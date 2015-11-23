@@ -1,0 +1,27 @@
+{
+  "name": "frontend-part",
+  "authors": [
+    {
+      "name": "Garance Vallat",
+      "email": "garance.vallat@gmail.com"
+    },
+    {
+      "name": "Salah Bennour",
+      "email": "bennour.salah.26@gmail.com"
+    },
+    {
+      "name": "Quentin Cornevin",
+      "email": "qcornevin@gmail.com"
+    },
+    {
+      "name": "Marc Karassev",
+      "email": "marc.karassev@yahoo.fr"
+    }
+  ],
+  "description": "The front end part of the project",
+  "main": "scripts/main.js",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "views/index.html",
+  "private": true
+}
