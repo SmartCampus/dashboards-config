@@ -17,8 +17,19 @@ function getAllSensors(callback) {
 	});
 }
 
-function getSensorData(name, last, convert, callback) {
-	var url = SMARTCAMPUS_HOST + SENSORS_PATH + "/" + name + "/data" + (last? "/last" : "") + "?convert=" + convert;
+function getLastSensorData(name, convert, callback) {
+	var url = SMARTCAMPUS_HOST + SENSORS_PATH + "/" + name + "/data" + "/last" + "?convert=" + convert;
+
+	http.get(url, function (res) {
+		callback(url, res);
+	})
+	.on('error', function (e) {
+		error(e, "getSensorData");
+	});
+}
+
+function getSensorData(name, date, convert, callback) {
+	var url = SMARTCAMPUS_HOST + SENSORS_PATH + "/" + name + "/data?convert=" + convert + (date? "&date=" + date : "");
 
 	http.get(url, function (res) {
 		callback(url, res);
@@ -31,4 +42,5 @@ function getSensorData(name, last, convert, callback) {
 // Exports
 
 exports.getAllSensors = getAllSensors;
+exports.getLastSensorData = getLastSensorData;
 exports.getSensorData = getSensorData;
