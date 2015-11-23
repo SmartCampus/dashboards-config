@@ -1,0 +1,15 @@
+# -----------------------------------------
+# File: .gitignore
+#
+# Garance Vallat 	: garance.vallat@gmail.com,
+# Salah Bennour 	: bennour.salah.26@gmail.com,
+# Quentin Cornevin 	: qcornevin@gmail.com,
+# Marc Karassev 	: marc.karassev@yahoo.fr
+#
+# PFE - SmartCampus Dashboard
+# Polytech Nice Sophia - Computer Sciences
+# -----------------------------------------
+
+
+## Unwanted Mac OS files ###
+./*/.DS_Store
