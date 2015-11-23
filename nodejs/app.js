@@ -10,5 +10,5 @@ function logRes(req, res) {
 }
 
 requestSmartcampus.getAllSensors(logRes);
-requestSmartcampus.getSensorData("DOOR_443", true, logRes);
-requestSmartcampus.getSensorData("DOOR_443", false, logRes);
+requestSmartcampus.getSensorData("DOOR_443", true, false, logRes);
+requestSmartcampus.getSensorData("DOOR_443", false, true, logRes);
