@@ -1,0 +1,39 @@
+{
+	"name": "PFE-Dashboards-SmartCampus",
+	"version": "0.0.1",
+	"description": "https://drive.google.com/file/d/0B2zMH_7SErjuSUhNWW1rZnAzLUk/view?usp=sharing",
+	"author": "Polytech Nice-Sophia SI - PFE 2015-2016 - groupe 9",
+	"contributors": [
+		{
+			"name": "Garance Vallat",
+			"email": "garance.vallat@gmail.com"
+		},
+		{
+			"name": "Salah Bennour",
+			"email": "bennour.salah.26@gmail.com"
+		},
+		{
+			"name": "Quentin Cornevin",
+			"email": "qcornevin@gmail.com"
+		},
+		{
+			"name": "Marc Karassev",
+			"email": "marc.karassev@yahoo.fr"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://atlas.i3s.unice.fr/stash/scm/pd/pfe-dashboards-smartcampus.git"
+	},
+	"bugs": {
+		"url": "https://atlas.i3s.unice.fr/jira/secure/RapidBoard.jspa?rapidView=246&view=planning.nodetail"
+	},
+	"dependencies": {
+
+	},
+	"devDependencies": {
+
+	},
+	"private": true,
+	"license": "no license"
+}
