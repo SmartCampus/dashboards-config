@@ -11,5 +11,8 @@
 # -----------------------------------------
 
 
-## Unwanted Mac OS files ###
+## Unwanted Mac OS files ##
 ./*/.DS_Store
+
+## Unwanted IDE files ##
+.idea
