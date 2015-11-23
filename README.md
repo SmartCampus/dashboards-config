@@ -3,7 +3,7 @@
 
 ## Description of Work 
 
-You can find the description of work at this following link :
+You can find the description of work document at the following link :
 
 	https://drive.google.com/file/d/0B2zMH_7SErjuSUhNWW1rZnAzLUk/view?usp=sharing
 
