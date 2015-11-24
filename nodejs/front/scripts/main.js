@@ -166,11 +166,11 @@ $(function () {
 var acOn = true;
 var windowOpen = false;
 if (!acOn)
-    document.getElementById('climState').setAttribute("class", "bg-danger");
+    document.getElementById('climState').setAttribute("class", "label label-danger");
 else
-    document.getElementById('climState').setAttribute("class", "bg-success");
+    document.getElementById('climState').setAttribute("class", "label label-success");
 
 if (!windowOpen)
-    document.getElementById('windowState').setAttribute("class", "bg-danger");
+    document.getElementById('windowState').setAttribute("class", "label label-danger");
 else
-    document.getElementById('windowState').setAttribute("class", "bg-success");
+    document.getElementById('windowState').setAttribute("class", "label label-success");
