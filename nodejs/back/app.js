@@ -1,8 +1,15 @@
-var smartCampusModel = require("./smartcampus_model");
-// var requestSmartcampus = require("./request_smartcampus");
+/**
+ * Main app.
+ */
 
-smartCampusModel.initSensors(function () {
-	smartCampusModel.test();
-});
+var express = require("express"),
+	bodyParser = require("body-parser"),
+	requestHandler = require("./request_handler")
+	app = express();
 
-// requestSmartcampus.test();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false}));
+
+app.use("/",requestHandler);
+
+app.listen(8081);
