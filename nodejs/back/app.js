@@ -1,3 +1,5 @@
-var requestSmartcampus = require("./request_smartcampus");
+var smartCampusModel = require("./smartcampus_model");
+// var requestSmartcampus = require("./request_smartcampus");
 
-requestSmartcampus.test();
+smartCampusModel.initSensors();
+// requestSmartcampus.test();
