@@ -20,8 +20,11 @@
   ],
   "description": "The front end part of the project",
   "main": "scripts/main.js",
-  "moduleType": [],
-  "license": "MIT",
+  "dependencies": {
+    "jquery": "latest",
+    "highcharts-release":"latest"
+  },
+  "license": "none",
   "homepage": "views/index.html",
   "private": true
 }
