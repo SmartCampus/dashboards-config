@@ -8,10 +8,11 @@ You can find the description of work document at the following link :
 	https://drive.google.com/file/d/0B2zMH_7SErjuSUhNWW1rZnAzLUk/view?usp=sharing
 
 ## Launching the project
-To launch the project, you must run : 
-$ npm install
-$ bower install
-after cloning it. 
+To launch the project you must, after clonning it , run these following commands : 
+
+	$ npm install
+	$ bower install
+ 
 
 ## Authors
 
