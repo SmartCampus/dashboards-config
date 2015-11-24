@@ -22,7 +22,8 @@
   "main": "scripts/main.js",
   "dependencies": {
     "jquery": "latest",
-    "highcharts-release":"latest"
+    "highcharts-release":"latest",
+    "bootstrap":"latest"
   },
   "license": "none",
   "homepage": "views/index.html",

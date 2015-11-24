@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
+    <script>
+        $(function () {
+            $("head").load("header.html")
+        });
+    </script>
 </head>
 <body>
 
@@ -10,7 +14,15 @@
 
 </body>
 
-<script src="/bower_components/jquery/dist/jquery.js"></script>
+
+<footer>
+    <!-- The lib dependencies are added in the footer -->
+    <script>
+        $(function () {
+            $("footer").load("footer.html")
+        });
+    </script>
+</footer>
 <script src="/bower_components/highcharts/highcharts.js"></script>
 <script src="/bower_components/highcharts/highcharts-more.js"></script>
 <script src="/scripts/main.js"></script>
