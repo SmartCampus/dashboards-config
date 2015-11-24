@@ -1,7 +1,19 @@
+/**
+ * @author Marc Karassev
+ *
+ * Model representing SmartCampus. Is should be used as a shortcut when retrieving
+ * SmartCampus sensors information.
+ */
+
 var requestSmartcampus = require("./request_smartcampus"),
 	sensors = [],
 	windowSensors = [];
 
+/**
+ * Retrieves the sensors from SmartCampus API and initializes the model.
+ * 
+ * @param  {Function} callback	function to call when the initialization has finished
+ */
 function initSensors(callback) {
 	requestSmartcampus.getAllSensors(function (res) {
 		var stringData = "";
@@ -27,14 +39,32 @@ function initWindowSensors(callback) {
 	callback();
 }
 
+/**
+ * Gets the sensors array. Requires that initSensors was called and terminated.
+ * 
+ * @return {[string]} an array of string representing JSON sensors
+ */
 function getSensors() {
 	return sensors;
 }
 
+/**
+ * Gets the windows sensors array. Requires that initSensors was called and terminated.
+ * 
+ * @return {[string]} an array of string representing JSON sensors
+ */
 function getWindowSensors() {
 	return windowSensors;
 }
 
+/**
+ * Gets a sensors array matching the given filters.
+ * Requires that initSensors was called and terminated.
+ * Should not be used due to its high complexity unless there's not another relevant getter.
+ *
+ * @param {string...}	filters 	strings to be used as regular expressions
+ * @return {[string]} an array of string representing JSON sensors
+ */
 function getSensorsMatchingFilters() {
 	var filters = arguments, filter, matchingSensors = [];
 
