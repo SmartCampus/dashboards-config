@@ -103,7 +103,8 @@ $(function () {
 $(function () {
     $('#c2').highcharts({
         chart: {
-            type: 'column'
+            type: 'column',
+            alignTicks: false
         },
         title: {
             text: 'Window openings vs. A/C use'
@@ -121,13 +122,15 @@ $(function () {
             },
             title: {
                 text: 'Openings'
-            }
+            },
+            allowDecimals: false,
         }, { // Secondary yAxis
             title: {
                 text: 'ACUse'
             },
+            max : 100,
             labels: {
-                format: '{value}'
+                format: '{value} %'
             },
             opposite: true
         }],
@@ -148,10 +151,11 @@ $(function () {
         series: [{
             name: 'Openings',
             data: open_result,
-            yAxis: 1
+            yAxis: 0
         }, {
             name: 'ACUse',
-            data: ac_result
+            data: ac_result,
+            yAxis: 1
         }]
     });
 });
