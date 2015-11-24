@@ -15,7 +15,7 @@ To launch the project you must place yourself in the nodejs folder, after clonni
 	$ bower install
  
 
-Every other time, you can run can then run :
+Every other time, you can simply run :
 	
 	$ node app.js
 
