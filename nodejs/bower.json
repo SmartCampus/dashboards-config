@@ -22,8 +22,10 @@
   "main": "scripts/main.js",
   "dependencies": {
     "jquery": "latest",
-    "highcharts-release":"latest",
-    "bootstrap":"latest"
+    "highcharts-release": "latest",
+    "bootstrap": "latest",
+    "bootstrap-treeview": "latest",
+    "eonasdan-bootstrap-datetimepicker": "~4.17.37"
   },
   "license": "none",
   "homepage": "views/index.html",
