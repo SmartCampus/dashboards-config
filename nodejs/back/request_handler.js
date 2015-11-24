@@ -9,7 +9,7 @@ var express = require("express"),
 
 router.get('/office/:officeNumber/temperature', function(req, res) {
     //console.log("request received");
-    sensor.getDesk443Temperature(req.params.officeNumber,res);
+    sensor.getDeskTemperature(req.params.officeNumber,res);
 });
 
 
