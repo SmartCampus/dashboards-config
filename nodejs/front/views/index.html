@@ -1,18 +1,23 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Dashboard configurables SmartCampus</title>
-    <!-- TODO : import d'une lib de visu, installation via package.json pour dev + facile-->
-    <link rel="shortcut icon" type="image/x-icon" href="icon.png" />
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
+    <script>
+        $(function () {
+            $("head").load("header.html")
+        });
+    </script>
 </head>
 <body>
 <div>Coucou !</div>
-<div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 </body>
 
-<script src="/bower_components/jquery/dist/jquery.js"></script>
-<script src="/bower_components/highcharts/highcharts.js"></script>
-<script src="/bower_components/highcharts/highcharts-more.js"></script>
+<footer>
+    <script>
+        $(function () {
+            $("footer").load("footer.html")
+        });
+    </script>
+</footer>
 <script src="/scripts/main.js"></script>
 </html>
