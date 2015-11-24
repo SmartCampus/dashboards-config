@@ -8,14 +8,27 @@ var requestSmartcampus = require("./request_smartcampus"),
 
 
 function getDeskTemperature(officeNumber ,callback) {
-    requestSmartcampus.getSensorData("TEMP_" + officeNumber + "V", "2015-09-01 00:00:00/2015-10-01 00:00:00", false, function (res) {
+    requestSmartcampus.getSensorData("TEMP_" + officeNumber + "V", "", true, function (res) {
         var stringData = ""
 
         res.on("data", function(chunck) {
            stringData += chunck;
        })
         res.on("end" , function() {
-            callback.send(stringData);
+            var tempPerTime = JSON.parse(stringData);
+            var temp = [];
+            var time = [];
+            console.log(tempPerTime.values[0].value);
+            for(var i in tempPerTime.values) {
+                temp.push(Math.round(tempPerTime.values[i].value).toFixed(2)); // Put only 2 number after the comma
+                time.push(tempPerTime.values[i].date);
+            }
+            var responseInGoodFormat = {
+                "tempratures": temp,
+                "time" : time
+            }
+
+            callback.send(responseInGoodFormat);
         })
     });
 }
