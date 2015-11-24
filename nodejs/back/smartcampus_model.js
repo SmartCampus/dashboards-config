@@ -11,8 +11,6 @@ function initSensors(callback) {
 		});
 		res.on("end", function () {
 			sensors = (JSON.parse(stringData))._items;
-			console.log("********** Sensors: **********");
-			console.log(sensors);
 			initWindowSensors(callback);
 		})
 	})
@@ -26,11 +24,19 @@ function initWindowSensors(callback) {
 			windowSensors.push(sensors[i]);
 		}
 	}
-	console.log("********** Window sensors: **********");
-	console.log(windowSensors);
 	callback();
+}
+
+function getSensors() {
+	return sensors;
+}
+
+function getWindowSensors() {
+	return windowSensors;
 }
 
 // Exports
 
 exports.initSensors = initSensors;
+exports.getSensors = getSensors;
+exports.getWindowSensors = getWindowSensors;
