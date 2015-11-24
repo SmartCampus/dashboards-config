@@ -35,8 +35,26 @@ function getWindowSensors() {
 	return windowSensors;
 }
 
+function getSensorsMatchingFilters() {
+	var filters = arguments, filter, matchingSensors = [];
+
+	for (var i in sensors) {
+		for (var j in filters) {
+			filter = new RegExp(filters[j], "i");
+			if (!filter.test(sensors[i].name)) {
+				break;
+			}
+			if (j == filters.length - 1) {
+				matchingSensors.push(sensors[i]);
+			}
+		}
+	}
+	return matchingSensors;
+}
+
 // Exports
 
 exports.initSensors = initSensors;
 exports.getSensors = getSensors;
 exports.getWindowSensors = getWindowSensors;
+exports.getSensorsMatchingFilters = getSensorsMatchingFilters;
