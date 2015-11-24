@@ -159,3 +159,18 @@ $(function () {
         }]
     });
 });
+
+/**
+ The boolean values for A/C and window :
+ */
+var acOn = true;
+var windowOpen = false;
+if (!acOn)
+    document.getElementById('climState').setAttribute("class", "bg-danger");
+else
+    document.getElementById('climState').setAttribute("class", "bg-success");
+
+if (!windowOpen)
+    document.getElementById('windowState').setAttribute("class", "bg-danger");
+else
+    document.getElementById('windowState').setAttribute("class", "bg-success");
