@@ -7,15 +7,14 @@ var requestSmartcampus = require("./request_smartcampus"),
     smartCampusModel = require("./smartcampus_model.js");
 
 
-function getDesk443Temperature(callback) {
-    requestSmartcampus.getSensorData("TEMP_443V", "", false, function (res) {
+function getDesk443Temperature(officeNumber ,callback) {
+    requestSmartcampus.getSensorData("TEMP_" + officeNumber + "V", "", false, function (res) {
         var stringData = ""
 
         res.on("data", function(chunck) {
            stringData += chunck;
        })
         res.on("end" , function() {
-            console.log(stringData);
             callback.send(stringData);
         })
     });
