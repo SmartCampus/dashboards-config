@@ -75,8 +75,7 @@ $(function () {
             line: {
                 dataLabels: {
                     enabled: false
-                },
-                enableMouseTracking: false
+                }
             }
         },
         tooltip: {
