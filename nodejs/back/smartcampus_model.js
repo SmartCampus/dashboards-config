@@ -7,7 +7,8 @@
 
 var requestSmartcampus = require("./request_smartcampus"),
 	sensors = [],
-	windowSensors = [];
+	windowSensors = [],
+	desk443Sensors = [];
 
 /**
  * Retrieves the sensors from SmartCampus API and initializes the model.
@@ -23,7 +24,10 @@ function initSensors(callback) {
 		});
 		res.on("end", function () {
 			sensors = (JSON.parse(stringData))._items;
-			initWindowSensors(callback);
+			//initWindowSensors(callback);
+			initWindowSensors(function () {
+			 	initDesk443Sensors(callback);
+			});
 		})
 	})
 }
@@ -39,6 +43,17 @@ function initWindowSensors(callback) {
 	callback();
 }
 
+function initDesk443Sensors(callback) {
+	var desk443 = /443/;
+
+	for (var i in sensors) {
+		if (desk443.test(sensors[i].name)) {
+			desk443Sensors.push(sensors[i]);
+		}
+	}
+	callback();
+}
+
 /**
  * Gets the sensors array. Requires that initSensors was called and terminated.
  * 
@@ -49,12 +64,21 @@ function getSensors() {
 }
 
 /**
- * Gets the windows sensors array. Requires that initSensors was called and terminated.
+ * Gets the window sensors array. Requires that initSensors was called and terminated.
  * 
  * @return {[string]} an array of string representing JSON sensors
  */
 function getWindowSensors() {
 	return windowSensors;
+}
+
+/**
+ * Gets the desk 443 sensors array. Requires that initSensors was called and terminated.
+ * 
+ * @return {[string]} an array of string representing JSON sensors
+ */
+function getDesk443Sensors() {
+	return desk443Sensors;
 }
 
 /**
@@ -86,13 +110,13 @@ function getSensorsMatchingFilters() {
 
 function test() {
 	console.log("********** Sensors: **********");
-	console.log(smartCampusModel.getSensors());
+	console.log(getSensors());
 	console.log("********** Window sensors: **********");
-	console.log(smartCampusModel.getWindowSensors());
+	console.log(getWindowSensors());
 	console.log("********** Sensors in desk 443 **********");
-	console.log(smartCampusModel.getSensorsMatchingFilters("443"));
+	console.log(getDesk443Sensors());
 	console.log("********** Temp sensors in desk 443 **********");
-	console.log(smartCampusModel.getSensorsMatchingFilters("443", "temp"));
+	console.log(getSensorsMatchingFilters("443", "temp"));
 }
 
 // Exports
@@ -100,5 +124,6 @@ function test() {
 exports.initSensors = initSensors;
 exports.getSensors = getSensors;
 exports.getWindowSensors = getWindowSensors;
+exports.getDesk443Sensors = getDesk443Sensors;
 exports.getSensorsMatchingFilters = getSensorsMatchingFilters;
 exports.test = test;
