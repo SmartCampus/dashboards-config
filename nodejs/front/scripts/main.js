@@ -174,3 +174,27 @@ if (!windowOpen)
     document.getElementById('windowState').setAttribute("class", "label label-danger");
 else
     document.getElementById('windowState').setAttribute("class", "label label-success");
+
+
+/**
+ * Datepikckers
+ */
+
+
+
+$('#datetimepicker1').datetimepicker({
+    format: 'DD-MM-YYYY HH:mm:ss'
+});
+
+$('#datetimepicker2').datetimepicker({
+    format: 'DD-MM-YYYY HH:mm:ss'
+});
+
+$( "#sub" ).click(function() {
+    var from = $('#datetimepicker1').data('date');
+    var to = $('#datetimepicker2').data('date');
+
+    alert(from);
+    alert(to);
+});
+
