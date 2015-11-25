@@ -1,5 +1,7 @@
 /**
- * Created by Quentin on 11/24/2015.
+ * @author Quentin Cornevin
+ *
+ * Module responsible for creating the good request to the SmartCampus API.
  */
 
 
@@ -32,7 +34,7 @@ function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09
 
 
 function getCampusTemperature(date, callback) {
-    requestSmartcampus.getSensorData("TEMP_CAMPUS", date, false, function (res) {
+    requestSmartcampus.getSensorData("TEMP_CAMPUS", date, true, function (res) {
         var stringData = ""
 
         res.on("data", function(chunck) {
@@ -42,15 +44,14 @@ function getCampusTemperature(date, callback) {
             var tempPerTime = JSON.parse(stringData);
 
             var responseInGoodFormat = {"data": []};
-            var temperaturePerTime = [];
 
             for(var i in tempPerTime.values) {
+                var temperaturePerTime = [];
                 temperaturePerTime.push(tempPerTime.values[i].date);
                 temperaturePerTime.push(parseFloat(tempPerTime.values[i].value));
+                responseInGoodFormat.data.push(temperaturePerTime);
             }
 
-            responseInGoodFormat.data.push(temperaturePerTime);
-            console.log(responseInGoodFormat);
             callback.send(responseInGoodFormat);
         })
     });
