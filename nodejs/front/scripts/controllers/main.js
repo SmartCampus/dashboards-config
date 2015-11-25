@@ -44,7 +44,7 @@ for(var i = 0; i < hourlyWindow.values.length; i++)
 }
 
 //First step of data retrieving : we get the inside temperatures
-retrieveData.askForTemp('443');
+retrieveData.askForTemp('office/443/temperature', '2015-10-14 8:00:11', '2015-10-20 18:00:11');
 
 
 //Success callback for retrieving the inside temperatures
@@ -57,7 +57,7 @@ var successCB = function(data) {
     console.log('created ?');
 
     //We need to get the outside temperatures now, to build our whole graph.
-    retrieveData.askForTemp();
+  //  retrieveData.askForTemp();
 
     //testTempJson = JSON.parse(testTemp);
 
