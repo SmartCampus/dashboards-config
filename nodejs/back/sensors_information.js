@@ -137,6 +137,28 @@ function getAirConditionerState(response, officeNumber) {
     });
 }
 
+/**
+ * TODO : Sprint suivant : envoie les données avec toutes les ouvertures de porte pour Salah
+ *
+ * @param response
+ * @param officeNumber
+ */
+function getDoorsOpening(response, officeNumber) {
+    requestSmartcampus.getLastSensorData("DOOR" + officeNumber + "STATE", false, function (res) {
+        var stringData = "";
+
+        res.on("data", function (chunck) {
+            stringData += chunck;
+        });
+
+        res.on("end", function () {
+            var json = JSON.parse(stringData);
+            var windowState = {"data" : json.values[0].value};
+            response.send(windowState);
+        });
+    });
+}
+
 
 /**
  * This method put the last state of air conditioner in the response in the route
