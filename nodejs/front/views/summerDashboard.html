@@ -25,6 +25,34 @@
         <div id="c2" style="width : 40%; border: solid"></div>
     </div>
 
+    <div class="container">
+        <div class="row">
+            <span>FROM</span>
+            <div class='col-md-4'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+            <span>TO</span>
+            <div class='col-md-4'>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker2'>
+                        <input type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button id="sub">Refresh</button>
 </body>
 
 
@@ -36,8 +64,12 @@
         });
     </script>
 </footer>
+
 <script src="/bower_components/highcharts/highcharts.js"></script>
 <script src="/bower_components/highcharts/highcharts-more.js"></script>
+<script src="/bower_components/moment/min/moment.min.js"></script>
+<script src="/bower_components/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/scripts/controllers/main.js"></script>
 <script src="/scripts/model/constants.js"></script>
 <script src="/scripts/model/createDashboard.js"></script>
 <script src="/scripts/controllers/main.js"></script>
