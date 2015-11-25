@@ -7,8 +7,9 @@ var requestSmartcampus = require("./request_smartcampus"),
     smartCampusModel = require("./smartcampus_model.js");
 
 
-function getDeskTemperature(officeNumber ,callback) {
-    requestSmartcampus.getSensorData("TEMP_" + officeNumber + "V", "", true, function (res) {
+function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09-01 00:00:00/2015-10-01 00:00:00
+   // requestSmartcampus.getSensorData("TEMP_" + officeNumber + "V", "2015-10-13 00:00:00/2015-10-14 00:00:00", true, function (res) {
+    requestSmartcampus.getSensorData("TEMP_" + officeNumber + "V", date, true, function (res) {
         var stringData = ""
 
         res.on("data", function(chunck) {
@@ -24,12 +25,28 @@ function getDeskTemperature(officeNumber ,callback) {
                 time.push(tempPerTime.values[i].date);
             }
             var responseInGoodFormat = {
-                "tempratures": temp,
+                "temperatures": temp,
                 "time" : time
             }
 
             callback.send(responseInGoodFormat);
         })
+    });
+}
+
+
+function getDoorsState(callback) {
+    requestSmartcampus.getSensorData("DOOR443STATE", "", true, function (res) {
+        var stringData = "";
+
+
+
+        res.on("data", function (chunck) {
+            stringData += chunck;
+        });
+        res.on("end", function () {
+            callback.send(stringData);
+        });
     });
 }
 
