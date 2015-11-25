@@ -8,16 +8,15 @@ var express = require("express"),
 
 
 router.get('/office/:officeNumber/temperature', function(req, res) {
-    console.log(req.query.date);
     var date = req.query.date;
-
     res.setHeader('Content-Type', 'application/json');
     sensor.getDeskTemperature(date,req.params.officeNumber,res);
 });
 
 
-router.get('/office/443/door_status', function(req, res) {
+router.get('/office/:officeNumber/window_status', function(req, res) {
 
+    sensor.getWindowsState(res, req.params.officeNumber)
 });
 
 module.exports = router;
