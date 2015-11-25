@@ -13,6 +13,51 @@ $(function () {
                 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
         },
         yAxis: {
+            min: 0,
+            max : 1.5,
+            title: {
+                text: 'Temperature (°C)'
+            },
+            plotLines: [{
+                color: 'red', // Color value
+                dashStyle: 'longdashdot', // Style of the plot line. Default to solid
+                value: 1, // Value of where the line will appear
+                width: 2, // Width of the line
+                legend : 'Danger !'
+            }]
+        },
+        tooltip: {
+            valueSuffix: '°C'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'center',
+            verticalAlign: 'bottom',
+            borderWidth: 0
+        },
+        series: [{
+            name: 'Couloir',
+            data: [0.10, 0.19, 0.15, 0.25, 0.2, 0.5, 0.7, 0.81, 0.87, 0.93, 1.11, 0.6]
+        },{
+            name: 'Door Status',
+            data: [0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1]
+        }
+        ]
+    });
+});
+
+
+$(function () {
+    $('#c2').highcharts({
+        title: {
+            text: 'Intensité sonore par rapport à l\'état de la fenêtre',
+            x: -20 //center
+        },
+        xAxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        },
+        yAxis: {
             title: {
                 text: 'Temperature (°C)'
             },
@@ -39,7 +84,6 @@ $(function () {
         }]
     });
 });
-
 
 
 
