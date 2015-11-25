@@ -42,6 +42,9 @@ for(var i = 0; i < hourlyWindow.values.length; i++)
 //First step of data retrieving : we get the inside temperatures
 retrieveData.askForTemp('office/443/temperature', '2015-10-14 8:00:11', '2015-10-20 18:00:11');
 
+function askForTemp(address, date1, date2){
+    retrieveData.askForTemp(address, date1, date2);
+}
 
 //Success callback for retrieving the inside temperatures
 var successCB = function(data) {
@@ -186,18 +189,17 @@ var successForWindow = function(data) {
 
 
 $('#datetimepicker1').datetimepicker({
-    format: 'DD-MM-YYYY HH:mm:ss'
+    format: 'YYYY-MM-DD HH:mm:ss'
 });
 
 $('#datetimepicker2').datetimepicker({
-    format: 'DD-MM-YYYY HH:mm:ss'
+    format: 'YYYY-MM-DD HH:mm:ss'
 });
 
-$( "#sub" ).click(function() {
+$( "#refresh" ).click(function() {
     var from = $('#datetimepicker1').data('date');
     var to = $('#datetimepicker2').data('date');
 
-    alert(from);
-    alert(to);
+    askForTemp('office/443/temperature', from, to);
 });
 
