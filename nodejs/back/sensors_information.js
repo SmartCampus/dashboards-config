@@ -187,7 +187,7 @@ function getWindowOpening(response, officeNumber, date) {
             }
             for(var test in hashMap) {
                 var table = [];
-                table.push(test);
+                table.push(parseInt(test));
                 table.push(hashMap[test]);
                 //console.log(test);
                 windowsOpening.data.push(table);
