@@ -164,9 +164,9 @@ $(function () {
 /**
  The boolean values for A/C and window :
  */
-var acOn = true;
-
 retrieveData.askForWindowNow('office/443/window_status');
+retrieveData.askForACNow('office/443/ac_status');
+
 
 var successForWindow = function(data) {
     if (data.state == 'CLOSED') {
@@ -175,12 +175,14 @@ var successForWindow = function(data) {
     else {
         document.getElementById('windowState').setAttribute("class", "label label-success");
     }
-}
+};
 
-    if (!acOn)
+var successForAC = function(data) {
+    if (data.state == 'OFF')
         document.getElementById('climState').setAttribute("class", "label label-danger");
     else
         document.getElementById('climState').setAttribute("class", "label label-success");
+};
 
 /**
  * Datepikckers

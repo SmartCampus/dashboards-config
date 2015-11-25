@@ -31,17 +31,38 @@ var retrieveData = (function () {
                 .done(function (data) {
                     console.log('got window state');
                     console.log(data);
-                      alert("Data Loaded: " + data);
+               //       alert("Data Loaded: " + data);
                     successForWindow(data);
                 })
                 .fail(function (data) {
                     console.log(data);
                     console.log('error in window state');
-                    alert("error");
+                 //   alert("error");
                 })
                 .always(function (data) {
                     console.log('processed');
-                    alert("finished");
+                   // alert("finished");
+                });
+            console.log('after the get');
+        },
+        askForACNow: function (route) {
+            console.log('before the get AC state');
+
+            $.get(serverURL + route)
+                .done(function (data) {
+                    console.log('got AC state');
+                    console.log(data);
+                    //       alert("Data Loaded: " + data);
+                    successForAC(data);
+                })
+                .fail(function (data) {
+                    console.log(data);
+                    console.log('error in AC state');
+                    //   alert("error");
+                })
+                .always(function (data) {
+                    console.log('processed');
+                    // alert("finished");
                 });
             console.log('after the get');
         }
