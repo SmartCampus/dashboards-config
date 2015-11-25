@@ -2,19 +2,10 @@
  * Created by Garance on 23/11/2015.
  */
 
-/**
- * WINDOWS AT OFFICE 443
- **/
-var SM_windows = '[[100,2],[101,0],[102,1],[103,6],[104,0],[105,2],[106,6]]';
 var SM_AirConditioning = '[[196,100],[201,10],[202,100],[303,25],[304,45],[305,56],[306,34]]';
 
-var open_result = [];
-var ac_result = [];
-
 // Transform text to JSON
-hourlyWindow = JSON.parse(SM_windows);
 hourlyAC = JSON.parse(SM_AirConditioning);
-console.log(hourlyWindow);
 console.log(hourlyAC);
 
 //Success callback for retrieving the inside temperatures
@@ -63,8 +54,7 @@ var firstSuccessInTemp = function(data) {
                     crosshairs: true,
                     formatter: function() {
                         return '<br/>'+
-                            Highcharts.dateFormat('%d.%m.%Y', this.x*1000) +': '+ this.y;
-
+                            Highcharts.dateFormat('%d.%m.%Y', this.x*1000) +' : '+ parseInt(this.y)+' °C <br/> <br/>';
                     }
                 },
                 series: [{
@@ -88,7 +78,7 @@ var endDate = '2015-10-20 18:00:11';
 var place = 'office/443/';
 
 //First step of data retrieving : we get the inside temperatures
-//retrieveData.askForSeries(place+'temperature', beginDate, endDate, firstSuccessInTemp);
+retrieveData.askForSeries(place+'temperature', beginDate, endDate, firstSuccessInTemp);
 
 
 
