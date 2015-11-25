@@ -2,89 +2,140 @@
  * Created by salahbennour on 25/11/2015.
  */
 
+
 $(function () {
     $('#c1').highcharts({
+        chart: {
+            zoomType: 'xy'
+        },
         title: {
-            text: 'Intensité sonore par rapport au couloir',
-            x: -20 //center
+            text: 'Intensité sonore par rapport au couloir'
         },
-        xAxis: {
+        xAxis: [{
             categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        },
-        yAxis: {
-            min: 0,
-            max : 1.5,
-            title: {
-                text: 'Temperature (°C)'
-            },
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            crosshair: true
+        }],
+
+        yAxis: [
+
+        { // Primary yAxis
             plotLines: [{
                 color: 'red', // Color value
                 dashStyle: 'longdashdot', // Style of the plot line. Default to solid
                 value: 1, // Value of where the line will appear
                 width: 2, // Width of the line
                 legend : 'Danger !'
-            }]
-        },
-        tooltip: {
-            valueSuffix: '°C'
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'center',
-            verticalAlign: 'bottom',
-            borderWidth: 0
-        },
-        series: [{
-            name: 'Couloir',
-            data: [0.10, 0.19, 0.15, 0.25, 0.2, 0.5, 0.7, 0.81, 0.87, 0.93, 1.11, 0.6]
-        },{
-            name: 'Door Status',
-            data: [0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1]
-        }
-        ]
-    });
-});
-
-
-$(function () {
-    $('#c2').highcharts({
-        title: {
-            text: 'Intensité sonore par rapport à l\'état de la fenêtre',
-            x: -20 //center
-        },
-        xAxis: {
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        },
-        yAxis: {
-            title: {
-                text: 'Temperature (°C)'
+            }],
+            min: 0,
+            max : 1.5,
+            labels: {
+                format: '{value} db',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
             },
-            plotLines: [{
-                color: 'red', // Color value
-                dashStyle: 'longdashdot', // Style of the plot line. Default to solid
-                value: 10, // Value of where the line will appear
-                width: 2, // Width of the line
-                legend : 'Danger !'
-            }]
-        },
+            title: {
+                text: 'Intensité sonore',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            }
+        }],
         tooltip: {
-            valueSuffix: '°C'
+            shared: false
         },
         legend: {
             layout: 'vertical',
             align: 'center',
             verticalAlign: 'bottom',
-            borderWidth: 0
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
         },
-        series: [{
-            name: 'Couloir',
-            data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+        series: [
+
+        {
+            name: 'Door state',
+            type: 'column',
+            data: [0, 0.5, 0.5,0.5, 0.5,0.5, 0.5,0.5, 0.5, 0, 0, 0],
+        },
+        {
+            name: 'Decibel',
+            type: 'spline',
+            data: [0.7, 1.1, 0.5, 0.5, 0.2, 0.5, 0.2, 0.5, 0.3, 1.3, 1.1, 0.03],
+            tooltip: {
+                valueSuffix: ' db'
+            }
         }]
     });
 });
 
+$(function () {
+    $('#c2').highcharts({
+        chart: {
+            zoomType: 'xy'
+        },
+        title: {
+            text: 'Intensité sonore par rapport à l\'extérieur'
+        },
+        xAxis: [{
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            crosshair: true
+        }],
+
+        yAxis: [
+
+            { // Primary yAxis
+                plotLines: [{
+                    color: 'red', // Color value
+                    dashStyle: 'longdashdot', // Style of the plot line. Default to solid
+                    value: 1, // Value of where the line will appear
+                    width: 2, // Width of the line
+                    legend : 'Danger !'
+                }],
+                min: 0,
+                max : 1.5,
+                labels: {
+                    format: '{value} db',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+                title: {
+                    text: 'Intensité sonore',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                }
+            }],
+
+
+        tooltip: {
+            shared: false
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'center',
+            verticalAlign: 'bottom',
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        series: [
+
+            {
+                name: 'Windows state',
+                type: 'column',
+                data: [0, 0.5, 0.5,0.5, 0.5,0.5, 0.5,0.5, 0.5, 0, 0, 0],
+            },
+            {
+                name: 'Decibel',
+                type: 'spline',
+                data: [0.7, 1.1, 0.5, 0.5, 0.2, 0.5, 0.2, 0.5, 0.3, 1.3, 1.1, 0.03],
+                tooltip: {
+                    valueSuffix: ' db'
+                }
+            }]
+    });
+});
 
 
 /**
