@@ -20,14 +20,13 @@ function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09
             var temp = [];
             var time = [];
             console.log(tempPerTime.values[0].value);
+            var responseInGoodFormat = {"temperatures": [], "time" : []};
+
+
             for(var i in tempPerTime.values) {
-                temp.push(Math.round(tempPerTime.values[i].value).toFixed(2)); // Put only 2 number after the comma
-                time.push(tempPerTime.values[i].date);
-            }
-            console.log(temp);
-            var responseInGoodFormat = {
-                "temperatures": temp,
-                "time" : time
+             //   responseInGoodFormat.temperatures.push(parseInt((Math.round(tempPerTime.values[i].value).toFixed(2))));
+                responseInGoodFormat.temperatures.push(parseFloat(tempPerTime.values[i].value));
+                responseInGoodFormat.time.push(tempPerTime.values[i].date);
             }
             callback.send(responseInGoodFormat);
         })

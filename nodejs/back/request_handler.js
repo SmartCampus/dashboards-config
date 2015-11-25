@@ -11,6 +11,7 @@ router.get('/office/:officeNumber/temperature', function(req, res) {
     console.log(req.query.date);
     var date = req.query.date;
 
+    res.setHeader('Content-Type', 'application/json');
     sensor.getDeskTemperature(date,req.params.officeNumber,res);
 });
 
