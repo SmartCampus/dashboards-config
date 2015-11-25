@@ -3,13 +3,12 @@
  */
 var retrieveData = (function () {
     return { //exposed to public
-        askForTemp: function (route, beginDate, endDate) {
+        askForTemp: function (route, beginDate, endDate, successCB) {
             console.log('before the get temperature for a timespan');
-
+            console.log('For route '+ route + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
             $.get(serverURL + route, {date: beginDate+"/"+endDate})
                 .done(function (data) {
                     console.log('got temps for a timespan');
-                    console.log(data);
                   //  alert("Data Loaded: " + data);
                     successCB(data);
                 })
@@ -24,7 +23,7 @@ var retrieveData = (function () {
                 });
             console.log('after the get');
         },
-        askForWindowNow: function (route) {
+        askForStateNow: function (route, successStateCB) {
             console.log('before the get window state');
 
             $.get(serverURL + route)
@@ -32,7 +31,7 @@ var retrieveData = (function () {
                     console.log('got window state');
                     console.log(data);
                //       alert("Data Loaded: " + data);
-                    successForWindow(data);
+                    successStateCB(data);
                 })
                 .fail(function (data) {
                     console.log(data);
@@ -42,27 +41,6 @@ var retrieveData = (function () {
                 .always(function (data) {
                     console.log('processed');
                    // alert("finished");
-                });
-            console.log('after the get');
-        },
-        askForACNow: function (route) {
-            console.log('before the get AC state');
-
-            $.get(serverURL + route)
-                .done(function (data) {
-                    console.log('got AC state');
-                    console.log(data);
-                    //       alert("Data Loaded: " + data);
-                    successForAC(data);
-                })
-                .fail(function (data) {
-                    console.log(data);
-                    console.log('error in AC state');
-                    //   alert("error");
-                })
-                .always(function (data) {
-                    console.log('processed');
-                    // alert("finished");
                 });
             console.log('after the get');
         }
