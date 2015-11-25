@@ -4,12 +4,17 @@
  * Module responsible for creating the good request to the SmartCampus API.
  */
 
-
 var requestSmartcampus = require("./request_smartcampus");
 
-
-function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09-01 00:00:00/2015-10-01 00:00:00
-        requestSmartcampus.getSensorData("TEMP_" + officeNumber + "V", date, true, function (res) {
+/**
+ * This method will retrieve
+ *
+ * @param date
+ * @param officeNumber
+ * @param callback
+ */
+function getDeskTemperature(date, officeNumber ,callback) {
+        requestSmartcampus.getSensorData("TEMP_" + officeNumber + "V", date, false, function (res) {
         var stringData = ""
 
         res.on("data", function(chunck) {
@@ -34,7 +39,7 @@ function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09
 
 
 function getCampusTemperature(date, callback) {
-    requestSmartcampus.getSensorData("TEMP_CAMPUS", date, true, function (res) {
+    requestSmartcampus.getSensorData("TEMP_CAMPUS", date, false, function (res) {
         var stringData = ""
 
         res.on("data", function(chunck) {
