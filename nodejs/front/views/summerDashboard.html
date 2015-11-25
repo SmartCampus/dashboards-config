@@ -25,34 +25,36 @@
         <div id="c2" style="width : 40%; border: solid"></div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <span>FROM</span>
-            <div class='col-md-4'>
-                <div class="form-group">
-                    <div class='input-group date' id='datetimepicker1'>
-                        <input type='text' class="form-control" />
+    <div class="row" style="margin : 10px 20px 0 20px">
+        <div class="col-md-4">
+            <span style="font-weight: bold;">FROM : </span>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
-                    </div>
                 </div>
             </div>
-            <span>TO</span>
-            <div class='col-md-4'>
-                <div class="form-group">
-                    <div class='input-group date' id='datetimepicker2'>
-                        <input type='text' class="form-control" />
+        </div>
+        <div class="col-md-4">
+            <span style="font-weight: bold;">TO :</span>
+            <div class="form-group">
+                <div class='input-group date' id='datetimepicker2'>
+                    <input type='text' class="form-control" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
                     </span>
-                    </div>
                 </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <button type="button" id="refresh" class="btn btn-primary">Refresh</button>
             </div>
         </div>
     </div>
 
-    <button id="refresh">Refresh</button>
 </body>
 
 

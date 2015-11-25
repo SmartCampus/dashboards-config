@@ -32,3 +32,4 @@ app.use(bodyParser.urlencoded({ extended: false}));
 app.use("/",requestHandler);
 
 app.listen(8081);
+console.log('Back end server is now listening on port 8081. ');

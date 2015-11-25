@@ -164,18 +164,25 @@ $(function () {
 /**
  The boolean values for A/C and window :
  */
-var acOn = true;
-var windowOpen = false;
-if (!acOn)
-    document.getElementById('climState').setAttribute("class", "label label-danger");
-else
-    document.getElementById('climState').setAttribute("class", "label label-success");
+retrieveData.askForWindowNow('office/443/window_status');
+retrieveData.askForACNow('office/443/ac_status');
 
-if (!windowOpen)
-    document.getElementById('windowState').setAttribute("class", "label label-danger");
-else
-    document.getElementById('windowState').setAttribute("class", "label label-success");
 
+var successForWindow = function(data) {
+    if (data.state == 'CLOSED') {
+        document.getElementById('windowState').setAttribute("class", "label label-danger");
+    }
+    else {
+        document.getElementById('windowState').setAttribute("class", "label label-success");
+    }
+};
+
+var successForAC = function(data) {
+    if (data.state == 'OFF')
+        document.getElementById('climState').setAttribute("class", "label label-danger");
+    else
+        document.getElementById('climState').setAttribute("class", "label label-success");
+};
 
 /**
  * Datepikckers
