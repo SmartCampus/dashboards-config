@@ -6,7 +6,7 @@
  * WINDOWS AT OFFICE 443
  **/
 var SM_windows = '[[100,2],[101,0],[102,1],[103,6],[104,0],[105,2],[106,6]]';
-var SM_AirConditioning = '[[100,100],[101,10],[102,100],[103,25],[104,45],[105,56],[106,34]]';
+var SM_AirConditioning = '[[196,100],[201,10],[202,100],[303,25],[304,45],[305,56],[306,34]]';
 
 var open_result = [];
 var ac_result = [];
@@ -19,7 +19,6 @@ console.log(hourlyAC);
 
 //Success callback for retrieving the inside temperatures
 var firstSuccessInTemp = function(data) {
-    //var periodWanted =data.time;
     var insideTemperature = data.data;
     console.log(insideTemperature);
 
@@ -89,13 +88,13 @@ var endDate = '2015-10-20 18:00:11';
 var place = 'office/443/';
 
 //First step of data retrieving : we get the inside temperatures
-retrieveData.askForSeries(place+'temperature', beginDate, endDate, firstSuccessInTemp);
+//retrieveData.askForSeries(place+'temperature', beginDate, endDate, firstSuccessInTemp);
 
 
 
 successForWindowCount = function(data) {
     //Here, we must process if needed the data received, and then call the ac count
-
+var windowCount = data.data;
 console.log('in the window method');
 
     //successForAcCount = function(data) {
@@ -153,7 +152,7 @@ console.log('in the window method');
                     yAxis: 0
                 }, {
                     name: 'WindowOpenings',
-                    data: hourlyWindow,
+                    data: windowCount,
                     yAxis: 1
                 }]
             });
@@ -162,8 +161,8 @@ console.log('in the window method');
     //retrieveData.askForSeries(place+'ac_percentage', beginDate, beginDate, successForAcCount);
 
 };
-successForWindowCount();
-//retrieveData.askForSeries(place+'window_opening', beginDate, endDate, successForWindowCount);
+//successForWindowCount();
+retrieveData.askForSeriesForever(place+'window_opening',successForWindowCount);
 
 /**
  The boolean values for A/C and window :
