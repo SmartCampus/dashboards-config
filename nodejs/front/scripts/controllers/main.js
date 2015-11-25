@@ -41,12 +41,12 @@ for(var i = 0; i < hourlyWindow.values.length; i++)
 
 //Success callback for retrieving the inside temperatures
 var firstSuccessInTemp = function(data) {
-    var periodWanted =data.time;
-    var insideTemperature = data.temperatures;
+    //var periodWanted =data.time;
+    var insideTemperature = data.data;
     console.log(insideTemperature);
 
     var secondSuccessInTemp = function(data) {
-        var outsideTemperature = data.temperatures;
+        var outsideTemperature = data.data;
         console.log(outsideTemperature);
         $(function () {
             $('#c1').highcharts({
@@ -60,7 +60,13 @@ var firstSuccessInTemp = function(data) {
                     text: 'office 443'
                 },
                 xAxis: {
-                    categories: periodWanted
+                    labels: {
+                        formatter: function () {
+                            return  Highcharts.dateFormat('%d.%m.%Y', this.value*1000)
+                        }
+                    },
+                  //  tickInterval: 24 * 3600 * 1000,
+                    type: 'category'
                 },
                 yAxis: {
                     title: {
@@ -77,14 +83,23 @@ var firstSuccessInTemp = function(data) {
                 },
                 tooltip: {
                     shared: true,
-                    crosshairs: true
+                    crosshairs: true,
+                    formatter: function() {
+                        return '<br/>'+
+                            Highcharts.dateFormat('%d.%m.%Y', this.x*1000) +': '+ this.y;
+
+                    }
                 },
                 series: [{
                     name: 'office 443 temperature inside',
+                  //  data: [[1331028000456, 8], [1331031600900, 1], [1331035201230, 2]]
                     data: insideTemperature
                 },
-                 {name: 'office 443 temperature outside',
-                 data: outsideTemperature}
+                 {
+                     name: 'office 443 temperature outside',
+                    // data: [[1331028000000, 5], [1331031600000, 6], [1331035200000, 4]]
+                     data: outsideTemperature
+                 }
                 ]
             });
         });
