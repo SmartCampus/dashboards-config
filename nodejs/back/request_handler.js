@@ -45,5 +45,10 @@ router.get('/office/:officeNumber/window_opening', function(req, res) {
 });
 
 
+router.get('/office/:officeNumber/ac_on', function(req, res) {
+    var date = req.query.date;
+    sensor.getAirConditioningUsage(res, req.params.officeNumber, date);
+});
+
 
 module.exports = router;

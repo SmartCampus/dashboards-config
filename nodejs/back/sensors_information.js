@@ -160,7 +160,16 @@ function getDoorsOpening(response, officeNumber) {
     });
 }
 
-
+/**
+ * This method retrieves all the opening of the door of the given office number per day and put it
+ * in the response of the request exposed in the route.
+ *
+ * @param   {response}  response        Response of the request in the route
+ * @param   {int}   officeNumber    Number of the office where we want to retrieve the opening
+ *                                      of the window
+ * @param   {string}    date            Intervale of date when we want to retrive the data
+ *
+ */
 function getWindowOpening(response, officeNumber, date) {
     requestSmartcampus.getSensorData("WINDOW" + officeNumber+ "STATE", date, false, function (res) {
         var stringData = "";
@@ -189,7 +198,6 @@ function getWindowOpening(response, officeNumber, date) {
                 var table = [];
                 table.push(parseInt(test));
                 table.push(hashMap[test]);
-                //console.log(test);
                 windowsOpening.data.push(table);
             }
 
@@ -199,7 +207,71 @@ function getWindowOpening(response, officeNumber, date) {
 }
 
 /**
- * TODO
+ * This method will calculate the per centage of time when the air conditioner is used and put it
+ * in the response of the request.
+ *
+ * @param   [response}  response        Response of the request expose in the route
+ * @param   {string}    officeNumber    Number of the office where we want to check the air conditioner
+ * @param   {string}    date            Intervale of date when we want to get the data
+ */
+function getAirConditioningUsage(response, officeNumber, date) {
+    requestSmartcampus.getSensorData("AC_" + officeNumber+ "STATE", date, false, function (res) {
+        var stringData = "";
+
+        res.on("data", function(chunck) {
+            stringData += chunck;
+        });
+
+        res.on("end" , function() {
+            var json = JSON.parse(stringData);
+            var airConditionerOpening = {"data" : []};
+            var hashMap = {};
+            var isOn = true;
+            for(var i in json.values) {
+                var date = moment.unix(json.values[i].date);
+                var day = date.dayOfYear();
+                var hour = date.hour();
+                if(hashMap[day] == undefined) {
+                    if(json.values[i].value == "ON") {
+                        hashMap[day] = 24 - hour;
+                    } else {
+                        isOn = false;
+                        hashMap[day] = hour;
+                    }
+                } else {
+                    if((json.values[i].value == "ON") && (isOn == false)) {
+                        hashMap[day] = hashMap[day] + 24 - hour;
+                        isOn = true;
+                    } else if((json.values[i].value == "OFF") && (isOn == true)) {
+                        hashMap[day] = hashMap[day] - (24 - hour);
+                        isOn = false;
+                    }
+                }
+            }
+            for(var iterator in hashMap) {
+                var table = [];
+                table.push(parseInt(iterator));
+                table.push((hashMap[iterator]/24*100));
+                airConditionerOpening.data.push(table);
+            }
+            response.send(airConditionerOpening);
+        })
+    });
+}
+
+
+
+
+/**
+ * This method will retrives the per cent of time when the air conditioner is used
+ *
+ * @type {getAirConditionningUsage}
+ */
+exports.getAirConditioningUsage = getAirConditioningUsage;
+
+/**
+ * This method put the number of doors opening for the given office per day.
+ *
  * @type {getWindowOpening}
  */
 exports.getWindowOpening = getWindowOpening;
