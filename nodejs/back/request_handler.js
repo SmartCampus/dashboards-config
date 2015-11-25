@@ -22,6 +22,11 @@ router.get('/office/:officeNumber/ac_status', function(req, res) {
     sensor.getAirConditionerState(res, req.params.officeNumber)
 });
 
+router.get('/campus/temperature', function(req, res) {
+    var date = req.query.date;
+    res.setHeader('Content-Type', 'application/json');
+    sensor.getCampusTemperature(date,res);
+});
 
 
 

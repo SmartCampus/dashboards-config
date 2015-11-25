@@ -39,66 +39,66 @@ for(var i = 0; i < hourlyWindow.values.length; i++)
     ac_result.push(parseInt(hourlyAC.values[i].value));
 }
 
-//First step of data retrieving : we get the inside temperatures
-retrieveData.askForTemp('office/443/temperature', '2015-10-14 8:00:11', '2015-10-20 18:00:11');
-
-function askForTemp(address, date1, date2){
-    retrieveData.askForTemp(address, date1, date2);
-}
-
 //Success callback for retrieving the inside temperatures
-var successCB = function(data) {
-    console.log(data);
+var firstSuccessInTemp = function(data) {
     var periodWanted =data.time;
     var insideTemperature = data.temperatures;
-    console.log(periodWanted);
-    console.log(periodWanted);
+    console.log(insideTemperature);
+
+    var secondSuccessInTemp = function(data) {
+        var outsideTemperature = data.temperatures;
+        console.log(outsideTemperature);
+        $(function () {
+            $('#c1').highcharts({
+                chart: {
+                    type: 'line'
+                },
+                title: {
+                    text: 'In vs Out temperature'
+                },
+                subtitle: {
+                    text: 'office 443'
+                },
+                xAxis: {
+                    categories: periodWanted
+                },
+                yAxis: {
+                    title: {
+                        text: 'Temperature (°C)'
+                    },
+                    minTickInterval:1
+                },
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            enabled: false
+                        }
+                    }
+                },
+                tooltip: {
+                    shared: true,
+                    crosshairs: true
+                },
+                series: [{
+                    name: 'office 443 temperature inside',
+                    data: insideTemperature
+                },
+                 {name: 'office 443 temperature outside',
+                 data: outsideTemperature}
+                ]
+            });
+        });
+    };
 
     //We need to get the outside temperatures now, to build our whole graph.
-  //  retrieveData.askForTemp();
-
-
-    $(function () {
-        $('#c1').highcharts({
-            chart: {
-                type: 'line'
-            },
-            title: {
-                text: 'In vs Out temperature'
-            },
-            subtitle: {
-                text: 'office 443'
-            },
-            xAxis: {
-                categories: periodWanted
-            },
-            yAxis: {
-                title: {
-                    text: 'Temperature (°C)'
-                },
-                minTickInterval:1
-            },
-            plotOptions: {
-                line: {
-                    dataLabels: {
-                        enabled: false
-                    }
-                }
-            },
-            tooltip: {
-                shared: true,
-                crosshairs: true
-            },
-            series: [{
-                name: 'office 443 temperature inside',
-                data: insideTemperature
-            }/*,
-             {name: 'office 344 temperature outside',
-             data: tempOut_result}*/
-            ]
-        });
-    });
+    retrieveData.askForTemp('campus/temperature', beginDate, endDate, secondSuccessInTemp);
 };
+var beginDate = '2015-10-14 8:00:11';
+var endDate = '2015-10-20 18:00:11';
+
+//First step of data retrieving : we get the inside temperatures
+retrieveData.askForTemp('office/443/temperature', beginDate, endDate, firstSuccessInTemp);
+
 
 
 $(function () {
@@ -164,11 +164,9 @@ $(function () {
 /**
  The boolean values for A/C and window :
  */
-retrieveData.askForWindowNow('office/443/window_status');
-retrieveData.askForACNow('office/443/ac_status');
-
 
 var successForWindow = function(data) {
+    console.log('in success result');
     if (data.state == 'CLOSED') {
         document.getElementById('windowState').setAttribute("class", "label label-danger");
     }
@@ -176,13 +174,15 @@ var successForWindow = function(data) {
         document.getElementById('windowState').setAttribute("class", "label label-success");
     }
 };
-
 var successForAC = function(data) {
     if (data.state == 'OFF')
         document.getElementById('climState').setAttribute("class", "label label-danger");
     else
         document.getElementById('climState').setAttribute("class", "label label-success");
 };
+
+retrieveData.askForStateNow('office/443/window_status', successForWindow);
+retrieveData.askForStateNow('office/443/ac_status', successForAC);
 
 /**
  * Datepikckers
@@ -201,7 +201,7 @@ $('#datetimepicker2').datetimepicker({
 $( "#refresh" ).click(function() {
     var from = $('#datetimepicker1').data('date');
     var to = $('#datetimepicker2').data('date');
+    retrieveData.askForTemp('office/443/temperature', from, to, firstSuccessInTemp);
 
-    askForTemp('office/443/temperature', from, to);
 });
 
