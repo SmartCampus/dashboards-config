@@ -14,21 +14,20 @@ function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09
 
         res.on("data", function(chunck) {
            stringData += chunck;
-       })
+        })
         res.on("end" , function() {
             var tempPerTime = JSON.parse(stringData);
             var temp = [];
             var time = [];
             console.log(tempPerTime.values[0].value);
-            for(var i in tempPerTime.values) {
-                temp.push(Math.round(tempPerTime.values[i].value).toFixed(2)); // Put only 2 number after the comma
-                time.push(tempPerTime.values[i].date);
-            }
-            var responseInGoodFormat = {
-                "temperatures": temp,
-                "time" : time
-            }
+            var responseInGoodFormat = {"temperatures": [], "time" : []};
 
+
+            for(var i in tempPerTime.values) {
+             //   responseInGoodFormat.temperatures.push(parseInt((Math.round(tempPerTime.values[i].value).toFixed(2))));
+                responseInGoodFormat.temperatures.push(parseFloat(tempPerTime.values[i].value));
+                responseInGoodFormat.time.push(tempPerTime.values[i].date);
+            }
             callback.send(responseInGoodFormat);
         })
     });
