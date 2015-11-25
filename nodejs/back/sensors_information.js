@@ -60,7 +60,24 @@ function getWindowsState(callback, officeNumber) {
     });
 }
 
+// TODO : si on veut normaliser faudrait que le capteur soit sur /AC443 et pas /AC_443 (meme synthase que la fenetre)
+function getAirConditionnerState(callback, officeNumber) {
+    requestSmartcampus.getLastSensorData("AC_" + officeNumber + "STATE", false, function (res) {
+        var stringData = "";
+
+        res.on("data", function (chunck) {
+            stringData += chunck;
+        });
+        res.on("end", function () {
+            var json = JSON.parse(stringData);
+            var windowState = {"state" : json.values[0].value};
+            callback.send(windowState);
+        });
+    });
+}
 
 
+
+exports.getAirConditionnerState = getAirConditionnerState;
 exports.getDeskTemperature = getDeskTemperature;
 exports.getWindowsState = getWindowsState;
