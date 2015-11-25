@@ -31,7 +31,8 @@
   "dependencies": {
     "body-parser": "^1.14.1",
     "ejs": "^2.3.4",
-    "express": "^4.13.3"
+    "express": "^4.13.3",
+    "moment": "^2.10.6"
   },
   "devDependencies": {},
   "private": true,

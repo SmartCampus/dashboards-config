@@ -4,7 +4,8 @@
  * Module responsible for creating the good request to the SmartCampus API.
  */
 
-var requestSmartcampus = require("./request_smartcampus");
+var requestSmartcampus = require("./request_smartcampus"),
+    moment = require("moment");
 
 /**
  * This method will retrieve all the data of the smart campus API for the given office and for the
@@ -159,6 +160,49 @@ function getDoorsOpening(response, officeNumber) {
     });
 }
 
+
+function getWindowOpening(response, officeNumber, date) {
+    requestSmartcampus.getSensorData("WINDOW" + officeNumber+ "STATE", date, false, function (res) {
+        var stringData = "";
+
+        res.on("data", function(chunck) {
+            stringData += chunck;
+        });
+
+        res.on("end" , function() {
+            var json = JSON.parse(stringData);
+            var windowsOpening = {"data" : []};
+
+            var hashMap = {};
+            for(var i in json.values) {
+                if(json.values[i].value == "OPEN") {
+                    var date = moment.unix(json.values[i].date);
+                    var day = date.dayOfYear();
+                    if(hashMap[day] == undefined) {
+                        hashMap[day] = 1;
+                    } else {
+                        hashMap[day] = hashMap[day] + 1;
+                    }
+                }
+            }
+            for(var test in hashMap) {
+                var table = [];
+                table.push(test);
+                table.push(hashMap[test]);
+                //console.log(test);
+                windowsOpening.data.push(table);
+            }
+
+            response.send(windowsOpening);
+        })
+    });
+}
+
+/**
+ * TODO
+ * @type {getWindowOpening}
+ */
+exports.getWindowOpening = getWindowOpening;
 
 /**
  * This method put the last state of air conditioner in the response in the route
