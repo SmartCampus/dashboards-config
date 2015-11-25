@@ -54,7 +54,7 @@ var firstSuccessInTemp = function(data) {
                     crosshairs: true,
                     formatter: function() {
                         return '<br/>'+
-                            Highcharts.dateFormat('%d.%m.%Y', this.x*1000) +' : '+ parseInt(this.y)+' °C <br/> <br/>';
+                            Highcharts.dateFormat('%H:%M - %d.%m.%Y', this.x*1000) +' : '+ parseInt(this.y)+' °C <br/> <br/>';
                     }
                 },
                 series: [{
