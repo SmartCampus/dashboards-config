@@ -37,11 +37,16 @@ function getCampusTemperature(date, callback) {
         res.on("end" , function() {
             var tempPerTime = JSON.parse(stringData);
 
-            var responseInGoodFormat = {"temperatures": [], "time" : []};
+            var responseInGoodFormat = {"data": []};
+            var temperaturePerTime = [];
+
             for(var i in tempPerTime.values) {
-                responseInGoodFormat.temperatures.push(parseFloat(tempPerTime.values[i].value));
-                responseInGoodFormat.time.push(tempPerTime.values[i].date);
+                temperaturePerTime.push(tempPerTime.values[i].date);
+                temperaturePerTime.push(parseFloat(tempPerTime.values[i].value));
             }
+
+            responseInGoodFormat.data.push(temperaturePerTime);
+            console.log(responseInGoodFormat);
             callback.send(responseInGoodFormat);
         })
     });
