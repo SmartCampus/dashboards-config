@@ -19,7 +19,7 @@ router.get('/office/:officeNumber/window_status', function(req, res) {
 });
 
 router.get('/office/:officeNumber/ac_status', function(req, res) {
-    sensor.getAirConditionnerState(res, req.params.officeNumber)
+    sensor.getAirConditionerState(res, req.params.officeNumber)
 });
 
 
