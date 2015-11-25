@@ -14,7 +14,7 @@ function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09
 
         res.on("data", function(chunck) {
            stringData += chunck;
-       })
+        })
         res.on("end" , function() {
             var tempPerTime = JSON.parse(stringData);
             var temp = [];
@@ -24,11 +24,11 @@ function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09
                 temp.push(Math.round(tempPerTime.values[i].value).toFixed(2)); // Put only 2 number after the comma
                 time.push(tempPerTime.values[i].date);
             }
+            console.log(temp);
             var responseInGoodFormat = {
                 "temperatures": temp,
                 "time" : time
             }
-
             callback.send(responseInGoodFormat);
         })
     });
