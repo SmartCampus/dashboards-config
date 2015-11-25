@@ -162,17 +162,22 @@ $(function () {
  The boolean values for A/C and window :
  */
 var acOn = true;
-var windowOpen = false;
-if (!acOn)
-    document.getElementById('climState').setAttribute("class", "label label-danger");
-else
-    document.getElementById('climState').setAttribute("class", "label label-success");
 
-if (!windowOpen)
-    document.getElementById('windowState').setAttribute("class", "label label-danger");
-else
-    document.getElementById('windowState').setAttribute("class", "label label-success");
+retrieveData.askForWindowNow('office/443/window_status');
 
+var successForWindow = function(data) {
+    if (data.state == 'CLOSED') {
+        document.getElementById('windowState').setAttribute("class", "label label-danger");
+    }
+    else {
+        document.getElementById('windowState').setAttribute("class", "label label-success");
+    }
+}
+
+    if (!acOn)
+        document.getElementById('climState').setAttribute("class", "label label-danger");
+    else
+        document.getElementById('climState').setAttribute("class", "label label-success");
 
 /**
  * Datepikckers
