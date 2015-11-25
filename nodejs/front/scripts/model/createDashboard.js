@@ -2,17 +2,19 @@
  * Created by Garance on 25/11/2015.
  */
 var retrieveData = (function () {
-    var tempAsked = [];
-    var timeFrame = [];
+    var tempData = {timeFrame: [], tempAsked:[]};
     return { //exposed to public
-        getTemp: function (/*params of temperature:begindate, place(office nb or out)*/) {
+        askForTemp: function (/*params of temperature:begindate, place(office nb or out)*/) {
             console.log('before the get');
 
-            $.get(serverURL + 'office/443/temperature', {date: "2015-10-14 18:00:11/2015-10-14 19:00:11"})
+            $.get(serverURL + 'office/443/temperature', {date: "2015-10-14 8:00:11/2015-10-20 18:00:11"})
                 .done(function (data) {
                     console.log('done');
                     console.log(data);
                     alert("Data Loaded: " + data);
+                    tempData.tempAsked.push(data.temperatures);
+                    tempData.timeFrame.push(data.time);
+                    successCB(data);
                 })
                 .fail(function (data) {
                     console.log(data);
@@ -25,6 +27,7 @@ var retrieveData = (function () {
                     alert("finished");
                 });
             console.log('after the get');
+            return tempData;
         }
     }
 }());
