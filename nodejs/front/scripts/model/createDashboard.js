@@ -10,18 +10,17 @@ var retrieveData = (function () {
                 .done(function (data) {
                     console.log('done');
                     console.log(data);
-                    alert("Data Loaded: " + data);
+                  //  alert("Data Loaded: " + data);
                     successCB(data);
                 })
                 .fail(function (data) {
                     console.log(data);
-
                     console.log('error');
-                    alert("error");
+                    //alert("error");
                 })
                 .always(function (data) {
                     console.log('processed');
-                    alert("finished");
+                    //alert("finished");
                 });
             console.log('after the get');
         }
