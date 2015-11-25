@@ -39,7 +39,10 @@ router.get('/campus/temperature', function(req, res) {
 });
 
 
-
+router.get('/office/:officeNumber/window_opening', function(req, res) {
+    var date = req.query.date;
+    sensor.getWindowOpening(res, req.params.officeNumber, date);
+});
 
 
 
