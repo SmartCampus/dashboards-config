@@ -7,7 +7,7 @@ var requestSmartcampus = require("./request_smartcampus");
 
 
 function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09-01 00:00:00/2015-10-01 00:00:00
-    requestSmartcampus.getSensorData("TEMP_" + officeNumber + "V", date, true, function (res) {
+        requestSmartcampus.getSensorData("TEMP_" + officeNumber + "V", date, true, function (res) {
         var stringData = ""
 
         res.on("data", function(chunck) {
@@ -17,13 +17,13 @@ function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09
             var tempPerTime = JSON.parse(stringData);
 
             var responseInGoodFormat = {"data": []};
-            var temperaturePerTime = [];
 
             for(var i in tempPerTime.values) {
+                var temperaturePerTime = [];
                 temperaturePerTime.push(tempPerTime.values[i].date);
                 temperaturePerTime.push(parseFloat(tempPerTime.values[i].value));
+                responseInGoodFormat.data.push(temperaturePerTime);
             }
-            responseInGoodFormat.data.push(temperaturePerTime);
 
             callback.send(responseInGoodFormat);
         })
@@ -32,7 +32,7 @@ function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09
 
 
 function getCampusTemperature(date, callback) {
-    requestSmartcampus.getSensorData("TEMP_CAMPUS", date, true, function (res) {
+    requestSmartcampus.getSensorData("TEMP_CAMPUS", date, false, function (res) {
         var stringData = ""
 
         res.on("data", function(chunck) {
@@ -61,8 +61,6 @@ function getDoorsState(callback) {
     requestSmartcampus.getSensorData("DOOR443STATE", "", true, function (res) {
         var stringData = "";
 
-
-
         res.on("data", function (chunck) {
             stringData += chunck;
         });
@@ -75,6 +73,13 @@ function getDoorsState(callback) {
 }
 
 
+/**
+ * This method retieve all the data for the state of the window of the given office number
+ *
+ * @param {Function} callback     function to call when the job is finish with the body response
+ *                                from the API call
+ * @param officeNumber
+ */
 function getWindowsState(callback, officeNumber) {
     requestSmartcampus.getLastSensorData("WINDOW" + officeNumber + "STATE", false, function (res) {
         var stringData = "";
