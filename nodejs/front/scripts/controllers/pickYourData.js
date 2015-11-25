@@ -39,5 +39,20 @@ function getTree() {
 
 $('#tree').treeview({data: getTree()});
 
-$('#datetimepicker1').datetimepicker();
-$('#datetimepicker2').datetimepicker();
+$('#beginTime1').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:ss'
+});
+
+$('#endTime1').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:ss'
+});
+
+var beginDate = '';
+var endDate = '';
+    $( "#buttonGenerate" ).click(function() {
+        beginDate = $('#beginTime1').data('date');
+        endDate = $('#endTime1').data('date');
+        window.location = '/summer.html';
+
+});
+

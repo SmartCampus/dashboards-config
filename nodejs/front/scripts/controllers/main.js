@@ -73,9 +73,12 @@ var firstSuccessInTemp = function(data) {
     //We need to get the outside temperatures now, to build our whole graph.
     retrieveData.askForSeries('campus/temperature', beginDate, endDate, secondSuccessInTemp);
 };
-var beginDate = '2015-10-14 8:00:11';
-var endDate = '2015-10-20 18:00:11';
+
 var place = 'office/443/';
+if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
+    beginDate = '2015-10-14 8:00:11';
+    endDate = '2015-10-20 18:00:11';
+}
 
 //First step of data retrieving : we get the inside temperatures
 retrieveData.askForSeries(place+'temperature', beginDate, endDate, firstSuccessInTemp);
@@ -180,8 +183,6 @@ retrieveData.askForStateNow(place+'ac_status', successForAC);
  * Datepikckers
  */
 
-
-
 $('#datetimepicker1').datetimepicker({
     format: 'YYYY-MM-DD HH:mm:ss'
 });
@@ -191,9 +192,9 @@ $('#datetimepicker2').datetimepicker({
 });
 
 $( "#refresh" ).click(function() {
-    var from = $('#datetimepicker1').data('date');
-    var to = $('#datetimepicker2').data('date');
-    retrieveData.askForTemp(place+'temperature', from, to, firstSuccessInTemp);
+    beginDate = $('#datetimepicker1').data('date');
+    endDate = $('#datetimepicker2').data('date');
+    retrieveData.askForSeries(place+'temperature', beginDate, endDate, firstSuccessInTemp);
 
 });
 
