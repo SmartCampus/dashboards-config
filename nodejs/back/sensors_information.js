@@ -27,6 +27,27 @@ function getDeskTemperature(date, officeNumber ,callback) {           // 2015-09
 }
 
 
+function getCampusTemperature(date, callback) {
+    requestSmartcampus.getSensorData("TEMP_CAMPUS", date, true, function (res) {
+        var stringData = ""
+
+        res.on("data", function(chunck) {
+            stringData += chunck;
+        })
+        res.on("end" , function() {
+            var tempPerTime = JSON.parse(stringData);
+
+            var responseInGoodFormat = {"temperatures": [], "time" : []};
+            for(var i in tempPerTime.values) {
+                responseInGoodFormat.temperatures.push(parseFloat(tempPerTime.values[i].value));
+                responseInGoodFormat.time.push(tempPerTime.values[i].date);
+            }
+            callback.send(responseInGoodFormat);
+        })
+    });
+}
+
+
 function getDoorsState(callback) {
     requestSmartcampus.getSensorData("DOOR443STATE", "", true, function (res) {
         var stringData = "";
@@ -81,3 +102,4 @@ function getAirConditionerState(callback, officeNumber) {
 exports.getAirConditionerState = getAirConditionerState;
 exports.getDeskTemperature = getDeskTemperature;
 exports.getWindowsState = getWindowsState;
+exports.getCampusTemperature = getCampusTemperature;
