@@ -30,7 +30,7 @@ var firstSuccessInTemp = function(data) {
                     },
                     tickInterval: 24 * 3600, // one day ?24 * 3600 * 1000
                     tickWidth: 0,
-                    type: 'category'
+                    type: 'category',
                 },
                 yAxis: {
                     title: {
@@ -102,7 +102,12 @@ console.log('in the window method');
                 },
                 xAxis: {
                     //  tickInterval: 24 * 3600 * 1000,
-                    type: 'category'
+                    type: 'category',
+                    labels: {
+                        formatter: function () {
+                            return (moment().dayOfYear(parseInt(this.value))).format("MMMM Do YYYY")
+                        }
+                    },
                 },
                 yAxis: [{ // Primary yAxis
                     title: {
