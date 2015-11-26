@@ -11,6 +11,7 @@ router.get("/:campus", function (req, res) {
 
 router.get("/:campus/sensors", function(req, res) {
     // TODO : list of all the sensor directly contained by this container
+    res.send("List of all the sensors");
 });
 
 router.get("/:campus/sensors/:sensor", function(req,res) {
@@ -24,6 +25,7 @@ router.get("/:campus/sensors/:sensor", function(req,res) {
 
 router.get("/:campus/buildings", function(req,res) {
    // TODO :  list of direct child containers URI (e.g. buildings of the campus)
+    res.send("list of all the buildings of the campus");
 });
 
 router.get("/:campus/buildings/:building", function(req,res) {
@@ -32,6 +34,7 @@ router.get("/:campus/buildings/:building", function(req,res) {
 
 router.get("/:campus/buildings/:building/sensors", function(req, res) {
    // TODO : list of all the sensors
+    res.send("list of all the sensors of the buildings");
 });
 
 router.get("/:campus/buildings/:building/sensors/:sensor", function(req, res) {
@@ -54,6 +57,7 @@ router.get("/:campus/buildings/:building/floors/:floorNumber",function(req,res) 
 
 router.get("/:campus/buildings/:building/floors/:floorNumber/sensors", function(req,res) {
     // TODO : 	-> list of sensor URI directly contained by this container
+    res.send("list of all the sensors of the floots");
 });
 
 router.get("/:campus/buildings/:building/floors/:floorNumber/sensors/:sensor", function(req,res) {
@@ -67,7 +71,8 @@ router.get("/:campus/buildings/:building/floors/:floorNumber/sensors/:sensor", f
  */
 
 router.get("/:campus/buildings/:building/floors/:floorNumber/areas",function(req,res) {
-    res.send("Yop");
+    // TODO :  list of direct child containers URI (e.g. areas of the floor)
+    res.send("list of all the areas of the floors");
 });
 
 router.get("/:campus/buildings/:building/floors/:floorNumber/areas/:areaId",function(req,res) {
@@ -91,7 +96,8 @@ router.get("/:campus/buildings/:building/floors/:floorNumber/areas/:areaId/senso
  */
 
 router.get("/:campus/buildings/:building/floors/:floorNumber/areas/:areaId/rooms",function(req,res) {
-    res.send("Yop");
+    // TODO : list of direct child containers URI (e.g. areas of the floor)
+    res.send("List of all the areas of the floor");
 });
 
 router.get("/:campus/buildings/:building/floors/:floorNumber/areas/:areaId/rooms/:roomId", function(req, res) {
@@ -101,7 +107,8 @@ router.get("/:campus/buildings/:building/floors/:floorNumber/areas/:areaId/rooms
 });
 
 router.get("/:campus/buildings/:building/floors/:floorNumber/areas/:areaId/rooms/:roomId/sensors", function(req, res) {
-    res.send("Yop");
+    // TODO : list of sensor URI directly contained by this container
+    res.send("list of sensor URI directly contained in the room");
 });
 
 
