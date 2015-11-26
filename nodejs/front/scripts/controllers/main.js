@@ -28,7 +28,8 @@ var firstSuccessInTemp = function(data) {
                             return  Highcharts.dateFormat('%d.%m.%Y', this.value*1000)
                         }
                     },
-                  //  tickInterval: 24 * 3600 * 1000,
+                    tickInterval: 24 * 3600, // one day ?24 * 3600 * 1000
+                    tickWidth: 0,
                     type: 'category'
                 },
                 yAxis: {
@@ -105,18 +106,36 @@ console.log('in the window method');
                 },
                 yAxis: [{ // Primary yAxis
                     title: {
-                        text: 'ACUse'
+                        text: '% of time AC is on',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
                     },
                     max: 100,
                     labels: {
-                        format: '{value} %'
+                        format: '{value} %',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    },
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
                     }
                 }, { // Secondary yAxis
                     title: {
-                        text: 'Openings'
+                        text: 'Nb of times the window got opened',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
                     },
                     labels: {
-                        format: '{value}'
+                        format: '{value}',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    },
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
                     },
                     allowDecimals: false,
                     opposite: true
@@ -136,11 +155,11 @@ console.log('in the window method');
                     }
                 },
                 series: [{
-                    name: 'ACUse',
+                    name: '% of time AC is on',
                     data: acCount,
                     yAxis: 0
                 }, {
-                    name: 'WindowOpenings',
+                    name: 'Nb of times the window got opened',
                     data: windowCount,
                     yAxis: 1
                 }]
