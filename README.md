@@ -28,6 +28,10 @@ Polytech Nice-Sophia SI - PFE 2015-2016 - groupe 9 :
 * [Quentin Cornevin](mailto:qcornevin@gmail.com)
 * [Marc Karassev](mailto:marc.karassev@yahoo.fr)
 
+## Intégration continue
+
+Jenkins server: 52.32.59.80:8080
+
 ---
 
 ![Polytech Nice Sophia](http://users.polytech.unice.fr/~bennour/logos.png)
