@@ -1,6 +1,9 @@
 var express = require("express"),
     router = express.Router();
 
+/**
+ * Route of the campus :
+ */
 
 router.get("/:campus", function (req, res) {
 	res.send("Welcome on the SmartCampus API, for more : /" + req.params.campus +"/sensors");
@@ -15,7 +18,9 @@ router.get("/:campus/sensors/:sensor", function(req,res) {
 });
 
 
-
+/**
+ * Route of the buildings
+ */
 
 router.get("/:campus/buildings", function(req,res) {
    // TODO :  list of direct child containers URI (e.g. buildings of the campus)
@@ -34,6 +39,9 @@ router.get("/:campus/buildings/:building/sensors/:sensor", function(req, res) {
 });
 
 
+/**
+ * Route of the floors
+ */
 
 router.get("/:campus/buildings/:building/floors" , function(req,res) {
     // TODO : list of direct child containers URI (e.g. floors of the building)
@@ -54,7 +62,9 @@ router.get("/:campus/buildings/:building/floors/:floorNumber/sensors/:sensor", f
 });
 
 
-
+/**
+ * Route of the areas
+ */
 
 router.get("/:campus/buildings/:building/floors/:floorNumber/areas",function(req,res) {
     res.send("Yop");
@@ -76,7 +86,9 @@ router.get("/:campus/buildings/:building/floors/:floorNumber/areas/:areaId/senso
 });
 
 
-
+/**
+ * Route of the rooms
+ */
 
 router.get("/:campus/buildings/:building/floors/:floorNumber/areas/:areaId/rooms",function(req,res) {
     res.send("Yop");
