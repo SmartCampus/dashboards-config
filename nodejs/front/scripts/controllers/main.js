@@ -118,7 +118,7 @@ console.log('in the window method');
                             color: Highcharts.getOptions().colors[0]
                         }
                     },
-                    max: 100,
+                    max: 101,
                     labels: {
                         format: '{value} %',
                         style: {
