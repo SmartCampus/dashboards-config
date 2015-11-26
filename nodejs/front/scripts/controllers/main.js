@@ -14,7 +14,8 @@ var firstSuccessInTemp = function(data) {
         $(function () {
             $('#c1').highcharts({
                 chart: {
-                    type: 'line'
+                    type: 'line',
+                    zoomType: 'x'
                 },
                 title: {
                     text: 'In vs Out temperature'
@@ -30,7 +31,7 @@ var firstSuccessInTemp = function(data) {
                     },
                     tickInterval: 24 * 3600, // one day ?24 * 3600 * 1000
                     tickWidth: 0,
-                    type: 'category',
+                    type: 'category'
                 },
                 yAxis: {
                     title: {
@@ -92,7 +93,8 @@ console.log('in the window method');
             $('#c2').highcharts({
                 chart: {
                     type: 'column',
-                    alignTicks: false
+                 //   alignTicks: false,
+                    zoomType: 'x'
                 },
                 title: {
                     text: 'Window openings vs. A/C use'
@@ -107,7 +109,7 @@ console.log('in the window method');
                         formatter: function () {
                             return (moment().dayOfYear(parseInt(this.value))).format("MMMM Do YYYY")
                         }
-                    },
+                    }
                 },
                 yAxis: [{ // Primary yAxis
                     title: {
