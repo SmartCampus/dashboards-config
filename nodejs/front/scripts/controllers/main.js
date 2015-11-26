@@ -14,7 +14,8 @@ var firstSuccessInTemp = function(data) {
         $(function () {
             $('#c1').highcharts({
                 chart: {
-                    type: 'line'
+                    type: 'line',
+                    zoomType: 'x'
                 },
                 title: {
                     text: 'In vs Out temperature'
@@ -28,7 +29,8 @@ var firstSuccessInTemp = function(data) {
                             return  Highcharts.dateFormat('%d.%m.%Y', this.value*1000)
                         }
                     },
-                  //  tickInterval: 24 * 3600 * 1000,
+                    tickInterval: 24 * 3600, // one day ?24 * 3600 * 1000
+                    tickWidth: 0,
                     type: 'category'
                 },
                 yAxis: {
@@ -91,7 +93,8 @@ console.log('in the window method');
             $('#c2').highcharts({
                 chart: {
                     type: 'column',
-                    alignTicks: false
+                 //   alignTicks: false,
+                    zoomType: 'x'
                 },
                 title: {
                     text: 'Window openings vs. A/C use'
@@ -101,22 +104,45 @@ console.log('in the window method');
                 },
                 xAxis: {
                     //  tickInterval: 24 * 3600 * 1000,
-                    type: 'category'
+                    type: 'category',
+                    labels: {
+                        formatter: function () {
+                            return (moment().dayOfYear(parseInt(this.value))).format("MMMM Do YYYY")
+                        }
+                    }
                 },
                 yAxis: [{ // Primary yAxis
                     title: {
-                        text: 'ACUse'
+                        text: '% of time AC is on',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
                     },
                     max: 100,
                     labels: {
-                        format: '{value} %'
+                        format: '{value} %',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    },
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
                     }
                 }, { // Secondary yAxis
                     title: {
-                        text: 'Openings'
+                        text: 'Nb of times the window got opened',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
                     },
                     labels: {
-                        format: '{value}'
+                        format: '{value}',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    },
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
                     },
                     allowDecimals: false,
                     opposite: true
@@ -136,11 +162,11 @@ console.log('in the window method');
                     }
                 },
                 series: [{
-                    name: 'ACUse',
+                    name: '% of time AC is on',
                     data: acCount,
                     yAxis: 0
                 }, {
-                    name: 'WindowOpenings',
+                    name: 'Nb of times the window got opened',
                     data: windowCount,
                     yAxis: 1
                 }]
