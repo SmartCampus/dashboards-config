@@ -2,11 +2,6 @@
  * Created by Garance on 23/11/2015.
  */
 
-var SM_AirConditioning = '[[196,100],[201,10],[202,100],[303,25],[304,45],[305,56],[306,34]]';
-
-// Transform text to JSON
-hourlyAC = JSON.parse(SM_AirConditioning);
-console.log(hourlyAC);
 
 //Success callback for retrieving the inside temperatures
 var firstSuccessInTemp = function(data) {
@@ -90,7 +85,8 @@ successForWindowCount = function(data) {
 var windowCount = data.data;
 console.log('in the window method');
 
-    //successForAcCount = function(data) {
+    successForAcCount = function(data) {
+        var acCount = data.data;
         $(function () {
             $('#c2').highcharts({
                 chart: {
@@ -141,7 +137,7 @@ console.log('in the window method');
                 },
                 series: [{
                     name: 'ACUse',
-                    data: hourlyAC,
+                    data: acCount,
                     yAxis: 0
                 }, {
                     name: 'WindowOpenings',
@@ -150,12 +146,12 @@ console.log('in the window method');
                 }]
             });
         });
-    //};
-    //retrieveData.askForSeries(place+'ac_percentage', beginDate, beginDate, successForAcCount);
+    };
+    retrieveData.askForSeries(place+'ac_on', beginDate, endDate, successForAcCount);
 
 };
 //successForWindowCount();
-retrieveData.askForSeriesForever(place+'window_opening',successForWindowCount);
+retrieveData.askForSeries(place+'window_opening', beginDate, endDate, successForWindowCount);
 
 /**
  The boolean values for A/C and window :

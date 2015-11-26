@@ -26,16 +26,17 @@ var retrieveData = (function () {
         askForSeriesForever: function (route, successCB) {
             $.get(serverURL + route)
                 .done(function (data) {
-                    console.log('got temps for a timespan');
+                    console.log('got temps forever');
                   //  alert("Data Loaded: " + data);
                     successCB(data);
                 })
                 .fail(function (data) {
                     console.log(data);
-                    console.log('error in get temp for timespan');
+                    console.log('error in get temp forever');
                 //    alert("error");
                 })
                 .always(function (data) {
+                    console.log('route sent : ', serverURL, route)
                     console.log('processed');
               //      alert("finished");
                 });
