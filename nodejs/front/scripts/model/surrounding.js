@@ -4,143 +4,63 @@
 
 
 $(function () {
-    $('#c1').highcharts({
-        chart: {
-            zoomType: 'xy'
-        },
-        title: {
-            text: 'Intensité sonore par rapport au couloir'
-        },
-        xAxis: [{
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            crosshair: true
-        }],
 
-        yAxis: [
+    $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
 
-        { // Primary yAxis
-            plotLines: [{
-                color: 'red', // Color value
-                dashStyle: 'longdashdot', // Style of the plot line. Default to solid
-                value: 1, // Value of where the line will appear
-                width: 2, // Width of the line
-                legend : 'Danger !'
-            }],
-            min: 0,
-            max : 1.5,
-            labels: {
-                format: '{value} db',
-                style: {
-                    color: Highcharts.getOptions().colors[1]
-                }
+        // Create the chart
+        $('#c1').highcharts('StockChart', {
+
+            // titre
+            title : {
+                text : 'Intensité sonore par rapport à la porte'
             },
-            title: {
-                text: 'Intensité sonore',
-                style: {
-                    color: Highcharts.getOptions().colors[1]
-                }
-            }
-        }],
-        tooltip: {
-            shared: false
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'center',
-            verticalAlign: 'bottom',
-            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-        },
-        series: [
 
-        {
-            name: 'Door state',
-            type: 'column',
-            data: [0, 0.5, 0.5,0.5, 0.5,0.5, 0.5,0.5, 0.5, 0, 0, 0],
-        },
-        {
-            name: 'Decibel',
-            type: 'spline',
-            data: [0.7, 1.1, 0.5, 0.5, 0.2, 0.5, 0.2, 0.5, 0.3, 1.3, 1.1, 0.03],
-            tooltip: {
-                valueSuffix: ' db'
-            }
-        }]
-    });
-});
+            rangeSelector : {
+                selected : 1
+            },
 
-$(function () {
-    $('#c2').highcharts({
-        chart: {
-            zoomType: 'xy'
-        },
-        title: {
-            text: 'Intensité sonore par rapport à l\'extérieur'
-        },
-        xAxis: [{
-            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            crosshair: true
-        }],
+            yAxis: {
 
-        yAxis: [
+                // legende axe Y
+                title: {
+                    text: 'Intensité sonore (db)'
+                },
 
-            { // Primary yAxis
+                // Affichage seuil
                 plotLines: [{
-                    color: 'red', // Color value
-                    dashStyle: 'longdashdot', // Style of the plot line. Default to solid
-                    value: 1, // Value of where the line will appear
-                    width: 2, // Width of the line
-                    legend : 'Danger !'
+                    value: 2,
+                    color: 'red',
+                    dashStyle: 'shortdash', //pointillé
+                    width: 2,
+                    label: {
+                        text: 'Seuil du bruit'
+                    }
                 }],
-                min: 0,
-                max : 1.5,
-                labels: {
-                    format: '{value} db',
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
+
+                // min et max en ordonnées
+                min : 0,
+            },
+
+            series : [
+                // affichage graphe
+                {
+                    name : 'Intensité sonore',
+                    data : data,
+                    tooltip: {
+                        valueDecimals: 2
                     }
                 },
-                title: {
-                    text: 'Intensité sonore',
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    }
+                // affichage colonnes
+                {
+                    type: 'column',
+                    name: 'Etat de la porte',
+                    data: data,
                 }
-            }],
-
-
-        tooltip: {
-            shared: false
-        },
-        legend: {
-            layout: 'vertical',
-            align: 'center',
-            verticalAlign: 'bottom',
-            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-        },
-        series: [
-
-            {
-                name: 'Windows state',
-                type: 'column',
-                data: [0, 0.5, 0.5,0.5, 0.5,0.5, 0.5,0.5, 0.5, 0, 0, 0],
-            },
-            {
-                name: 'Decibel',
-                type: 'spline',
-                data: [0.7, 1.1, 0.5, 0.5, 0.2, 0.5, 0.2, 0.5, 0.3, 1.3, 1.1, 0.03],
-                tooltip: {
-                    valueSuffix: ' db'
-                }
-            }]
+            ]
+        });
     });
+
 });
-
-
-/**
- * CAMENBERTS WINDOWS/DOOR
- */
 
 $(function () {
 
@@ -174,14 +94,14 @@ $(function () {
                 name: 'Brands',
                 colorByPoint: true,
                 data: [
-                { name: 'Open',
-                    y: 70.0,
-                    sliced: true,
-                    selected: true
-                },{
-                    name: 'Close',
-                    y: 30.0
-                }]
+                    { name: 'Open',
+                        y: 70.0,
+                        sliced: true,
+                        selected: true
+                    },{
+                        name: 'Close',
+                        y: 30.0
+                    }]
             }]
         });
     });
@@ -233,9 +153,7 @@ $(function () {
 });
 
 
-/**
- * GRAPH WINDOWS/DOOR
- */
+
 $(function () {
     $('#g1').highcharts({
         chart: {
