@@ -1,5 +1,6 @@
 var express = require("express"),
 	campusRouter = require("./campus_router"),
+	sensors = require("./Sensors"),
 	app = express();
 
 app.use(function (req, res, next) {
@@ -21,6 +22,10 @@ app.use(function (req, res, next) {
 });
 
 app.use("/", campusRouter);
+
+(function init() {
+	sensors.initSystem();
+})();
 
 app.listen(8081);
 console.log('Sensor Hierarchy Service is now listening on port 8081.');
