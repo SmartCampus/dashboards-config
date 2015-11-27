@@ -59,8 +59,68 @@ $(function () {
             ]
         });
     });
+});
+
+
+$(function () {
+
+    $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
+
+        // Create the chart
+        $('#c2').highcharts('StockChart', {
+
+            // titre
+            title : {
+                text : 'Intensité sonore par rapport à la fenêtre'
+            },
+
+            rangeSelector : {
+                selected : 1
+            },
+
+            yAxis: {
+
+                // legende axe Y
+                title: {
+                    text: 'Intensité sonore (db)'
+                },
+
+                // Affichage seuil
+                plotLines: [{
+                    value: 2,
+                    color: 'red',
+                    dashStyle: 'shortdash', //pointillé
+                    width: 2,
+                    label: {
+                        text: 'Seuil du bruit'
+                    }
+                }],
+
+                // min et max en ordonnées
+                min : 0,
+            },
+
+            series : [
+                // affichage graphe
+                {
+                    name : 'Intensité sonore',
+                    data : data,
+                    tooltip: {
+                        valueDecimals: 2
+                    }
+                },
+                // affichage colonnes
+                {
+                    type: 'column',
+                    name: 'Etat de la fenêtre',
+                    data: data,
+                }
+            ]
+        });
+    });
 
 });
+
 
 $(function () {
 
