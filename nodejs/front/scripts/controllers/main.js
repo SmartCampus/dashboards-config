@@ -217,7 +217,7 @@ $( "#refresh" ).click(function() {
     beginDate = $('#datetimepicker1').data('date');
     endDate = $('#datetimepicker2').data('date');
     retrieveData.askForSeries(place+'temperature', beginDate, endDate, firstSuccessInTemp);
-    retrieveData.askForSeries(place+'temperature', beginDate, endDate, successForWindowCount);
+    retrieveData.askForSeries(place+'window_opening', beginDate, endDate, successForWindowCount);
 
 });
 
