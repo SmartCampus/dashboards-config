@@ -196,7 +196,7 @@ function getWindowOpening(response, officeNumber, date) {
             }
             for(var test in hashMap) {
                 var table = [];
-                table.push(parseInt(test));
+                table.push(parseInt(test)*1000);
                 table.push(hashMap[test]);
                 windowsOpening.data.push(table);
             }
@@ -250,7 +250,7 @@ function getAirConditioningUsage(response, officeNumber, date) {
             }
             for(var iterator in hashMap) {
                 var table = [];
-                table.push(parseInt(iterator));
+                table.push(parseInt(iterator)*1000);
                 table.push((hashMap[iterator]/24*100));
                 airConditionerOpening.data.push(table);
             }
