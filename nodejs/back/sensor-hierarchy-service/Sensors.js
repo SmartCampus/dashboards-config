@@ -143,7 +143,7 @@ function initContainers() {
     var templierWest = new SensorContainer("Templiers Ouest", [], [], []);
     var fourthFloor = new SensorContainer("4th floor", ["SPARKS"] ,[], []);
     var coffeeCorner = new SensorContainer("Coffee corner", ["COFFEE", "CAFE"], [], []);
-    var sousRepartiteur = new SensorContainer("Sous repartiteur", ["MW_power"] , [], []);
+    var sousRepartiteur = new SensorContainer("Sous repartiteur", ["MW"] , [], []);
     var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis", "CORRIDOR"], [], []);
     var office445 = new SensorContainer("Office 445", ["445"], [], []);
     var office443 = new SensorContainer("Office 443", ["443"], [], []);
