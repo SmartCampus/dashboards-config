@@ -25,7 +25,8 @@
     "highcharts-release": "latest",
     "bootstrap": "latest",
     "bootstrap-treeview": "latest",
-    "eonasdan-bootstrap-datetimepicker": "~4.17.37"
+    "eonasdan-bootstrap-datetimepicker": "~4.17.37",
+    "highstock": "highstock-release#~2.1.9"
   },
   "license": "none",
   "homepage": "views/index.html",

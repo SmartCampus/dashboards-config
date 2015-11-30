@@ -118,7 +118,7 @@ console.log('in the window method');
                             color: Highcharts.getOptions().colors[0]
                         }
                     },
-                    max: 100,
+                    max: 101,
                     labels: {
                         format: '{value} %',
                         style: {
@@ -217,6 +217,7 @@ $( "#refresh" ).click(function() {
     beginDate = $('#datetimepicker1').data('date');
     endDate = $('#datetimepicker2').data('date');
     retrieveData.askForSeries(place+'temperature', beginDate, endDate, firstSuccessInTemp);
+    retrieveData.askForSeries(place+'window_opening', beginDate, endDate, successForWindowCount);
 
 });
 
