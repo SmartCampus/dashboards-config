@@ -5,7 +5,7 @@
 /** The dashboard parametres **/
 var place = 'office/443/';
 if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
-    beginDate = '2015-09-01 8:00:11';
+    beginDate = '2015-05-01 8:00:11';
     endDate = '2015-12-01 18:00:11';
 }
 
@@ -17,15 +17,21 @@ var drawLineChart = function() {
      * @returns {undefined}
      */
     $('#c1').highcharts('StockChart', {
+
         yAxis: {
+
             title: {
                 text: 'Temperature (°C)'
             },
+
             minTickInterval: 1,
+
             plotLines: [{
                 value: 0,
+                color: 'red',
+                dashStyle: 'shortdash', //pointillé
                 width: 2,
-                color: 'silver'
+                label: { text: '0°C'}
             }]
         },
 
@@ -36,8 +42,9 @@ var drawLineChart = function() {
 
         series: temperaturesArray
     });
-
 };
+
+
 
 var firstSuccessInTemp = function (data) {
     temperaturesArray[0] = {"name": "inside temparature", "data": data.data};
@@ -52,8 +59,9 @@ var firstSuccessInTemp = function (data) {
     console.log('about to ask for campus temp');
     retrieveData.askForSeries('campus/temperature', beginDate, endDate, secondSuccessInTemp);
     //retrieveData.askForSeriesForever('campus/temperature', secondSuccessInTemp);
-
 };
+
+
 
 retrieveData.askForSeries(place + 'temperature', beginDate, endDate, firstSuccessInTemp);
 //retrieveData.askForSeriesForever(place + 'temperature', firstSuccessInTemp);
@@ -70,62 +78,75 @@ var successForWindowCount = function (data) {
         $(function () {
             // create the chart
             $('#c2').highcharts('StockChart', {
+
                 chart: {
                     type: 'column',
                     zoomType: 'x'
                 },
-                title: {
-                    text: 'Window openings vs. A/C use'
-                },
+
                 xAxis: {
                     type: 'datetime'
                 },
-                yAxis: [{ // Primary yAxis
+
+                yAxis: [
+                { // Primary yAxis
+                    min: 0,
+
                     title: {
                         text: '% of time AC is on',
                         style: {
                             color: Highcharts.getOptions().colors[1]
                         }
                     },
-                    max: 100,
+
                     labels: {
                         format: '{value} %',
                         style: {
                             color: Highcharts.getOptions().colors[1]
                         }
                     },
+
                     style: {
                         color: Highcharts.getOptions().colors[1]
                     },
+
                     opposite: false
-                }, { // Secondary yAxis
+                },
+                { // Secondary yAxis
+
                     title: {
                         text: 'Nb of times the window got opened',
                         style: {
                             color: Highcharts.getOptions().colors[0]
                         }
                     },
+
                     labels: {
                         format: '{value}',
                         style: {
                             color: Highcharts.getOptions().colors[0]
                         }
                     },
+
                     style: {
                         color: Highcharts.getOptions().colors[0]
                     },
+
                     allowDecimals: false,
                     opposite: true
                 }],
+
                 tooltip: {
                     headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                    pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
                     footerFormat: '</table>',
                     shared: true,
                     useHTML: true
                 },
-                series: [{
+
+                series: [
+                {
                     name: countingArray[0].name,
                     data: countingArray[0].data,
                     dataGrouping: {
@@ -136,31 +157,33 @@ var successForWindowCount = function (data) {
                     },
                     yAxis: 1
                 },
-                    {
-                        type: 'column',
-                        name: countingArray[1].name,
-                        data: countingArray[1].data,
-                        dataGrouping: {
-                            forced: true,
-                            units: [[
-                                'hour',[1]
-                            ],
+                {
+                    type: 'column',
+                    name: countingArray[1].name,
+                    data: countingArray[1].data,
+                    dataGrouping: {
+                        forced: true,
+                        units: [[
+                            'hour',[1]
+                        ],
                             [
                                 'day', [1]
                             ],
-                                [
-                                    'week', [1]
-                                ],
-                               ]
+                            [
+                                'week', [1]
+                            ],[
+                                'month', [1,2,3,4,5,6]
+                            ],
+                        ]
                         /*    units: [[
-                                'hour',
-                                [1]
-                            ]],
+                         'hour',
+                         [1]
+                         ]],
 
-                            smoothed:true
-                        */},
-                        yAxis: 0
-                    }
+                         smoothed:true
+                         */},
+                    yAxis: 0
+                }
                 ]
             });
         });
