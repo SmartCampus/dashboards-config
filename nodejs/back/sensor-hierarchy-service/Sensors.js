@@ -60,9 +60,10 @@ class SensorContainer extends SensorSet {
      *                                          in this container.
      */
     constructor(name, filters, sensors, childContainer) {
-        super(name, sensors);
+        super(name, []);
         this.childContainer = childContainer;
         this.filters = filters;
+        this.directSensor = sensors;
     }
 
     /**
@@ -71,14 +72,27 @@ class SensorContainer extends SensorSet {
      * @returns {array|*}
      */
     getSensors() {
-        var result = this.sensors;
-        for(var child in this.childContainer) {
+    //    console.log("Direct sensor in " + this.name + " : " + this.directSensor.length);
+        var result = [];
+        for(var i in this.directSensor) {
+            result.push(this.directSensor[i]);
+        }
+    //    var result = this.directSensor;
+        for (var child in this.childContainer) {
             var childSensors = this.childContainer[child].getSensors();
-            for( var sensor in childSensors) {
-                result.push(childSensors[sensor])
+            for (var i in childSensors) {
+                result.push(childSensors[i]);
             }
         }
         return result;
+    };
+
+    /**
+     *
+     * @returns {array|*}
+     */
+    getDirectSensors() {
+        return this.directSensor;
     };
 
     /**
@@ -161,6 +175,7 @@ function initSensors(data) {
     initCategories();
     initContainers();
 
+
     var json = JSON.parse(data);
     var jsonContainers = json._items;
     for(var i in jsonContainers) {
@@ -175,14 +190,21 @@ function initSensors(data) {
     for(var i in jsonContainers) {
         for(var iterator in containers) {
             for(var filters in containers[iterator].getFilters()) {
-                var filter = new RegExp("(?:^|[^A-Za-z])" + containers[iterator].getFilters()[filters], "i");
+                var filter = new RegExp(containers[iterator].getFilters()[filters], "i");
                 if(filter.test(jsonContainers[i].name)) {
-                    containers[iterator].getSensors().push(jsonContainers[i].name);
+                    containers[iterator].getDirectSensors().push(jsonContainers[i].name);
                 }
             }
         }
     }
- //   console.log(containers);
+
+    for(var iterator in containers) {
+        smartCampus.push(containers[iterator]);
+    }
+    for(var iterator in categories) {
+        smartCampus.push(categories[iterator]);
+    }
+  //  console.log(smartCampus[1]);
 }
 
 /**
@@ -201,7 +223,6 @@ function initCategories() {
     categories.push(doorSensors);
     categories.push(airConditioningSensors);
     categories.push(windowSensors);
-
 }
 
 /**
@@ -243,6 +264,17 @@ function initContainers() {
     modalisCorridor.getChild().push(office444);
     modalisCorridor.getChild().push(office443);
 }
+
+
+function getSmartCampusSensors()  {
+    return smartCampus;
+}
+
+/**
+ * This method return the list of the sensors of SmartCampus
+ * @type {getSmartCampusSensors}
+ */
+exports.getSmartCampusSensors = getSmartCampusSensors;
 
 /**
  * Class representing the physical container of the sensors
