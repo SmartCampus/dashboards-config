@@ -214,7 +214,7 @@ $(function () {
 
         xAxis: {
             title: {
-                text: 'Temps'
+                text: 'Time'
             }
         },
 
@@ -260,7 +260,7 @@ $(function () {
 
         xAxis: {
             title: {
-                text: 'Temps'
+                text: 'Time'
             }
         },
 
