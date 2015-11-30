@@ -71,11 +71,7 @@ var firstSuccessInTemp = function(data) {
     retrieveData.askForSeries('campus/temperature', beginDate, endDate, secondSuccessInTemp);
 };
 
-var place = 'office/443/';
-if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
-    beginDate = '2015-10-14 8:00:11';
-    endDate = '2015-10-20 18:00:11';
-}
+
 
 //First step of data retrieving : we get the inside temperatures
 retrieveData.askForSeries(place+'temperature', beginDate, endDate, firstSuccessInTemp);
@@ -178,28 +174,6 @@ console.log('in the window method');
 };
 //successForWindowCount();
 retrieveData.askForSeries(place+'window_opening', beginDate, endDate, successForWindowCount);
-
-/**
- The boolean values for A/C and window :
- */
-
-var successForWindow = function(data) {
-    if (data.state == 'CLOSED') {
-        document.getElementById('windowState').setAttribute("class", "label label-danger");
-    }
-    else {
-        document.getElementById('windowState').setAttribute("class", "label label-success");
-    }
-};
-var successForAC = function(data) {
-    if (data.state == 'OFF')
-        document.getElementById('climState').setAttribute("class", "label label-danger");
-    else
-        document.getElementById('climState').setAttribute("class", "label label-success");
-};
-
-retrieveData.askForStateNow(place+'window_status', successForWindow);
-retrieveData.askForStateNow(place+'ac_status', successForAC);
 
 /**
  * Datepikckers
