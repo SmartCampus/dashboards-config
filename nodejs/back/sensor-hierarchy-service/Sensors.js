@@ -22,15 +22,20 @@ class SensorSet {
 
 class SensorContainer extends SensorSet {
 
-    constructor(name, sensors, childContainer) {
+    constructor(name, filters, sensors, childContainer) {
         super(name, sensors);
         this.childContainer = childContainer;
+        this.filters = filters;
     }
 
     getSensors() {
         for(var child in this.childContainer) {
             sensors.push(child.getSensors());
         }
+    };
+
+    addFilter(filter) {
+        this.filters.push(filter);
     };
 }
 
@@ -60,7 +65,7 @@ function initSystem() {
         });
 
         res.on("end", function() {
-            initContainers(stringData)
+            initSensors(stringData)
         });
     });
 }
@@ -72,20 +77,17 @@ function initSystem() {
  *
  * TODO : Capteur TEMP_444V pas dans la liste car /sensors le renvoie cependant il est la.
  */
-function initContainers(data) {
+function initSensors(data) {
     initCategories();
+    initContainers();
 
     var json = JSON.parse(data);
     var jsonContainers = json._items;
     for(var i in jsonContainers) {
-        if(jsonContainers[i].sensorType == "virtual_filter") {
-            for(var iterator in categories) {
-             //   console.log(categories[iterator].getName());
-                var filter = new RegExp(categories[iterator].getName(), "i");
-                if(filter.test(jsonContainers[i].name)) {
-            //        console.log("derp")
-                    categories[iterator].getSensors().push(jsonContainers[i].name)
-                }
+        for(var iterator in categories) {
+            var filter = new RegExp("(?:^|[^A-Za-z])" + categories[iterator].getName() + "(?:[^A-Za-z]|$)", "ig");
+            if(filter.test(jsonContainers[i].name)) {
+                categories[iterator].getSensors().push(jsonContainers[i].name);
             }
         }
     }
@@ -108,8 +110,21 @@ function initCategories() {
     categories.push(doorSensors);
     categories.push(airConditioningSensors);
     categories.push(windowSensors);
+
 }
 
+function initContainers() {
+    var campus = new SensorContainer("Campus SophiaTech", ["CAMPUS"], [], []);
+    var templierWest = new SensorContainer("Templiers Ouest", [], [], []);
+    var fouthFloor = new SensorContainer("4th floor", ["SPARKS"] ,[], []);
+    var coffeeCorner = new SensorContainer("Coffee corner", ["COFFEE", "CAFE"], [], []);
+    var sousRepartiteur = new SensorContainer("Sous repartiteur", ["MW_power"] , [], []);
+    var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis", "CORRIDOR"], [], []);
+    var office443 = new SensorContainer("Office 443", [], []);
+    var offce444 = new SensorContainer("Office 444", [], []);
+    // TODO : coffee corner
+
+}
 
 
 
