@@ -29,10 +29,24 @@ class SensorContainer extends SensorSet {
     }
 
     getSensors() {
+        var result = this.sensors;
         for(var child in this.childContainer) {
-            sensors.push(child.getSensors());
+            var childSensors = this.childContainer[child].getSensors();
+            for( var sensor in childSensors) {
+                result.push(childSensors[sensor])
+            }
         }
+        return result;
     };
+
+    getChild() {
+        return this.childContainer;
+    };
+
+    getFilters() {
+        return this.filters;
+    }
+
 
     addFilter(filter) {
         this.filters.push(filter);
@@ -91,7 +105,18 @@ function initSensors(data) {
             }
         }
     }
-    console.log(categories);
+
+    for(var i in jsonContainers) {
+        for(var iterator in containers) {
+            for(var filters in containers[iterator].getFilters()) {
+                var filter = new RegExp("(?:^|[^A-Za-z])" + containers[iterator].getFilters()[filters], "i");
+                if(filter.test(jsonContainers[i].name)) {
+                    containers[iterator].getSensors().push(jsonContainers[i].name);
+                }
+            }
+        }
+    }
+    console.log(containers);
 }
 
 /**
@@ -116,18 +141,37 @@ function initCategories() {
 function initContainers() {
     var campus = new SensorContainer("Campus SophiaTech", ["CAMPUS"], [], []);
     var templierWest = new SensorContainer("Templiers Ouest", [], [], []);
-    var fouthFloor = new SensorContainer("4th floor", ["SPARKS"] ,[], []);
+    var fourthFloor = new SensorContainer("4th floor", ["SPARKS"] ,[], []);
     var coffeeCorner = new SensorContainer("Coffee corner", ["COFFEE", "CAFE"], [], []);
-    var sousRepartiteur = new SensorContainer("Sous repartiteur", ["MW_power"] , [], []);
+    var sousRepartiteur = new SensorContainer("Sous repartiteur", ["MW"] , [], []);
     var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis", "CORRIDOR"], [], []);
-    var office443 = new SensorContainer("Office 443", [], []);
-    var offce444 = new SensorContainer("Office 444", [], []);
-    // TODO : coffee corner
+    var office445 = new SensorContainer("Office 445", ["445"], [], []);
+    var office443 = new SensorContainer("Office 443", ["443"], [], []);
+    var office444 = new SensorContainer("Office 444", ["444"], [], []);
 
+    containers.push(campus);
+    containers.push(templierWest);
+    containers.push(fourthFloor);
+    containers.push(coffeeCorner);
+    containers.push(sousRepartiteur);
+    containers.push(modalisCorridor);
+    containers.push(office445);
+    containers.push(office443);
+    containers.push(office444);
+
+
+    campus.getChild().push(templierWest);
+
+    templierWest.getChild().push(fourthFloor);
+
+    fourthFloor.getChild().push(coffeeCorner);
+    fourthFloor.getChild().push(sousRepartiteur);
+    fourthFloor.getChild().push(modalisCorridor);
+
+    modalisCorridor.getChild().push(office445);
+    modalisCorridor.getChild().push(office444);
+    modalisCorridor.getChild().push(office443);
 }
-
-
-
 
 exports.SensorContainer = SensorContainer;
 exports.SensorSet = SensorSet;
