@@ -18,7 +18,7 @@ var retrieveData = (function () {
                     //alert("error");
                 })
                 .always(function (data) {
-                    console.log('processed');
+                    console.log('processed series');
                     //alert("finished");
                 });
             console.log('after the get');
@@ -36,8 +36,7 @@ var retrieveData = (function () {
                 //    alert("error");
                 })
                 .always(function (data) {
-                    console.log('route sent : ', serverURL, route)
-                    console.log('processed');
+                    console.log('route sent : ', serverURL+route);
               //      alert("finished");
                 });
             console.log('after the get');

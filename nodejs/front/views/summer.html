@@ -1,77 +1,91 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
-    <script>
-        $(function () {
-            $("head").load("header.html")
-        });
-    </script>
+    <!-- Meta -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- JS -->
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="icon.png" />
+
+    <title>SmartCampus : dashboards</title>
+
+  <!--
+        <div class="row" style="margin : 10px 20px 0 20px">
+            <div class="col-md-4">
+                <span style="font-weight: bold;">FROM : </span>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <span style="font-weight: bold;">TO :</span>
+                <div class="form-group">
+                    <div class='input-group date' id='datetimepicker2'>
+                        <input type='text' class="form-control" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <button type="button" id="refresh" class="btn btn-primary">Refresh</button>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+
+
+
+
+
+    <script src="/scripts/controllers/main.js"></script>
+    </html>
+    -->
+    <script src="/bower_components/highstock/highstock.js"></script>
+    <script src="/bower_components/moment/min/moment.min.js"></script>
+    <script src="/bower_components/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+   <!-- <script src="/bower_components/highstock/modules/exporting.js"></script>
+   Only usefule if we want to let people print or save the db as an image-->
 </head>
 <body>
-
-    <h1 style="text-align: center">Summer dashboard</h1>
-
-    <div id="states" style="display : flex; width: 100%; margin: 40px 0 40px 0;">
-        <div class="col-md-6 text-center"><h1><span id="climState">A/C State</span></h1>
-        </div>
-        <div class="col-md-6 text-center"><h1><span id="windowState">Window State</span></h1>
-        </div>
+<h1 class="text-center">Summer dashboard</h1>
+<div class="row" id="states">
+    <div class="col-md-6 text-center"><h1><span id="climState">A/C State</span></h1>
     </div>
-
-
-    <div id="container" style="display : flex; width: 100%; margin: 0 auto;">
-        <div id="c1" style="width : 60%; border: solid"></div>
-        <div id="c2" style="width : 40%; border: solid"></div>
+    <div class="col-md-6 text-center"><h1><span id="windowState">Window State</span></h1>
     </div>
+</div>
 
-    <div class="row" style="margin : 10px 20px 0 20px">
-        <div class="col-md-4">
-            <span style="font-weight: bold;">FROM : </span>
-            <div class="form-group">
-                <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <span style="font-weight: bold;">TO :</span>
-            <div class="form-group">
-                <div class='input-group date' id='datetimepicker2'>
-                    <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="form-group">
-                <button type="button" id="refresh" class="btn btn-primary">Refresh</button>
-            </div>
-        </div>
-    </div>
-
+<div class="row">
+    <div class="col-md-6" id="c1" style="height: 400px; min-width: 310px"></div>
+    <div class="col-md-6" id="c2" style="height: 400px; min-width: 310px"></div>
+</div>
 </body>
 
-
-<footer>
-    <!-- The lib dependencies are added in the footer -->
-    <script>
-        $(function () {
-            $("footer").load("footer.html")
-        });
-    </script>
-</footer>
-
-<script src="/bower_components/highcharts/highcharts.js"></script>
-<script src="/bower_components/highcharts/highcharts-more.js"></script>
-<script src="/bower_components/moment/min/moment.min.js"></script>
-<script src="/bower_components/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 <script src="/scripts/model/constants.js"></script>
 <script src="/scripts/model/createDashboard.js"></script>
-<script src="/scripts/controllers/main.js"></script>
+<script src="/scripts/controllers/summer.js"></script>
+
+<footer>
+        <script>
+            $(function () {
+                $("footer").load("footer.html")
+            });
+        </script>
+    </footer>
 </html>

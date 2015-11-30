@@ -184,22 +184,31 @@ function getWindowOpening(response, officeNumber, date) {
 
             var hashMap = {};
             for(var i in json.values) {
-                if(json.values[i].value == "OPEN") {
+                //if the window gets opened during the period, we write it.
+                //We don't care if it was already opened ????
+                if (i == 0) {
+                    if(json.values[i].value == "OPEN") {
+                        windowsOpening.data.push([json.values[i].date*1000, 1]);
+                    }
+                        }
+                else if(json.values[i].value == "OPEN") {
+                    windowsOpening.data.push([json.values[i].date*1000, 1]);
+                    /*
                     var date = moment.unix(json.values[i].date);
                     var day = date.dayOfYear();
                     if(hashMap[day] == undefined) {
                         hashMap[day] = 1;
                     } else {
                         hashMap[day] = hashMap[day] + 1;
-                    }
+                    }*/
                 }
             }
-            for(var test in hashMap) {
+            /*for(var test in hashMap) {
                 var table = [];
-                table.push((parseInt(test)*1000));
+                table.push((parseInt(test)));
                 table.push(hashMap[test]);
                 windowsOpening.data.push(table);
-            }
+            }*/
 
             response.send(windowsOpening);
         })
@@ -228,7 +237,10 @@ function getAirConditioningUsage(response, officeNumber, date) {
             var hashMap = {};
             var isOn = true;
             for(var i in json.values) {
-                var date = moment.unix(json.values[i].date);
+                if (json.values[i].value=="ON") {
+                    airConditionerOpening.data.push([json.values[i].date*1000, 0.83]);
+                }
+                /*var date = moment.unix(json.values[i].date);
                 var day = date.dayOfYear();
                 var hour = date.hour();
                 if(hashMap[day] == undefined) {
@@ -247,13 +259,14 @@ function getAirConditioningUsage(response, officeNumber, date) {
                         isOn = false;
                     }
                 }
+                */
             }
-            for(var iterator in hashMap) {
+            /*for(var iterator in hashMap) {
                 var table = [];
                 table.push(parseInt((iterator)*1000));
                 table.push((hashMap[iterator]/24*100));
                 airConditionerOpening.data.push(table);
-            }
+            }*/
             response.send(airConditionerOpening);
         })
     });
