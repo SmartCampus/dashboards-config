@@ -11,4 +11,5 @@ Valid Query :
   'TEMP',
   'DOOR',
   'AC',
-  'WINDOW' ]
+  'WINDOW'
+  'VirtualSensors']

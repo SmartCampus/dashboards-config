@@ -11,8 +11,8 @@ var http = require("http"),
 /**
  * Retrieves all sensors from SmartCampus.
  *
- * @param  {Function} callback function to call when job is finished with
- *                             the body response from the API call
+ * @param   {Function}          callback function to call when job is finished with
+ *                              the body response from the API call
  */
 function getAllSensors(callback) {
     var url = SMARTCAMPUS_HOST + SENSORS_PATH;
@@ -24,6 +24,52 @@ function getAllSensors(callback) {
             error(e, "getAllSensors");
         });
 }
+
+/**
+ * Retrieves the last data from a specific sensor.
+ *
+ * @param  {[string]}	name 		the sensor's name
+ * @param  {[boolean]}  convert 	whether the timestamps should be converted
+ *                               	into "human readable" dates
+ * @param  {Function}	callback	function to call when job is finished with
+ *                             		the body response from the API call
+ */
+function getLastSensorData(name, convert, callback) {
+    var url = SMARTCAMPUS_HOST + SENSORS_PATH + "/" + name + "/data" + "/last" + "?convert=" + convert;
+
+    http.get(url, function (res) {
+        callback(res);
+    })
+        .on('error', function (e) {
+            error(e, "getSensorData");
+        });
+}
+
+/**
+ * Retrieves sensor data.
+ *
+ * @param  {[string]}   name     	the sensor's name
+ * @param  {[string]}   date   		Date of the wished data or date range:
+ *                               	YYYY-MM-DD hh:mm:ss[/YYYY-MM-DD hh:mm:ss]
+ *                               	if no date is given, all sensor data will be returned
+ * @param  {[boolean]}   convert 	whether the timestamps should be converted
+ *                               	into "human readable" dates
+ * @param  {Function} callback 		function to call when job is finished with
+ *                             		the body response from the API call
+ */
+function getSensorData(name, date, convert, callback) {
+    var url = SMARTCAMPUS_HOST + SENSORS_PATH + "/" + name + "/data?convert=" + convert + (date? "&date=" + date : "");
+    console.log("in get : " + url);
+    http.get(url, function (res) {
+        callback(res);
+    })
+    .on('error', function (e) {
+        error(e, "getSensorData");
+    });
+}
+
+exports.getSensorData = getSensorData;
+
 
 /**
  * Retrieves all sensors from SmartCampus.
