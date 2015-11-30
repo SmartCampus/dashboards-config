@@ -61,8 +61,8 @@ function getCampusTemperature(date, response) {
 
             for(var i in tempPerTime.values) {
                 var temperaturePerTime = [];
-                temperaturePerTime.push(tempPerTime.values[i].date);
-                temperaturePerTime.push(parseFloat((tempPerTime.values[i].value))*1000);
+                temperaturePerTime.push((tempPerTime.values[i].date)*1000);
+                temperaturePerTime.push(parseFloat(tempPerTime.values[i].value));
                 responseInGoodFormat.data.push(temperaturePerTime);
             }
 
