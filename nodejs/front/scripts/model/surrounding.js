@@ -3,11 +3,13 @@
  */
 
 
+/**
+ * Graphe intensité sonore
+ */
+
 $(function () {
 
     $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
-
-        // Create the chart
         $('#c1').highcharts('StockChart', {
 
             // titre
@@ -15,6 +17,7 @@ $(function () {
                 text : 'Intensité sonore par rapport à la porte'
             },
 
+            // Selectionne un interval de temps proposé par default
             rangeSelector : {
                 selected : 1
             },
@@ -65,8 +68,6 @@ $(function () {
 $(function () {
 
     $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
-
-        // Create the chart
         $('#c2').highcharts('StockChart', {
 
             // titre
@@ -74,6 +75,7 @@ $(function () {
                 text : 'Intensité sonore par rapport à la fenêtre'
             },
 
+            // Selectionne un interval de temps proposé par default
             rangeSelector : {
                 selected : 1
             },
@@ -122,156 +124,116 @@ $(function () {
 });
 
 
-$(function () {
+/**
+ * Camenbert état de la porte/fenêtre
+ */
 
+$(function () {
     $(document).ready(function () {
 
-        // Build the chart
         $('#cam1').highcharts({
+
             chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
                 type: 'pie'
             },
+
             title: {
                 text: 'Door'
             },
+
             tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                pointFormat: '<b>{point.percentage:.1f}%</b>'
             },
+
             plotOptions: {
+
                 pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
-                    },
-                    showInLegend: true
+                    allowPointSelect: true,     // selection d'une part
+                    cursor: 'pointer',          // affichage avec pointeur
                 }
+
             },
+
             series: [{
-                name: 'Brands',
-                colorByPoint: true,
                 data: [
-                    { name: 'Open',
-                        y: 70.0,
-                        sliced: true,
-                        selected: true
-                    },{
-                        name: 'Close',
-                        y: 30.0
-                    }]
+                    { name: 'Open', y: 70.0},
+                    {name: 'Close', y: 30.0}
+                ]
             }]
         });
     });
 });
 
 $(function () {
-
     $(document).ready(function () {
 
-        // Build the chart
         $('#cam2').highcharts({
+
             chart: {
-                plotBackgroundColor: null,
-                plotBorderWidth: null,
-                plotShadow: false,
                 type: 'pie'
             },
+
             title: {
                 text: 'Windows'
             },
+
             tooltip: {
-                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                pointFormat: '<b>{point.percentage:.1f}%</b>'
             },
+
             plotOptions: {
                 pie: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: {
-                        enabled: false
-                    },
-                    showInLegend: true
+                    allowPointSelect: true,     // selection d'une part
+                    cursor: 'pointer',          // affichage avec pointeur
                 }
             },
             series: [{
-                name: 'Brands',
-                colorByPoint: true,
                 data: [
-                    { name: 'Open',
-                        y: 50.0,
-                        sliced: true,
-                        selected: true
-                    },{
-                        name: 'Close',
-                        y: 50.0
-                    }]
+                    { name: 'Open', y: 50.0},
+                    { name: 'Close', y: 50.0}
+                ]
             }]
         });
     });
 });
 
-
+/**
+ * Graphe de l'état de la porte/fenêtre par rapport au temps
+ */
 
 $(function () {
     $('#g1').highcharts({
+
         chart: {
             type: 'scatter'
+        },
 
-        },
         title: {
-            text: 'Height Versus Weight of 507 Individuals by Gender'
+            text: 'Door status in time'
         },
-        subtitle: {
-            text: 'Source: Heinz  2003'
-        },
+
         xAxis: {
             title: {
-                enabled: true,
                 text: 'Temps'
             }
         },
+
         yAxis: {
             title: {
                 text: ''
             },
             categories: ['Close', 'Open']
         },
-        legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            x: 100,
-            y: 70,
-            floating: true,
-            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
-            borderWidth: 1
-        },
+
         plotOptions: {
             scatter: {
-                marker: {
-                    radius: 5,
-                    states: {
-                        hover: {
-                            enabled: true,
-                            lineColor: 'rgb(100,100,100)'
-                        }
-                    }
-                },
-                states: {
-                    hover: {
-                        marker: {
-                            enabled: false
-                        }
-                    }
-                },
                 tooltip: {
                     headerFormat: '<b>{series.name}</b><br>',
-                    pointFormat: '{point.y} '
+                    pointFormat: '{point.x} '
                 }
             }
         },
+
         series: [{
             name: 'Close',
             color: 'rgba(223, 83, 83, .5)',
@@ -287,62 +249,37 @@ $(function () {
 
 $(function () {
     $('#g2').highcharts({
+
         chart: {
             type: 'scatter'
+        },
 
-        },
         title: {
-            text: 'Height Versus Weight of 507 Individuals by Gender'
+            text: 'Windows status in time '
         },
-        subtitle: {
-            text: 'Source: Heinz  2003'
-        },
+
         xAxis: {
             title: {
-                enabled: true,
                 text: 'Temps'
             }
         },
+
         yAxis: {
             title: {
                 text: ''
             },
             categories: ['Close', 'Open']
         },
-        legend: {
-            layout: 'vertical',
-            align: 'left',
-            verticalAlign: 'top',
-            x: 100,
-            y: 70,
-            floating: true,
-            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
-            borderWidth: 1
-        },
+
         plotOptions: {
             scatter: {
-                marker: {
-                    radius: 5,
-                    states: {
-                        hover: {
-                            enabled: true,
-                            lineColor: 'rgb(100,100,100)'
-                        }
-                    }
-                },
-                states: {
-                    hover: {
-                        marker: {
-                            enabled: false
-                        }
-                    }
-                },
                 tooltip: {
                     headerFormat: '<b>{series.name}</b><br>',
-                    pointFormat: '{point.y} '
+                    pointFormat: '{point.x} '
                 }
             }
         },
+
         series: [{
             name: 'Close',
             color: 'rgba(223, 83, 83, .5)',
