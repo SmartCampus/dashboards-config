@@ -9,22 +9,23 @@
 
 <body>
 
-    <h1 style="text-align: center">Surrounding dashboard</h1>
+    <h1 style="text-align: center; padding-bottom: 100px">Surrounding dashboard</h1>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-6 col-md-6 col-lg-6" id="c1"></div>
+            <div class="col-xs-6 col-md-6 col-lg-6" id="c2"></div>
+        </div>
 
-    <div class="row"  style="display : flex; width: 100%; margin: 0 auto;">
-        <div class="col-md-6" id="c1"></div>
-        <div class="col-md-6" id="c2"></div>
-    </div>
+        <div class="row"  style="display : flex; width: 100%; margin: 0 auto;">
+            <div class="col-xs-6 col-md-6 col-lg-6" id="cam1"></div>
+            <div class="col-xs-6 col-md-6 col-lg-6" id="cam2"></div>
+        </div>
 
-    <div class="row"  style="display : flex; width: 100%; margin: 0 auto;">
-        <div class="col-md-6" id="cam1"></div>
-        <div class="col-md-6" id="cam2"></div>
-    </div>
-
-    <div class="row"  style="display : flex; width: 100%; margin: 0 auto;">
-        <div class="col-md-6" id="g1"></div>
-        <div class="col-md-6" id="g2"></div>
+        <div class="row"  style="display : flex; width: 100%; margin: 0 auto;">
+            <div class="col-md-6" id="g1"></div>
+            <div class="col-md-6" id="g2"></div>
+        </div>
     </div>
 
 </body>
@@ -39,8 +40,11 @@
 </footer>
 
 
+<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+
 <script src="/bower_components/highstock/highstock.js"></script>
-<script src="/bower_components/moment/min/moment.min.js"></script>
-<script src="/bower_components/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
 <script src="/scripts/model/surrounding.js"></script>
 </html>
