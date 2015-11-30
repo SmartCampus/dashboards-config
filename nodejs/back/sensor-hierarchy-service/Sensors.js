@@ -239,6 +239,8 @@ function initContainers() {
     var office445 = new SensorContainer("Office 445", ["445"], [], []);
     var office443 = new SensorContainer("Office 443", ["443"], [], []);
     var office444 = new SensorContainer("Office 444", ["444"], [], []);
+    // TODO : Solution très sale mais pour les capteurs virtuels y a juste aucune norme !!!
+    var virtualSensors = new SensorContainer("Virtual Sensors", ["2V", "STATE", "3V", "TEMP_CAMPUS"], [], []);
 
     /** Add the containers in the array of containers **/
     containers.push(campus);
@@ -250,6 +252,7 @@ function initContainers() {
     containers.push(office445);
     containers.push(office443);
     containers.push(office444);
+    containers.push(virtualSensors);
 
     /** Set the child of every container **/
     campus.getChild().push(templierWest);
@@ -265,16 +268,20 @@ function initContainers() {
     modalisCorridor.getChild().push(office443);
 }
 
-
-function getSmartCampusSensors()  {
+/**
+ * This method return the list of all the sensors of the system.
+ *
+ * @returns {Array}
+ */
+function getAllSensors()  {
     return smartCampus;
 }
 
 /**
  * This method return the list of the sensors of SmartCampus
- * @type {getSmartCampusSensors}
+ * @type {getAllSensors}
  */
-exports.getSmartCampusSensors = getSmartCampusSensors;
+exports.getSmartCampusSensors = getAllSensors;
 
 /**
  * Class representing the physical container of the sensors
