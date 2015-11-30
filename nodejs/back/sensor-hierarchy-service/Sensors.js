@@ -109,9 +109,7 @@ function initSensors(data) {
     for(var i in jsonContainers) {
         for(var iterator in containers) {
             for(var filters in containers[iterator].getFilters()) {
-             //   console.log(containers[iterator].getFilters()[filters]);
-             //   console.log(jsonContainers[i].name);
-                var filter = new RegExp("(?:^|[^A-Za-z])" + containers[iterator].getFilters()[filters] + "(?:[^A-Za-z]|$)", "i");
+                var filter = new RegExp("(?:^|[^A-Za-z])" + containers[iterator].getFilters()[filters], "i");
                 if(filter.test(jsonContainers[i].name)) {
                     containers[iterator].getSensors().push(jsonContainers[i].name);
                 }
