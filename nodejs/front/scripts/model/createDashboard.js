@@ -3,10 +3,10 @@
  */
 var retrieveData = (function () {
     return { //exposed to public
-        askForSeries: function (route, beginDate, endDate, successCB) {
+        askForSeries: function (sensor, beginDate, endDate, successCB) {
             console.log('before the get temperature for a timespan');
-            console.log('For route '+ route + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
-            $.get(serverURL + route, {date: beginDate+"/"+endDate})
+            console.log('For route '+ sensorAPI + sensor+'/data' + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
+            $.get(sensorAPI + sensor+'/data', {date: beginDate+"/"+endDate})
                 .done(function (data) {
                     console.log('got temps for a timespan');
                     //alert("Data Loaded: " + data);
@@ -24,7 +24,7 @@ var retrieveData = (function () {
             console.log('after the get');
         },
         askForSeriesForever: function (route, successCB) {
-            $.get(serverURL + route)
+            $.get(sensorAPI + route+'/data')
                 .done(function (data) {
                     console.log('got temps forever');
                   //  alert("Data Loaded: " + data);
@@ -36,7 +36,7 @@ var retrieveData = (function () {
                 //    alert("error");
                 })
                 .always(function (data) {
-                    console.log('route sent : ', serverURL+route);
+                    console.log('route sent : ', sensorAPI + route+'/data');
               //      alert("finished");
                 });
             console.log('after the get');
@@ -57,6 +57,7 @@ var retrieveData = (function () {
        //             alert("error");
                 })
                 .always(function (data) {
+                    console.log(serverURL+route);
                     console.log('processed');
          //           alert("finished");
                 });

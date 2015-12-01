@@ -57,14 +57,14 @@ var firstSuccessInTemp = function (data) {
     };
     //We need to get the outside temperatures now, to build our whole graph.
     console.log('about to ask for campus temp');
-    retrieveData.askForSeries('campus/temperature', beginDate, endDate, secondSuccessInTemp);
-    //retrieveData.askForSeriesForever('campus/temperature', secondSuccessInTemp);
+    retrieveData.askForSeries('TEMP_CAMPUS', beginDate, endDate, secondSuccessInTemp);
+    //retrieveData.askForSeriesForever('TEMP_CAMPUS', secondSuccessInTemp);
 };
 
 
 
-retrieveData.askForSeries(place + 'temperature', beginDate, endDate, firstSuccessInTemp);
-//retrieveData.askForSeriesForever(place + 'temperature', firstSuccessInTemp);
+retrieveData.askForSeries('TEMP_443V', beginDate, endDate, firstSuccessInTemp);
+//retrieveData.askForSeriesForever('TEMP_443V', firstSuccessInTemp);
 var countingArray = [];
 var successForWindowCount = function (data) {
     countingArray[0] = {"name": "nb of window openings", "data": data.data};
@@ -191,7 +191,7 @@ var successForWindowCount = function (data) {
 
 };
 
-retrieveData.askForSeries(place + 'window_opening', beginDate, endDate, successForWindowCount);
+//retrieveData.askForSeries(place + 'window_opening', beginDate, endDate, successForWindowCount);
 
 
 /**
@@ -212,5 +212,5 @@ var successForAC = function (data) {
         document.getElementById('climState').setAttribute("class", "label label-success");
 };
 
-retrieveData.askForStateNow(place + 'window_status', successForWindow);
-retrieveData.askForStateNow(place + 'ac_status', successForAC);
+//retrieveData.askForStateNow(place + 'window_status', successForWindow);
+//retrieveData.askForStateNow(place + 'ac_status', successForAC);
