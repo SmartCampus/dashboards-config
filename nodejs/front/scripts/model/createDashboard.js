@@ -3,10 +3,29 @@
  */
 var retrieveData = (function () {
     return { //exposed to public
-        askForSeries: function (route, beginDate, endDate, successCB) {
+        askForSeries: function (sensor, beginDate, endDate, successCB) {
             console.log('before the get temperature for a timespan');
-            console.log('For route '+ route + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
-            $.get(serverURL + route, {date: beginDate+"/"+endDate})
+            console.log('For route '+ sensorAPI + sensor + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
+            $.get(sensorAPI + sensor, {date: beginDate+"/"+endDate})
+                .done(function (data) {
+                    console.log('got temps for a timespan');
+                    //alert("Data Loaded: " + data);
+                    successCB(data);
+                })
+                .fail(function (data) {
+                    console.log(data);
+                    console.log('error in get temp for timespan');
+                    //alert("error");
+                })
+                .always(function (data) {
+                    console.log('processed series');
+                    //alert("finished");
+                });
+            console.log('after the get');
+        },
+        askForSeriesWithParam: function(sensor, param, beginDate, endDate, successCB) {
+            console.log('For route '+ sensorAPI + sensor + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
+            $.get(sensorAPI + sensor, {state:param, date: beginDate+"/"+endDate})
                 .done(function (data) {
                     console.log('got temps for a timespan');
                     //alert("Data Loaded: " + data);
@@ -24,7 +43,7 @@ var retrieveData = (function () {
             console.log('after the get');
         },
         askForSeriesForever: function (route, successCB) {
-            $.get(serverURL + route)
+            $.get(sensorAPI + route)
                 .done(function (data) {
                     console.log('got temps forever');
                   //  alert("Data Loaded: " + data);
@@ -36,7 +55,7 @@ var retrieveData = (function () {
                 //    alert("error");
                 })
                 .always(function (data) {
-                    console.log('route sent : ', serverURL+route);
+                    console.log('route sent : ', sensorAPI + route+'/data');
               //      alert("finished");
                 });
             console.log('after the get');
@@ -57,6 +76,7 @@ var retrieveData = (function () {
        //             alert("error");
                 })
                 .always(function (data) {
+                    console.log(serverURL+route);
                     console.log('processed');
          //           alert("finished");
                 });

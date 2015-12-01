@@ -25,7 +25,7 @@ router.get("/sensor/:sensorId/data", function(req, res) {
         date = req.query.date;
     }
     if(req.query.state !== undefined) {
-        state = reeq.query.state;
+        state = req.query.state;
     }
     request_handler.getSensorInformation(sensorId, date, state,res);
 });
