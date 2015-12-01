@@ -2,7 +2,8 @@
  * Created by Quentin on 12/1/2015.
  */
 var requester = require("./api_requester"),
-                 moment = require("moment");
+     moment = require("moment")
+     processor = require("./response_processor");
 
 
 function requestSensors(queries, response) {
@@ -12,16 +13,7 @@ function requestSensors(queries, response) {
     }
 
     requester.getSensors(stringQuery, function(res) {
-        var stringData = "";
-
-        res.on("data", function(chunck) {
-           stringData += chunck;
-        });
-
-        res.on("end", function() {
-            var tempPerTime = JSON.parse(stringData);
-            response.send(tempPerTime);
-        })
+    processor.concatenateResponse(response,res);
     });
 }
 
@@ -75,7 +67,6 @@ function getStateInformationSplit(sensorId, date, response) {
 
             for(var i in tempPerTime.values) {
                 var loopArray = [];
-            //    temperaturePerTime.push((tempPerTime.values[i].date)*1000);
                 if(tempPerTime.values[i].value == "OPEN")  {
                     loopArray.push((tempPerTime.values[i].date)*1000);
                     loopArray.push(1);
