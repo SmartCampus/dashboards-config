@@ -48,25 +48,10 @@ var doorGraphStateInTime = function() {
                 type: 'datetime'
             },
 
-            yAxis:
-                {
-                    /**
-                    labels: {
-                        format: '{value}',
-                    },
-                    **/
-
-                    categories: ['Close','Open'],
-
-                    /**
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    },
-
-                    opposite: false
-                    **/
-                },
-
+            yAxis: {
+                categories: ['Close','Open'],
+                opposite: false
+            },
 
             tooltip: {
                 headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -85,7 +70,8 @@ $(function () {
     $('#g2').highcharts({
 
         chart: {
-            type: 'scatter'
+            type: 'scatter',
+            zoomType: 'x'
         },
 
         title: {
@@ -105,15 +91,6 @@ $(function () {
             categories: ['Close', 'Open']
         },
 
-        plotOptions: {
-            scatter: {
-                tooltip: {
-                    headerFormat: '<b>{series.name}</b><br>',
-                    pointFormat: '{point.x} '
-                }
-            }
-        },
-
         series: [{
             name: 'Close',
             color: 'rgba(223, 83, 83, .5)',
@@ -126,7 +103,6 @@ $(function () {
         }]
     });
 });
-
 
 
 
