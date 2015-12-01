@@ -73,6 +73,9 @@ function getInformationInPercent(sensorId, date, response) {
 
             var lastOn = 0;
             for(var i in tempPerTime.values) {
+                if(i == 1) {
+                    console.log("YOLO");
+                }
                 var temperaturePerTime = [];
                 if(tempPerTime.values[i].value == "OPEN") {
 
@@ -85,30 +88,10 @@ function getInformationInPercent(sensorId, date, response) {
 
 
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
 
-exports.getSensorInformation = getSensorInformation;
+exports.getInformationInPercent = getInformationInPercent;
 
+exports.getSensorInformation = getSensorInformation;
 
 exports.requestSensors = requestSensors;
