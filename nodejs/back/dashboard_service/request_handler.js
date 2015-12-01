@@ -41,7 +41,8 @@ function getSensorInformation(sensorId, date, state, response) {
                 var temperaturePerTime = [];
                 temperaturePerTime.push((tempPerTime.values[i].date)*1000);
                 if(state) {
-                    if(tempPerTime.values[i].value == "ON" || tempPerTime.values[i].value == "OPEN") {
+                    if(tempPerTime.values[i].value == "ON") temperaturePerTime.push(0.83);
+                    if(tempPerTime.values[i].value == "OPEN") {
                         temperaturePerTime.push(1);
                     } else {
                         temperaturePerTime.push(0);
