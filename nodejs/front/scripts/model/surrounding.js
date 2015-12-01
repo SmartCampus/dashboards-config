@@ -13,6 +13,9 @@ if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
 
 var doorState = [];
 var windowState = [];
+var doorPercentage = [];
+var windowPercentage = [];
+
 
 
 
@@ -28,9 +31,24 @@ var successForWindowStateInTime = function (data) {
     windowGraphStateInTime();
 };
 
+var successForDoorPercentage = function (data) {
+    doorPercentage[0] = {"name": "Open", "y": data.data[0].open};
+    doorPercentage[1] = {"name": "Close", "y": data.data[1].close};
+    doorPercentageCamenbert();
+};
+
+var successForWindowPercentage = function (data) {
+    windowPercentage[0] = {"name": "Open", "y": data.data[0].open};
+    windowPercentage[1] = {"name": "Close", "y": data.data[1].close};
+    windowPercentageCamenbert();
+};
+
+
 
 retrieveData.askForSeriesWithParam('DOOR443STATE/data/splitlist', 'true', beginDate, endDate, successForDoorStateInTime);
 retrieveData.askForSeriesWithParam('WINDOW443STATE/data/splitlist', 'true', beginDate, endDate, successForWindowStateInTime);
+retrieveData.askForSeries('DOOR443STATE/data/percent', beginDate, endDate, successForDoorPercentage);
+retrieveData.askForSeries('WINDOW443STATE/data/percent', beginDate, endDate, successForWindowPercentage);
 
 
 /**
@@ -325,71 +343,60 @@ $(function () {
  * Camenbert état de la porte/fenêtre
  */
 
-$(function () {
-    $(document).ready(function () {
+var doorPercentageCamenbert = function() {
 
-        $('#cam1').highcharts({
+    $('#cam1').highcharts({
 
-            chart: {
-                type: 'pie'
-            },
+        chart: {
+            type: 'pie'
+        },
 
-            title: {
-                text: 'Door'
-            },
+        title: {
+            text: 'Door'
+        },
 
-            tooltip: {
-                pointFormat: '<b>{point.percentage:.1f}%</b>'
-            },
+        tooltip: {
+            pointFormat: '<b>{point.percentage:.1f}%</b>'
+        },
 
-            plotOptions: {
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,     // selection d'une part
+                cursor: 'pointer',          // affichage avec pointeur
+            }
+        },
 
-                pie: {
-                    allowPointSelect: true,     // selection d'une part
-                    cursor: 'pointer',          // affichage avec pointeur
-                }
-
-            },
-
-            series: [{
-                data: [
-                    { name: 'Open', y: 70.0},
-                    { name: 'Close', y: 30.0}
-                ]
-            }]
-        });
+        series: [{
+            data: [doorPercentage[0],doorPercentage[1]]
+        }]
     });
-});
+};
 
-$(function () {
-    $(document).ready(function () {
 
-        $('#cam2').highcharts({
+var windowPercentageCamenbert = function() {
 
-            chart: {
-                type: 'pie'
-            },
+    $('#cam2').highcharts({
 
-            title: {
-                text: 'Windows'
-            },
+        chart: {
+            type: 'pie'
+        },
 
-            tooltip: {
-                pointFormat: '<b>{point.percentage:.1f}%</b>'
-            },
+        title: {
+            text: 'Windows'
+        },
 
-            plotOptions: {
-                pie: {
-                    allowPointSelect: true,     // selection d'une part
-                    cursor: 'pointer',          // affichage avec pointeur
-                }
-            },
-            series: [{
-                data: [
-                    { name: 'Open', y: 50.0},
-                    { name: 'Close', y: 50.0}
-                ]
-            }]
-        });
+        tooltip: {
+            pointFormat: '<b>{point.percentage:.1f}%</b>'
+        },
+
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,     // selection d'une part
+                cursor: 'pointer',          // affichage avec pointeur
+            }
+        },
+        series: [{
+            data: [windowPercentage[0],windowPercentage[1]]
+        }]
     });
-});
+};
