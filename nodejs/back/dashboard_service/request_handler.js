@@ -41,7 +41,11 @@ function getSensorInformation(sensorId, date, state, response) {
                 var temperaturePerTime = [];
                 temperaturePerTime.push((tempPerTime.values[i].date)*1000);
                 if(state) {
-                    temperaturePerTime.push(tempPerTime.values[i].value);
+                    if(tempPerTime.values[i].value == "ON") {
+                        temperaturePerTime.push(1);
+                    } else {
+                        temperaturePerTime.push(0);
+                    }
                 } else {
                     temperaturePerTime.push(parseFloat(tempPerTime.values[i].value));
                 }
