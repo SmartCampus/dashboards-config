@@ -2,10 +2,16 @@
  * Created by Quentin on 12/1/2015.
  */
 var requester = require("./api_requester"),
-     moment = require("moment")
      processor = require("./response_processor");
 
-
+/**
+ * This function first treat the queries param, then make the request to the given sensor to the API with
+ * {@link api_requester#getSensors}. Then the information receive is concatenate with the
+ * {@link response_processor#concatenateResponse}. Finally the information is send in the response of the request.
+ *
+ * @param   queries         {array}         Array with all the query parameters of the request.
+ * @param   response        {response}      Response of the request.
+ */
 function requestSensors(queries, response) {
     var stringQuery = "?";
     for(var i in queries) {
@@ -17,124 +23,81 @@ function requestSensors(queries, response) {
     });
 }
 
-
+/**
+ * This function request the information of the sensor with the given {@param sensorId}, with the
+ * {@link api_requester#getSensors}. Then the result in transform in a format readable by HighCharts with the method
+ * {@link response_processor#highChartFormatTransformation}. Finally the result is return in the response of the
+ * request.
+ *
+ * @param   sensorId        {string]        Id of the sensor that will be requested on the API.
+ * @param   date            {string}        String representing the interval of date of when we want the information
+ *                                          of the sensor.
+ * @param   state           {boolean}       This boolean represent if the information will contain a state like for
+ *                                          a door or a window, or a value like for a temperature.
+ * @param   response        {response}      Response of the request
+ */
 function getSensorInformation(sensorId, date, state, response) {
     requester.getSensorData(sensorId, date, function(res) {
-        var stringData = "";
-
-        res.on("data", function(chunck) {
-            stringData += chunck;
-        });
-
-        res.on("end" , function() {
-            var tempPerTime = JSON.parse(stringData);
-            var responseInGoodFormat = {"data": []};
-
-            for(var i in tempPerTime.values) {
-                var temperaturePerTime = [];
-                temperaturePerTime.push((tempPerTime.values[i].date)*1000);
-                if(state) {
-                    if(tempPerTime.values[i].value == "ON") temperaturePerTime.push(100);
-                    if(tempPerTime.values[i].value == "OPEN") temperaturePerTime.push(1);
-                    else {
-                        temperaturePerTime.push(0);
-                    }
-                } else {
-                    temperaturePerTime.push(parseFloat(tempPerTime.values[i].value));
-                }
-                responseInGoodFormat.data.push(temperaturePerTime);
-            }
-
-            response.send(responseInGoodFormat);
-        });
+        processor.highChartFormatTransformation(response, res, state);
     });
+
 }
 
+/**
+ * This function request the information for the sensor with the given {@param sensorId} in the API, with the
+ * {@link getSensorData} method. Then the information is split in two list, for example one whe the door is open
+ * and one for when the door is closed. Then the result is put in a JSON and return to the {@param response} of the
+ * request. This function does not work with a temperature.
+ *
+ * @param   sensorId        {string}        Id of the sensor requested on the API.
+ * @param   date            {string}        String representing the interval of date of when we want to retrieve the
+ *                                          information of the sensors.
+ * @param   response        {response}      Response of the request.
+ */
 function getStateInformationSplit(sensorId, date, response) {
     requester.getSensorData(sensorId, date, function(res) {
-        var stringData = "";
-
-        res.on("data", function(chunck) {
-            stringData += chunck;
-        });
-
-        res.on("end" , function() {
-            var tempPerTime = JSON.parse(stringData);
-            var responseInGoodFormat = {"data": []};
-
-            var openList = [];
-            var closeList = [];
-
-            for(var i in tempPerTime.values) {
-                var loopArray = [];
-                if(tempPerTime.values[i].value == "OPEN")  {
-                    loopArray.push((tempPerTime.values[i].date)*1000);
-                    loopArray.push(1);
-                    openList.push(loopArray);
-                }
-                else {
-                    loopArray.push((tempPerTime.values[i].date)*1000);
-                    loopArray.push(0);
-
-                    closeList.push(loopArray);
-                }
-            }
-            responseInGoodFormat.data.push({"open" : openList});
-            responseInGoodFormat.data.push({"close" : closeList});
-
-            response.send(responseInGoodFormat);
-        });
+        processor.splitInformation(response, res);
     });
 }
 
+
+/**
+ * This function request the information for the sensor with the given {@param sensorId} for the given interval of
+ * {@param date} with the function {@link getSensorData}. Then we run through the result with the method
+ * {@link informationInPercent} and return the result in percent. This method doesn't work with a sensor like the
+ * temperature.
+ *
+ * @param   sensorId        {string}        Id of the sensor request in the API
+ * @param   date            {string}        String representing the interval of date of when we want to retrieve the
+ *                                          information. If there is no date, all the information are returned.
+ * @param   response        {response}      Response of the request.
+ */
 function getInformationInPercent(sensorId, date, response) {
     requester.getSensorData(sensorId, date, function(res) {
-        var stringData = "";
-        var dates = date.split("/")
-        var begin = moment(dates[0]).unix();
-        var end = moment(dates[1]).unix();
-        var totalTime = end - begin;
-
-        res.on("data", function(chunck) {
-            stringData += chunck;
-        });
-
-        var totalTimeOpen = 0;
-        res.on("end" , function() {
-            var tempPerTime = JSON.parse(stringData);
-            var responseInGoodFormat = {"data": []};
-
-            var lastOn = 0;
-            for(var i in tempPerTime.values) {
-                if(i == 1) {
-                    if(tempPerTime.values[i].value == "OPEN") {
-                        lastOn = tempPerTime.values[i].date;
-                    } else {
-                        lastOn = begin;
-                        totalTimeOpen += (tempPerTime.values[i].date - begin);
-                    }
-                }
-                if(tempPerTime.values[i].value == "OPEN") {
-                    lastOn = tempPerTime.values[i].date;
-                } else if(tempPerTime.values[i].value == "OPEN") {
-                    totalTimeOpen += (tempPerTime.values[i].date - lastOn);
-                }
-            }
-            var percent = totalTimeOpen/totalTime;
-            responseInGoodFormat.data.push({"open" : percent*100});
-            responseInGoodFormat.data.push({"close": (1 - percent)*100});
-
-            response.send(responseInGoodFormat);
-        });
-
-
+        processor.informationInPercent(res,response, date);
     });
 }
 
+/**
+ *
+ * @type {getStateInformationSplit}
+ */
 exports.getStateInformationSplit = getStateInformationSplit;
 
+/**
+ *
+ * @type {getInformationInPercent}
+ */
 exports.getInformationInPercent = getInformationInPercent;
 
+/**
+ *
+ * @type {getSensorInformation}
+ */
 exports.getSensorInformation = getSensorInformation;
 
+/**
+ *
+ * @type {requestSensors}
+ */
 exports.requestSensors = requestSensors;
