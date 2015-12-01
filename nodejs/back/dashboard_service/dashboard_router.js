@@ -27,6 +27,7 @@ router.get("/sensor/:sensorId/data", function(req, res) {
     if(req.query.state !== undefined) {
         state = req.query.state;
     }
+
     request_handler.getSensorInformation(sensorId, date, state,res);
 });
 
@@ -38,6 +39,10 @@ router.get("/sensor/:sensorId/data/last", function(req, res) {
     request_handler.getSensorLastInformation(sensorId, res);
 });
 
+
+router.get("/sensor/:sensorId/data/percent", function(req, res) {
+    request_handler.getInformationInPercent();
+});
 
 
 
