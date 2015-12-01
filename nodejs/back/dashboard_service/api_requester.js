@@ -33,7 +33,7 @@ function getSensors(queries, callback) {
  *                             		the body response from the API call
  */
 function getSensorData(name, date, callback) {
-    var url = API_HOST + SENSOR_PATH + "/" + name + "/data" +  (date? "&date=" + date : "");
+    var url = API_HOST + SENSOR_PATH + "/" + name + "/data" +  (date? "?date=" + date : "");
     console.log(url);
     http.get(url, function (res) {
         callback(res);
