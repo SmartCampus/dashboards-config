@@ -41,9 +41,22 @@ router.get("/sensor/:sensorId/data/last", function(req, res) {
 
 
 router.get("/sensor/:sensorId/data/percent", function(req, res) {
-    request_handler.getInformationInPercent();
+    var date = "";
+    if(req.query.date !== undefined) {
+        date = req.query.date;
+    }
+    request_handler.getInformationInPercent(req.params.sensorId, date, res);
 });
 
 
+router.get("/sensor/:sensorId/data/splitList", function(req, res) {
+    var sensorId = req.params.sensorId;
+    var date = "";
+    if(req.query.date !== undefined) {
+        date = req.query.date;
+    }
+
+    request_handler.getStateInformationSplit(sensorId, date,res);
+});
 
 module.exports = router;
