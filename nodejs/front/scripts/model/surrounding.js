@@ -19,12 +19,12 @@ var windowState = [];
 
 var successForDoorStateInTime = function (data) {
     console.log('Entrer ici !');
-    doorState[0] = {"name": "CLOSE" , "data": data.data}; // color: 'rgba(223, 83, 83, .5)'
-    //doorState[1] = {"name": "OPEN" , color: 'rgba(119, 152, 191, .5)', "data": data.data};
+    doorState[0] = {"name": "open",  color: 'rgba(119, 152, 191, .5)' , "data": data.data[0].open};
+    doorState[1] = {"name": "close" ,color: 'rgba(223, 83, 83, .5)', "data": data.data[1].close};
     doorGraphStateInTime();
 };
 
-retrieveData.askForSeriesWithParam('DOOR443STATE/data', 'true', beginDate, endDate, successForDoorStateInTime);
+retrieveData.askForSeriesWithParam('DOOR443STATE/data/splitlist', 'true', beginDate, endDate, successForDoorStateInTime);
 
 
 /**
