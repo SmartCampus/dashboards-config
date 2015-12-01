@@ -120,20 +120,18 @@ function getInformationInPercent(sensorId, date, response) {
                         lastOn = tempPerTime.values[i].date;
                     } else {
                         lastOn = begin;
-                        totalTimeOpen += (begin - tempPerTime.values[i].date);
+                        totalTimeOpen += (tempPerTime.values[i].date - begin);
                     }
                 }
-                var temperaturePerTime = [];
                 if(tempPerTime.values[i].value == "OPEN") {
-
+                    lastOn = tempPerTime.values[i].date;
+                } else if(tempPerTime.values[i].value == "OPEN") {
+                    totalTimeOpen += (tempPerTime.values[i].date - lastOn);
                 }
             }
-            console.log(totalTime);
-            console.log(totalTimeOpen);
             var percent = totalTimeOpen/totalTime;
-            console.log(percent);
             responseInGoodFormat.data.push({"open" : percent});
-            responseInGoodFormat.data.push({"close": 1-percent});
+            responseInGoodFormat.data.push({"close": 1 - percent});
 
             response.send(responseInGoodFormat);
         });
