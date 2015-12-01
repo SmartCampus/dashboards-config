@@ -22,30 +22,76 @@ $(function () {
                 selected : 1
             },
 
-            yAxis: {
+            yAxis: [
+                { // Primary yAxis
+                    min: 0,
 
-                // legende axe Y
-                title: {
-                    text: 'Intensité sonore (db)'
+                    title: {
+                        text: 'Nb of times the door got opened',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    },
+
+
+                    labels: {
+                        format: '{value}',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    },
+
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    },
+
+                    opposite: false
                 },
+                { // Secondary yAxis
 
-                // Affichage seuil
-                plotLines: [{
-                    value: 2,
-                    color: 'red',
-                    dashStyle: 'shortdash', //pointillé
-                    width: 2,
-                    label: {
-                        text: 'Seuil du bruit'
-                    }
+                    title: {
+                        text: 'intensité sonore',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    },
+
+                    // Affichage seuil
+                    plotLines: [{
+                        value: 2,
+                        color: 'red',
+                        dashStyle: 'shortdash', //pointillé
+                        width: 2,
+                        label: {
+                            text: 'Seuil du bruit'
+                        }
+                    }],
+
+                    labels: {
+                        format: '{value} db',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    },
+
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    },
+
+                    allowDecimals: false,
+                    opposite: true
                 }],
 
-                // min et max en ordonnées
-                min : 0,
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
             },
 
-            series : [
-                // affichage graphe
+            series: [
                 {
                     name : 'Intensité sonore',
                     data : data,
@@ -53,13 +99,14 @@ $(function () {
                         valueDecimals: 2
                     }
                 },
-                // affichage colonnes
                 {
                     type: 'column',
                     name: 'Etat de la porte',
                     data: data,
+                    yAxis: 1
                 }
             ]
+
         });
     });
 });
@@ -80,30 +127,76 @@ $(function () {
                 selected : 1
             },
 
-            yAxis: {
+            yAxis: [
+                { // Primary yAxis
+                    min: 0,
 
-                // legende axe Y
-                title: {
-                    text: 'Intensité sonore (db)'
+                    title: {
+                        text: 'Nb of times the windows got opened',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    },
+
+
+                    labels: {
+                        format: '{value}',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    },
+
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    },
+
+                    opposite: false
                 },
+                { // Secondary yAxis
 
-                // Affichage seuil
-                plotLines: [{
-                    value: 2,
-                    color: 'red',
-                    dashStyle: 'shortdash', //pointillé
-                    width: 2,
-                    label: {
-                        text: 'Seuil du bruit'
-                    }
+                    title: {
+                        text: 'intensité sonore',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    },
+
+                    // Affichage seuil
+                    plotLines: [{
+                        value: 2,
+                        color: 'red',
+                        dashStyle: 'shortdash', //pointillé
+                        width: 2,
+                        label: {
+                            text: 'Seuil du bruit'
+                        }
+                    }],
+
+                    labels: {
+                        format: '{value} db',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    },
+
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    },
+
+                    allowDecimals: false,
+                    opposite: true
                 }],
 
-                // min et max en ordonnées
-                min : 0,
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
             },
 
-            series : [
-                // affichage graphe
+            series: [
                 {
                     name : 'Intensité sonore',
                     data : data,
@@ -111,16 +204,16 @@ $(function () {
                         valueDecimals: 2
                     }
                 },
-                // affichage colonnes
                 {
                     type: 'column',
                     name: 'Etat de la fenêtre',
                     data: data,
+                    yAxis: 1
                 }
             ]
+
         });
     });
-
 });
 
 
