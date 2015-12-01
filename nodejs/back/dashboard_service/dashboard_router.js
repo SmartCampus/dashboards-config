@@ -20,11 +20,14 @@ router.get("/sensors", function(req, res) {
  */
 router.get("/sensor/:sensorId/data", function(req, res) {
     var sensorId = req.params.sensorId;
-    var date = "";
+    var date = "", state = false;
     if(req.query.date !== undefined) {
         date = req.query.date;
     }
-    request_handler.getSensorInformation(sensorId, date, res);
+    if(req.query.state !== undefined) {
+        state = reeq.query.state;
+    }
+    request_handler.getSensorInformation(sensorId, date, state,res);
 });
 
 /**
