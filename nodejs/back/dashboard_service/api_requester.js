@@ -11,13 +11,13 @@ var http = require("http"),
 
 function getSensors(queries, callback) {
     var url = API_HOST + SENSORS_PATH + queries;
-    console.log(queries);
+    console.log(url);
     http.get(url, function(res) {
         callback(res);
     })
     .on('error', function(e) {
            error(e, "getSensors");
-        });
+    });
 }
 
 /**
