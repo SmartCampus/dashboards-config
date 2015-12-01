@@ -5,8 +5,27 @@ var retrieveData = (function () {
     return { //exposed to public
         askForSeries: function (sensor, beginDate, endDate, successCB) {
             console.log('before the get temperature for a timespan');
-            console.log('For route '+ sensorAPI + sensor+'/data' + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
-            $.get(sensorAPI + sensor+'/data', {date: beginDate+"/"+endDate})
+            console.log('For route '+ sensorAPI + sensor + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
+            $.get(sensorAPI + sensor, {date: beginDate+"/"+endDate})
+                .done(function (data) {
+                    console.log('got temps for a timespan');
+                    //alert("Data Loaded: " + data);
+                    successCB(data);
+                })
+                .fail(function (data) {
+                    console.log(data);
+                    console.log('error in get temp for timespan');
+                    //alert("error");
+                })
+                .always(function (data) {
+                    console.log('processed series');
+                    //alert("finished");
+                });
+            console.log('after the get');
+        },
+        askForSeriesWithParam: function(sensor, param, beginDate, endDate, successCB) {
+            console.log('For route '+ sensorAPI + sensor + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
+            $.get(sensorAPI + sensor, {state:param, date: beginDate+"/"+endDate})
                 .done(function (data) {
                     console.log('got temps for a timespan');
                     //alert("Data Loaded: " + data);
@@ -24,7 +43,7 @@ var retrieveData = (function () {
             console.log('after the get');
         },
         askForSeriesForever: function (route, successCB) {
-            $.get(sensorAPI + route+'/data')
+            $.get(sensorAPI + route)
                 .done(function (data) {
                     console.log('got temps forever');
                   //  alert("Data Loaded: " + data);

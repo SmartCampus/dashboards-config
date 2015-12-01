@@ -5,8 +5,8 @@
 /** The dashboard parametres **/
 var place = 'office/443/';
 if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
-    beginDate = '2015-05-01 8:00:11';
-    endDate = '2015-12-01 18:00:11';
+    beginDate = '2015-06-21 8:00:11';
+    endDate = '2015-09-21 18:00:11';
 }
 
 
@@ -57,38 +57,28 @@ var firstSuccessInTemp = function (data) {
     };
     //We need to get the outside temperatures now, to build our whole graph.
     console.log('about to ask for campus temp');
-    retrieveData.askForSeries('TEMP_CAMPUS', beginDate, endDate, secondSuccessInTemp);
-    //retrieveData.askForSeriesForever('TEMP_CAMPUS', secondSuccessInTemp);
+    retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate, secondSuccessInTemp);
+    //retrieveData.askForSeriesForever('TEMP_CAMPUS/data', secondSuccessInTemp);
 };
 
+retrieveData.askForSeries('TEMP_443V/data', beginDate, endDate, firstSuccessInTemp);
+//retrieveData.askForSeriesForever('TEMP_443V/data', firstSuccessInTemp);
 
+var drawBarChart = function() {
+    $(function () {
+        // create the chart
+        $('#c2').highcharts('StockChart', {
 
-retrieveData.askForSeries('TEMP_443V', beginDate, endDate, firstSuccessInTemp);
-//retrieveData.askForSeriesForever('TEMP_443V', firstSuccessInTemp);
-var countingArray = [];
-var successForWindowCount = function (data) {
-    countingArray[0] = {"name": "nb of window openings", "data": data.data};
-    console.log(countingArray[0].data);
-    console.log('in the window method');
+            chart: {
+                type: 'column',
+                zoomType: 'x'
+            },
 
-    successForAcCount = function (data) {
-        countingArray[1] = {"name": "% of time the AC is on", "data": data.data};
+            xAxis: {
+                type: 'datetime'
+            },
 
-
-        $(function () {
-            // create the chart
-            $('#c2').highcharts('StockChart', {
-
-                chart: {
-                    type: 'column',
-                    zoomType: 'x'
-                },
-
-                xAxis: {
-                    type: 'datetime'
-                },
-
-                yAxis: [
+            yAxis: [
                 { // Primary yAxis
                     min: 0,
 
@@ -136,24 +126,36 @@ var successForWindowCount = function (data) {
                     opposite: true
                 }],
 
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
 
-                series: [
+            series: [
                 {
                     name: countingArray[0].name,
                     data: countingArray[0].data,
                     dataGrouping: {
-                        units: [[
-                            'hour',[1]
-                        ]],
-                        forced: true
+                        forced: true,
+                        approximation:'sum',
+                        /*units: [
+                            [
+                                'hour',[1]
+                            ],
+                            [
+                                'day', [1]
+                            ],
+                            [
+                                'week', [1]
+                            ],[
+                                'month', [1]
+                            ]
+                        ],*/
+                        groupPixelWidth: 50
                     },
                     yAxis: 1
                 },
@@ -162,36 +164,44 @@ var successForWindowCount = function (data) {
                     data: countingArray[1].data,
                     dataGrouping: {
                         forced: true,
-                        units: [[
+                        approximation:'average',
+                       /* units: [
+                            [
                             'hour',[1]
-                        ],
+                            ],
                             [
                                 'day', [1]
                             ],
                             [
                                 'week', [1]
                             ],[
-                                'month', [1,2,3,4,5,6]
-                            ],
-                        ]
-                        /*    units: [[
-                         'hour',
-                         [1]
-                         ]],
-
-                         smoothed:true
-                         */},
+                                'month', [1]
+                            ]
+                        ],*/
+                        groupPixelWidth: 50
+                       },
                     yAxis: 0
                 }
-                ]
-            });
+            ]
         });
-    };
-    retrieveData.askForSeries(place + 'ac_on', beginDate, endDate, successForAcCount);
-
+    });
 };
 
-//retrieveData.askForSeries(place + 'window_opening', beginDate, endDate, successForWindowCount);
+
+var countingArray = [];
+var successForWindowCount = function (data) {
+    countingArray[0] = {"name": "nb of window openings", "data": data.data};
+    console.log(countingArray[0].data);
+    console.log('in the window method');
+
+    successForAcCount = function (data) {
+        countingArray[1] = {"name": "% of time the AC is on", "data": data.data};
+        drawBarChart();
+    };
+    retrieveData.askForSeriesWithParam('AC_443STATE/data', 'true', beginDate, endDate, successForAcCount);
+};
+
+retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, endDate, successForWindowCount);
 
 
 /**
