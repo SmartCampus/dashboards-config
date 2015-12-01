@@ -1,7 +1,8 @@
 /**
  * Created by Quentin on 12/1/2015.
  */
-var requester = require("./api_requester");
+var requester = require("./api_requester"),
+                 moment = require("moment");
 
 
 function requestSensors(queries, response) {
@@ -57,16 +58,57 @@ function getSensorInformation(sensorId, date, state, response) {
     });
 }
 
-
-function getInformationInPercent(sensorId, date, response) {
+function getStateInformationSplit(sensorId, date, response) {
     requester.getSensorData(sensorId, date, function(res) {
-       var stringData = "";
+        var stringData = "";
 
         res.on("data", function(chunck) {
             stringData += chunck;
         });
 
+        res.on("end" , function() {
+            var tempPerTime = JSON.parse(stringData);
+            var responseInGoodFormat = {"data": []};
 
+            var openList = [];
+            var closeList = [];
+
+            for(var i in tempPerTime.values) {
+                var loopArray = [];
+            //    temperaturePerTime.push((tempPerTime.values[i].date)*1000);
+                if(tempPerTime.values[i].value == "OPEN")  {
+                    loopArray.push((tempPerTime.values[i].date)*1000);
+                    loopArray.push(1);
+                    openList.push(loopArray);
+                }
+                else {
+                    loopArray.push((tempPerTime.values[i].date)*1000);
+                    loopArray.push(0);
+
+                    closeList.push(loopArray);
+                }
+            }
+            responseInGoodFormat.data.push({"open" : openList});
+            responseInGoodFormat.data.push({"close" : closeList});
+
+            response.send(responseInGoodFormat);
+        });
+    });
+}
+
+function getInformationInPercent(sensorId, date, response) {
+    requester.getSensorData(sensorId, date, function(res) {
+        var stringData = "";
+        var dates = date.split("/")
+        var begin = moment(dates[0]).unix();
+        var end = moment(dates[1]).unix();
+        var totalTime = end - begin;
+
+        res.on("data", function(chunck) {
+            stringData += chunck;
+        });
+
+        var totalTimeOpen = 0;
         res.on("end" , function() {
             var tempPerTime = JSON.parse(stringData);
             var responseInGoodFormat = {"data": []};
@@ -74,14 +116,22 @@ function getInformationInPercent(sensorId, date, response) {
             var lastOn = 0;
             for(var i in tempPerTime.values) {
                 if(i == 1) {
-                    console.log("YOLO");
+                    if(tempPerTime.values[i].value == "OPEN") {
+                        lastOn = tempPerTime.values[i].date;
+                    } else {
+                        lastOn = begin;
+                        totalTimeOpen += (tempPerTime.values[i].date - begin);
+                    }
                 }
-                var temperaturePerTime = [];
                 if(tempPerTime.values[i].value == "OPEN") {
-
+                    lastOn = tempPerTime.values[i].date;
+                } else if(tempPerTime.values[i].value == "OPEN") {
+                    totalTimeOpen += (tempPerTime.values[i].date - lastOn);
                 }
             }
-
+            var percent = totalTimeOpen/totalTime;
+            responseInGoodFormat.data.push({"open" : percent});
+            responseInGoodFormat.data.push({"close": 1 - percent});
 
             response.send(responseInGoodFormat);
         });
@@ -89,6 +139,8 @@ function getInformationInPercent(sensorId, date, response) {
 
     });
 }
+
+exports.getStateInformationSplit = getStateInformationSplit;
 
 exports.getInformationInPercent = getInformationInPercent;
 
