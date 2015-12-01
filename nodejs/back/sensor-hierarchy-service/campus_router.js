@@ -3,23 +3,32 @@ var express = require("express"),
     router = express.Router();
 
 
-
+/**
+ *
+ */
 router.get("/sensors", function(req, res) {
     var queries = req.query;
     queryHandler.handleQuery(queries,res);
 });
 
-router.get("/data", function(req, res) {
-    var queries = req.query;
+/**
+ *
+ */
+router.get("/sensor/:sensorId/data", function(req, res) {
+    var sensorId = req.params.sensorId;
     var date = "";
-    for(var query in queries) {
-        if(query == "date") {
-            date = query;
-            delete queries['date'];
-        }
+    if(req.query.date !== undefined) {
+        date = req.query.date;
     }
-    console.log(queries);
-    queryHandler.getSensorInformation(queries, date, res);
+    queryHandler.getSensorInformation(sensorId, date, res);
+});
+
+/**
+ *
+ */
+router.get("/sensor/:sensorId/data/last", function(req, res) {
+   var sensorId = req.params.sensorId;
+    queryHandler.getSensorLastInformation(sensorId, res);
 });
 
 

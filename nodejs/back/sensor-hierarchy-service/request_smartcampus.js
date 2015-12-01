@@ -59,7 +59,7 @@ function getLastSensorData(name, convert, callback) {
  */
 function getSensorData(name, date, convert, callback) {
     var url = SMARTCAMPUS_HOST + SENSORS_PATH + "/" + name + "/data?convert=" + convert + (date? "&date=" + date : "");
-    console.log("in get : " + url);
+
     http.get(url, function (res) {
         callback(res);
     })
@@ -67,6 +67,30 @@ function getSensorData(name, date, convert, callback) {
         error(e, "getSensorData");
     });
 }
+
+
+/**
+ * Retrieves the last data from a specific sensor.
+ *
+ * @param  {[string]}	name 		the sensor's name
+ * @param  {[boolean]}  convert 	whether the timestamps should be converted
+ *                               	into "human readable" dates
+ * @param  {Function}	callback	function to call when job is finished with
+ *                             		the body response from the API call
+ */
+function getLastSensorData(name, convert, callback) {
+    var url = SMARTCAMPUS_HOST + SENSORS_PATH + "/" + name + "/data" + "/last" + "?convert=" + convert;
+
+    http.get(url, function (res) {
+        callback(res);
+    })
+        .on('error', function (e) {
+            error(e, "getSensorData");
+        });
+}
+
+
+exports.getLastSensorData = getLastSensorData;
 
 exports.getSensorData = getSensorData;
 

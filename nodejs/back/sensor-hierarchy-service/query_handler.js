@@ -33,35 +33,19 @@ function checkArrays(arrays) {
 }
 
 
-function getSensorInformation(queries, date, response) {
-    var sensors = getSensorsFromQuery(queries);
-    var sensor = checkArrays(sensors);
-    if(sensor.length > 1) {
-        response.send("Sorry too much sensors for the given queries");
-    } else {
-        requester.getSensorData(sensor[0], date, false, function(res) {
-            var stringData = "";
+function getSensorInformation(name, date, response) {
+    requester.getSensorData(name, date, false, function(res) {
+        var stringData = "";
 
-            res.on("data", function(chunck) {
-                stringData += chunck;
-            });
-
-            res.on("end" , function() {
-                var tempPerTime = JSON.parse(stringData);
-                var responseInGoodFormat = {"data": []};
-
-                for(var i in tempPerTime.values) {
-                    var temperaturePerTime = [];
-                    console.log(tempPerTime.values[i]);
-                    temperaturePerTime.push((tempPerTime.values[i].date)*1000);
-                    temperaturePerTime.push(parseFloat(tempPerTime.values[i].value));
-                    responseInGoodFormat.data.push(temperaturePerTime);
-                }
-
-                response.send(responseInGoodFormat);
-            });
+        res.on("data", function(chunck) {
+            stringData += chunck;
         });
-    }
+
+        res.on("end" , function() {
+            var tempPerTime = JSON.parse(stringData);
+            response.send(tempPerTime);
+        });
+    });
 }
 
 /**
@@ -92,6 +76,25 @@ function getSensorsFromQuery(queries) {
     }
     return sensorsArray;
 }
+
+
+function getSensorLastInformation(name, response) {
+    requester.getLastSensorData(name, false, function(res) {
+        var stringData = "";
+
+        res.on("data", function(chunck) {
+            stringData += chunck;
+        });
+
+        res.on("end" , function() {
+            var tempPerTime = JSON.parse(stringData);
+            response.send(tempPerTime);
+        });
+    });
+}
+
+exports.getSensorLastInformation = getSensorLastInformation;
+
 
 exports.getSensorInformation = getSensorInformation;
 
