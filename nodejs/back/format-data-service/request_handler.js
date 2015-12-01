@@ -130,8 +130,8 @@ function getInformationInPercent(sensorId, date, response) {
                 }
             }
             var percent = totalTimeOpen/totalTime;
-            responseInGoodFormat.data.push({"open" : percent});
-            responseInGoodFormat.data.push({"close": 1 - percent});
+            responseInGoodFormat.data.push({"open" : percent*100});
+            responseInGoodFormat.data.push({"close": (1 - percent)*100});
 
             response.send(responseInGoodFormat);
         });
