@@ -2,13 +2,133 @@
  * Created by salahbennour on 25/11/2015.
  */
 
-/** The dashboard parametres **/
-var place = 'DOOR443STATE';
+/************************************
+ *          VARIABLES               *
+ ************************************/
+
 if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
     beginDate = '2015-06-21 8:00:11';
     endDate = '2015-09-21 18:00:11';
 }
-var myURL = //localhost:8082/sensor/DOOR443STATE/data?state=true&date=2015-05-01+8%3A00%3A11%2F2015-12-01+18%3A00%3A11;
+
+var myURL = '//localhost:8082/sensor/DOOR443STATE/data?state=true&date=2015-05-01+8%3A00%3A11%2F2015-12-01+18%3A00%3A11';
+var doorState = [];
+var windowState = [];
+
+
+
+var successForDoorStateInTime = function (data) {
+    console.log('Entrer ici !');
+    doorState[0] = {"name": "CLOSE" , "data": data.data}; // color: 'rgba(223, 83, 83, .5)'
+    //doorState[1] = {"name": "OPEN" , color: 'rgba(119, 152, 191, .5)', "data": data.data};
+    doorGraphStateInTime();
+};
+
+retrieveData.askForSeriesWithParam('DOOR443STATE/data', 'true', beginDate, endDate, successForDoorStateInTime);
+
+
+/**
+ * Graphe de l'état de la porte/fenêtre par rapport au temps
+ */
+
+var doorGraphStateInTime = function() {
+
+        $('#g1').highcharts('StockChart', {
+
+            chart: {
+                type: 'scatter',
+                zoomType: 'x'
+            },
+
+            title: {
+                text: 'Door status in time'
+            },
+
+            xAxis: {
+                type: 'datetime'
+            },
+
+            yAxis:
+                {
+                    /**
+                    labels: {
+                        format: '{value}',
+                    },
+                    **/
+
+                    categories: ['Close','Open'],
+
+                    /**
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    },
+
+                    opposite: false
+                    **/
+                },
+
+
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}</td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+
+            series : doorState
+        });
+};
+
+
+$(function () {
+    $('#g2').highcharts({
+
+        chart: {
+            type: 'scatter'
+        },
+
+        title: {
+            text: 'Windows status in time '
+        },
+
+        xAxis: {
+            title: {
+                text: 'Time'
+            }
+        },
+
+        yAxis: {
+            title: {
+                text: ''
+            },
+            categories: ['Close', 'Open']
+        },
+
+        plotOptions: {
+            scatter: {
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.x} '
+                }
+            }
+        },
+
+        series: [{
+            name: 'Close',
+            color: 'rgba(223, 83, 83, .5)',
+            data: [[161.2, 0], [167.5, 0], [159.5, 0], [157.0, 0], [155.8, 0]]
+
+        }, {
+            name: 'Open',
+            color: 'rgba(119, 152, 191, .5)',
+            data: [[174.0, 1], [175.3, 1], [193.5, 1], [186.5, 1], [187.2, 1]]
+        }]
+    });
+});
+
+
+
 
 /**
  * Graphe intensité sonore
@@ -296,100 +416,3 @@ $(function () {
         });
     });
 });
-
-/**
- * Graphe de l'état de la porte/fenêtre par rapport au temps
- */
-
-$(function () {
-    $('#g1').highcharts({
-
-        chart: {
-            type: 'scatter'
-        },
-
-        title: {
-            text: 'Door status in time'
-        },
-
-        xAxis: {
-            title: {
-                text: 'Time'
-            }
-        },
-
-        yAxis: {
-            title: {
-                text: ''
-            },
-            categories: ['Close', 'Open']
-        },
-
-        plotOptions: {
-            scatter: {
-                tooltip: {
-                    headerFormat: '<b>{series.name}</b><br>',
-                    pointFormat: '{point.x} '
-                }
-            }
-        },
-
-        series: [{
-            name: 'Close',
-            color: 'rgba(223, 83, 83, .5)',
-            data: [[161.2, 0], [167.5, 0], [159.5, 0], [157.0, 0], [155.8, 0]]
-
-        }, {
-            name: 'Open',
-            color: 'rgba(119, 152, 191, .5)',
-            data: [[174.0, 1], [175.3, 1], [193.5, 1], [186.5, 1], [187.2, 1]]
-        }]
-    });
-});
-
-$(function () {
-    $('#g2').highcharts({
-
-        chart: {
-            type: 'scatter'
-        },
-
-        title: {
-            text: 'Windows status in time '
-        },
-
-        xAxis: {
-            title: {
-                text: 'Time'
-            }
-        },
-
-        yAxis: {
-            title: {
-                text: ''
-            },
-            categories: ['Close', 'Open']
-        },
-
-        plotOptions: {
-            scatter: {
-                tooltip: {
-                    headerFormat: '<b>{series.name}</b><br>',
-                    pointFormat: '{point.x} '
-                }
-            }
-        },
-
-        series: [{
-            name: 'Close',
-            color: 'rgba(223, 83, 83, .5)',
-            data: [[161.2, 0], [167.5, 0], [159.5, 0], [157.0, 0], [155.8, 0]]
-
-        }, {
-            name: 'Open',
-            color: 'rgba(119, 152, 191, .5)',
-            data: [[174.0, 1], [175.3, 1], [193.5, 1], [186.5, 1], [187.2, 1]]
-        }]
-    });
-});
-
