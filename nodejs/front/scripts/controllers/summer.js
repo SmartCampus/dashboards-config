@@ -158,7 +158,6 @@ var successForWindowCount = function (data) {
                     yAxis: 1
                 },
                 {
-                    type: 'column',
                     name: countingArray[1].name,
                     data: countingArray[1].data,
                     dataGrouping: {
