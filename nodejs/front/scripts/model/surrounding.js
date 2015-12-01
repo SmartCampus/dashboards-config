@@ -2,6 +2,13 @@
  * Created by salahbennour on 25/11/2015.
  */
 
+/** The dashboard parametres **/
+var place = 'DOOR443STATE';
+if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
+    beginDate = '2015-06-21 8:00:11';
+    endDate = '2015-09-21 18:00:11';
+}
+var myURL = //localhost:8082/sensor/DOOR443STATE/data?state=true&date=2015-05-01+8%3A00%3A11%2F2015-12-01+18%3A00%3A11;
 
 /**
  * Graphe intensité sonore
@@ -250,7 +257,7 @@ $(function () {
             series: [{
                 data: [
                     { name: 'Open', y: 70.0},
-                    {name: 'Close', y: 30.0}
+                    { name: 'Close', y: 30.0}
                 ]
             }]
         });
