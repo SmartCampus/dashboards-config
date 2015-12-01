@@ -42,9 +42,8 @@ function getSensorInformation(sensorId, date, state, response) {
                 temperaturePerTime.push((tempPerTime.values[i].date)*1000);
                 if(state) {
                     if(tempPerTime.values[i].value == "ON") temperaturePerTime.push(100);
-                    if(tempPerTime.values[i].value == "OPEN") {
-                        temperaturePerTime.push(1);
-                    } else {
+                    if(tempPerTime.values[i].value == "OPEN") temperaturePerTime.push(1);
+                    else {
                         temperaturePerTime.push(0);
                     }
                 } else {
@@ -58,6 +57,56 @@ function getSensorInformation(sensorId, date, state, response) {
     });
 }
 
+
+function getInformationInPercent(sensorId, date, response) {
+    requester.getSensorData(sensorId, date, function(res) {
+       var stringData = "";
+
+        res.on("data", function(chunck) {
+            stringData += chunck;
+        });
+
+
+        res.on("end" , function() {
+            var tempPerTime = JSON.parse(stringData);
+            var responseInGoodFormat = {"data": []};
+
+            var lastOn = 0;
+            for(var i in tempPerTime.values) {
+                var temperaturePerTime = [];
+                if(tempPerTime.values[i].value == "OPEN") {
+
+                }
+            }
+
+
+            response.send(responseInGoodFormat);
+        });
+
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
 
 exports.getSensorInformation = getSensorInformation;
 
