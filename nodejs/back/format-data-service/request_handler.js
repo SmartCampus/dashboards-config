@@ -78,6 +78,16 @@ function getInformationInPercent(sensorId, date, response) {
     });
 }
 
+
+function getLastInformation(sensorId, response) {
+    requester.getLastSensorData(sensorId, function(res) {
+       processor.concatenateResponse(response, res);
+    });
+}
+
+
+exports.getLastInformation = getLastInformation;
+
 /**
  *
  * @type {getStateInformationSplit}
