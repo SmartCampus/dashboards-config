@@ -24,11 +24,11 @@ var secondSuccessInTemp = function (data, callback) {
     callback();
 };
 
-/**
+
 var thirdSuccessInTemp = function (data, callback) {
-    temperaturesArray[2] = {"type": 'column',"name": "heater state" , "data": data.data,  "yAxis": 0};
+    temperaturesArray[2] = {"type": 'column',"name": "heater state" , "data": data.data[0].open,  "yAxis": 0};
     callback();
-};**/
+};
 
 var toUpdate = 0;
 
@@ -53,12 +53,12 @@ retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate,
     }
 );
 
-/**
+
 retrieveData.askForSeriesWithParam('DOOR443STATE/data/splitlist', 'true', beginDate, endDate,
     function (data) {
         thirdSuccessInTemp(data, updateCallback);
     }
-);**/
+);
 
 var drawLineChart = function() {
 
