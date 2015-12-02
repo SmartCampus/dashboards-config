@@ -66,5 +66,5 @@ public class App
 		PrintWriter output = new PrintWriter("result.js");
 		output.println(jsResult);
 		output.close();
-		    }
+    }
 }
