@@ -290,7 +290,7 @@ var noiseAccordingWindowState = function() {
 
                 // Affichage seuil
                 plotLines: [{
-                    value: 2,
+                    value: 45,
                     color: 'red',
                     dashStyle: 'shortdash', //pointillé
                     width: 2,
