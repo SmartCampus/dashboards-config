@@ -26,9 +26,14 @@ public class App
 
         /* lets render a template */
         StringWriter w = new StringWriter();
-
-    //    Velocity.mergeTemplate("hello.vm", context, w );
-      //  System.out.println(" template : " + w );
+		
+		if (Velocity.templateExists("hello.vm")) {
+			Velocity.mergeTemplate("hello.vm", context, w );
+			System.out.println(" template : " + w );
+		}
+		else {
+			System.out.println("The template hello.vm is not found in the resource files !");
+		}
 
         /* lets make our own string to render */
         String s = "We are using $project $name to render this.";
