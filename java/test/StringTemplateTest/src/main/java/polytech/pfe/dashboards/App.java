@@ -46,7 +46,7 @@ public class App
 		System.out.println(otherRender);
 		*/
 		//Import as a template group the whole folder ??
-		STGroup group =  new STGroupFile("templates/myJavascriptTest.stg");
+		STGroup group =  new STGroupFile("myJavascriptTest.stg");
 		   
 		ST lineChart = group.getInstanceOf("myJavascriptTest");
  
