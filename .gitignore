@@ -20,3 +20,7 @@
 ## Unwanted Javascript files ##
 node_modules
 bower_components
+
+## Unwanted maven files ##
+target/
+.mvn
