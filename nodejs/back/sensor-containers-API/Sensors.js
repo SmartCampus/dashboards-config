@@ -72,12 +72,10 @@ class SensorContainer extends SensorSet {
      * @returns {array|*}
      */
     getSensors() {
-    //    console.log("Direct sensor in " + this.name + " : " + this.directSensor.length);
         var result = [];
         for(var i in this.directSensor) {
             result.push(this.directSensor[i]);
         }
-    //    var result = this.directSensor;
         for (var child in this.childContainer) {
             var childSensors = this.childContainer[child].getSensors();
             for (var i in childSensors) {
@@ -204,7 +202,6 @@ function initSensors(data) {
     for(var iterator in categories) {
         smartCampus.push(categories[iterator]);
     }
-  //  console.log(smartCampus[1]);
 }
 
 /**
