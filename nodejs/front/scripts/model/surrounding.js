@@ -28,12 +28,8 @@ var successForNoise = function (data) {
 
         noiseDoor[1] = {"type": 'column', "name" : "door state", "data": data.data[0].open,  "dataGrouping": {
             "enable": false, "force": false}};
-
-        console.log("BIDULE");
-
-        console.log(data.data[0].open);
-
         doorGraphStateInTime();
+
         callback();
     };
 
@@ -43,6 +39,7 @@ var successForNoise = function (data) {
 
         noiseWindow[1] = {"type": 'column', "name" : 'window state', "data": data.data[0].open};
         windowGraphStateInTime();
+
         callback();
     };
 
@@ -54,7 +51,7 @@ var successForNoise = function (data) {
         }
         else {
             noiseAccordingDoorState();
-            //noiseAccordingWindowState();
+            noiseAccordingWindowState();
         }
     }
 
@@ -67,18 +64,6 @@ var successForNoise = function (data) {
         function (data) {
             successForWindowStateInTime(data, updateCallback);
         });
-
-    /**
-    retrieveData.askForSeriesWithParam('DOOR443STATE/data/splitlist', 'true', beginDate, endDate,
-        function (data) {
-            successForDoorStateInTime(data, function () {
-                retrieveData.askForSeriesWithParam('WINDOW443STATE/data/splitlist', 'true', beginDate, endDate,
-                    function (data) {
-                        successForWindowStateInTime(data, noiseAccordingDoorState);
-                    });
-            });
-        });
-    **/
 }
 
 
@@ -261,109 +246,87 @@ var noiseAccordingDoorState = function() {
 };
 
 
-$(function () {
+var noiseAccordingWindowState = function() {
 
-    $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
-        $('#c2').highcharts('StockChart', {
+    $('#c2').highcharts('StockChart', {
 
-            // titre
-            title : {
-                text : 'Intensité sonore par rapport à la fenêtre'
-            },
+        // titre
+        title : {
+            text : 'Intensité sonore par rapport à la fenêtre'
+        },
 
-            // Selectionne un interval de temps proposé par default
-            rangeSelector : {
-                selected : 1
-            },
+        yAxis: [
+            { // Primary yAxis
+                min: 0,
 
-            yAxis: [
-                { // Primary yAxis
-                    min: 0,
-                    max : 1,
-
-                    title: {
-                        text: 'Nb of times the windows got opened',
-                        style: {
-                            color: Highcharts.getOptions().colors[1]
-                        }
-                    },
-
-                    labels: {
-                        format: '{value}',
-                        style: {
-                            color: Highcharts.getOptions().colors[1]
-                        }
-                    },
-
+                title: {
+                    text: 'Nb of times the windows got opened',
                     style: {
                         color: Highcharts.getOptions().colors[1]
-                    },
-
-                    opposite: false
-                },
-                { // Secondary yAxis
-
-                    title: {
-                        text: 'intensité sonore',
-                        style: {
-                            color: Highcharts.getOptions().colors[0]
-                        }
-                    },
-
-                    // Affichage seuil
-                    plotLines: [{
-                        value: 2,
-                        color: 'red',
-                        dashStyle: 'shortdash', //pointillé
-                        width: 2,
-                        label: {
-                            text: 'Seuil du bruit'
-                        }
-                    }],
-
-                    labels: {
-                        format: '{value} db',
-                        style: {
-                            color: Highcharts.getOptions().colors[0]
-                        }
-                    },
-
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    },
-
-                    allowDecimals: false,
-                    opposite: true
-                }],
-
-            tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-
-            series: [
-                {
-                    name : 'Intensité sonore',
-                    data : data,
-                    tooltip: {
-                        valueDecimals: 2
                     }
                 },
-                {
-                    type: 'column',
-                    name: 'Etat de la fenêtre',
-                    data: data,
-                    yAxis: 1
-                }
-            ]
 
-        });
+                labels: {
+                    format: '{value}',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                },
+
+                opposite: false
+            },
+            { // Secondary yAxis
+
+                title: {
+                    text: 'intensité sonore',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+
+                // Affichage seuil
+                plotLines: [{
+                    value: 2,
+                    color: 'red',
+                    dashStyle: 'shortdash', //pointillé
+                    width: 2,
+                    label: {
+                        text: 'Seuil du bruit'
+                    }
+                }],
+
+                labels: {
+                    format: '{value} db',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                },
+
+                allowDecimals: false,
+                opposite: true
+            }],
+
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+
+        series: [ noiseWindow[0], noiseWindow[1]]
+
     });
-});
+};
 
 
 /**
