@@ -49,10 +49,13 @@ public class App
 		STGroup group =  new STGroupFile("myJavascriptTest.stg");
 		   
 		ST lineChart = group.getInstanceOf("myJavascriptTest");
- 
-		lineChart.add("nbOfGraph", "c1");		
-		lineChart.add("yTitle", "Temperature (°C)");
-		lineChart.add("dataName", "temperatureArray");
+ /*
+ WidgetDescription(String nbOfGraph, String yTitle, String dataName)
+ */
+		WidgetDescription widget = new WidgetDescription("c1", "Température (°C)", "temperatureArray");
+		lineChart.add("nbOfGraph", widget.getNbOfGraph());		
+		lineChart.add("yTitle", widget.getYTitle());
+		lineChart.add("dataName", widget.getDataName());
 
 
 //		myJavascriptTest(nbOfGraph, yTitle, dataName) ::= <<
