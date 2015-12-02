@@ -6,8 +6,6 @@ var $ = require("jquery");
 var value = require("./dataView.json");
 var fs = require('fs');
 
-//var template = require("./myTemplate.mustache");
-
 
 (function loadUser() {
 
@@ -22,6 +20,5 @@ var fs = require('fs');
         var rendered = Mustache.render(template, value);
         console.log(rendered);
     });
-    console.log("Template : "+ template);
 })();
 

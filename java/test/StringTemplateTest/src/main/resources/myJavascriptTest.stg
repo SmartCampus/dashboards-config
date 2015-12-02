@@ -14,7 +14,10 @@ myJavascriptTest(nbOfGraph, yTitle, dataName) ::= <<
                 label: { text: '0°C'}
             }]
         },
-
+	tooltip: {
+            pointFormat: '\<span style="color:{series.color}">{series.name}\</span>: \<b>{point.y}\</b>\<br/>',
+            valueDecimals: 2
+        },
         series: <dataName>
     });
 };
