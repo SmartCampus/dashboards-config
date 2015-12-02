@@ -35,9 +35,11 @@ Polytech Nice-Sophia SI - PFE 2015-2016 - groupe 9 :
 * [Quentin Cornevin](mailto:qcornevin@gmail.com)
 * [Marc Karassev](mailto:marc.karassev@yahoo.fr)
 
-## Intégration continue
+## Production
 
-Jenkins server: 52.32.59.80:8080
+IP: 52.34.201.18
+Front port: 80
+Jenkins port: 8080
 
 ---
 
