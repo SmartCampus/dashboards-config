@@ -54,7 +54,7 @@ function loadBarGraph(config, res) {
     for(var i in value.yAxis) {
         if(value.yAxis[i].type == "number") {
             value.yAxis[i].min = 0;
-            value.yAxis[i].max = undefined;
+            value.yAxis[i].max = "undefined";
             value.yAxis[i].format = "";
         } else if(value.yAxis[i].type == "percent") {
             value.yAxis[i].min = 0;
