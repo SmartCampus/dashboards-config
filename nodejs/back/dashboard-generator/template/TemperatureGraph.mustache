@@ -1,6 +1,6 @@
-$({{& graphName}}).highcharts('StockChart', {
+$('{{graphName}}').highcharts('StockChart', {
     chart: {
-        type: {{& graphType}},
+        type: '{{graphType}}',
         zoomType: 'x'
     },
     xAxis: {
@@ -8,7 +8,7 @@ $({{& graphName}}).highcharts('StockChart', {
     },
     yAxis: [{
         title: {
-            text: {{& yAxis}}
+            text: '{{yAxis}}'
         },
         minTickInterval: 1,
         plotLines: [{

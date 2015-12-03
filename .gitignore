@@ -16,6 +16,7 @@
 
 ## Unwanted IDE files ##
 .idea
+.iml
 
 ## Unwanted Javascript files ##
 node_modules
