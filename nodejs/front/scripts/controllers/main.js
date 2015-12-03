@@ -1,197 +1,77 @@
-/**
- * Created by Garance on 23/11/2015.
- */
-
-
-//Success callback for retrieving the inside temperatures
-var firstSuccessInTemp = function(data) {
-    var insideTemperature = data.data;
-    console.log(insideTemperature);
-
-    var secondSuccessInTemp = function(data) {
-        var outsideTemperature = data.data;
-        console.log(outsideTemperature);
-        $(function () {
-            $('#c1').highcharts({
-                chart: {
-                    type: 'line',
-                    zoomType: 'x'
-                },
-                title: {
-                    text: 'In vs Out temperature'
-                },
-                subtitle: {
-                    text: 'office 443'
-                },
-                xAxis: {
-                    labels: {
-                        formatter: function () {
-                            return  Highcharts.dateFormat('%d.%m.%Y', this.value*1000)
-                        }
+var besoins = [{key:1, value:"comparison"}, {key:2, value:"proportion"}, {key:3, value: "hierarchy"}, {key:4, value: "distribution"}];
+var capteurs = [
+    {
+        value: "Building Templiers",
+        bla: [
+            {
+                value: "Office 443",
+                nodes: [
+                    {
+                        value: "Temperature"
                     },
-                    tickInterval: 24 * 3600, // one day ?24 * 3600 * 1000
-                    tickWidth: 0,
-                    type: 'category'
-                },
-                yAxis: {
-                    title: {
-                        text: 'Temperature (°C)'
+                    {
+                        value: "Noise"
                     },
-                    minTickInterval:1
-                },
-                plotOptions: {
-                    line: {
-                        dataLabels: {
-                            enabled: false
-                        }
+                    {
+                        value: "Door"
+                    },
+                    {
+                        value: "Window"
                     }
-                },
-                tooltip: {
-                    shared: true,
-                    crosshairs: true,
-                    formatter: function() {
-                        return '<br/>'+
-                            Highcharts.dateFormat('%H:%M - %d.%m.%Y', this.x*1000) +' : '+ parseInt(this.y)+' °C <br/> <br/>';
-                    }
-                },
-                series: [{
-                    name: 'office 443 temperature inside',
-                    data: insideTemperature
-                },
-                 {
-                     name: 'office 443 temperature outside',
-                     data: outsideTemperature
-                 }
                 ]
-            });
-        });
-    };
-
-    //We need to get the outside temperatures now, to build our whole graph.
-    retrieveData.askForSeries('campus/temperature', beginDate, endDate, secondSuccessInTemp);
-};
-
-
-
-//First step of data retrieving : we get the inside temperatures
-retrieveData.askForSeries(place+'temperature', beginDate, endDate, firstSuccessInTemp);
-
-
-
-successForWindowCount = function(data) {
-    //Here, we must process if needed the data received, and then call the ac count
-var windowCount = data.data;
-console.log('in the window method');
-
-    successForAcCount = function(data) {
-        var acCount = data.data;
-        $(function () {
-            $('#c2').highcharts({
-                chart: {
-                    type: 'column',
-                 //   alignTicks: false,
-                    zoomType: 'x'
-                },
-                title: {
-                    text: 'Window openings vs. A/C use'
-                },
-                subtitle: {
-                    text: 'office 344'
-                },
-                xAxis: {
-                    //  tickInterval: 24 * 3600 * 1000,
-                    type: 'category',
-                    labels: {
-                        formatter: function () {
-                            return (moment().dayOfYear(parseInt(this.value))).format("MMMM Do YYYY")
-                        }
+            },
+            {
+                value: "Office 444",
+                nodes: [
+                    {
+                        value: "Temperature"
+                    },
+                    {
+                        value: "Noise"
+                    },
+                    {
+                        value: "Door"
+                    },
+                    {
+                        value: "Window"
                     }
-                },
-                yAxis: [{ // Primary yAxis
-                    title: {
-                        text: '% of time AC is on',
-                        style: {
-                            color: Highcharts.getOptions().colors[0]
-                        }
+                ]
+            },
+            {
+                text: "Office 445",
+                nodes: [
+                    {
+                        value: "Temperature"
                     },
-                    max: 101,
-                    labels: {
-                        format: '{value} %',
-                        style: {
-                            color: Highcharts.getOptions().colors[0]
-                        }
+                    {
+                        value: "Noise"
                     },
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
+                    {
+                        value: "Door"
+                    },
+                    {
+                        value: "Window"
                     }
-                }, { // Secondary yAxis
-                    title: {
-                        text: 'Nb of times the window got opened',
-                        style: {
-                            color: Highcharts.getOptions().colors[1]
-                        }
-                    },
-                    labels: {
-                        format: '{value}',
-                        style: {
-                            color: Highcharts.getOptions().colors[1]
-                        }
-                    },
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    },
-                    allowDecimals: false,
-                    opposite: true
-                }],
-                tooltip: {
-                    headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                    pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-                    footerFormat: '</table>',
-                    shared: true,
-                    useHTML: true
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0
-                    }
-                },
-                series: [{
-                    name: '% of time AC is on',
-                    data: acCount,
-                    yAxis: 0
-                }, {
-                    name: 'Nb of times the window got opened',
-                    data: windowCount,
-                    yAxis: 1
-                }]
-            });
-        });
-    };
-    retrieveData.askForSeries(place+'ac_on', beginDate, endDate, successForAcCount);
+                ]
+            }
+        ]
+    }];
 
-};
-//successForWindowCount();
-retrieveData.askForSeries(place+'window_opening', beginDate, endDate, successForWindowCount);
+function init() {
 
-/**
- * Datepikckers
- */
+    // update needed
+    for(var i = 0; i < besoins.length; i++){
+        var s = "<tr><td><div class=\"redips-drag square\">"+besoins[i].value+"</div></td></tr>";
+        $("#besoins").append(s);
+    }
 
-$('#datetimepicker1').datetimepicker({
-    format: 'YYYY-MM-DD HH:mm:ss'
-});
-
-$('#datetimepicker2').datetimepicker({
-    format: 'YYYY-MM-DD HH:mm:ss'
-});
-
-$( "#refresh" ).click(function() {
-    beginDate = $('#datetimepicker1').data('date');
-    endDate = $('#datetimepicker2').data('date');
-    retrieveData.askForSeries(place+'temperature', beginDate, endDate, firstSuccessInTemp);
-    retrieveData.askForSeries(place+'window_opening', beginDate, endDate, successForWindowCount);
-
-});
-
+    // update building captors
+    for(var i = 0; i < capteurs.length; i++){
+        if(capteurs[i].nodes != null){
+            var s = "<tr><td><div>"+capteurs[i].text+"</div></td></tr>";
+        }else{
+            var s = "<tr><td><div class=\"redips-drag square\">"+capteurs[i].value+"</div></td></tr>";
+        }
+        $("#capteurs").append(s);
+    }
+}
