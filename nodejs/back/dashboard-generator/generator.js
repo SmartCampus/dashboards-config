@@ -27,29 +27,6 @@ function loadTemperatureGraph(config ,res) {
 };
 
 function loadBarGraph(config, res) {
-
-
-    /**
-     * Input :
-     * {
-     *      name : "c1",
-     *      graphType : "column"
-     *      "yAxis" : [
-     *          {
-     *              "title": “Nb of times the window got opened”
-     *              “type”: “number”
-     *          },
-     *          {
-     *           ...
-     *           }
-     *      ]
-     *      "seriesName" : "Name of serie"
-     * }
-     *
-     *
-     *
-     */
-
     var value = config;
     for(var i in value.yAxis) {
         if(value.yAxis[i].type == "number") {
@@ -70,7 +47,6 @@ function loadBarGraph(config, res) {
         value.yAxis[i].index = i;
     }
 
-    console.log(value);
     var template = "";
 
     fs.readFile('./template/BarGraph.mustache', "utf-8", function (err, data) {
@@ -83,6 +59,26 @@ function loadBarGraph(config, res) {
     });
 }
 
+
+function loadBooleanGraph(config, res) {
+    var value = config;
+
+
+
+    var template = "";
+
+    fs.readFile('./template/BooleanWidget.mustache', "utf-8", function (err, data) {
+        if (err) {
+            throw err;
+        }
+        template = data;
+        var rendered = Mustache.render(template, value);
+        res.send(rendered);
+    });
+}
+
+
+exports.loadBooleanGraph = loadBooleanGraph;
 
 exports.loadBarGraph = loadBarGraph;
 
