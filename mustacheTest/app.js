@@ -12,7 +12,7 @@ var fs = require('fs');
     var template = "";
 
 
-    fs.readFile('./myTemplate.mustache',"utf-8" , function (err, data) {
+    fs.readFile('./TemperatureGraph.mustache',"utf-8" , function (err, data) {
         if (err) {
             throw err;
         }
