@@ -61,6 +61,12 @@ function loadBarGraph(config, res) {
             value.yAxis[i].max = 100;
             value.yAxis[i].format = "%";
         }
+        if(i == (value.yAxis.length - 1)) {
+            value.yAxis[i].coma = "";
+        } else {
+            value.yAxis[i].coma = ",";
+        }
+
         value.yAxis[i].index = i;
     }
 
