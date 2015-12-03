@@ -3,7 +3,15 @@
  */
 var express = require("express"),
     router = require("./generator-router"),
-    app = express();
+    app = express(),
+    bodyParser = require('body-parser');
+
+
+
+
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
+
 
 
 app.use(function (req, res, next) {
