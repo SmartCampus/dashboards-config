@@ -77,9 +77,12 @@ var capteurs =
 
 
 var current = capteurs;
-var previous = null;
+var current_capt = null;
+
+var previous = [];
 
 init();
+
 function init() {
     explore();
 }
@@ -92,9 +95,9 @@ function explore() {
         $("#add-it").append(s);
     }
 
-    if (previous != null) {
-        for(var i = 0; i < previous.directSensor.length; i++){
-            var a = "<div class=\"row\"> <button class=\"drag\">"+previous.directSensor[i]+"</button></div>"
+    if (current_capt != null) {
+        for(var i = 0; i < current_capt.directSensor.length; i++){
+            var a = "<div class=\"row\"> <button class=\"drag\">"+current_capt.directSensor[i]+"</button></div>"
             $("#add-it").append(a);
         }
     }
@@ -110,10 +113,12 @@ function clean() {
 
 $(document).on('click', '.node', function(el) {
     if(current == capteurs){
-        previous = null;
+        current_capt = null;
     }else{
-        previous = current[parseInt(el.target.id)];
+        current_capt = current[parseInt(el.target.id)];
     }
+
+    previous.push(current);
     current = current[parseInt(el.target.id)].childContainer;
     explore();
 });
@@ -126,4 +131,6 @@ $( ".drag" ).click(function() {
 
 /** click on back **/
 $( "#goback" ).click(function() {
+    current = previous.pop();
+    explore();
 });
