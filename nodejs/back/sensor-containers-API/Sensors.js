@@ -119,6 +119,15 @@ class SensorContainer extends SensorSet {
     addFilter(filter) {
         this.filters.push(filter);
     };
+
+    /**
+     * This function return the name of the container
+     *
+     * @returns {string|*}
+     */
+    getName() {
+        return this.name;
+    }
 }
 
 
@@ -142,6 +151,15 @@ class SensorCategory extends SensorSet {
 var smartCampus = [];
 var categories = [];
 var containers = [];
+
+/**
+ * This function return the list of all the containers
+ *
+ * @returns {Array}
+ */
+function getContainers() {
+    return containers;
+}
 
 /**
  * This function initialize the system with all the categories and container needed. For that, this function make a
@@ -304,3 +322,10 @@ exports.SensorCategory = SensorCategory;
  * @type {initSystem}
  */
 exports.initSystem = initSystem;
+
+/**
+ * This function return the list of all the containers
+ *
+ * @type {getContainers}
+ */
+exports.getContainers = getContainers;
