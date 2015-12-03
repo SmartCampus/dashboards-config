@@ -9,8 +9,6 @@ var express = require("express"),
 
 
 router.post("/generateWidget", function(req, res) {
-    //generator.loadTemperatureGraph(res);
-   // console.log(req.body);
     jobsRouter(req.body, res);
 });
 
@@ -23,6 +21,10 @@ function jobsRouter(document, res) {
             break;
         case "barGraph" :
             generator.loadBarGraph(document.config, res);
+            break;
+        case "generateBoolean":
+            generator.loadBooleanGraph(document.config, res);
+            console.log(document.config);
             break;
         default :
             res.send("Bad JSON");
