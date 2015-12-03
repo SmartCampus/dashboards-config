@@ -1,15 +1,7 @@
-/**
- * Algo
- *
- * recuperer le premier étage
- *      si il a des directSensor
- *          afficher
- *      si il a des childContainer
- *          mettre le name en lien
- */
 
 var capteurs =
-    [
+    { "name" : "Buildings", "childContainer" :
+        [
         {
             "name":"Templiers Ouest",
             "sensors":[],
@@ -72,18 +64,18 @@ var capteurs =
             "filters":[],
             "directSensor":[]
         }
-    ];
+    ]};
 
 
-var position = null;
-var buildings = capteurs;
+var position = capteurs;
+var buildings = capteurs.childContainer;
 
 var previous = [];
 
 init();
 
 function init() {
-    previous.push(capteurs);
+    previous.push(position);
     explore();
 }
 
@@ -95,7 +87,7 @@ function explore() {
         $("#add-it").append(s);
     }
 
-    if (position != null) {
+    if (position.directSensor != null) {
         for(var i = 0; i < position.directSensor.length; i++){
             var a = "<div class=\"row\"> <button class=\"drag\">"+position.directSensor[i]+"</button></div>"
             $("#add-it").append(a);
