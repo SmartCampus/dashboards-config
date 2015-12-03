@@ -1,0 +1,33 @@
+curve_graph(curveGraph) ::= <<
+    $('#<curveGraph.id>').highcharts('StockChart', {
+       chart: {
+          type: '<curveGraph.type>',
+          zoomType: 'x'
+       },
+       xAxis: {
+          type: 'datetime'
+       },
+       yAxis: [{
+           title: {
+               text: '<curveGraph.yText>'
+           },
+           minTickInterval: 1,
+           plotLines: [{
+               value: 0,
+               color: 'red',
+               dashStyle: 'shortdash', //pointillé
+               width: 2,
+               label: { text: '0°C'}
+           }]
+       }, {}],
+       tooltip: {
+           headerFormat: '\<span style="font-size:10px">{point.key}\</span>\<table>',
+           pointFormat:    '\<tr>\<td style="color:{series.color};padding:0"\>{series.name}: \</td>' +
+           '\<td style="padding:0">\<b>{point.y:.1f}\</b>\</td>\</tr>',
+           footerFormat: '\</table>',
+           shared: true,
+           useHTML: true
+       },
+       series: <curveGraph.seriesName>
+    });
+>>
