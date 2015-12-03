@@ -2,15 +2,31 @@
  * Created by Quentin on 12/3/2015.
  */
 var Mustache = require("mustache"),
-    value = require("./template/TemperatureGraph.json"),
+//    value = require("./template/TemperatureGraph.json"),
     fs = require('fs')
 ;
 
 
-function loadTemperatureGraph(res) {
+function loadTemperatureGraph(config ,res) {
+
+    /* {
+     "graphName": "'#c1'",
+     "graphType" : "'line'",
+     "yAxis": "'Temperature ( °C)'",
+     "dataName" : "temperaturesArray"
+     }
+*/
 
     var template = "";
-
+    console.log("Config : " + config);
+    var value =
+    {
+        "graphName": config.id,
+        "graphType": config.type,
+        "yAxis": config.yText,
+        "dataName" : config.seriesName
+    };
+    console.log("Value : " +  value.graphName);
 
     fs.readFile('./template/TemperatureGraph.mustache', "utf-8", function (err, data) {
         if (err) {
