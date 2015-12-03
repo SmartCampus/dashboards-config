@@ -81,16 +81,20 @@ function init() {
 
 function explore() {
     clean();
+    var myContent;
+
+    myContent = "<div class=\"row\"> <h3>"+position.name+"</h3></div>";
+    $("#add-it").append(myContent);
 
     for(var i = 0; i < buildings.length; i++){
-        var s = "<div class=\"row\"> <a class=\"node\" id=\""+i+"\">"+buildings[i].name+"</a></div>"
-        $("#add-it").append(s);
+        myContent = "<div class=\"row\"> <a class=\"node\" id=\""+i+"\">"+buildings[i].name+"</a></div>";
+        $("#add-it").append(myContent);
     }
 
     if (position.directSensor != null) {
         for(var i = 0; i < position.directSensor.length; i++){
-            var a = "<div class=\"row\"> <button class=\"drag\">"+position.directSensor[i]+"</button></div>"
-            $("#add-it").append(a);
+            myContent = "<div class=\"row\"> <button class=\"drag\">"+position.directSensor[i]+"</button></div>";
+            $("#add-it").append(myContent);
         }
     }
 }
