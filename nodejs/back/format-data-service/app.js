@@ -3,7 +3,7 @@
  */
 
 var express = require("express"),
-    campusRouter = require("./dashboard_router"),
+    campusRouter = require("./format_data_router"),
     app = express();
 
 app.use(function (req, res, next) {
