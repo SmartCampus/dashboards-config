@@ -5,80 +5,51 @@ var retrieveData = (function () {
     return { //exposed to public
         askForSeries: function (sensor, beginDate, endDate, successCB) {
             console.log('before the get temperature for a timespan');
-            console.log('For route '+ sensorAPI + sensor + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
             $.get(sensorAPI + sensor, {date: beginDate+"/"+endDate})
                 .done(function (data) {
                     console.log('got temps for a timespan');
-                    //alert("Data Loaded: " + data);
                     successCB(data);
                 })
                 .fail(function (data) {
                     console.log(data);
                     console.log('error in get temp for timespan');
-                    //alert("error");
                 })
                 .always(function (data) {
                     console.log('processed series');
-                    //alert("finished");
+                    console.log('For route '+ sensorAPI + sensor + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
                 });
             console.log('after the get');
         },
         askForSeriesWithParam: function(sensor, param, beginDate, endDate, successCB) {
-            console.log('For route '+ sensorAPI + sensor + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
             $.get(sensorAPI + sensor, {state:param, date: beginDate+"/"+endDate})
                 .done(function (data) {
                     console.log('got temps for a timespan');
-                    //alert("Data Loaded: " + data);
                     successCB(data);
                 })
                 .fail(function (data) {
                     console.log(data);
                     console.log('error in get temp for timespan');
-                    //alert("error");
                 })
                 .always(function (data) {
                     console.log('processed series');
-                    //alert("finished");
-                });
-            console.log('after the get');
-        },
-        askForSeriesForever: function (route, successCB) {
-            $.get(sensorAPI + route)
-                .done(function (data) {
-                    console.log('got temps forever');
-                  //  alert("Data Loaded: " + data);
-                    successCB(data);
-                })
-                .fail(function (data) {
-                    console.log(data);
-                    console.log('error in get temp forever');
-                //    alert("error");
-                })
-                .always(function (data) {
-                    console.log('route sent : ', sensorAPI + route+'/data');
-              //      alert("finished");
+                    console.log('For route '+ sensorAPI + sensor + ' : \n state : '+ param +'\nbegin : ' + beginDate + '\nend : '+endDate);
                 });
             console.log('after the get');
         },
         askForStateNow: function (route, successStateCB) {
-            console.log('before the get window state');
-
-            $.get(serverURL + route)
+            console.log('before the get state');
+            $.get(sensorAPI + route+'/data/last')
                 .done(function (data) {
-                    console.log('got window state');
+                    console.log('got state');
                     console.log(data);
-            //          alert("Data Loaded: " + data);
                     successStateCB(data);
                 })
                 .fail(function (data) {
                     console.log(data);
-                    console.log('error in window state');
-       //             alert("error");
+                    console.log('error in state');
                 })
                 .always(function (data) {
-                    console.log(serverURL+route);
-                    console.log('processed');
-         //           alert("finished");
+                    console.log('route sent : ', sensorAPI + route);
                 });
             console.log('after the get');
         }
