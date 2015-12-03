@@ -23,23 +23,9 @@
         <a class="btn btn-default" href="/summer.html">Summer dashboard</a>
         <a class="btn btn-default" href="/surrounding.html">Surrounding dashboard</a>
     </div>
-    <!-- tables inside this DIV could contain drag-able content  -->
-    <div id="redips-drag">
-        <h1>yo</h1>
-        <table class="nested_table1" id="besoins">
-        </table>
-
-        <table class="nested_table1" id="composition">
-        </table>
-
-        <table class="nested_table1" id="capteurs">
-        </table>
-    </div>
-</div>
-    <!--
     <div class="row">
 
-        <div class="col-xs-3 col-md-3 col-lg-3" id="c1" style="text-align: center; background-color: #cf867e">
+        <div class="col-xs-3 col-md-3 col-lg-3" id="c1" style="text-align: center; background-color: #cf867e; min-height: 450px;">
             <div class="row">
                 <h3>What ?</h3>
             </div>
@@ -61,14 +47,14 @@
             </div>
         </div>
 
-        <div class="col-xs-6 col-md-6 col-lg-6" id="c2" style="text-align: center">
+        <div class="col-xs-6 col-md-6 col-lg-6" id="c2" style="text-align: center; background-color: #66afe9; min-height: 450px;">
             <div class="row">
                 <h3>Composition</h3>
             </div>
 
         </div>
 
-        <div class="col-xs-3 col-md-3 col-lg-3" id="c3" style="text-align: center; background-color: wheat">
+        <div class="col-xs-3 col-md-3 col-lg-3" id="c3" style="text-align: center; background-color: wheat;min-height: 450px">
             <div class="row">
                 <h3>Where ?</h3>
             </div>
@@ -85,67 +71,11 @@
 
 
 </div>
--->
-
-<!--
-    <div class="row">
-        <div class="col-md-4"><h4>What ?</h4>
-            <div class="btn-group-vertical" role="group" aria-label="...">
-                <button type="button" class="btn btn-default">Comparison</button>
-                <button type="button" class="btn btn-default">Proportion</button>
-                <button type="button" class="btn btn-default">Hierarchy</button>
-                <button type="button" class="btn btn-default">Distribution</button>
-
-            </div>
-        </div>
-        <div class="col-md-4"><h4>Where ?</h4>
-            <div id="tree"></div>
-        </div>
-        <div class="col-md-4"><h4>When ?</h4>
-        From :
-            <div class="container">
-                <div class="row">
-                    <div class='col-md-4'>
-                        <div class="form-group">
-                            <div class='input-group date' id='beginTime1'>
-                                <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        Until :
-            <div class="container">
-                <div class="row">
-                    <div class='col-md-4'>
-                        <div class="form-group">
-                            <div class='input-group date' id='endTime1'>
-                                <input type='text' class="form-control" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <a class="btn btn-default pull-right" id="buttonGenerate">Let's go !</a>
-    </div>
-</div> container -->
 
 </body>
-<script type="text/javascript" src="scripts/controllers/redips-drag-min.js"></script>
 
-<script src="/bower_components/bootstrap-treeview/dist/bootstrap-treeview.min.js"></script>
 <script src="/bower_components/moment/min/moment.min.js"></script>
-<script src="/bower_components/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+<script src="/scripts/controllers/main.js"></script>
 
 
 <footer>
@@ -155,5 +85,4 @@
         });
     </script>
 </footer>
-<script src="/scripts/controllers/pickYourData.js"></script>
 </html>
