@@ -75,29 +75,29 @@ var capteurs =
     ];
 
 
-
-var current = capteurs;
-var current_capt = null;
+var position = null;
+var buildings = capteurs;
 
 var previous = [];
 
 init();
 
 function init() {
+    previous.push(capteurs);
     explore();
 }
 
 function explore() {
     clean();
 
-    for(var i = 0; i < current.length; i++){
-        var s = "<div class=\"row\"> <a class=\"node\" id=\""+i+"\">"+current[i].name+"</a></div>"
+    for(var i = 0; i < buildings.length; i++){
+        var s = "<div class=\"row\"> <a class=\"node\" id=\""+i+"\">"+buildings[i].name+"</a></div>"
         $("#add-it").append(s);
     }
 
-    if (current_capt != null) {
-        for(var i = 0; i < current_capt.directSensor.length; i++){
-            var a = "<div class=\"row\"> <button class=\"drag\">"+current_capt.directSensor[i]+"</button></div>"
+    if (position != null) {
+        for(var i = 0; i < position.directSensor.length; i++){
+            var a = "<div class=\"row\"> <button class=\"drag\">"+position.directSensor[i]+"</button></div>"
             $("#add-it").append(a);
         }
     }
@@ -109,17 +109,12 @@ function clean() {
 
 
 /** click on node **/
-
-
 $(document).on('click', '.node', function(el) {
-    if(current == capteurs){
-        current_capt = null;
-    }else{
-        current_capt = current[parseInt(el.target.id)];
-    }
 
-    previous.push(current);
-    current = current[parseInt(el.target.id)].childContainer;
+    previous.push(position);
+    position = buildings[parseInt(el.target.id)];
+    buildings = position.childContainer;
+
     explore();
 });
 
@@ -131,6 +126,9 @@ $( ".drag" ).click(function() {
 
 /** click on back **/
 $( "#goback" ).click(function() {
-    current = previous.pop();
-    explore();
+    if(previous.length > 0){
+        position = previous.pop();
+        buildings = position.childContainer;
+        explore();
+    }
 });
