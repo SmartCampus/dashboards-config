@@ -2,31 +2,19 @@
  * Created by Quentin on 12/3/2015.
  */
 var Mustache = require("mustache"),
-//    value = require("./template/TemperatureGraph.json"),
-    fs = require('fs')
-;
+    handlebar = require("handlebars"),
+    fs = require('fs');
 
 
 function loadTemperatureGraph(config ,res) {
-
-    /* {
-     "graphName": "'#c1'",
-     "graphType" : "'line'",
-     "yAxis": "'Temperature ( °C)'",
-     "dataName" : "temperaturesArray"
-     }
-*/
-
     var template = "";
-    console.log("Config : " + config);
     var value =
     {
-        "graphName": config.id,
-        "graphType": config.type,
+        "name": config.id,
+        "type": config.type,
         "yAxis": config.yText,
-        "dataName" : config.seriesName
+        "seriesName" : config.seriesName
     };
-    console.log("Value : " +  value.graphName);
 
     fs.readFile('./template/TemperatureGraph.mustache', "utf-8", function (err, data) {
         if (err) {
@@ -38,5 +26,58 @@ function loadTemperatureGraph(config ,res) {
     });
 };
 
+function loadBarGraph(config, res) {
+
+
+    /**
+     * Input :
+     * {
+     *      name : "c1",
+     *      graphType : "column"
+     *      "yAxis" : [
+     *          {
+     *              "title": “Nb of times the window got opened”
+     *              “type”: “number”
+     *          },
+     *          {
+     *           ...
+     *           }
+     *      ]
+     *      "seriesName" : "Name of serie"
+     * }
+     *
+     *
+     *
+     */
+
+    var value = config;
+    for(var i in value.yAxis) {
+        if(value.yAxis[i].type == "number") {
+            value.yAxis[i].min = 0;
+            value.yAxis[i].max = undefined;
+            value.yAxis[i].format = "";
+        } else if(value.yAxis[i].type == "percent") {
+            value.yAxis[i].min = 0;
+            value.yAxis[i].max = 100;
+            value.yAxis[i].format = "%";
+        }
+        value.yAxis[i].index = i;
+    }
+
+    console.log(value);
+    var template = "";
+
+    fs.readFile('./template/BarGraph.mustache', "utf-8", function (err, data) {
+        if (err) {
+            throw err;
+        }
+        template = data;
+        var rendered = Mustache.render(template, value);
+        res.send(rendered);
+    });
+}
+
+
+exports.loadBarGraph = loadBarGraph;
 
 exports.loadTemperatureGraph = loadTemperatureGraph;

@@ -1,6 +1,6 @@
-$('{{graphName}}').highcharts('StockChart', {
+$('{{name}}').highcharts('StockChart', {
     chart: {
-        type: '{{graphType}}',
+        type: '{{type}}',
         zoomType: 'x'
     },
     xAxis: {
@@ -27,5 +27,5 @@ $('{{graphName}}').highcharts('StockChart', {
         shared: true,
         useHTML: true
     },
-    series: {{dataName}}
+    series: {{seriesName}}
 });

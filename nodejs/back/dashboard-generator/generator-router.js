@@ -19,8 +19,10 @@ function jobsRouter(document, res) {
     var method = document.job;
     switch (method) {
         case "compareTemperature":
-            console.log(document);
             generator.loadTemperatureGraph(document.config, res);
+            break;
+        case "barGraph" :
+            generator.loadBarGraph(document.config, res);
             break;
         default :
             res.send("Bad JSON");

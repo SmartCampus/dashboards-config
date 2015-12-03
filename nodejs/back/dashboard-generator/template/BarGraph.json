@@ -1,0 +1,21 @@
+{
+  "name": "yolo",
+  "graphType" : "YOLO",
+  "yAxis" : [
+    {
+      "min" : "YOLO1" ,
+      "max" : "YOLO1" ,
+      "title" : "YOLO1" ,
+      "format" : "YOLO1" ,
+      "index" : 0
+    },
+    {
+      "min" : "YOLO2" ,
+      "max" : "YOLO2" ,
+      "title" : "YOLO2" ,
+      "format" : "YOLO1" ,
+      "index" : 1
+    }
+  ],
+  "seriesName" : "Name of serie"
+}
