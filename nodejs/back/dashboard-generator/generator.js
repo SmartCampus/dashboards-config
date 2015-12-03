@@ -10,7 +10,7 @@ function loadTemperatureGraph(config ,res) {
     var template = "";
     var value =
     {
-        "name": config.id,
+        "name": config.name,
         "type": config.type,
         "yAxis": config.yText,
         "seriesName" : config.seriesName
