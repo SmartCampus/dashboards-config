@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
+    <!-- Meta -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- JS -->
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="icon.png" />
+
+    <title>SmartCampus : dashboards</title>
+
+    <script src="/bower_components/highstock/highstock.js"></script>
+    <script src="/bower_components/moment/min/moment.min.js"></script>
+</head>
+
+<body>
+    <h1 class="text-center">Winter dashboard</h1>
+
+    <div class="row" id="states">
+        <div class="col-md-6 text-center"><h1><span id="heaterState">Heater State</span></h1>
+        </div>
+        <div class="col-md-6 text-center"><h1><span id="lightState">Light State</span></h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10" id="c1"></div>
+        <div class="col-md-1"></div>
+
+    </div>
+</body>
+
+<script src="/scripts/model/constants.js"></script>
+<script src="/scripts/model/createDashboard.js"></script>
+<script src="/scripts/controllers/winter.js"></script>
+
+<footer>
+    <script>
+        $(function () {
+            $("footer").load("footer.html")
+        });
+    </script>
+</footer>
+</html>

@@ -28,7 +28,11 @@
   "bugs": {
     "url": "https://atlas.i3s.unice.fr/jira/secure/RapidBoard.jspa?rapidView=246&view=planning.nodetail"
   },
-  "dependencies": {},
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "jquery": "^2.1.4"
+  },
   "devDependencies": {
     "mustache": "^2.2.0"
   },

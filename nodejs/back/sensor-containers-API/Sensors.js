@@ -119,6 +119,15 @@ class SensorContainer extends SensorSet {
     addFilter(filter) {
         this.filters.push(filter);
     };
+
+    /**
+     * This function return the name of the container
+     *
+     * @returns {string|*}
+     */
+    getName() {
+        return this.name;
+    }
 }
 
 
@@ -142,6 +151,15 @@ class SensorCategory extends SensorSet {
 var smartCampus = [];
 var categories = [];
 var containers = [];
+
+/**
+ * This function return the list of all the containers
+ *
+ * @returns {Array}
+ */
+function getContainers() {
+    return containers;
+}
 
 /**
  * This function initialize the system with all the categories and container needed. For that, this function make a
@@ -234,7 +252,7 @@ function initContainers() {
     var sousRepartiteur = new SensorContainer("Sous repartiteur", ["MW"] , [], []);
     var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis", "CORRIDOR"], ["NOISE_SPARKS_CORRIDOR"], []);
     var office445 = new SensorContainer("Office 445", ["445"], [], []);
-    var office443 = new SensorContainer("Office 443", ["443"], [], []);
+    var office443 = new SensorContainer("Office 443", ["443"], ["HEATING_443"], []);
     var office444 = new SensorContainer("Office 444", ["444"], [], []);
     // TODO : Solution très sale mais pour les capteurs virtuels y a juste aucune norme !!!
     var virtualSensors = new SensorContainer("Virtual Sensors", ["2V", "STATE", "3V", "TEMP_CAMPUS"], [], []);
@@ -304,3 +322,10 @@ exports.SensorCategory = SensorCategory;
  * @type {initSystem}
  */
 exports.initSystem = initSystem;
+
+/**
+ * This function return the list of all the containers
+ *
+ * @type {getContainers}
+ */
+exports.getContainers = getContainers;

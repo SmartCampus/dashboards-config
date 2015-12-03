@@ -1,10 +1,10 @@
 /**
- * Created by Quentin on 11/30/2015.
+ * Created by Quentin on 12/2/2015.
  */
-
 var express = require("express"),
-    campusRouter = require("./dashboard_router"),
+    router = require("./generator-router"),
     app = express();
+
 
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
@@ -25,8 +25,9 @@ app.use(function (req, res, next) {
 });
 
 
-app.use("/", campusRouter);
+app.use("/", router);
 
 
-app.listen(8082);
-console.log('Data format service is now listening on port 8082.');
+app.listen(8083);
+console.log('Dashboard Generator is now listening on port 8083.');
+

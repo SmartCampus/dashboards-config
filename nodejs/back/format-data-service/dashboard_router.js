@@ -31,14 +31,6 @@ router.get("/sensor/:sensorId/data", function(req, res) {
     request_handler.getSensorInformation(sensorId, date, state,res);
 });
 
-/**
- *
- */
-router.get("/sensor/:sensorId/data/last", function(req, res) {
-    var sensorId = req.params.sensorId;
-    request_handler.getSensorLastInformation(sensorId, res);
-});
-
 
 router.get("/sensor/:sensorId/data/percent", function(req, res) {
     var date = "";
@@ -57,6 +49,12 @@ router.get("/sensor/:sensorId/data/splitList", function(req, res) {
     }
 
     request_handler.getStateInformationSplit(sensorId, date,res);
+});
+
+
+router.get("/sensor/:sensorId/data/last", function(req, res) {
+    var sensorId = req.params.sensorId;
+    request_handler.getLastInformation(sensorId, res);
 });
 
 module.exports = router;

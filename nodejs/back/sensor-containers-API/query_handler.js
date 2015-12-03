@@ -93,6 +93,16 @@ function getSensorLastInformation(name, response) {
     });
 }
 
+function getContainerChild(name, response) {
+    var containerList = sensors.getContainers();
+    for(var i in containerList) {
+        if(containerList[i].getName().replace(/\s+/g, '') == name) {
+            response.send(containerList[i].getChild());
+        }
+    }
+}
+
+
 exports.getSensorLastInformation = getSensorLastInformation;
 
 
@@ -104,5 +114,7 @@ exports.getSensorInformation = getSensorInformation;
  * @type {handleQuery}
  */
 exports.handleQuery = handleQuery;
+
+exports.getContainerChild = getContainerChild;
 
 

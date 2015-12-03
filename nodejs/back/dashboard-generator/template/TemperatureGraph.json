@@ -1,0 +1,8 @@
+
+{
+    "graphName": "'#c1'",
+    "graphType" : "'line'",
+    "yAxis": "'Temperature ( °C)'",
+    "dataName" : "temperaturesArray"
+}
+
