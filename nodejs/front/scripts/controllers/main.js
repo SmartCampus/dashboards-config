@@ -1,80 +1,20 @@
-
-var capteurs =
-    { "name" : "Buildings", "childContainer" :
-        [
-        {
-            "name":"Templiers Ouest",
-            "sensors":[],
-            "childContainer":
-                [
-                    {
-                        "name":"4th floor",
-                        "sensors":[],
-                        "childContainer":
-                            [
-                                {
-                                    "name":"Coffee corner",
-                                    "sensors":[],
-                                    "childContainer":[],
-                                    "filters":["COFFEE","CAFE"],
-                                    "directSensor":["LIGHT_CAFE","Coffee_energy","Coffee_power","Window_Coffee","Coffee_machine_power","Coffee_machine_energy"]
-                                },
-                                {
-                                    "name":"Sous repartiteur",
-                                    "sensors":[],
-                                    "childContainer":[],
-                                    "filters":["MW"],
-                                    "directSensor":["MW_energy"]
-                                },
-                                {
-                                    "name":"Modalis corridor",
-                                    "sensors":[],
-                                    "childContainer":
-                                        [
-                                            {
-                                                "name":"Office 445",
-                                                "sensors":[],
-                                                "childContainer":[],
-                                                "filters":["445"],
-                                                "directSensor":[]
-                                            },
-                                            {
-                                                "name":"Office 444",
-                                                "sensors":[],
-                                                "childContainer":[],
-                                                "filters":["444"],
-                                                "directSensor":["LIGHT_444","TEMP_444"]
-                                            },
-                                            {
-                                                "name":"Office 443",
-                                                "sensors":[],
-                                                "childContainer":[],
-                                                "filters":["443"],
-                                                "directSensor":["HEATING_443","TEMP_443","AC_443","PRESENCE_443","DOOR_443","DOOR443STATE","TEMP_443V","WINDOW_443","WINDOW443STATE","AC_443STATE"]
-                                            }
-                                        ],
-                                    "filters":["Modalis","CORRIDOR"],
-                                    "directSensor":["NOISE_SPARKS_CORRIDOR","Window_Modalis"]
-                                }
-                            ],
-                        "filters":["SPARKS"],
-                        "directSensor":["DOOR_SPARKS"]
-                    }
-                ],
-            "filters":[],
-            "directSensor":[]
-        }
-    ]};
-
-
-var position = capteurs;
-var buildings = capteurs.childContainer;
+var capteurs,
+    position,
+    buildings;
 
 var previous = [];
 
-init();
+(function getSensors(callback){
+    $.get("http://localhost:8082/container/Root/child")
+        .done(function (data) {
+            capteurs = data;
+            callback();
+        });
+})(init);
 
 function init() {
+    position  = capteurs;
+    buildings = capteurs.childContainer;
     previous.push(position);
     explore();
 }
@@ -83,7 +23,7 @@ function explore() {
     clean();
     var myContent;
 
-    myContent = "<div class=\"row\"> <h3>"+position.name+"</h3></div>";
+    myContent = "<div class=\"row\"><h3>"+position.name+"</h3></div>";
     $("#add-it").append(myContent);
 
     for(var i = 0; i < buildings.length; i++){
