@@ -4,11 +4,12 @@ var express = require("express"),
 
 
 /**
- *
+ * This route
  */
 router.get("/sensors", function(req, res) {
     var queries = req.query;
-    if(queries.length > 0) {
+    console.log(queries);
+    if(queries.keys({}).length != 0) {
         queryHandler.handleQuery(queries, res);
     } else {
         res.send("Sorry please enter a container in the query parameters." +
