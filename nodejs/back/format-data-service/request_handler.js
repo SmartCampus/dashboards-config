@@ -81,7 +81,7 @@ function getInformationInPercent(sensorId, date, response) {
 
 function getLastInformation(sensorId, response) {
     requester.getLastSensorData(sensorId, function(res) {
-       processor.concatenateResponse(response, res);
+       processor.standardizeInformation(response, res);
     });
 }
 
