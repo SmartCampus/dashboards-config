@@ -11,6 +11,22 @@ if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
     endDate = '2015-12-01 18:00:11';
 }
 
+var allLoaded = 0;
+var finishedLoading = function() {
+    if (allLoaded < 5) {
+        allLoaded += 1;
+    }
+    else {
+        document.getElementById("loadingImg").className = "hidden";
+    }
+};
+
+var errorOccured = function() {
+    document.getElementById("errorOccured").className = "row text-center show";
+    document.getElementById("loadingImg").className = "hidden";
+    document.getElementById("dahsboardSurrounding").className = "hidden";
+};
+
 var doorState = [],
     windowState = [],
     doorPercentage = [],
@@ -58,12 +74,12 @@ var successForNoise = function (data) {
     retrieveData.askForSeriesWithParam('DOOR443STATE/data/splitlist', 'true', beginDate, endDate,
         function (data) {
             successForDoorStateInTime(data, updateCallback);
-        });
+        }, errorOccured);
 
     retrieveData.askForSeriesWithParam('WINDOW443STATE/data/splitlist', 'true', beginDate, endDate,
         function (data) {
             successForWindowStateInTime(data, updateCallback);
-        });
+        }, errorOccured);
 }
 
 
@@ -81,9 +97,9 @@ var successForWindowPercentage = function (data) {
 };
 
 
-retrieveData.askForSeries('NOISE_SPARKS_CORRIDOR/data', beginDate, endDate, successForNoise);
-retrieveData.askForSeries('DOOR443STATE/data/percent', beginDate, endDate, successForDoorPercentage);
-retrieveData.askForSeries('WINDOW443STATE/data/percent', beginDate, endDate, successForWindowPercentage);
+retrieveData.askForSeries('NOISE_SPARKS_CORRIDOR/data', beginDate, endDate, successForNoise, errorOccured);
+retrieveData.askForSeries('DOOR443STATE/data/percent', beginDate, endDate, successForDoorPercentage, errorOccured);
+retrieveData.askForSeries('WINDOW443STATE/data/percent', beginDate, endDate, successForWindowPercentage, errorOccured);
 
 
 /**
@@ -122,6 +138,7 @@ var doorGraphStateInTime = function() {
 
             series : doorState
         });
+    finishedLoading();
 };
 
 
@@ -156,6 +173,7 @@ var windowGraphStateInTime = function() {
 
         series : windowState
     });
+    finishedLoading();
 };
 
 
@@ -242,7 +260,8 @@ var noiseAccordingDoorState = function() {
         },
 
         series: [ noiseDoor[0], noiseDoor[1]]
-    })
+    });
+    finishedLoading();
 };
 
 
@@ -326,6 +345,7 @@ var noiseAccordingWindowState = function() {
         series: [ noiseWindow[0], noiseWindow[1]]
 
     });
+    finishedLoading();
 };
 
 
@@ -352,7 +372,7 @@ var doorPercentageCamenbert = function() {
         plotOptions: {
             pie: {
                 allowPointSelect: true,     // selection d'une part
-                cursor: 'pointer',          // affichage avec pointeur
+                cursor: 'pointer'          // affichage avec pointeur
             }
         },
 
@@ -360,6 +380,7 @@ var doorPercentageCamenbert = function() {
             data: [doorPercentage[0],doorPercentage[1]]
         }]
     });
+    finishedLoading();
 };
 
 
@@ -389,4 +410,5 @@ var windowPercentageCamenbert = function() {
             data: [windowPercentage[0],windowPercentage[1]]
         }]
     });
+    finishedLoading();
 };

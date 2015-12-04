@@ -17,7 +17,6 @@ var finishedLoading = function() {
     }
 };
 
-var everyBody = 0;
 var errorOccured = function() {
     document.getElementById("errorOccured").className = "row text-center show";
     document.getElementById("loadingImg").className = "hidden";
@@ -25,6 +24,7 @@ var errorOccured = function() {
     document.getElementById("graphs").className = "hidden";
 };
 
+var everyBody = 0;
 var waitForEverybody = function() {
     if (everyBody < 2) {
         everyBody += 1;

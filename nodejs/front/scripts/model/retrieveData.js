@@ -4,7 +4,6 @@
 var retrieveData = (function () {
     return { //exposed to public
         askForSeries: function (sensor, beginDate, endDate, successCB, failCB) {
-            console.log('before the get temperature for a timespan');
             $.get(sensorAPI + sensor, {date: beginDate+"/"+endDate})
                 .done(function (data) {
                     console.log('got temps for a timespan');
@@ -12,30 +11,27 @@ var retrieveData = (function () {
                 })
                 .fail(function (data) {
                     console.log(data);
-                    console.log('error in get temp for timespan');
+                    console.log('error in get series for timespan');
                     failCB();
                 })
                 .always(function (data) {
-                    console.log('processed series');
                     console.log('For route '+ sensorAPI + sensor + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
                 });
-            console.log('after the get');
         },
-        askForSeriesWithParam: function(sensor, param, beginDate, endDate, successCB) {
+        askForSeriesWithParam: function(sensor, param, beginDate, endDate, successCB, errorCB) {
             $.get(sensorAPI + sensor, {state:param, date: beginDate+"/"+endDate})
                 .done(function (data) {
-                    console.log('got temps for a timespan');
+                    console.log('got series for a timespan');
                     successCB(data);
                 })
                 .fail(function (data) {
                     console.log(data);
-                    console.log('error in get temp for timespan');
+                    console.log('error in get series for timespan');
+                    errorCB();
                 })
                 .always(function (data) {
-                    console.log('processed series');
                     console.log('For route '+ sensorAPI + sensor + ' : \n state : '+ param +'\nbegin : ' + beginDate + '\nend : '+endDate);
                 });
-            console.log('after the get');
         },
         askForStateNow: function (route, successStateCB, errorCB) {
             console.log('before the get state');
