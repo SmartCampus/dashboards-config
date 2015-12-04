@@ -9,42 +9,26 @@ if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
 }
 
 
+var everyBody = 0;
+
+function waitForEverybody() {
+    if (everyBody < 2) {
+        everyBody += 1;
+    }
+    else {
+        eval(lineChartData);
+        everyBody = 0;
+    }
+}
+
+
 var temperaturesArray = [];
-var drawLineChart = function () {
-    $.post("http://localhost:8083/generateWidget", {
-        job : "compareTemperature",
-        config :
-        {
-            name: "c1",
-            type : "line",
-            yText: "Température ( °C)",
-            seriesName : "temperaturesArray"
-        }
-    })
-        .done(function (data) {
-            console.log('request done !');
-            console.log(data);
-            eval(data);
-            //  alert("Data Loaded: " + data);
-        })
-        .fail(function (data) {
-            //  console.log(data);
-            console.log('error in post gen');
-            //    alert("error");
-        })
-        .always(function (data) {
-        });
-
-};
-
+var lineChartData;
 
 var firstSuccessInTemp = function (data) {
     temperaturesArray[0] = {"name": "inside temparature", "data": data.data};
     console.log('in 1st success for temp');
-    //console.log(temperaturesArray[0]);
-    if (typeof temperaturesArray[1] !== 'undefined') {
-        drawLineChart();
-    }
+    waitForEverybody();
 };
 
 retrieveData.askForSeries('TEMP_443V/data', beginDate, endDate, firstSuccessInTemp);
@@ -52,109 +36,62 @@ retrieveData.askForSeries('TEMP_443V/data', beginDate, endDate, firstSuccessInTe
 var secondSuccessInTemp = function (data) {
     temperaturesArray[1] = {"name": "outside temparature", "data": data.data};
     console.log('in 2nd success for temp');
-    if (typeof temperaturesArray[0] !== 'undefined') {
-        drawLineChart();
-    }
+    waitForEverybody();
 };
 //We need to get the outside temperatures now, to build our whole graph.
 retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate, secondSuccessInTemp);
 
-var drawBarChart = function () {
-    $.post("http://localhost:8083/generateWidget", {
-            job : "barGraph",
-            config :
-            {
-                name: "c2",
-                type : "column",
-                "yAxis": [
-                    {
-                        "title" : "Number of times the window got opened",
-                        "type" : "number"
-                    },
-                    {
-                        "title" : "% of time AC is on",
-                        "type" : "percent"
-                    }
-                ],
-                "seriesName" : "countingArray"
-            }
-        }
-    )
-        .done(function (data) {
-            console.log('request done !');
-            console.log(data);
-            eval(data);
-            //  alert("Data Loaded: " + data);
-        })
-        .fail(function (data) {
-            console.log(data);
-            console.log('error in post gen');
-            //    alert("error");
-        })
-        .always(function (data) {
-        });
+generate.widgetLine(function(data) {
+    lineChartData = data;
+    waitForEverybody();
+});
 
 
 
 
-};
-
+var barChartData;
+var theOthers = 0;
+function waitForTheOthers() {
+    if (theOthers < 2) {
+        theOthers += 1;
+    }
+    else {
+        eval(barChartData);
+        theOthers = 0;
+    }
+}
 
 var countingArray = [];
 var successForWindowCount = function (data) {
     countingArray[0] = {"name": "nb of window openings", "data": data.data};
-    if (typeof countingArray[1] !== 'undefined') {
-        drawBarChart();
-    }
-    console.log('in the window method');
+    waitForTheOthers();
 };
 
 successForAcCount = function (data) {
     countingArray[1] = {"name": "% of time the AC is on", "data": data.data};
-    if (typeof countingArray[0] !== 'undefined') {
-        drawBarChart();
-    }
+    waitForTheOthers();
 };
 retrieveData.askForSeriesWithParam('AC_443STATE/data', 'true', beginDate, endDate, successForAcCount);
 
 retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, endDate, successForWindowCount);
 
+generate.widgetBar(function(data) {
+    barChartData = data;
+    waitForTheOthers();
+});
+
+
+
 
 var successForWindow = function (data) {
-    $.post("http://localhost:8083/generateWidget",
-        {
-            job : "generateBoolean",
-            config :
-            {
-                id: "windowState"
-            }
-        })
-        .done(function (data) {
-            console.log('request done !');
-            console.log(data);
-            eval(data);
-        })
-        .fail(function (data) {
-            console.log('error in post gen');
-        });
+    generate.widgetBoolean("windowState", function(result) {
+        eval(result);
+    });
 };
 var successForAC = function (data) {
-    $.post("http://localhost:8083/generateWidget",
-        {
-            job : "generateBoolean",
-            config :
-            {
-                id: "climState"
-            }
-        })
-        .done(function (data) {
-            console.log('request done !');
-            console.log(data);
-            eval(data);
-        })
-        .fail(function (data) {
-            console.log('error in post gen');
-        });
+    generate.widgetBoolean("climState", function(result) {
+        eval(result);
+    });
 };
 
 retrieveData.askForStateNow('WINDOW443STATE', successForWindow);
