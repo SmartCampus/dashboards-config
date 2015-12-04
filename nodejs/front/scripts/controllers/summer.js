@@ -7,19 +7,34 @@ if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
     beginDate = '2015-06-21 8:00:11';
     endDate = '2015-09-21 18:00:11';
 }
-
+var allLoaded = 0;
+var finishedLoading = function() {
+    if (allLoaded < 3) {
+        allLoaded += 1;
+    }
+    else {
+        document.getElementById("loadingImg").className = "hidden";
+    }
+};
 
 var everyBody = 0;
+var errorOccured = function() {
+    document.getElementById("errorOccured").className = "row text-center show";
+    document.getElementById("loadingImg").className = "hidden";
+    document.getElementById("states").className = "hidden";
+    document.getElementById("graphs").className = "hidden";
+};
 
-function waitForEverybody() {
+var waitForEverybody = function() {
     if (everyBody < 2) {
         everyBody += 1;
     }
     else {
+        finishedLoading();
         eval(lineChartData);
         everyBody = 0;
     }
-}
+};
 
 
 var temperaturesArray = [];
@@ -31,7 +46,7 @@ var firstSuccessInTemp = function (data) {
     waitForEverybody();
 };
 
-retrieveData.askForSeries('TEMP_443V/data', beginDate, endDate, firstSuccessInTemp);
+retrieveData.askForSeries('TEMP_443V/data', beginDate, endDate, firstSuccessInTemp, errorOccured);
 
 var secondSuccessInTemp = function (data) {
     temperaturesArray[1] = {"name": "outside temparature", "data": data.data};
@@ -39,7 +54,7 @@ var secondSuccessInTemp = function (data) {
     waitForEverybody();
 };
 //We need to get the outside temperatures now, to build our whole graph.
-retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate, secondSuccessInTemp);
+retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate, secondSuccessInTemp, errorOccured);
 
 generate.widgetLine(function(data) {
     lineChartData = data;
@@ -56,6 +71,7 @@ function waitForTheOthers() {
         theOthers += 1;
     }
     else {
+        finishedLoading();
         eval(barChartData);
         theOthers = 0;
     }
@@ -71,9 +87,9 @@ successForAcCount = function (data) {
     countingArray[1] = {"name": "% of time the AC is on", "data": data.data};
     waitForTheOthers();
 };
-retrieveData.askForSeriesWithParam('AC_443STATE/data', 'true', beginDate, endDate, successForAcCount);
+retrieveData.askForSeriesWithParam('AC_443STATE/data', 'true', beginDate, endDate, successForAcCount, errorOccured);
 
-retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, endDate, successForWindowCount);
+retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, endDate, successForWindowCount, errorOccured);
 
 generate.widgetBar(function(data) {
     barChartData = data;
@@ -85,14 +101,16 @@ generate.widgetBar(function(data) {
 
 var successForWindow = function (data) {
     generate.widgetBoolean("windowState", function(result) {
+        finishedLoading();
         eval(result);
     });
 };
 var successForAC = function (data) {
     generate.widgetBoolean("climState", function(result) {
+        finishedLoading();
         eval(result);
     });
 };
 
-retrieveData.askForStateNow('WINDOW443STATE', successForWindow);
-retrieveData.askForStateNow('AC_443STATE', successForAC);
+retrieveData.askForStateNow('WINDOW443STATE', successForWindow, errorOccured);
+retrieveData.askForStateNow('AC_443STATE', successForAC, errorOccured);

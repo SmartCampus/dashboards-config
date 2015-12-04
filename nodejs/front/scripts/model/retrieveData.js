@@ -3,7 +3,7 @@
  */
 var retrieveData = (function () {
     return { //exposed to public
-        askForSeries: function (sensor, beginDate, endDate, successCB) {
+        askForSeries: function (sensor, beginDate, endDate, successCB, failCB) {
             console.log('before the get temperature for a timespan');
             $.get(sensorAPI + sensor, {date: beginDate+"/"+endDate})
                 .done(function (data) {
@@ -13,6 +13,7 @@ var retrieveData = (function () {
                 .fail(function (data) {
                     console.log(data);
                     console.log('error in get temp for timespan');
+                    failCB();
                 })
                 .always(function (data) {
                     console.log('processed series');
@@ -36,7 +37,7 @@ var retrieveData = (function () {
                 });
             console.log('after the get');
         },
-        askForStateNow: function (route, successStateCB) {
+        askForStateNow: function (route, successStateCB, errorCB) {
             console.log('before the get state');
             $.get(sensorAPI + route+'/data/last')
                 .done(function (data) {
@@ -46,6 +47,7 @@ var retrieveData = (function () {
                 })
                 .fail(function (data) {
                     console.log(data);
+                    errorCB();
                     console.log('error in state');
                 })
                 .always(function (data) {

@@ -7,22 +7,20 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <!-- JS -->
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
 
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="shortcut icon" type="image/x-icon" href="icon.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/icon.png" />
 
     <title>SmartCampus : dashboards</title>
 
     <script src="/bower_components/highstock/highstock.js"></script>
-    <script src="/bower_components/moment/min/moment.min.js"></script>
-    <script src="/bower_components/bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
    <!-- <script src="/bower_components/highstock/modules/exporting.js"></script>
    Only useful if we want to let people print or save the db as an image-->
 </head>
 <body>
 <h1 class="text-center">Summer dashboard</h1>
+
+
 <div class="row" id="states">
     <div class="col-md-6 text-center"><h1><span id="climState">A/C State</span></h1>
     </div>
@@ -30,7 +28,13 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row text-center" id="loadingImg"><img src="/assets/images/loading.gif" alt="loading" class="img-circle"></div>
+<div class="hidden" id="errorOccured">
+    <img src="/assets/images/errorCat.gif" alt="loading">
+    <h1 class="text-danger">An error occured. You should reload the page !</h1>
+</div>
+
+<div class="row" id="graphs">
     <div class="col-md-6" id="c1" style="height: 400px; min-width: 310px"></div>
     <div class="col-md-6" id="c2" style="height: 400px; min-width: 310px"></div>
 </div>
