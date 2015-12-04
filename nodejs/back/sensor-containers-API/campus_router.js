@@ -4,11 +4,20 @@ var express = require("express"),
 
 
 /**
- *
+ * This route
  */
 router.get("/sensors", function(req, res) {
     var queries = req.query;
-    queryHandler.handleQuery(queries,res);
+    console.log(queries);
+    if(queries.keys({}).length != 0) {
+        queryHandler.handleQuery(queries, res);
+    } else {
+        res.send("Sorry please enter a container in the query parameters." +
+            "Here is the list of all the valid containers" +
+            "CampusSophiaTech - TempliersOuest - 4thfloor - Coffeecorner - Sousrepartiteur - Modaliscorridor" +
+            "Office445 - Office443 - Office444 - TEMP - DOOR - AC - WINDOW - VirtualSensors. Exemple of valid request " +
+            "/sensors?container1=Office443")
+    }
 });
 
 
