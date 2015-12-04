@@ -97,7 +97,7 @@ function getContainerChild(name, response) {
     var containerList = sensors.getContainers();
     for(var i in containerList) {
         if(containerList[i].getName().replace(/\s+/g, '') == name) {
-            var jsonResponse = {"name" : "Buildings",  childContainers : containerList[i].getChild()};
+            var jsonResponse = {"name" : "Buildings",  childContainer : containerList[i].getChild()};
             response.send(jsonResponse);
         }
     }
