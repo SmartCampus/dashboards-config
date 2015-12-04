@@ -1,0 +1,26 @@
+{
+	"graphName": "TheYoloGraph",
+	"graphType": "yoloType",
+	"yAxis": [
+		{
+			"title": "yoloAxis1",
+			"minValue": 0,
+			"maxValue": 10,
+			"index":0,
+			"unit": "cm³",
+			"plotLine": "yoloPlotline1"
+		},
+		{
+			"title": "yoloAxis2",
+			"minValue": -50,
+			"maxValue": 100,
+			"index":1,
+			"unit": "Pa",
+			"plotLine": "yoloPlotline2"
+		}
+	],
+	"seriesName": "yoloSeries",
+	"defineMultipleAxis": "yolo",
+	"approxType": "num",
+	"grpPixelNb": 5
+}
