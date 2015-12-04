@@ -256,8 +256,10 @@ function initContainers() {
     var office444 = new SensorContainer("Office 444", ["444"], [], []);
     // TODO : Solution très sale mais pour les capteurs virtuels y a juste aucune norme !!!
     var virtualSensors = new SensorContainer("Virtual Sensors", ["2V", "STATE", "3V", "TEMP_CAMPUS"], [], []);
+    var root = new SensorContainer("Root", [], [], []);
 
     /** Add the containers in the array of containers **/
+    containers.push(root);
     containers.push(campus);
     containers.push(templierWest);
     containers.push(fourthFloor);
@@ -270,6 +272,8 @@ function initContainers() {
     containers.push(virtualSensors);
 
     /** Set the child of every container **/
+    root.getChild().push(campus);
+
     campus.getChild().push(templierWest);
 
     templierWest.getChild().push(fourthFloor);

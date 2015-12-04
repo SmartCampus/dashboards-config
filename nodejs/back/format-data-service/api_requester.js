@@ -5,6 +5,7 @@
 var http = require("http"),
     API_HOST = "http://localhost:8081",
     SENSORS_PATH = "/sensors",
+    CONTAINER_PATH = "/container",
     SENSOR_PATH = "/sensor";
 
 
@@ -64,7 +65,24 @@ function getLastSensorData(name, callback) {
         });
 }
 
+/**
+ * TODO
+ * @param name
+ * @param callback
+ */
+function getContainerChild(name, callback) {
+    var url = API_HOST + CONTAINER_PATH + "/" + name + "/child";
+    console.log(url);
+    http.get(url, function (res) {
+        callback(res);
+    })
+        .on('error', function (e) {
+            error(e, "getSensorData");
+        });
+}
 
+
+exports.getContainerChild = getContainerChild;
 
 exports.getSensorData = getSensorData;
 

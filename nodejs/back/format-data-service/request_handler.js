@@ -86,6 +86,15 @@ function getLastInformation(sensorId, response) {
 }
 
 
+function getContainersChild(containerId, response) {
+    requester.getContainerChild(containerId, function (res) {
+        processor.concatenateResponse(response, res);
+    });
+}
+
+exports.getContainersChild = getContainersChild;
+
+
 exports.getLastInformation = getLastInformation;
 
 /**

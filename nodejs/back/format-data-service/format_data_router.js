@@ -41,6 +41,13 @@ router.get("/sensor/:sensorId/data/percent", function(req, res) {
 });
 
 
+
+
+router.get("/container/:containerId/child", function(req, res) {
+    var sensor = req.params.containerId;
+    request_handler.getContainersChild(sensor, res);
+});
+
 router.get("/sensor/:sensorId/data/splitList", function(req, res) {
     var sensorId = req.params.sensorId;
     var date = "";

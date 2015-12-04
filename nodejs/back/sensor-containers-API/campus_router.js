@@ -12,9 +12,8 @@ router.get("/sensors", function(req, res) {
 });
 
 
-router.get("/sensor/:sensorId/child", function(req, res) {
-    var sensor = req.params.sensorId;
-    console.log("Yo : " + sensor);
+router.get("/container/:containerId/child", function(req, res) {
+    var sensor = req.params.containerId;
     queryHandler.getContainerChild(sensor, res);
 });
 
