@@ -1,7 +1,7 @@
 {
 	"graphName": "TheYoloGraph",
 	"graphType": "yoloType",
-	"yAxis": [
+	"yAxes": [
 		{
 			"title": "yoloAxis1",
 			"minValue": 0,
@@ -19,7 +19,7 @@
 			"plotLine": "yoloPlotline2"
 		}
 	],
-	"seriesName": "yoloSeries",
+	"seriesArrayName": "yoloSeriesArray",
 	"defineMultipleAxis": "yolo",
 	"approxType": "num",
 	"grpPixelNb": 5

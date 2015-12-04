@@ -7,7 +7,7 @@ $('#{{graphName}}').highcharts('StockChart', {
       type: 'datetime'
   },
   yAxis: [
-      {{#yAxis}}
+      {{#yAxes}}
         {
           min: {{minValue}},
           max: {{maxValue}}, 
@@ -26,10 +26,10 @@ $('#{{graphName}}').highcharts('StockChart', {
           style: {
              color: Highcharts.getOptions().colors[{{index}}]
           },
-          opposite: yAxis.index,
-          plotLines: [{ {{plotLine}} }]
+          opposite: {{index}},
+          plotLines: [ {{plotLine}} ]
         },
-      {{/yAxis}}
+      {{/yAxes}}
       ],
   tooltip: {
       headerFormat: '<span style="font-size:10px">{point.key}</span><table>',

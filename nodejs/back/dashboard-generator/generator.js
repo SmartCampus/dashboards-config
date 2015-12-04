@@ -4,7 +4,8 @@
 
 var Mustache = require("mustache"),
     handlebar = require("handlebars"),
-    fs = require('fs');
+    fs = require('fs'),
+    graphDefinitions = require("./graph_definitions");
 
 function loadTemperatureGraph(config ,res) {
     var template = "";
@@ -73,14 +74,55 @@ function loadBooleanGraph(config, res) {
     });
 }
 
+/**
+ * Generetes code for a widget.
+ * 
+ * @param  {JSON}       config      configuration description as sent by the frontend,
+ *                                  should match this template:
+ *          ,_---~~~~~----._            {
+ *   _,,_,*^____      _____``*g*\"*,        "graphName": string,
+ *  / __/ /'     ^.  / \      ^@q   f       "graphType": string,
+ * [  @f | @))    |  | @))    l  0 _/       "yAxes": [
+ *  \`/   \~____ / __ \_____/    \              {
+ *   |           _l__l_           I                 "title": string,
+ *   }          [______]           I                "type": string
+ *   ]            | | |            |            },
+ *   ]             ~ ~             |            ...
+ *   |                            |         ],
+ *    |                           |         "seriesArrayName": string
+ *                                      }
+ * @param  {Function}   callback    function to call with the resulting generated code
+ */
 function generateWidget(config, callback) {
+    console.log(config);
     fs.readFile(__dirname + "/template/Widget.mustache", "utf-8", function (err, template) {
         if (err) {
             throw err;
         }
-        config = require(__dirname + "/template/Widget.json");
-        callback(Mustache.render("" + template, config));
+        //config = require(__dirname + "/template/Widget.json");
+        config = analyseConfig(config);
+        console.log(config);
+        callback(Mustache.render(template, config));
     });
+}
+
+function analyseConfig(config) {
+    var yAxes = config.yAxes;
+    var type;
+
+    for (var i in yAxes) {
+        type = graphDefinitions.getYAxisType(yAxes[i].type);
+        if (type) {
+            graphDefinitions.copyYAxisTypeProperties(type, yAxes[i]);
+            yAxes[i].index = i;
+            config.approxType = type.approxType;
+            // TODO use graph class definition
+        }
+        else {
+            console.log("bad yAxesType");
+        }
+    }
+    return config;
 }
 
 // Exports
