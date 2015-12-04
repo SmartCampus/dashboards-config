@@ -3,7 +3,7 @@
  */
 var generate = (function () {
     return { //exposed to public
-        widgetLine: function (successCB) {
+        widgetLine: function (successCB, errorCB) {
             $.post("http://localhost:8083/generateWidget", {
                 job : "compareTemperature",
                 config :
@@ -16,15 +16,16 @@ var generate = (function () {
             })
                 .done(function (data) {
                     console.log('request done !');
-                    console.log(data);
+                  //  console.log(data);
                     successCB(data);
                 })
                 .fail(function (data) {
                     //  console.log(data);
                     console.log('error in post gen');
+                    errorCB();
                 });
         },
-        widgetBar: function (successCB) {
+        widgetBar: function (successCB, errorCB) {
             $.post("http://localhost:8083/generateWidget", {
                     job : "barGraph",
                     config :
@@ -47,15 +48,16 @@ var generate = (function () {
             )
                 .done(function (data) {
                     console.log('request done !');
-                    console.log(data);
+                  //  console.log(data);
                     successCB(data);
                 })
                 .fail(function (data) {
                     console.log(data);
                     console.log('error in post gen');
+                    errorCB();
                 });
         },
-        widgetBoolean: function(idWanted, successCB) {
+        widgetBoolean: function(idWanted, successCB, errorCB) {
             $.post("http://localhost:8083/generateWidget",
                 {
                     job : "generateBoolean",
@@ -66,11 +68,12 @@ var generate = (function () {
                 })
                 .done(function (data) {
                     console.log('request done !');
-                    console.log(data);
+                   // console.log(data);
                     successCB(data);
                 })
                 .fail(function (data) {
                     console.log('error in post gen');
+                    errorCB();
                 });
         }
     }

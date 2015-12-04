@@ -6,7 +6,7 @@ var retrieveData = (function () {
         askForSeries: function (sensor, beginDate, endDate, successCB, failCB) {
             $.get(sensorAPI + sensor, {date: beginDate+"/"+endDate})
                 .done(function (data) {
-                    console.log('got temps for a timespan');
+                    console.log('got series for a timespan');
                     successCB(data);
                 })
                 .fail(function (data) {
@@ -34,11 +34,10 @@ var retrieveData = (function () {
                 });
         },
         askForStateNow: function (route, successStateCB, errorCB) {
-            console.log('before the get state');
             $.get(sensorAPI + route+'/data/last')
                 .done(function (data) {
                     console.log('got state');
-                    console.log(data);
+              //      console.log(data);
                     successStateCB(data);
                 })
                 .fail(function (data) {
@@ -49,7 +48,6 @@ var retrieveData = (function () {
                 .always(function (data) {
                     console.log('route sent : ', sensorAPI + route);
                 });
-            console.log('after the get');
         }
     }
 }());

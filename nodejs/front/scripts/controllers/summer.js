@@ -41,7 +41,6 @@ var lineChartData;
 
 var firstSuccessInTemp = function (data) {
     temperaturesArray[0] = {"name": "inside temparature", "data": data.data};
-    console.log('in 1st success for temp');
     waitForEverybody();
 };
 
@@ -49,7 +48,6 @@ retrieveData.askForSeries('TEMP_443V/data', beginDate, endDate, firstSuccessInTe
 
 var secondSuccessInTemp = function (data) {
     temperaturesArray[1] = {"name": "outside temparature", "data": data.data};
-    console.log('in 2nd success for temp');
     waitForEverybody();
 };
 //We need to get the outside temperatures now, to build our whole graph.
@@ -58,7 +56,7 @@ retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate, secondSuccessI
 generate.widgetLine(function(data) {
     lineChartData = data;
     waitForEverybody();
-});
+}, errorOccurred);
 
 
 
@@ -93,7 +91,7 @@ retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, end
 generate.widgetBar(function(data) {
     barChartData = data;
     waitForTheOthers();
-});
+}, errorOccurred);
 
 
 
@@ -102,13 +100,13 @@ var successForWindow = function (data) {
     generate.widgetBoolean("windowState", function(result) {
         finishedLoading();
         eval(result);
-    });
+    }, errorOccurred);
 };
 var successForAC = function (data) {
     generate.widgetBoolean("climState", function(result) {
         finishedLoading();
         eval(result);
-    });
+    }, errorOccurred);
 };
 
 retrieveData.askForStateNow('WINDOW443STATE', successForWindow, errorOccurred);
