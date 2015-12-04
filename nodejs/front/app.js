@@ -24,5 +24,9 @@ app.use("/bower_components/bootstrap-datetimepicker",
 	express.static(__dirname + "/bower_components/eonasdan-bootstrap-datetimepicker"));
 
 
+app.use("/bower_components/jquery-ui",
+    express.static(__dirname + "/bower_components/jquery-ui"));
+
+
 app.listen(process.env.PORT || 8080);
 console.log("Server listening on port " + (process.env.PORT || 8080) + ".");

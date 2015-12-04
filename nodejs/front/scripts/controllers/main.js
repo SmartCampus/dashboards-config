@@ -33,7 +33,7 @@ function explore() {
 
     if (position.directSensor != null) {
         for(var i = 0; i < position.directSensor.length; i++){
-            myContent = "<div class=\"row\"> <button class=\"drag\">"+position.directSensor[i]+"</button></div>";
+            myContent = "<div class=\"row\"> <button class=\"draggable\">"+position.directSensor[i]+"</button></div>";
             $("#add-it").append(myContent);
         }
     }
@@ -55,16 +55,26 @@ $(document).on('click', '.node', function(el) {
 });
 
 
-/** click on draggable element **/
-$( ".drag" ).click(function() {
-    alert("drag");
-});
-
 /** click on back **/
 $( "#goback" ).click(function() {
     if(previous.length > 0){
         position = previous.pop();
         buildings = position.childContainer;
         explore();
+    }
+});
+
+$( ".draggable" ).draggable({
+    revert: "invalid"
+});
+
+$( ".droppable" ).droppable({
+    activeClass: "ui-state-default",
+    hoverClass: "ui-state-hover",
+    drop: function( event, ui ) {
+        $( this )
+            .addClass( "ui-state-highlight" )
+            .find( "p" )
+            .html( "Dropped!" );
     }
 });
