@@ -64,6 +64,23 @@ $( "#goback" ).click(function() {
     }
 });
 
+
+$(".draggable").draggable({
+    helper: 'clone',
+    revert: "invalid"
+});
+
+
+$('.droppable').droppable({ drop: dropIt });
+
+
+function dropIt(event, ui) {
+    var draggableId = ui.draggable.attr("id");
+    var droppableId = $(this).attr("id");
+
+    ui.draggable.clone().appendTo($(this));
+}
+/**
 $( ".draggable" ).draggable({
     revert: "invalid"
 });
@@ -77,4 +94,4 @@ $( ".droppable" ).droppable({
             .find( "p" )
             .html( "Dropped!" );
     }
-});
+});**/
