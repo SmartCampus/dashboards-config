@@ -3,9 +3,10 @@
 
 <head>
     <script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
     <script>
         $(function () {
-            $("head").load("header.html")
+            $("head").load("header.html");
         });
     </script>
 </head>
@@ -30,26 +31,46 @@
                 <h3>What ?</h3>
             </div>
 
-            <div class="row" style="padding: 20px 0 20px 0">
-                <button type="button" class="btn btn-default">Comparison</button>
+            <div class="row" style="padding: 20px 0 0 0">
+                <div class="draggable" id="Comparison">
+                    <p>Comparison</p>
+                </div>
             </div>
 
-            <div class="row" style="padding: 20px 0 20px 0">
-                <button type="button" class="btn btn-default">Proportion</button>
+            <div class="row" style="padding: 20px 0 0 0">
+                <div class="draggable" id="Hierarchy">
+                    <p>Hierarchy</p>
+                </div>
             </div>
 
-            <div class="row" style="padding: 20px 0 20px 0">
-                <button type="button" class="btn btn-default">Hierarchy</button>
+            <div class="row" style="padding: 20px 0 0 0">
+                <div class="draggable" id="Proportion">
+                    <p>Proportion</p>
+                </div>
             </div>
 
-            <div class="row" style="padding: 20px 0 20px 0">
-                <button type="button" class="btn btn-default">Distribution</button>
+            <div class="row" style="padding: 20px 0 0 0">
+                <div class="draggable" id="ABC">
+                    <p>ABC</p>
+                </div>
             </div>
         </div>
 
-        <div class="col-xs-6 col-md-6 col-lg-6" id="c2" style="text-align: center; background-color: #66afe9; min-height: 450px;">
+        <div class="col-xs-6 col-md-6 col-lg-6" id="c2" style="text-align: center; min-height: 450px;">
             <div class="row">
                 <h3>Composition</h3>
+            </div>
+
+            <div class="droppable" id="1" style="min-height: 70px; border: solid; margin-top: 30px">
+
+            </div>
+
+            <div class="droppable" id="2" style="min-height: 70px; border: solid;  margin-top: 30px">
+
+            </div>
+
+            <div class="droppable" id="3" style="min-height: 70px; border: solid;  margin-top: 30px">
+
             </div>
 
         </div>
@@ -74,17 +95,11 @@
 
         </div>
     </div>
-
-
-
-
 </div>
 
 </body>
 
-<script src="/bower_components/moment/min/moment.min.js"></script>
 <script src="/scripts/controllers/main.js"></script>
-
 
 <footer>
     <script>

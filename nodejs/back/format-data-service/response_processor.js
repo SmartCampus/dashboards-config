@@ -40,8 +40,12 @@ function handleState(state, sensorInfoJson, i) {
     var sensorPerTime = [];
     sensorPerTime.push((sensorInfoJson.values[i].date)*1000);
     if(state) {
-        if(sensorInfoJson.values[i].value == "ON") sensorPerTime.push(100);
-        if(sensorInfoJson.values[i].value == "OPEN") sensorPerTime.push(1);
+        if(sensorInfoJson.values[i].value == 'ON') {
+            sensorPerTime.push(100);
+        }
+        if(sensorInfoJson.values[i].value == 'OPEN') {
+            sensorPerTime.push(1);
+        }
         else {
             sensorPerTime.push(0);
         }
@@ -126,6 +130,33 @@ function informationInPercent(res, response, date) {
         response.send(responseInGoodFormat);
     });
 }
+
+function standardizeInformation(response, res) {
+    var stringData = "";
+
+    res.on("data", function(chunck) {
+        stringData += chunck;
+    });
+
+    res.on("end", function() {
+        var jsonData = JSON.parse(stringData);
+        var standardizeResponse = {data: []};
+        if(jsonData.values[0].value == "OPEN" || jsonData.values[0].value == "ON") {
+            standardizeResponse.data.push(parseInt(jsonData.values[0].date));
+            standardizeResponse.data.push(1);
+        } else if(jsonData.values[0].value == "CLOSED" || jsonData.values[0].value == "OFF") {
+            standardizeResponse.data.push(parseInt(jsonData.values[0].date));
+            standardizeResponse.data.push(0);
+        } else {
+            standardizeResponse.data.push(parseInt(jsonData.values[0].date));
+            standardizeResponse.data.push(jsonData.values[0].value);
+        }
+        response.send(standardizeResponse);
+    });
+}
+
+
+exports.standardizeInformation = standardizeInformation;
 
 exports.informationInPercent = informationInPercent;
 

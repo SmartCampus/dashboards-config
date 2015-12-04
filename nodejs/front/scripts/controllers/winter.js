@@ -11,22 +11,42 @@ if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
     endDate = '2015-12-01 18:00:11';
 }
 
+var allLoaded = 0;
+/**
+ * Should be changed once we add the data link for door and heater state !
+ */
+var finishedLoading = function() {
+    if (allLoaded < 0) {
+        allLoaded += 1;
+    }
+    else {
+        document.getElementById("loadingImg").className = "hidden";
+    }
+};
+
+var errorOccurred = function() {
+    document.getElementById("errorOccured").className = "row text-center show";
+    document.getElementById("loadingImg").className = "hidden";
+    document.getElementById("dashboard").className = "hidden";
+};
+
+
 
 var temperaturesArray = [];
 
 var firstSuccessInTemp = function (data, callback) {
-    temperaturesArray[0] = {"type": 'line', "name": "inside temparature", "data": data.data,  "yAxis": 1};
+    temperaturesArray[0] = {"type": "line", "name": "inside temparature", "data": data.data,  "yAxis": 1};
     callback();
 };
 
 var secondSuccessInTemp = function (data, callback) {
-    temperaturesArray[1] = {"type": 'line',"name": "outside temparature", "data": data.data,  "yAxis": 1};
+    temperaturesArray[1] = {"type": "line","name": "outside temparature", "data": data.data,  "yAxis": 1};
     callback();
 };
 
 
 var thirdSuccessInTemp = function (data, callback) {
-    temperaturesArray[2] = {"type": 'column',"name": "heater state" , "data": data.data[0].open,  "yAxis": 0};
+    temperaturesArray[2] = {"type": "column","name": "heater state" , "data": data.data[0].open,  "yAxis": 0};
     callback();
 };
 
@@ -45,30 +65,27 @@ retrieveData.askForSeries('TEMP_443V/data', beginDate, endDate,
     function(data){
         firstSuccessInTemp(data, updateCallback)
     }
-);
+, errorOccurred);
 
 retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate,
     function(data) {
         secondSuccessInTemp(data, updateCallback);
     }
-);
+, errorOccurred);
 
 
 retrieveData.askForSeriesWithParam('DOOR443STATE/data/splitlist', 'true', beginDate, endDate,
     function (data) {
         thirdSuccessInTemp(data, updateCallback);
     }
-);
+, errorOccurred);
 
 var drawLineChart = function() {
-
     $('#c1').highcharts('StockChart', {
-
         yAxis:
         [
             { // Primary yAxis
                 min: 0,
-
                 title: {
                     text: 'heater state',
                     style: {
@@ -134,4 +151,5 @@ var drawLineChart = function() {
 
         series: temperaturesArray
     });
+    finishedLoading();
 };
