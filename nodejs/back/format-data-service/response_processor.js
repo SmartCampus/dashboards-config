@@ -40,8 +40,12 @@ function handleState(state, sensorInfoJson, i) {
     var sensorPerTime = [];
     sensorPerTime.push((sensorInfoJson.values[i].date)*1000);
     if(state) {
-        if(sensorInfoJson.values[i].value == "ON") sensorPerTime.push(100);
-        if(sensorInfoJson.values[i].value == "OPEN") sensorPerTime.push(1);
+        if(sensorInfoJson.values[i].value == 'ON') {
+            sensorPerTime.push(100);
+        }
+        if(sensorInfoJson.values[i].value == 'OPEN') {
+            sensorPerTime.push(1);
+        }
         else {
             sensorPerTime.push(0);
         }
