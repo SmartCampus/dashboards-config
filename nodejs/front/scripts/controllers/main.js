@@ -27,14 +27,18 @@ function explore() {
     $("#add-it").append(myContent);
 
     for(var i = 0; i < buildings.length; i++){
-        myContent = "<div class=\"row\"> <a class=\"node\" id=\""+i+"\">"+buildings[i].name+"</a></div>";
+        myContent = "<div class=\"row\"><a class=\"node\" id=\""+i+"\">"+buildings[i].name+"</a></div>";
         $("#add-it").append(myContent);
     }
 
     if (position.directSensor != null) {
         for(var i = 0; i < position.directSensor.length; i++){
-            myContent = "<div class=\"row\"> <button class=\"draggable\">"+position.directSensor[i]+"</button></div>";
+            myContent = "<div class=\"row\"><div class=\"draggable\"><p>"+position.directSensor[i]+"</p></div></div>";
             $("#add-it").append(myContent);
+            $(".draggable").draggable({
+                helper: 'clone',
+                revert: "invalid"
+            });
         }
     }
 }
@@ -50,10 +54,8 @@ $(document).on('click', '.node', function(el) {
     previous.push(position);
     position = buildings[parseInt(el.target.id)];
     buildings = position.childContainer;
-
     explore();
 });
-
 
 /** click on back **/
 $( "#goback" ).click(function() {
@@ -64,15 +66,14 @@ $( "#goback" ).click(function() {
     }
 });
 
-
 $(".draggable").draggable({
     helper: 'clone',
     revert: "invalid"
 });
 
-
-$('.droppable').droppable({ drop: dropIt });
-
+$('.droppable').droppable({
+    drop: dropIt
+});
 
 function dropIt(event, ui) {
     var draggableId = ui.draggable.attr("id");
@@ -80,18 +81,3 @@ function dropIt(event, ui) {
 
     ui.draggable.clone().appendTo($(this));
 }
-/**
-$( ".draggable" ).draggable({
-    revert: "invalid"
-});
-
-$( ".droppable" ).droppable({
-    activeClass: "ui-state-default",
-    hoverClass: "ui-state-hover",
-    drop: function( event, ui ) {
-        $( this )
-            .addClass( "ui-state-highlight" )
-            .find( "p" )
-            .html( "Dropped!" );
-    }
-});**/
