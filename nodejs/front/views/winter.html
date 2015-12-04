@@ -20,6 +20,13 @@
 <body>
     <h1 class="text-center">Winter dashboard</h1>
 
+    <div class="row text-center" id="loadingImg"><img src="/assets/images/loading.gif" alt="loading" class="img-circle"></div>
+    <div class="hidden" id="errorOccured">
+        <img src="/assets/images/errorCat.gif" alt="loading">
+        <h1 class="text-danger">An error occurred. You should reload the page !</h1>
+    </div>
+
+    <div id="dashboard">
     <div class="row" id="states">
         <div class="col-md-6 text-center"><h1><span id="heaterState">Heater State</span></h1>
         </div>
@@ -31,8 +38,9 @@
         <div class="col-md-1"></div>
         <div class="col-md-10" id="c1"></div>
         <div class="col-md-1"></div>
-
     </div>
+    </div>
+
 </body>
 
 <script src="/scripts/model/constants.js"></script>

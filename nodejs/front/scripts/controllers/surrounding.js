@@ -21,10 +21,10 @@ var finishedLoading = function() {
     }
 };
 
-var errorOccured = function() {
-    document.getElementById("errorOccured").className = "row text-center show";
+var errorOccurred = function() {
+    document.getElementById("errorOccurred").className = "row text-center show";
     document.getElementById("loadingImg").className = "hidden";
-    document.getElementById("dahsboardSurrounding").className = "hidden";
+    document.getElementById("dashboard").className = "hidden";
 };
 
 var doorState = [],
@@ -74,12 +74,12 @@ var successForNoise = function (data) {
     retrieveData.askForSeriesWithParam('DOOR443STATE/data/splitlist', 'true', beginDate, endDate,
         function (data) {
             successForDoorStateInTime(data, updateCallback);
-        }, errorOccured);
+        }, errorOccurred);
 
     retrieveData.askForSeriesWithParam('WINDOW443STATE/data/splitlist', 'true', beginDate, endDate,
         function (data) {
             successForWindowStateInTime(data, updateCallback);
-        }, errorOccured);
+        }, errorOccurred);
 }
 
 
@@ -97,9 +97,9 @@ var successForWindowPercentage = function (data) {
 };
 
 
-retrieveData.askForSeries('NOISE_SPARKS_CORRIDOR/data', beginDate, endDate, successForNoise, errorOccured);
-retrieveData.askForSeries('DOOR443STATE/data/percent', beginDate, endDate, successForDoorPercentage, errorOccured);
-retrieveData.askForSeries('WINDOW443STATE/data/percent', beginDate, endDate, successForWindowPercentage, errorOccured);
+retrieveData.askForSeries('NOISE_SPARKS_CORRIDOR/data', beginDate, endDate, successForNoise, errorOccurred);
+retrieveData.askForSeries('DOOR443STATE/data/percent', beginDate, endDate, successForDoorPercentage, errorOccurred);
+retrieveData.askForSeries('WINDOW443STATE/data/percent', beginDate, endDate, successForWindowPercentage, errorOccurred);
 
 
 /**

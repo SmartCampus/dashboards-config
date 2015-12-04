@@ -20,23 +20,24 @@
 <body>
 <h1 class="text-center">Summer dashboard</h1>
 
+<div class="row text-center" id="loadingImg"><img src="/assets/images/loading.gif" alt="loading" class="img-circle"></div>
+<div class="hidden" id="errorOccured">
+    <img src="/assets/images/errorCat.gif" alt="loading">
+    <h1 class="text-danger">An error occurred. You should reload the page !</h1>
+</div>
 
-<div class="row" id="states">
+<div id="dashboard">
+<div class="row">
     <div class="col-md-6 text-center"><h1><span id="climState">A/C State</span></h1>
     </div>
     <div class="col-md-6 text-center"><h1><span id="windowState">Window State</span></h1>
     </div>
 </div>
 
-<div class="row text-center" id="loadingImg"><img src="/assets/images/loading.gif" alt="loading" class="img-circle"></div>
-<div class="hidden" id="errorOccured">
-    <img src="/assets/images/errorCat.gif" alt="loading">
-    <h1 class="text-danger">An error occured. You should reload the page !</h1>
-</div>
-
-<div class="row" id="graphs">
+<div class="row">
     <div class="col-md-6" id="c1" style="height: 400px; min-width: 310px"></div>
     <div class="col-md-6" id="c2" style="height: 400px; min-width: 310px"></div>
+</div>
 </div>
 </body>
 

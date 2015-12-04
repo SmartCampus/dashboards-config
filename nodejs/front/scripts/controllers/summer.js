@@ -17,11 +17,10 @@ var finishedLoading = function() {
     }
 };
 
-var errorOccured = function() {
-    document.getElementById("errorOccured").className = "row text-center show";
+var errorOccurred = function() {
+    document.getElementById("errorOccurred").className = "row text-center show";
     document.getElementById("loadingImg").className = "hidden";
-    document.getElementById("states").className = "hidden";
-    document.getElementById("graphs").className = "hidden";
+    document.getElementById("dashboard").className = "hidden";
 };
 
 var everyBody = 0;
@@ -46,7 +45,7 @@ var firstSuccessInTemp = function (data) {
     waitForEverybody();
 };
 
-retrieveData.askForSeries('TEMP_443V/data', beginDate, endDate, firstSuccessInTemp, errorOccured);
+retrieveData.askForSeries('TEMP_443V/data', beginDate, endDate, firstSuccessInTemp, errorOccurred);
 
 var secondSuccessInTemp = function (data) {
     temperaturesArray[1] = {"name": "outside temparature", "data": data.data};
@@ -54,7 +53,7 @@ var secondSuccessInTemp = function (data) {
     waitForEverybody();
 };
 //We need to get the outside temperatures now, to build our whole graph.
-retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate, secondSuccessInTemp, errorOccured);
+retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate, secondSuccessInTemp, errorOccurred);
 
 generate.widgetLine(function(data) {
     lineChartData = data;
@@ -87,9 +86,9 @@ successForAcCount = function (data) {
     countingArray[1] = {"name": "% of time the AC is on", "data": data.data};
     waitForTheOthers();
 };
-retrieveData.askForSeriesWithParam('AC_443STATE/data', 'true', beginDate, endDate, successForAcCount, errorOccured);
+retrieveData.askForSeriesWithParam('AC_443STATE/data', 'true', beginDate, endDate, successForAcCount, errorOccurred);
 
-retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, endDate, successForWindowCount, errorOccured);
+retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, endDate, successForWindowCount, errorOccurred);
 
 generate.widgetBar(function(data) {
     barChartData = data;
@@ -112,5 +111,5 @@ var successForAC = function (data) {
     });
 };
 
-retrieveData.askForStateNow('WINDOW443STATE', successForWindow, errorOccured);
-retrieveData.askForStateNow('AC_443STATE', successForAC, errorOccured);
+retrieveData.askForStateNow('WINDOW443STATE', successForWindow, errorOccurred);
+retrieveData.askForStateNow('AC_443STATE', successForAC, errorOccurred);
