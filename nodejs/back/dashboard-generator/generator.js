@@ -1,10 +1,10 @@
 /**
- * Created by Quentin on 12/3/2015.
+ * @author Quentin Cornevin, Marc Karassev
  */
+
 var Mustache = require("mustache"),
     handlebar = require("handlebars"),
     fs = require('fs');
-
 
 function loadTemperatureGraph(config ,res) {
     var template = "";
@@ -59,12 +59,8 @@ function loadBarGraph(config, res) {
     });
 }
 
-
 function loadBooleanGraph(config, res) {
     var value = config;
-
-
-
     var template = "";
 
     fs.readFile('./template/BooleanWidget.mustache', "utf-8", function (err, data) {
@@ -77,9 +73,22 @@ function loadBooleanGraph(config, res) {
     });
 }
 
+function generateWidget(config, callback) {
+    fs.readFile(__dirname + "/template/Widget.mustache", "utf-8", function (err, template) {
+        if (err) {
+            throw err;
+        }
+        config = require(__dirname + "/template/Widget.json");
+        callback(Mustache.render("" + template, config));
+    });
+}
+
+// Exports
 
 exports.loadBooleanGraph = loadBooleanGraph;
 
 exports.loadBarGraph = loadBarGraph;
 
 exports.loadTemperatureGraph = loadTemperatureGraph;
+
+exports.generateWidget = generateWidget;
