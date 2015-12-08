@@ -10,21 +10,21 @@ router.post("/generateWidget", function(req, res) {
     jobsRouter(req.body, res);
 });
 
-function jobsRouter(document, res) {
-    var method = document.job;
+function jobsRouter(message, res) {
+    var method = message.job;
     switch (method) {
         case "compareTemperature":
-            generator.loadTemperatureGraph(document.config, res);
+            generator.loadTemperatureGraph(message.config, res);
             break;
         case "barGraph" :
-            generator.loadBarGraph(document.config, res);
+            generator.loadBarGraph(message.config, res);
             break;
         case "generateBoolean":
-            generator.loadBooleanGraph(document.config, res);
-            console.log(document.config);
+            generator.loadBooleanGraph(message.config, res);
+            console.log(message.config);
             break;
         case "generateWidget":
-            generator.generateWidget(document.config, function(data) {
+            generator.generateWidget(message.config, function(data) {
                 res.send(data);
             });
             break;

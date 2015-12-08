@@ -107,15 +107,17 @@ function generateWidget(config, callback) {
 }
 
 function analyseConfig(config) {
-    var yAxes = config.yAxes;
-    var type;
+    var yAxes = config.yAxes,
+        graphType = graphDefinitions.getGraphType(config.graphType),
+        yAxisType;
 
     for (var i in yAxes) {
-        type = graphDefinitions.getYAxisType(yAxes[i].type);
-        if (type) {
-            graphDefinitions.copyYAxisTypeProperties(type, yAxes[i]);
+        yAxisType = graphDefinitions.getYAxisType(yAxes[i].type);
+        if (yAxisType) {
+            graphDefinitions.copyYAxisTypeProperties(yAxisType, yAxes[i]);
             yAxes[i].index = i;
-            config.approxType = type.approxType;
+            config.approxType = yAxisType.approxType;
+            config.grpPixelNb = graphType.grpPixelNb;
             // TODO use graph class definition
         }
         else {

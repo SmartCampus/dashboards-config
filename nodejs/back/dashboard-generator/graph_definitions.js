@@ -6,7 +6,7 @@
 
 class YAxisType {
 
-	constructor(name, minValue, maxValue, unit, plotLine, approxType) {
+	constructor (name, minValue, maxValue, unit, plotLine, approxType) {
 		this._name = name;
 		this._minValue = minValue;
 		this._maxValue = maxValue;
@@ -60,10 +60,38 @@ function copyYAxisTypeProperties(type, target) {
 	if (type.plotLine) target.plotLine = type.plotLine;
 }
 
-// TODO Graph class
+class GraphType {
+
+	constructor (name, grpPixelNb) {
+		this._name = name;
+		this._grpPixelNb = grpPixelNb;
+	}
+
+	get name() { return this._name; }
+	get grpPixelNb() { return this._grpPixelNb; }
+}
+
+var LINE = new GraphType("line", 5),
+	COLUMN = new GraphType("column", 50);
+
+var GRAPH_TYPES = {
+	line: LINE,
+	column: COLUMN
+}
+
+function getGraphType(type) {
+	for (var property in GRAPH_TYPES) {
+		if (property == type) {
+			return GRAPH_TYPES[property];
+		}
+	}
+}
 
 // Exports
 
 exports.YAXIS_TYPES = YAXIS_TYPES;
 exports.getYAxisType = getYAxisType;
 exports.copyYAxisTypeProperties = copyYAxisTypeProperties;
+
+exports.GRAPH_TYPES = GRAPH_TYPES;
+exports.getGraphType = getGraphType;
