@@ -8,6 +8,7 @@
 			"maxValue": 10,
 			"index":0,
 			"unit": "cm³",
+			"approxType": "yoloApprox",
 			"plotLine": "yoloPlotline1"
 		},
 		{
@@ -16,11 +17,11 @@
 			"maxValue": 100,
 			"index":1,
 			"unit": "Pa",
+			"approxType": "yoloApprox",
 			"plotLine": "yoloPlotline2"
 		}
 	],
 	"seriesArrayName": "yoloSeriesArray",
 	"defineMultipleAxes": "yolo",
-	"approxType": "num",
 	"grpPixelNb": 5
 }

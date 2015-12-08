@@ -116,17 +116,17 @@ function analyseConfig(config) {
         if (yAxisType) {
             graphDefinitions.copyYAxisTypeProperties(yAxisType, yAxes[i]);
             yAxes[i].index = i;
-            // INCORRECT : doit dépendre du yAxis dans le template (le template est incorrect aussi)
-            config.approxType = yAxisType.approxType;
-            config.grpPixelNb = graphType.grpPixelNb;
+            yAxes[i].approxType = yAxisType.approxType;
         }
         else {
             console.log("bad yAxesType");
         }
     }
+    config.grpPixelNb = graphType.grpPixelNb;
     if (yAxes.length > 1) {
         config.defineMultipleAxes = true;
     }
+
     return config;
 }
 

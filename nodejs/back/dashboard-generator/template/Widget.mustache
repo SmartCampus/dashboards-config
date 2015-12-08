@@ -44,25 +44,19 @@ $('#{{graphName}}').highcharts('StockChart', {
       {{seriesName}}
     {{/defineMultipleAxes}}
     {{#defineMultipleAxes}}
-      [{
-        name: {{seriesName}}[0].name,
-        data: {{seriesName}}[0].data,
-        dataGrouping: {
-          forced: true,
-          approximation:'{{approxType}}',
-          groupPixelWidth: {{grpPixelNb}}
+      [
+      {{#yAxes}}
+        {
+          name: {{seriesName}}[0].name,
+          data: {{seriesName}}[0].data,
+          dataGrouping: {
+            forced: true,
+            approximation:'{{approxType}}',
+            groupPixelWidth: {{grpPixelNb}}
+          },
+          yAxis: 0
         },
-        yAxis: 0
-      }, 
-      {
-        name: {{seriesName}}[1].name,
-        data: {{seriesName}}[1].data,
-        dataGrouping: {
-           forced: true,
-           approximation:'{{approxType}}',
-           groupPixelWidth: {{grpPixelNb}}
-        },
-        yAxis: 1
-      }]
+      {{/yAxes}}
+      ]
     {{/defineMultipleAxes}}
 });
