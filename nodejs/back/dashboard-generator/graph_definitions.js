@@ -20,6 +20,7 @@ class YAxisType {
 	get maxValue () { return this._maxValue }
 	get unit () { return this._unit }
 	get plotLine () { return this._plotLine }
+	get approxType() { return this._approxType }
 }
 
 var PERCENT = new YAxisType("percent", 0, 100, "%", {}, "average"),

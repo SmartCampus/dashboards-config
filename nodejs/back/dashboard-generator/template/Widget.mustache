@@ -40,10 +40,10 @@ $('#{{graphName}}').highcharts('StockChart', {
       useHTML: true
   },
   series: 
-    {{^defineMultipleAxis}}
+    {{^defineMultipleAxes}}
       {{seriesName}}
-    {{/defineMultipleAxis}}
-    {{#defineMultipleAxis}}
+    {{/defineMultipleAxes}}
+    {{#defineMultipleAxes}}
       [{
         name: {{seriesName}}[0].name,
         data: {{seriesName}}[0].data,
@@ -64,5 +64,5 @@ $('#{{graphName}}').highcharts('StockChart', {
         },
         yAxis: 1
       }]
-    {{/defineMultipleAxis}}
+    {{/defineMultipleAxes}}
 });

@@ -20,7 +20,7 @@
 		}
 	],
 	"seriesArrayName": "yoloSeriesArray",
-	"defineMultipleAxis": "yolo",
+	"defineMultipleAxes": "yolo",
 	"approxType": "num",
 	"grpPixelNb": 5
 }
