@@ -21,12 +21,12 @@ var retrieveData = (function () {
         askForSeriesWithParam: function(sensor, param, beginDate, endDate, successCB, errorCB) {
             $.get(sensorAPI + sensor, {state:param, date: beginDate+"/"+endDate})
                 .done(function (data) {
-                    console.log('got series for a timespan');
+                    console.log('got series for a timespan with param');
                     successCB(data);
                 })
                 .fail(function (data) {
                     console.log(data);
-                    console.log('error in get series for timespan');
+                    console.log('error in get series for timespan with param');
                     errorCB();
                 })
                 .always(function (data) {

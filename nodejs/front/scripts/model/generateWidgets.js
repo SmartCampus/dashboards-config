@@ -75,6 +75,30 @@ var generate = (function () {
                     console.log('error in post gen');
                     errorCB();
                 });
+        },
+        widgetV2: function (graphType, yAxesArray, graphName, seriesName, successCB, errorCB) {
+
+            $.post("http://localhost:8083/generateWidget", {
+                    job : "generateWidget",
+                    config :
+                    {
+                        graphType: graphType,
+                        yAxes : yAxesArray,
+                        graphName:graphName,
+                        seriesArrayName : seriesName
+                    }
+                }
+                )
+                .done(function (data) {
+                    console.log('request done !');
+                    //  console.log(data);
+                    successCB(data);
+                })
+                .fail(function (data) {
+                    console.log(data);
+                    console.log('error in post gen');
+                    errorCB();
+                });
         }
     }
 }());
