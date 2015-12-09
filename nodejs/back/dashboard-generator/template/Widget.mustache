@@ -28,7 +28,7 @@ $('#{{graphName}}').highcharts('StockChart', {
           },
           opposite: {{index}},
           plotLines: [ {{plotLine}} ]
-        },
+        }{{coma}}
       {{/yAxes}}
       ],
   tooltip: {
@@ -47,15 +47,15 @@ $('#{{graphName}}').highcharts('StockChart', {
       [
       {{#yAxes}}
         {
-          name: {{seriesArrayName}}[0].name,
-          data: {{seriesArrayName}}[0].data,
+          name: {{seriesArrayName}}[{{index}}].name,
+          data: {{seriesArrayName}}[{{index}}].data,
           dataGrouping: {
             forced: true,
             approximation:'{{approxType}}',
             groupPixelWidth: {{grpPixelNb}}
           },
-          yAxis: 0
-        },
+          yAxis: {{index}}
+        }{{coma}}
       {{/yAxes}}
       ]
     {{/defineMultipleAxes}}

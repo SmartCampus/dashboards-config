@@ -117,6 +117,9 @@ function analyseConfig(config) {
             graphDefinitions.copyYAxisTypeProperties(yAxisType, yAxes[i]);
             yAxes[i].index = i;
             yAxes[i].approxType = yAxisType.approxType;
+            if (i < yAxes.length - 1) {
+                yAxes[i].coma = ",";
+            }
         }
         else {
             console.log("bad yAxesType");
