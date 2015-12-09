@@ -102,6 +102,7 @@ function generateWidget(config, callback) {
         //config = require(__dirname + "/template/Widget.json");
         config = analyseConfig(config);
         console.log(config);
+        // console.log("" + Mustache.render(template, config));
         callback(Mustache.render(template, config));
     });
 }
