@@ -75,7 +75,7 @@ function loadBooleanGraph(config, res) {
 }
 
 /**
- * Generetes code for a widget.
+ * Generates code for a widget using the template/Widget.mustache .
  * 
  * @param  {JSON}       config      configuration description as sent by the frontend,
  *                                  should match this template:
@@ -107,6 +107,27 @@ function generateWidget(config, callback) {
     });
 }
 
+/**
+ * Updates a widget generation configuration JSON received throught the web in order
+ * to make it match the template/Widget.json sample file.
+ * 
+ * @param  {JSON}       config      configuration description as sent by the frontend,
+ *                                  should match this template:
+ *          ,_---~~~~~----._            {
+ *   _,,_,*^____      _____``*g*\"*,        "graphName": string,
+ *  / __/ /'     ^.  / \      ^@q   f       "graphType": string,
+ * [  @f | @))    |  | @))    l  0 _/       "yAxes": [
+ *  \`/   \~____ / __ \_____/    \              {
+ *   |           _l__l_           I                 "title": string,
+ *   }          [______]           I                "type": string
+ *   ]            | | |            |            },
+ *   ]             ~ ~             |            ...
+ *   |                            |         ],
+ *    |                           |         "seriesArrayName": string
+ *                                      }
+ * @return {JSON}                   the updated configuration JSON as specified in the
+ *                                  template/Widget.json file
+ */
 function analyseConfig(config) {
     var yAxes = config.yAxes,
         graphType = graphDefinitions.getGraphType(config.graphType),
