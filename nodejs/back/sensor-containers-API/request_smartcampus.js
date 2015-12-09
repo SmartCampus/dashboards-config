@@ -8,6 +8,10 @@ var http = require("http"),
     SMARTCAMPUS_HOST = "http://smartcampus.unice.fr",
     SENSORS_PATH = "/sensors";
 
+function error(e, msg) {
+	console.log(msg + ":", e.message);
+}
+
 /**
  * Retrieves all sensors from SmartCampus.
  *
