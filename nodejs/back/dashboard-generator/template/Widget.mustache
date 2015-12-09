@@ -41,14 +41,14 @@ $('#{{graphName}}').highcharts('StockChart', {
   },
   series: 
     {{^defineMultipleAxes}}
-      {{seriesName}}
+      {{seriesArrayName}}
     {{/defineMultipleAxes}}
     {{#defineMultipleAxes}}
       [
       {{#yAxes}}
         {
-          name: {{seriesName}}[0].name,
-          data: {{seriesName}}[0].data,
+          name: {{seriesArrayName}}[0].name,
+          data: {{seriesArrayName}}[0].data,
           dataGrouping: {
             forced: true,
             approximation:'{{approxType}}',
