@@ -4,6 +4,9 @@ var capteurs,
 
 var previous = [];
 
+var dashs = [];
+
+
 (function getSensors(callback){
     $.get("http://localhost:8082/container/Root/child")
         .done(function (data) {
@@ -13,6 +16,11 @@ var previous = [];
 })(init);
 
 function init() {
+
+    dashs[0] = new Array();
+    dashs[1] = new Array();
+    dashs[2] = new Array();
+
     position  = capteurs;
     buildings = capteurs.childContainer;
     previous.push(position);
@@ -33,7 +41,7 @@ function explore() {
 
     if (position.directSensor != null) {
         for(var i = 0; i < position.directSensor.length; i++){
-            myContent = "<div class=\"row\"><div class=\"draggable\"><p>"+position.directSensor[i]+"</p></div></div>";
+            myContent = "<div class=\"row\"><div class=\"draggable\" id=\""+position.directSensor[i]+"\"><p>"+position.directSensor[i]+"</p></div></div>";
             $("#add-it").append(myContent);
             $(".draggable").draggable({
                 helper: 'clone',
@@ -79,5 +87,18 @@ function dropIt(event, ui) {
     var draggableId = ui.draggable.attr("id");
     var droppableId = $(this).attr("id");
 
-    ui.draggable.clone().appendTo($(this));
+    if(!alreadyInContainer(draggableId, droppableId)){
+        addToDashs(draggableId, droppableId);
+        ui.draggable.clone().appendTo($(this));
+    }
 }
+
+function alreadyInContainer(drag, drop)
+{
+    return ($.inArray(drag, dashs[drop]) > -1);
+}
+
+function addToDashs(drag, drop) {
+    dashs[drop].push(drag);
+}
+
