@@ -4,7 +4,7 @@
 var generate = (function () {
     return { //exposed to public
         widgetLine: function (successCB, errorCB) {
-            $.post("http://localhost:8083/generateWidget", {
+            $.post(genServer+widgetGen, {
                 job : "compareTemperature",
                 config :
                 {
@@ -26,7 +26,7 @@ var generate = (function () {
                 });
         },
         widgetBar: function (successCB, errorCB) {
-            $.post("http://localhost:8083/generateWidget", {
+            $.post(genServer+widgetGen, {
                     job : "barGraph",
                     config :
                     {
@@ -58,7 +58,7 @@ var generate = (function () {
                 });
         },
         widgetBoolean: function(idWanted, successCB, errorCB) {
-            $.post("http://localhost:8083/generateWidget",
+            $.post(genServer+widgetGen,
                 {
                     job : "generateBoolean",
                     config :
@@ -78,8 +78,8 @@ var generate = (function () {
         },
         widgetV2: function (graphType, yAxesArray, graphName, seriesName, successCB, errorCB) {
 
-            $.post("http://localhost:8083/generateWidget", {
-                    job : "generateWidget",
+            $.post(genServer+widgetGen, {
+                    job : widgetGen,
                     config :
                     {
                         graphType: graphType,
