@@ -33,10 +33,8 @@ var errorOccurred = function() {
  HEATING_443
  */
 var successForHeating = function (data) {
-    console.log('********* Success to get heating. ', data);
     generate.widgetBoolean("heaterState", function(result) {
         finishedLoading();
-        console.log(result);
         eval(result);
     }, errorOccurred);
 };
@@ -56,7 +54,7 @@ var secondSuccessInTemp = function (data, callback) {
 
 
 var thirdSuccessInTemp = function (data, callback) {
-    temperaturesArray[2] = {"type": "column","name": "heating status" , "data": data.data[0].open,  "yAxis": 0};
+    temperaturesArray[2] = {"type": "column","name": "Heating status" , "data": data.data[0].open,  "yAxis": 0};
     callback();
 };
 
