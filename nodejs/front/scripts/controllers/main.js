@@ -8,7 +8,7 @@ var dashs = [];
 
 
 (function getSensors(callback){
-    $.get("http://localhost:8082/container/Root/child")
+    $.get(mainServer+"container/Root/child")
         .done(function (data) {
             capteurs = data;
             callback();
