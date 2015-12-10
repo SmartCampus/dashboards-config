@@ -1,6 +1,10 @@
 if (data.data[1] == 0) {
-    document.getElementById('{{id}}').setAttribute("class", "label label-danger");
+    //document.getElementById('{{id}}').setAttribute("class", "label label-danger");
+document.getElementById('{{id}}').src="/assets/images/no.png";
+
 }
 else {
-    document.getElementById('{{id}}').setAttribute("class", "label label-success");
+//    document.getElementById('{{id}}').setAttribute("class", "label label-success");
+document.getElementById('{{id}}').src="/assets/images/yes.png";
+
 }
