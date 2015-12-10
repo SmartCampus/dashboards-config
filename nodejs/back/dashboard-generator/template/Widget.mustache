@@ -27,7 +27,22 @@ $('#{{graphName}}').highcharts('StockChart', {
              color: Highcharts.getOptions().colors[{{index}}]
           },
           opposite: {{index}},
-          plotLines: [ {{plotLine}} ]
+          plotLines: [
+            {
+            {{#plotLine}}
+              "value": {{value}},
+              "color": '{{color}}',
+              "dashStyle": '{{dashStyle}}',
+              "width": {{width}},
+              "label":
+                {{#label}}
+                {
+                  text: '{{text}}'
+                }
+                {{/label}}
+            {{/plotLine}}
+            }
+          ]
         }{{coma}}
       {{/yAxes}}
       ],

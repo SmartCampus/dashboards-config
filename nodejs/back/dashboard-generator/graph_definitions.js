@@ -23,8 +23,8 @@ class YAxisType {
 	get approxType() { return this._approxType }
 }
 
-var PERCENT = new YAxisType("percent", 0, 100, "%", {}, "average"),
-	NUMBER = new YAxisType("number", 0, undefined, undefined, {}, "sum"),
+var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average"),
+	NUMBER = new YAxisType("number", 0, undefined, undefined, undefined, "sum"),
 	TEMPERATURE = new YAxisType("temperature", undefined, undefined, undefined,
 		{
 			value: 0,

@@ -1,4 +1,7 @@
 #!/bin/bash
+echo "this script should be executed in root mode"
+echo "you should have npm ans bower installed"
+
 parent_path=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
 
 cd "$parent_path"

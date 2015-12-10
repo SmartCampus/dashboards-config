@@ -9,7 +9,7 @@
 			"index":0,
 			"unit": "cm³",
 			"approxType": "yoloApprox",
-			"plotLine": "yoloPlotline1"
+			"coma": ","
 		},
 		{
 			"title": "yoloAxis2",
@@ -18,7 +18,13 @@
 			"index":1,
 			"unit": "Pa",
 			"approxType": "yoloApprox",
-			"plotLine": "yoloPlotline2"
+			"plotLine": {
+				"value": 0,
+				"color": "red",
+				"dashStyle": "shortdash",
+				"width": 2,
+				"label": {"text": "0°C"}
+			}
 		}
 	],
 	"seriesArrayName": "yoloSeriesArray",

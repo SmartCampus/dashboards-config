@@ -4,7 +4,7 @@
 var retrieveData = (function () {
     return { //exposed to public
         askForSeries: function (sensor, beginDate, endDate, successCB, failCB) {
-            $.get(sensorAPI + sensor, {date: beginDate+"/"+endDate})
+            $.get(mainServer+sensorAPI + sensor, {date: beginDate+"/"+endDate})
                 .done(function (data) {
                     console.log('got series for a timespan');
                     successCB(data);
@@ -15,26 +15,26 @@ var retrieveData = (function () {
                     failCB();
                 })
                 .always(function (data) {
-                    console.log('For route '+ sensorAPI + sensor + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
+                    console.log('For route '+ mainServer+sensorAPI + sensor + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
                 });
         },
         askForSeriesWithParam: function(sensor, param, beginDate, endDate, successCB, errorCB) {
-            $.get(sensorAPI + sensor, {state:param, date: beginDate+"/"+endDate})
+            $.get(mainServer+sensorAPI + sensor, {state:param, date: beginDate+"/"+endDate})
                 .done(function (data) {
-                    console.log('got series for a timespan');
+                    console.log('got series for a timespan with param');
                     successCB(data);
                 })
                 .fail(function (data) {
                     console.log(data);
-                    console.log('error in get series for timespan');
+                    console.log('error in get series for timespan with param');
                     errorCB();
                 })
                 .always(function (data) {
-                    console.log('For route '+ sensorAPI + sensor + ' : \n state : '+ param +'\nbegin : ' + beginDate + '\nend : '+endDate);
+                    console.log('For route '+mainServer+ sensorAPI + sensor + ' : \n state : '+ param +'\nbegin : ' + beginDate + '\nend : '+endDate);
                 });
         },
         askForStateNow: function (route, successStateCB, errorCB) {
-            $.get(sensorAPI + route+'/data/last')
+            $.get(mainServer+sensorAPI + route+'/data/last')
                 .done(function (data) {
                     console.log('got state');
               //      console.log(data);
@@ -46,7 +46,7 @@ var retrieveData = (function () {
                     console.log('error in state');
                 })
                 .always(function (data) {
-                    console.log('route sent : ', sensorAPI + route);
+                    console.log('route sent : ', mainServer+sensorAPI + route);
                 });
         }
     }

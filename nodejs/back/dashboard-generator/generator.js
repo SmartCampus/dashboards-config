@@ -17,7 +17,7 @@ function loadTemperatureGraph(config ,res) {
         "seriesName" : config.seriesName
     };
 
-    fs.readFile('./template/TemperatureGraph.mustache', "utf-8", function (err, data) {
+    fs.readFile(__dirname + '/template/TemperatureGraph.mustache', "utf-8", function (err, data) {
         if (err) {
             throw err;
         }
@@ -50,7 +50,7 @@ function loadBarGraph(config, res) {
 
     var template = "";
 
-    fs.readFile('./template/BarGraph.mustache', "utf-8", function (err, data) {
+    fs.readFile(__dirname + '/template/BarGraph.mustache', "utf-8", function (err, data) {
         if (err) {
             throw err;
         }
@@ -64,7 +64,7 @@ function loadBooleanGraph(config, res) {
     var value = config;
     var template = "";
 
-    fs.readFile('./template/BooleanWidget.mustache', "utf-8", function (err, data) {
+    fs.readFile(__dirname + '/template/BooleanWidget.mustache', "utf-8", function (err, data) {
         if (err) {
             throw err;
         }
@@ -75,7 +75,7 @@ function loadBooleanGraph(config, res) {
 }
 
 /**
- * Generetes code for a widget.
+ * Generates code for a widget using the template/Widget.mustache .
  * 
  * @param  {JSON}       config      configuration description as sent by the frontend,
  *                                  should match this template:
@@ -102,10 +102,32 @@ function generateWidget(config, callback) {
         //config = require(__dirname + "/template/Widget.json");
         config = analyseConfig(config);
         console.log(config);
+        // console.log("" + Mustache.render(template, config));
         callback(Mustache.render(template, config));
     });
 }
 
+/**
+ * Updates a widget generation configuration JSON received throught the web in order
+ * to make it match the template/Widget.json sample file.
+ * 
+ * @param  {JSON}       config      configuration description as sent by the frontend,
+ *                                  should match this template:
+ *          ,_---~~~~~----._            {
+ *   _,,_,*^____      _____``*g*\"*,        "graphName": string,
+ *  / __/ /'     ^.  / \      ^@q   f       "graphType": string,
+ * [  @f | @))    |  | @))    l  0 _/       "yAxes": [
+ *  \`/   \~____ / __ \_____/    \              {
+ *   |           _l__l_           I                 "title": string,
+ *   }          [______]           I                "type": string
+ *   ]            | | |            |            },
+ *   ]             ~ ~             |            ...
+ *   |                            |         ],
+ *    |                           |         "seriesArrayName": string
+ *                                      }
+ * @return {JSON}                   the updated configuration JSON as specified in the
+ *                                  template/Widget.json file
+ */
 function analyseConfig(config) {
     var yAxes = config.yAxes,
         graphType = graphDefinitions.getGraphType(config.graphType),

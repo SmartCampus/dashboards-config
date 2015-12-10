@@ -53,12 +53,11 @@ var secondSuccessInTemp = function (data) {
 //We need to get the outside temperatures now, to build our whole graph.
 retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate, secondSuccessInTemp, errorOccurred);
 
-generate.widgetLine(function(data) {
+generate.widgetV2("line", [{type:"temperature", "title": "Temperature (°C)"}], "c1", "temperaturesArray", function(data) {
+    console.log(data);
     lineChartData = data;
     waitForEverybody();
 }, errorOccurred);
-
-
 
 
 var barChartData;
@@ -68,6 +67,8 @@ function waitForTheOthers() {
         theOthers += 1;
     }
     else {
+        console.log('***********************')
+        console.log(countingArray[0].data);
         finishedLoading();
         eval(barChartData);
         theOthers = 0;
@@ -87,8 +88,11 @@ successForAcCount = function (data) {
 retrieveData.askForSeriesWithParam('AC_443STATE/data', 'true', beginDate, endDate, successForAcCount, errorOccurred);
 
 retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, endDate, successForWindowCount, errorOccurred);
+//generate.widgetV2("line", [{type:"temperature", "title": "Temperature (°C)"}], "c1", "temperatureArray", function(data) {
 
-generate.widgetBar(function(data) {
+generate.widgetV2("column",  [{"type":"number","title":"Nb of times the window got opened"},{"type":"percent","title":"% of time AC is on"}]
+    , "c2", "countingArray", function(data) {
+        console.log(data);
     barChartData = data;
     waitForTheOthers();
 }, errorOccurred);
