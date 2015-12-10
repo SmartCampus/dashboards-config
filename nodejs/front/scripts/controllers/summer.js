@@ -54,7 +54,7 @@ var secondSuccessInTemp = function (data) {
 retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate, secondSuccessInTemp, errorOccurred);
 
 generate.widgetV2("line", [{type:"temperature", "title": "Temperature (°C)"}], "c1", "temperaturesArray", function(data) {
-    console.log(data);
+   // console.log(data);
     lineChartData = data;
     waitForEverybody();
 }, errorOccurred);
@@ -67,8 +67,6 @@ function waitForTheOthers() {
         theOthers += 1;
     }
     else {
-        console.log('***********************')
-        console.log(countingArray[0].data);
         finishedLoading();
         eval(barChartData);
         theOthers = 0;
@@ -92,7 +90,7 @@ retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, end
 
 generate.widgetV2("column",  [{"type":"number","title":"Nb of times the window got opened"},{"type":"percent","title":"% of time AC is on"}]
     , "c2", "countingArray", function(data) {
-        console.log(data);
+     //   console.log(data);
     barChartData = data;
     waitForTheOthers();
 }, errorOccurred);
@@ -103,12 +101,16 @@ generate.widgetV2("column",  [{"type":"number","title":"Nb of times the window g
 var successForWindow = function (data) {
     generate.widgetBoolean("windowState", function(result) {
         finishedLoading();
+        console.log('*********');
+        console.log(result);
         eval(result);
     }, errorOccurred);
 };
 var successForAC = function (data) {
     generate.widgetBoolean("climState", function(result) {
         finishedLoading();
+        console.log('*********');
+        console.log(result);
         eval(result);
     }, errorOccurred);
 };

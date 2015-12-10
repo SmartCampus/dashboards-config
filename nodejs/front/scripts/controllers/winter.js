@@ -16,7 +16,7 @@ var allLoaded = 0;
  * Should be changed once we add the data link for door and heater state !
  */
 var finishedLoading = function() {
-    if (allLoaded < 0) {
+    if (allLoaded < 1) {
         allLoaded += 1;
     }
     else {
@@ -29,8 +29,18 @@ var errorOccurred = function() {
     document.getElementById("loadingImg").className = "hidden";
     document.getElementById("dashboard").className = "hidden";
 };
-
-
+/*
+ HEATING_443
+ */
+var successForHeating = function (data) {
+    console.log('********* Success to get heating. ', data);
+    generate.widgetBoolean("heaterState", function(result) {
+        finishedLoading();
+        console.log(result);
+        eval(result);
+    }, errorOccurred);
+};
+retrieveData.askForStateNow('HEATING_443', successForHeating, errorOccurred);
 
 var temperaturesArray = [];
 
@@ -46,7 +56,7 @@ var secondSuccessInTemp = function (data, callback) {
 
 
 var thirdSuccessInTemp = function (data, callback) {
-    temperaturesArray[2] = {"type": "column","name": "heater state" , "data": data.data[0].open,  "yAxis": 0};
+    temperaturesArray[2] = {"type": "column","name": "heating status" , "data": data.data[0].open,  "yAxis": 0};
     callback();
 };
 
@@ -87,7 +97,7 @@ var drawLineChart = function() {
             { // Primary yAxis
                 min: 0,
                 title: {
-                    text: 'heater state',
+                    text: 'heating status',
                     style: {
                         color: Highcharts.getOptions().colors[1]
                     }
