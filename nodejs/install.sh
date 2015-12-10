@@ -6,6 +6,8 @@ cd back/format-data-service
 npm install
 cd ../sensor-containers-API
 npm install
+cd ../dashboard-generator
+npm install
 cd ../../front
 npm install
 bower install --allow-root
