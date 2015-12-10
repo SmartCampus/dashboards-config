@@ -2,9 +2,8 @@ var capteurs,
     position,
     buildings;
 
-var previous = [];
-
-var dashs = [];
+var previous = [],
+    dashs = [];
 
 
 (function getSensors(callback){
@@ -16,7 +15,6 @@ var dashs = [];
 })(init);
 
 function init() {
-
     dashs[0] = new Array();
     dashs[1] = new Array();
     dashs[2] = new Array();
@@ -27,8 +25,10 @@ function init() {
     explore();
 }
 
+
 function explore() {
-    clean();
+
+    $( "#add-it" ).empty(); // clean DOM
     var myContent;
 
     myContent = "<div class=\"row\"><h3>"+position.name+"</h3></div>";
@@ -51,14 +51,8 @@ function explore() {
     }
 }
 
-function clean() {
-    $( "#add-it" ).empty();
-}
-
-
 /** click on node **/
 $(document).on('click', '.node', function(el) {
-
     previous.push(position);
     position = buildings[parseInt(el.target.id)];
     buildings = position.childContainer;
@@ -72,14 +66,25 @@ $( "#goback" ).click(function() {
         buildings = position.childContainer;
         explore();
     }
+
+    /**
+    for(var i=0; i < dashs.length; i++){
+        console.log("Dashboard "+i +" :");
+        for(var j; j < dashs[i].length; j++){
+            console.log("\t"+dashs[i][j]);
+        }
+    }
+    **/
 });
 
-$(".draggable").draggable({
+// elements which are draggable
+$( ".draggable" ).draggable({
     helper: 'clone',
     revert: "invalid"
 });
 
-$('.droppable').droppable({
+// elements where draggable elements will be put
+$( ".droppable" ).droppable({
     drop: dropIt
 });
 
@@ -95,10 +100,24 @@ function dropIt(event, ui) {
 
 function alreadyInContainer(drag, drop)
 {
-    return ($.inArray(drag, dashs[drop]) > -1);
+    return ( $.inArray( drag, dashs[drop] ) > -1 );
 }
 
 function addToDashs(drag, drop) {
     dashs[drop].push(drag);
+    displayGenerateButton();
+}
+
+function displayGenerateButton(){
+    for( var i = 0 ; i < dashs.length ; i++ ) {
+        if ( dashs[i].length > 1 ) {
+            $( "#generateButton" ).show( 700 );
+            break;
+        }
+    }
+}
+
+function getDashboardsToGenerate(){
+    return dashs;
 }
 
