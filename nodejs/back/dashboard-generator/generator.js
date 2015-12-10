@@ -17,7 +17,7 @@ function loadTemperatureGraph(config ,res) {
         "seriesName" : config.seriesName
     };
 
-    fs.readFile('./template/TemperatureGraph.mustache', "utf-8", function (err, data) {
+    fs.readFile(__dirname + '/template/TemperatureGraph.mustache', "utf-8", function (err, data) {
         if (err) {
             throw err;
         }
@@ -50,7 +50,7 @@ function loadBarGraph(config, res) {
 
     var template = "";
 
-    fs.readFile('./template/BarGraph.mustache', "utf-8", function (err, data) {
+    fs.readFile(__dirname + '/template/BarGraph.mustache', "utf-8", function (err, data) {
         if (err) {
             throw err;
         }
@@ -64,7 +64,7 @@ function loadBooleanGraph(config, res) {
     var value = config;
     var template = "";
 
-    fs.readFile('./template/BooleanWidget.mustache', "utf-8", function (err, data) {
+    fs.readFile(__dirname + '/template/BooleanWidget.mustache', "utf-8", function (err, data) {
         if (err) {
             throw err;
         }
