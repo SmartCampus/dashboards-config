@@ -188,7 +188,7 @@ var noiseAccordingDoorState = function() {
 
         // titre
         title: {
-            text: 'Intensité sonore par rapport à la porte'
+            text: 'Loudness in function of the door'
         },
 
         yAxis: [
@@ -218,7 +218,7 @@ var noiseAccordingDoorState = function() {
             { // Secondary yAxis
 
                 title: {
-                    text: 'intensité sonore',
+                    text: 'Loudness',
                     style: {
                         color: Highcharts.getOptions().colors[0]
                     }
@@ -231,7 +231,7 @@ var noiseAccordingDoorState = function() {
                     dashStyle: 'shortdash', //pointillé
                     width: 2,
                     label: {
-                        text: 'Seuil du bruit'
+                        text: 'Noise threshold'
                     }
                 }],
 
@@ -271,7 +271,7 @@ var noiseAccordingWindowState = function() {
 
         // titre
         title : {
-            text : 'Intensité sonore par rapport à la fenêtre'
+            text : 'Loudness in function of the window'
         },
 
         yAxis: [
@@ -301,7 +301,7 @@ var noiseAccordingWindowState = function() {
             { // Secondary yAxis
 
                 title: {
-                    text: 'intensité sonore',
+                    text: 'Loudness',
                     style: {
                         color: Highcharts.getOptions().colors[0]
                     }
@@ -360,15 +360,12 @@ var doorPercentageCamenbert = function() {
         chart: {
             type: 'pie'
         },
-
         title: {
             text: 'Door'
         },
-
         tooltip: {
             pointFormat: '<b>{point.percentage:.1f}%</b>'
         },
-
         plotOptions: {
             pie: {
                 allowPointSelect: true,     // selection d'une part
