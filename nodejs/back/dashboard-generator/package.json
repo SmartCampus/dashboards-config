@@ -29,13 +29,10 @@
     "url": "https://atlas.i3s.unice.fr/jira/secure/RapidBoard.jspa?rapidView=246&view=planning.nodetail"
   },
   "dependencies": {
-    "body-parser": "^1.14.1",
-    "express": "^4.13.3",
     "handlebars": "^4.0.5",
-    "jquery": "^2.1.4"
+    "mustache": "^2.2.0"
   },
   "devDependencies": {
-    "mustache": "^2.2.0"
   },
   "private": true,
   "license": "no license"
