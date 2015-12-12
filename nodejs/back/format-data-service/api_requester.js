@@ -1,5 +1,5 @@
 /**
- * Created by Quentin on 12/1/2015.
+ * @author Marc Karassev, Quentin Cornevin
  */
 
 var http = require("http"),
@@ -8,7 +8,9 @@ var http = require("http"),
     CONTAINER_PATH = "/container",
     SENSOR_PATH = "/sensor";
 
-
+function error(e, msg) {
+    console.log(msg + ":", e.message);
+}
 
 function getSensors(queries, callback) {
     var url = API_HOST + SENSORS_PATH + queries;
