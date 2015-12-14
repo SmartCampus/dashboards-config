@@ -201,7 +201,7 @@ var drawLineChartForLight = function () {
             selected: 1
         },
         yAxis: { // Primary yAxis
-            min: 0,
+            min: 8,
             title: {
                 text: 'Brightness level',
                 style: {
