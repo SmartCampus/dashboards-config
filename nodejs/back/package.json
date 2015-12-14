@@ -1,5 +1,5 @@
 {
-  "name": "PFE-Dashboards-SmartCampus-frontend",
+  "name": "PFE-Dashboards-SmartCampus-backend",
   "version": "0.0.1",
   "description": "https://drive.google.com/file/d/0B2zMH_7SErjuSUhNWW1rZnAzLUk/view?usp=sharing",
   "author": "Polytech Nice-Sophia SI - PFE 2015-2016 - groupe 9",
@@ -29,8 +29,11 @@
     "url": "https://atlas.i3s.unice.fr/jira/secure/RapidBoard.jspa?rapidView=246&view=planning.nodetail"
   },
   "dependencies": {
+    "body-parser": "^1.14.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^2.3.4"
+  },
   "private": true,
   "license": "no license"
 }
