@@ -11,10 +11,11 @@ var sensors = require('./Sensors.js'),
  * @param   queries     {string}        String representing a JSON Object with all the query of the request.
  * @param   res         {response}      Response of the HTTP request.
  */
-function handleQuery(queries, res) {
+function handleQuery(queries, callback) {
     var sensorsArray = getSensorsFromQuery(queries);
     var result = checkArrays(sensorsArray);
-    res.send(result);
+    //res.send(result);
+    callback(result);
 }
 
 /**
@@ -33,7 +34,7 @@ function checkArrays(arrays) {
 }
 
 
-function getSensorInformation(name, date, response) {
+function getSensorInformation(name, date, callback) {
     requester.getSensorData(name, date, false, function(res) {
         var stringData = "";
 
@@ -43,7 +44,7 @@ function getSensorInformation(name, date, response) {
 
         res.on("end" , function() {
             var tempPerTime = JSON.parse(stringData);
-            response.send(tempPerTime);
+            callback(tempPerTime);
         });
     });
 }
@@ -78,7 +79,7 @@ function getSensorsFromQuery(queries) {
 }
 
 
-function getSensorLastInformation(name, response) {
+function getSensorLastInformation(name, callback) {
     requester.getLastSensorData(name, false, function(res) {
         var stringData = "";
 
@@ -88,17 +89,19 @@ function getSensorLastInformation(name, response) {
 
         res.on("end" , function() {
             var tempPerTime = JSON.parse(stringData);
-            response.send(tempPerTime);
+            //response.send(tempPerTime);
+            callback(tempPerTime);
         });
     });
 }
 
-function getContainerChild(name, response) {
+function getContainerChild(name, callback) {
     var containerList = sensors.getContainers();
     for(var i in containerList) {
         if(containerList[i].getName().replace(/\s+/g, '') == name) {
             var jsonResponse = {"name" : "Buildings",  childContainer : containerList[i].getChild()};
-            response.send(jsonResponse);
+            //response.send(jsonResponse);
+            callback(jsonResponse);
         }
     }
 }

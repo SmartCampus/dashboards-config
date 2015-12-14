@@ -8,9 +8,12 @@ var express = require("express"),
  */
 router.get("/sensors", function(req, res) {
     var queries = req.query;
-    console.log(queries);
-    if(queries.keys({}).length != 0) {
-        queryHandler.handleQuery(queries, res);
+    var count = Object.keys(queries).length
+
+    if(count != 0) {
+        queryHandler.handleQuery(queries, function(jsonResponse) {
+            putValueInResponse(res, jsonResponse);
+        });
     } else {
         res.send("Sorry please enter a container in the query parameters." +
             "Here is the list of all the valid containers" +
@@ -23,7 +26,9 @@ router.get("/sensors", function(req, res) {
 
 router.get("/container/:containerId/child", function(req, res) {
     var sensor = req.params.containerId;
-    queryHandler.getContainerChild(sensor, res);
+    queryHandler.getContainerChild(sensor, function(jsonResponse) {
+        putValueInResponse(res, jsonResponse)
+    });
 });
 
 /**
@@ -35,7 +40,9 @@ router.get("/sensor/:sensorId/data", function(req, res) {
     if(req.query.date !== undefined) {
         date = req.query.date;
     }
-    queryHandler.getSensorInformation(sensorId, date, res);
+    queryHandler.getSensorInformation(sensorId, date, function(jsonResponse) {
+        putValueInResponse(res,jsonResponse);
+    });
 });
 
 /**
@@ -43,9 +50,15 @@ router.get("/sensor/:sensorId/data", function(req, res) {
  */
 router.get("/sensor/:sensorId/data/last", function(req, res) {
    var sensorId = req.params.sensorId;
-    queryHandler.getSensorLastInformation(sensorId, res);
+    queryHandler.getSensorLastInformation(sensorId, function(jsonResponse) {
+        putValueInResponse(res,jsonResponse);
+    });
 });
 
+
+function putValueInResponse(res, jsonResponse) {
+    res.send(jsonResponse);
+}
 
 
 module.exports = router;

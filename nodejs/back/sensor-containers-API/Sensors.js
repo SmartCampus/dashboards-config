@@ -233,7 +233,7 @@ function initCategories() {
     var doorSensors = new SensorCategory("DOOR", []);
     var airConditioningSensors = new SensorCategory("AC", []);
     var windowSensors = new SensorCategory("WINDOW", []);
-    var lightSensors = new SensorCategory("LIGHT", ["LIGHT_444"]);
+    var lightSensors = new SensorCategory("LIGHT", []);
 
     categories.push(temperatureSensors);
     categories.push(doorSensors);
@@ -255,7 +255,7 @@ function initContainers() {
     var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis", "CORRIDOR"], ["NOISE_SPARKS_CORRIDOR"], []);
     var office445 = new SensorContainer("Office 445", ["445"], [], []);
     var office443 = new SensorContainer("Office 443", ["443"], ["HEATING_443"], []);
-    var office444 = new SensorContainer("Office 444", ["444"], ["LIGHT_444"], []);
+    var office444 = new SensorContainer("Office 444", ["444"], [], []);
     // TODO : Solution très sale mais pour les capteurs virtuels y a juste aucune norme !!!
     var virtualSensors = new SensorContainer("Virtual Sensors", ["2V", "STATE", "3V", "TEMP_CAMPUS"], [], []);
     var root = new SensorContainer("Root", [], [], []);

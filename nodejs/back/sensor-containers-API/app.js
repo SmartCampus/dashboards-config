@@ -23,6 +23,9 @@ app.use(function (req, res, next) {
 
 app.use("/", campusRouter);
 
+/**
+ * This function initialize the system with all the different category of sensor sets.
+ */
 (function init() {
 	sensors.initSystem();
 })();
