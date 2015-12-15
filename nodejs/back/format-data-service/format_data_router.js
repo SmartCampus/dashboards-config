@@ -35,6 +35,8 @@ router.get("/sensor/:sensorId/data", function(req, res) {
 
 
 router.get("/sensor/:sensorId/data/percent", function(req, res) {
+    console.log('one call for ', req.params.sensorId, '\n');
+    console.time("Get-specific-sensor-percent-data");
     var date = "";
     if(req.query.date !== undefined) {
         date = req.query.date;
@@ -51,6 +53,8 @@ router.get("/container/:containerId/child", function(req, res) {
 });
 
 router.get("/sensor/:sensorId/data/splitList", function(req, res) {
+    console.log('one call for ', req.params.sensorId, '\n');
+    console.time("Get-specific-sensor-splitList-data");
     var sensorId = req.params.sensorId;
     var date = "";
     if(req.query.date !== undefined) {
