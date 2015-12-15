@@ -44,6 +44,7 @@ function getSensorInformation(name, date, response) {
         res.on("end" , function() {
             var tempPerTime = JSON.parse(stringData);
             response.send(tempPerTime);
+            console.timeEnd("call-to-real-smartcampus");
         });
     });
 }

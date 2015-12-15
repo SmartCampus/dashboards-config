@@ -33,6 +33,7 @@ function highChartFormatTransformation(response, res, state) {
         }
 
         response.send(responseInGoodFormat);
+        console.timeEnd("Get-specific-sensor-data")
     });
 }
 
