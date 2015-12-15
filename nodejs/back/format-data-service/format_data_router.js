@@ -19,6 +19,8 @@ router.get("/sensors", function(req, res) {
  *
  */
 router.get("/sensor/:sensorId/data", function(req, res) {
+    console.log('one call for ', req.params.sensorId, '\n');
+    console.time("Get-specific-sensor-data");
     var sensorId = req.params.sensorId;
     var date = "", state = false;
     if(req.query.date !== undefined) {
@@ -27,12 +29,14 @@ router.get("/sensor/:sensorId/data", function(req, res) {
     if(req.query.state !== undefined) {
         state = req.query.state;
     }
-
     request_handler.getSensorInformation(sensorId, date, state,res);
+
 });
 
 
 router.get("/sensor/:sensorId/data/percent", function(req, res) {
+    console.log('one call for ', req.params.sensorId, '\n');
+    console.time("Get-specific-sensor-percent-data");
     var date = "";
     if(req.query.date !== undefined) {
         date = req.query.date;
@@ -49,6 +53,8 @@ router.get("/container/:containerId/child", function(req, res) {
 });
 
 router.get("/sensor/:sensorId/data/splitList", function(req, res) {
+    console.log('one call for ', req.params.sensorId, '\n');
+    console.time("Get-specific-sensor-splitList-data");
     var sensorId = req.params.sensorId;
     var date = "";
     if(req.query.date !== undefined) {

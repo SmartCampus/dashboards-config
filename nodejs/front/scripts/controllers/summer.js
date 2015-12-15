@@ -53,8 +53,20 @@ var secondSuccessInTemp = function (data) {
 //We need to get the outside temperatures now, to build our whole graph.
 retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate, secondSuccessInTemp, errorOccurred);
 
+
+var plotines =
+{
+    plotLines: [
+    {
+        "value": 0,
+        "color": 'red',
+        "dashStyle": 'shortdash',
+        "width": 2
+    }]
+};
+
 generate.widgetV2("line", [{type:"temperature", "title": "Temperature (°C)"}], "c1", "temperaturesArray", function(data) {
-   // console.log(data);
+    console.log(data);
     lineChartData = data;
     waitForEverybody();
 }, errorOccurred);
