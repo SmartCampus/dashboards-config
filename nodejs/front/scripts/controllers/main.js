@@ -3,7 +3,8 @@ var capteurs,
     buildings;
 
 var previous = [],
-    dashs = [];
+    dashs = [],
+    need = ["Comparison", "Hirarchy", "Proportion", "Other"];
 
 
 (function getSensors(callback){
@@ -22,27 +23,58 @@ function init() {
     position  = capteurs;
     buildings = capteurs.childContainer;
     previous.push(position);
+    addTableRow();
+    needs();
     explore();
+}
+
+function addTableRow() {
+
+    for( var i = 0 ; i < 3 ; i++ ){
+        $("#add-rows").append(
+            "<div class=\"droppable\" id=\""+i+"\" style=\"min-height: 70px; border: solid; margin-top: 30px\"></div>"
+        );
+        $( ".droppable" ).droppable({
+            drop: dropIt
+        });
+    }
+}
+
+function needs() {
+
+    for(var i = 0; i < need.length; i++){
+        $("#add-need").append(
+            "<div class=\"row\" style=\"padding: 20px 0 0 0\"><div class=\"draggable\" id=\""+need[i]+"\"><p>"+need[i]+"</p></div></div>"
+        );
+
+        $(".draggable").draggable({
+            helper: 'clone',
+            revert: "invalid"
+        });
+    }
+
 }
 
 
 function explore() {
 
-    $( "#add-it" ).empty(); // clean DOM
-    var myContent;
+    $( "#add-captors" ).empty(); // clean DOM
 
-    myContent = "<div class=\"row\"><h3>"+position.name+"</h3></div>";
-    $("#add-it").append(myContent);
+    $("#add-captors").append(
+        "<div class=\"row\"><h3>"+position.name+"</h3></div>"
+    );
 
     for(var i = 0; i < buildings.length; i++){
-        myContent = "<div class=\"row\"><a class=\"node\" id=\""+i+"\">"+buildings[i].name+"</a></div>";
-        $("#add-it").append(myContent);
+        $("#add-captors").append(
+            "<div class=\"row\"><a class=\"node\" id=\""+i+"\">"+buildings[i].name+"</a></div>"
+        );
     }
 
     if (position.directSensor != null) {
         for(var i = 0; i < position.directSensor.length; i++){
-            myContent = "<div class=\"row\"><div class=\"draggable\" id=\""+position.directSensor[i]+"\"><p>"+position.directSensor[i]+"</p></div></div>";
-            $("#add-it").append(myContent);
+            $("#add-captors").append(
+                "<div class=\"row\"><div class=\"draggable\" id=\""+position.directSensor[i]+"\"><p>"+position.directSensor[i]+"</p></div></div>"
+            );
             $(".draggable").draggable({
                 helper: 'clone',
                 revert: "invalid"
@@ -81,11 +113,6 @@ $( "#goback" ).click(function() {
 $( ".draggable" ).draggable({
     helper: 'clone',
     revert: "invalid"
-});
-
-// elements where draggable elements will be put
-$( ".droppable" ).droppable({
-    drop: dropIt
 });
 
 function dropIt(event, ui) {
