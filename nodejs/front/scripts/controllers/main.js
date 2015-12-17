@@ -1,150 +1,196 @@
-var capteurs,
-    position,
-    buildings;
+var sensors;
+var needs = ["Comparison", "Hierarchy", "Proportion", "Other"];
 
-var previous = [],
-    dashs = [],
-    need = ["Comparison", "Hirarchy", "Proportion", "Other"];
+var composition_sensors = [];
+var composition_needs = [];
+
+/**
+ * Get all buildings captors et placements
+ */
+    (function getSensors(callback){
+        $.get(mainServer+"container/Root/child")
+            .done(function (data) {
+                sensors = data;
+                //needs = data;
+                callback();
+            });
+    })(initWindowsData);
 
 
-(function getSensors(callback){
-    $.get(mainServer+"container/Root/child")
-        .done(function (data) {
-            capteurs = data;
-            callback();
-        });
-})(init);
+/***********************************
+ ******* Init windowd data *********
+ ***********************************/
 
-function init() {
-    dashs[0] = new Array();
-    dashs[1] = new Array();
-    dashs[2] = new Array();
+    function initWindowsData() {
 
-    position  = capteurs;
-    buildings = capteurs.childContainer;
-    previous.push(position);
-    addTableRow();
-    needs();
-    explore();
-}
+        for( var i = 0; i < 3 ; i++ ){
+            composition_needs[i]   = new Array();
+            composition_sensors[i] = new Array();
+        }
 
-function addTableRow() {
+        position  = sensors;
+        buildings = sensors.childContainer;
+        previous.push(position);
 
-    for( var i = 0 ; i < 3 ; i++ ){
-        $("#add-rows").append(
-            "<div class=\"droppable\" id=\""+i+"\" style=\"min-height: 70px; border: solid; margin-top: 30px\"></div>"
-        );
-        $( ".droppable" ).droppable({
-            drop: dropIt
-        });
-    }
-}
-
-function needs() {
-
-    for(var i = 0; i < need.length; i++){
-        $("#add-need").append(
-            "<div class=\"row\" style=\"padding: 20px 0 0 0\"><div class=\"draggable\" id=\""+need[i]+"\"><p>"+need[i]+"</p></div></div>"
-        );
-
-        $(".draggable").draggable({
-            helper: 'clone',
-            revert: "invalid"
-        });
+        addTableRow();
+        abc();
+        navigation();
     }
 
-}
 
+    function addTableRow() {
 
-function explore() {
+        for( var i = 0 ; i < 3 ; i++ ){
+            $("#add-rows").append( "<div class=\"droppable\" id=\""+i+"\" style=\"min-height: 70px; border: solid; margin-top: 30px\"></div>" );
 
-    $( "#add-captors" ).empty(); // clean DOM
-
-    $("#add-captors").append(
-        "<div class=\"row\"><h3>"+position.name+"</h3></div>"
-    );
-
-    for(var i = 0; i < buildings.length; i++){
-        $("#add-captors").append(
-            "<div class=\"row\"><a class=\"node\" id=\""+i+"\">"+buildings[i].name+"</a></div>"
-        );
+            $( ".droppable" ).droppable({ drop: dropIt });
+        }
     }
 
-    if (position.directSensor != null) {
-        for(var i = 0; i < position.directSensor.length; i++){
-            $("#add-captors").append(
-                "<div class=\"row\"><div class=\"draggable\" id=\""+position.directSensor[i]+"\"><p>"+position.directSensor[i]+"</p></div></div>"
+
+    function abc() {
+
+        for(var i = 0; i < needs.length; i++){
+            $("#add-need").append(
+                "<div class=\"row\" style=\"padding: 20px 0 0 0\"><div class=\"draggable\" id=\""+needs[i]+"\"><p>"+needs[i]+"</p></div></div>"
             );
+
             $(".draggable").draggable({
                 helper: 'clone',
                 revert: "invalid"
             });
         }
     }
-}
 
-/** click on node **/
-$(document).on('click', '.node', function(el) {
-    previous.push(position);
-    position = buildings[parseInt(el.target.id)];
-    buildings = position.childContainer;
-    explore();
-});
 
-/** click on back **/
-$( "#goback" ).click(function() {
-    if(previous.length > 0){
-        position = previous.pop();
+/***********************************
+ **** WHERE part : navigation ******
+ ***********************************/
+
+var position;
+var buildings;
+var previous = [];
+
+    function navigation() {
+
+        // clean DOM
+        $( "#add-captors" ).empty();
+
+
+        $("#add-captors").append( "<div class=\"row\"><h3>"+position.name+"</h3></div>" );
+
+        for( var i = 0 ; i < buildings.length ; i++ ) {
+            $("#add-captors").append(
+                "<div class=\"row\"><a class=\"node\" id=\"" + i + "\">" + buildings[i].name + "</a></div>"
+            );
+        }
+
+        if (position.directSensor != null) {
+
+            for(var i = 0; i < position.directSensor.length; i++){
+                $("#add-captors").append(
+                    "<div class=\"row\"><div class=\"draggable\" id=\""+position.directSensor[i]+"\"><p>"+position.directSensor[i]+"</p></div></div>"
+                );
+
+                $(".draggable").draggable({
+                    helper: 'clone',
+                    revert: "invalid"
+                });
+            }
+        }
+    }
+
+    // click on building
+    $( document ).on( 'click' , '.node' , function(el) {
+
+        previous.push( position );
+
+        position = buildings[ parseInt( el.target.id ) ];
+
         buildings = position.childContainer;
-        explore();
+
+        navigation();
+
+    });
+
+
+
+    // click on back button
+    $( "#goback" ).click(function() {
+
+        if(previous.length > 0){
+
+            position = previous.pop();
+
+            buildings = position.childContainer;
+
+            navigation();
+        }
+
+    });
+
+
+
+
+/************************
+ **** DROP ELEMENT ******
+ ***********************/
+
+
+
+    function dropIt(event, ui) {
+
+        var draggableId = ui.draggable.attr("id");
+        var droppableId = $(this).attr("id");
+
+        if( $.inArray(draggableId, needs) > -1 )
+        {
+            if(! ($.inArray( draggableId, composition_needs[droppableId] ) > -1) ) {
+                composition_needs[droppableId].push(draggableId);
+                ui.draggable.clone().appendTo($(this));
+            }
+
+        }else {
+
+            if(! ($.inArray( draggableId, composition_sensors[droppableId] ) > -1) ) {
+                composition_sensors[droppableId].push(draggableId);
+                ui.draggable.clone().appendTo($(this));
+            }
+        }
+
+        displayGenerateButton();
     }
 
-    /**
-    for(var i=0; i < dashs.length; i++){
-        console.log("Dashboard "+i +" :");
-        for(var j; j < dashs[i].length; j++){
-            console.log("\t"+dashs[i][j]);
+
+    function displayGenerateButton(){
+        for( var i = 0 ; i < composition_sensors.length ; i++ ) {
+            if ( composition_sensors[i].length > 1 ) {
+                $( "#generateButton" ).show( 700 );
+                break;
+            }
         }
     }
-    **/
-});
 
-// elements which are draggable
-$( ".draggable" ).draggable({
-    helper: 'clone',
-    revert: "invalid"
-});
 
-function dropIt(event, ui) {
-    var draggableId = ui.draggable.attr("id");
-    var droppableId = $(this).attr("id");
+/*******************************
+ **** JSON Of composition ******
+ ******************************/
 
-    if(!alreadyInContainer(draggableId, droppableId)){
-        addToDashs(draggableId, droppableId);
-        ui.draggable.clone().appendTo($(this));
-    }
-}
 
-function alreadyInContainer(drag, drop)
-{
-    return ( $.inArray( drag, dashs[drop] ) > -1 );
-}
+    function getCompositions() {
 
-function addToDashs(drag, drop) {
-    dashs[drop].push(drag);
-    displayGenerateButton();
-}
+        var compositions = {};
+        compositions.composition = [];
 
-function displayGenerateButton(){
-    for( var i = 0 ; i < dashs.length ; i++ ) {
-        if ( dashs[i].length > 1 ) {
-            $( "#generateButton" ).show( 700 );
-            break;
+        for( var i = 0 ; i < 3 ; i++ ){
+            var employee = {
+                "need"   : composition_needs[i],
+                "sensors": composition_sensors[i]
+            }
+
+            compositions.composition.push(employee);
         }
+
+        //return compositions;
+        return JSON.stringify(compositions);
     }
-}
-
-function getDashboardsToGenerate(){
-    return dashs;
-}
-
