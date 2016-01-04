@@ -23,6 +23,7 @@ function jobsRouter(message, res) {
             generator.loadBooleanGraph(message.config, res);
             console.log(message.config);
             break;
+        // TODO rename route ?
         case "generateWidget":
             generator.generateWidget(message.config, function(data) {
                 res.send(data);
