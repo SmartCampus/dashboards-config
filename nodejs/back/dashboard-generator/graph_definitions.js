@@ -33,15 +33,25 @@ var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average"),
 			width: 2,
 			label: {"text": "0°C"}
 		},
-	"average");
+		"average"),
+	DECIBEL = new YAxisType("decibel", 0, "undefined", "db",
+		{
+			value: 45,
+			color: "red",
+			dashStyle: "shortdash",
+			width: 2,
+			label: {"text": "Noise threshold"}
+		},
+		undefined);
 
 var YAXIS_TYPES = {
 	percent: PERCENT,
 	number: NUMBER,
-	temperature: TEMPERATURE
+	temperature: TEMPERATURE,
+	decibel: DECIBEL
 };
 
-var YAXIS_TYPES_ARRAY = [PERCENT, NUMBER, TEMPERATURE]
+var YAXIS_TYPES_ARRAY = [PERCENT, NUMBER, TEMPERATURE, DECIBEL]
 
 function getYAxisType(type) {
 	for (var i in YAXIS_TYPES_ARRAY) {
