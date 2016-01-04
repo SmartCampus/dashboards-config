@@ -28,6 +28,11 @@ function jobsRouter(message, res) {
                 res.send(data);
             });
             break;
+        case "generatePie":
+            generator.generatePie(message.config, function(data) {
+                res.send(data);
+            });
+            break;
         default :
             res.send("Bad JSON");
     }

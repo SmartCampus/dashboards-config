@@ -155,7 +155,29 @@ function analyseConfig(config) {
     return config;
 }
 
+/**
+ * Generates code for a pie chart widget using the template/pie.mustache .
+ * 
+ * @param  {JSON}       config    {
+ *                                    "graphName": string,
+ *                                    "graphTitle": string,
+ *                                    "seriesArrayName": string
+ *                                }
+ * @param  {Function}   callback    function to call with the resulting generated code
+ */
+function generatePie(config, callback) {
+    console.log(config);
+    fs.readFile(__dirname + "/template/pie.mustache", "utf-8", function (err, template) {
+        if (err) {
+            throw err;
+        }
+        //config = require(__dirname + "/template/pie.json");
+        callback(Mustache.render(template, config));
+    });
+}
+
 // Exports
+// TODO remove unused
 
 exports.loadBooleanGraph = loadBooleanGraph;
 
@@ -164,3 +186,5 @@ exports.loadBarGraph = loadBarGraph;
 exports.loadTemperatureGraph = loadTemperatureGraph;
 
 exports.generateWidget = generateWidget;
+
+exports.generatePie = generatePie;
