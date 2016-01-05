@@ -355,35 +355,20 @@ var noiseAccordingWindowState = function() {
 
 var doorPercentageCamenbert = function() {
 
-    $('#cam1').highcharts({
-
-        chart: {
-            type: 'pie'
-        },
-        title: {
-            text: 'Door'
-        },
-        tooltip: {
-            pointFormat: '<b>{point.percentage:.1f}%</b>'
-        },
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,     // selection d'une part
-                cursor: 'pointer'          // affichage avec pointeur
-            }
-        },
-
-        series: [{
-            data: [doorPercentage[0],doorPercentage[1]]
-        }]
-    });
+    generate.widgetPie("cam1", "Door", "doorPercentage", function(data) {
+        eval (data);
+    }, errorOccurred);
     finishedLoading();
 };
 
 
 var windowPercentageCamenbert = function() {
+    generate.widgetPie("cam2", "Window", "windowPercentage", function(data) {
+        eval (data);
+    }, errorOccurred);
 
-    $('#cam2').highcharts({
+
+    /*$('#cam2').highcharts({
 
         chart: {
             type: 'pie'
@@ -407,5 +392,6 @@ var windowPercentageCamenbert = function() {
             data: [windowPercentage[0],windowPercentage[1]]
         }]
     });
+    */
     finishedLoading();
 };
