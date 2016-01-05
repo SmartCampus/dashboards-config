@@ -116,7 +116,7 @@ function generateWidget(config, callback) {
  *          ,_---~~~~~----._            {
  *   _,,_,*^____      _____``*g*\"*,        "graphName": string,
  *  / __/ /'     ^.  / \      ^@q   f       "graphType": string,
- * [  @f | @))    |  | @))    l  0 _/       "yAxes": [
+ * [  @f |    ((@ |  | @))    l  0 _/       "yAxes": [
  *  \`/   \~____ / __ \_____/    \              {
  *   |           _l__l_           I                 "title": string,
  *   }          [______]           I                "type": string
