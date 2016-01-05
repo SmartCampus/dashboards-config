@@ -1,5 +1,5 @@
 var sensors;
-var needs = ["Comparison", "Hierarchy", "Proportion", "Other"];
+var needs = ["Compare", "See status", "Summarize", "Hierarchy", "Proportion", "Other"];
 
 var composition_sensors = [];
 var composition_needs = [];
@@ -40,7 +40,7 @@ var composition_needs = [];
 
     function addTableRow() {
 
-        for( var i = 0 ; i < 3 ; i++ ){
+        for( var i = 0 ; i < 4 ; i++ ){
             $("#add-rows").append( "<div class=\"droppable\" id=\""+i+"\" style=\"min-height: 70px; border: solid; margin-top: 30px\"></div>" );
 
             $( ".droppable" ).droppable({ drop: dropIt });

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Meta -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- JS -->
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/icon.png" />
+
+    <title>SmartCampus : dashboards</title>
+
+    <script src="/bower_components/highstock/highstock.js"></script>
+    <!-- <script src="/bower_components/highstock/modules/exporting.js"></script>
+    Only useful if we want to let people print or save the db as an image-->
+    <script type="text/javascript">
+        $(window).load(function(){
+            $('#myDashboardConfigModal').modal('show');
+        });
+    </script>
+</head>
+<body>
+
+<!--This loading / error part si always the same, no matter the dashboard-->
+<div class="row text-center" id="loadingImg"><img src="/assets/images/loading.gif" alt="loading" class="img-circle"></div>
+<div class="hidden" id="errorOccurred">
+    <img src="/assets/images/errorCat.gif" alt="loading">
+    <h1 class="text-danger">An error occurred. You should reload the page !</h1>
+</div>
+
+<div id="dashboard">
+    <!--Insert generated layout here -->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Modal -->
+<div id="myDashboardConfigModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="text-center">
+                    <button type="button" class="btn btn-success" id="0">50 - 50</button>
+                    <button type="button" class="btn btn-success" id="1">66 - 33</button>
+                    <button type="button" class="btn btn-success" id="2">33 - 33 - 33</button>
+                    <button type="button" class="btn btn-success" id="3">20 - 40 - 20</button>
+
+                </div>
+                <div id="add-content">
+                    <!-- Insert content -->
+                </div>
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="layouts.newLayout(layoutChosen, errorOccurred)">Pick this layout</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+</body>
+
+<script src="/scripts/model/constants.js"></script>
+<script src="/scripts/model/retrieveData.js"></script>
+<script src="/scripts/model/generateWidgets.js"></script>
+<script src="/scripts/model/generateLayout.js"></script>
+
+<script src="/scripts/controllers/layoutChoice.js"></script>
+
+<script src="/scripts/controllers/dashboard.js"></script>
+
+
+<footer>
+    <script>
+        $(function () {
+            $("footer").load("footer.html")
+        });
+    </script>
+</footer>
+</html>

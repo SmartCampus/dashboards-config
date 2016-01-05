@@ -80,7 +80,7 @@ var successForNoise = function (data) {
         function (data) {
             successForWindowStateInTime(data, updateCallback);
         }, errorOccurred);
-}
+};
 
 
 
@@ -185,12 +185,13 @@ var windowGraphStateInTime = function() {
 var noiseAccordingDoorState = function() {
 
     $('#c1').highcharts('StockChart', {
-
+        chart: {
+            zoomType: 'x'
+        },
         // titre
         title: {
-            text: 'Loudness in function of the door'
+            text: 'Loudness in function of the door opening'
         },
-
         yAxis: [
             { // Primary yAxis
                 min: 0,
@@ -268,10 +269,12 @@ var noiseAccordingDoorState = function() {
 var noiseAccordingWindowState = function() {
 
     $('#c2').highcharts('StockChart', {
-
+        chart: {
+            zoomType: 'x'
+        },
         // titre
         title : {
-            text : 'Loudness in function of the window'
+            text : 'Loudness in function of the window opening'
         },
 
         yAxis: [
@@ -354,14 +357,18 @@ var noiseAccordingWindowState = function() {
  */
 
 var doorPercentageCamenbert = function() {
-
     $('#cam1').highcharts({
 
         chart: {
             type: 'pie'
         },
         title: {
-            text: 'Door'
+            text:'Time the door is open '
+        },
+        plotOptions: {
+            pie: {
+                size: 50
+            }
         },
         tooltip: {
             pointFormat: '<b>{point.percentage:.1f}%</b>'
@@ -374,7 +381,8 @@ var doorPercentageCamenbert = function() {
         },
 
         series: [{
-            data: [doorPercentage[0],doorPercentage[1]]
+            data: [doorPercentage[0],doorPercentage[1]],
+            name:"Time the door is open"
         }]
     });
     finishedLoading();
@@ -388,9 +396,8 @@ var windowPercentageCamenbert = function() {
         chart: {
             type: 'pie'
         },
-
         title: {
-            text: 'Windows'
+            text: 'Time the window is open'
         },
 
         tooltip: {
@@ -400,7 +407,7 @@ var windowPercentageCamenbert = function() {
         plotOptions: {
             pie: {
                 allowPointSelect: true,     // selection d'une part
-                cursor: 'pointer',          // affichage avec pointeur
+                cursor: 'pointer'          // affichage avec pointeur
             }
         },
         series: [{

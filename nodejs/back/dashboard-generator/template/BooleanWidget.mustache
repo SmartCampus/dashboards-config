@@ -1,10 +1,16 @@
-if (data.data[1] == 0) {
-    //document.getElementById('{{id}}').setAttribute("class", "label label-danger");
-document.getElementById('{{id}}').src="/assets/images/no.png";
+var position = document.createElement("img");
+document.getElementById('{{position}}').appendChild(position);
 
+var title = document.createElement("H1")
+var t = document.createTextNode("{{boolName}}");
+    title.appendChild(t);
+    document.getElementById('{{position}}').appendChild(title);
+
+if ({{id}}.data[1] == 0) {
+position.src = '/assets/images/no.png';
+//document.getElementById('{{position}}').src="/assets/images/no.png";
 }
 else {
-//    document.getElementById('{{id}}').setAttribute("class", "label label-success");
-document.getElementById('{{id}}').src="/assets/images/yes.png";
-
+position.src = '/assets/images/yes.png';
+//document.getElementById('{{position}}').src="/assets/images/yes.png";
 }

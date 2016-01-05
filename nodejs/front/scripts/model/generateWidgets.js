@@ -57,13 +57,15 @@ var generate = (function () {
                     errorCB();
                 });
         },
-        widgetBoolean: function(idWanted, successCB, errorCB) {
+        widgetBoolean: function(position, idWanted, name, successCB, errorCB) {
             $.post(genServer+widgetGen,
                 {
                     job : "generateBoolean",
                     config :
                     {
-                        id: idWanted
+                        id: idWanted,
+                        position: position,
+                        boolName:name
                     }
                 })
                 .done(function (data) {
