@@ -7,7 +7,7 @@
  ************************************/
 
 if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
-    beginDate = '2015-05-01 8:00:11';
+    beginDate = '2015-10-01 8:00:11';
     endDate = '2015-12-01 18:00:11';
 }
 

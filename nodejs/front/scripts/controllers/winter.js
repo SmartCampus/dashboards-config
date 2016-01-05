@@ -33,7 +33,8 @@ var errorOccurred = function () {
  HEATING_443
  */
 var successForHeating = function (data) {
-    generate.widgetBoolean("heaterState", function (result) {
+    var heaterState = data;
+    generate.widgetBoolean("heaterState", "heaterState", "Heating", function (result) {
         finishedLoading();
         eval(result);
     }, errorOccurred);

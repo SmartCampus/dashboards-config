@@ -5,13 +5,13 @@
 
 var layouts = (function () {
     return { //exposed to public
-        newLayout: function(successCB, errorCB) {
+        newLayout: function(layoutName, successCB, errorCB) {
             /*$.post(genServer+layoutGen,
                 {
                     job : "generateLayout",
                     config :
                     {
-                        layoutType: "halfNHalf",
+                        layoutType: layoutName,
                     }
                 })
                 .done(function (data) {
