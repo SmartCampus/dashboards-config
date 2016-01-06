@@ -3,7 +3,6 @@
  */
 
 var Mustache = require("mustache"),
-    handlebar = require("handlebars"),
     fs = require('fs'),
     graphDefinitions = require("./graph_definitions");
 
@@ -25,7 +24,8 @@ function generateBoolean(config, res) {
  * Generates code for a graph widget using the template/graph.mustache .
  * 
  * @param  {JSON}       config      configuration description as sent by the frontend,
- *                                  should match this template:
+ *                                  should match this template: (in case of scatter plot,
+ *                                  there should not be any "yAxes" property)
  *          ,_---~~~~~----._            {
  *   _,,_,*^____      _____``*g*\"*,        "graphName": string,
  *  / __/ /'     ^.  / \      ^@q   f       "graphType": string,
@@ -60,7 +60,8 @@ function generateGraph(config, callback) {
  * to make it match the template/graph.json sample file.
  * 
  * @param  {JSON}       config      configuration description as sent by the frontend,
- *                                  should match this template:
+ *                                  should match this template: (in case of scatter plot,
+ *                                  there should not be any "yAxes" property)
  *          ,_---~~~~~----._            {
  *   _,,_,*^____      _____``*g*\"*,        "graphName": string,
  *  / __/ /'     ^.  / \      ^@q   f       "graphType": string,
@@ -75,7 +76,7 @@ function generateGraph(config, callback) {
  *                                          "graphTitle": string
  *                                      }
  * @return {JSON}                   the updated configuration JSON as specified in the
- *                                  template/graph.json file
+ *                                  multipleYAxesGraph.json and scatterGraph.json files
  */
 function analyseGraphConfig(config) {
     var yAxes = config.yAxes,
@@ -97,7 +98,7 @@ function analyseGraphConfig(config) {
         }
     }
     config.grpPixelNb = graphType.grpPixelNb;
-    if (yAxes.length > 1) {
+    if (yAxes && yAxes.length > 1) {
         config.defineMultipleAxes = true;
     }
 

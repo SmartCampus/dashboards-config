@@ -83,11 +83,13 @@ class GraphType {
 }
 
 var LINE = new GraphType("line", 5),
-	COLUMN = new GraphType("column", 50);
+	COLUMN = new GraphType("column", 50),
+	SCATTER_PLOT = new GraphType("scatterPlot", undefined);
 
 var GRAPH_TYPES = {
 	line: LINE,
-	column: COLUMN
+	column: COLUMN,
+	scatterPlot: SCATTER_PLOT
 }
 
 function getGraphType(type) {

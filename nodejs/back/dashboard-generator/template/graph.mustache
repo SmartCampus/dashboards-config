@@ -9,7 +9,9 @@ $('#{{graphName}}').highcharts('StockChart', {
   xAxis: {
       type: 'datetime'
   },
-  yAxis: [
+  yAxis:
+  {{#yAxes}}
+    [
       {{#yAxes}}
         {
           min: {{minValue}},
@@ -48,7 +50,14 @@ $('#{{graphName}}').highcharts('StockChart', {
           ]
         }{{coma}}
       {{/yAxes}}
-      ],
+    ],
+  {{/yAxes}}
+  {{^yAxes}}
+    {
+      categories: ["Closed","Open"],
+      opposite: false
+    },
+  {{/yAxes}}
   tooltip: {
       headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
       pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
