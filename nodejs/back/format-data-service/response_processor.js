@@ -171,7 +171,7 @@ function reverseInformation(res, callback) {
 
         for(var i in sensorInfoJson.values) {
             var responsePerTime = [];
-            responsePerTime.push(sensorInfoJson.values[i].date);
+            responsePerTime.push(parseFloat(sensorInfoJson.values[i].date));
 
             if(sensorInfoJson.values[i].value == "ON") {
                 responsePerTime.push("OFF");
