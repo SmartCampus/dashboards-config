@@ -92,6 +92,14 @@ function getContainersChild(containerId, response) {
     });
 }
 
+function getReversedInformation(sensorId, date, callback) {
+    requester.getSensorData(sensorId, date, function(response) {
+        processor.reverseInformation(response, callback);
+    });
+}
+
+exports.getReversedInformation = getReversedInformation;
+
 exports.getContainersChild = getContainersChild;
 
 
