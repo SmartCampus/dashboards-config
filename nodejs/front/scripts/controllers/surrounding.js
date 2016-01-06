@@ -107,8 +107,11 @@ retrieveData.askForSeries('WINDOW443STATE/data/percent', beginDate, endDate, suc
  */
 
 var doorGraphStateInTime = function() {
-
-        $('#g1').highcharts('StockChart', {
+    generate.widgetV2("Door status over time", "scatter", [], "g1", "doorState", function(data) {
+        console.log(data);
+        eval(data);
+    }, errorOccurred);
+        /*$('#g1').highcharts('StockChart', {
 
             chart: {
                 type: 'scatter',
@@ -138,12 +141,18 @@ var doorGraphStateInTime = function() {
 
             series : doorState
         });
+        */
+
     finishedLoading();
 };
 
 
 var windowGraphStateInTime = function() {
-    $('#g2').highcharts('StockChart', {
+    generate.widgetV2("Window status over time", "scatter", [], "g2", "windowState", function(data) {
+        console.log(data);
+        eval(data);
+    }, errorOccurred);
+    /*$('#g2').highcharts('StockChart', {
 
         chart: {
             type: 'scatter',
@@ -173,6 +182,7 @@ var windowGraphStateInTime = function() {
 
         series : windowState
     });
+    */
     finishedLoading();
 };
 
@@ -183,8 +193,17 @@ var windowGraphStateInTime = function() {
  */
 
 var noiseAccordingDoorState = function() {
+    generate.widgetV2("Loudness in function of the door", "",
+        [
+            { "type": "decibel", "title": "loudness" },
+            { "type": "number", "title": "Nb of times the door got opened" }
+        ]
+        , "c1", "noiseDoor", function(data) {
+        console.log(data);
+        eval(data);
+    }, errorOccurred);
 
-    $('#c1').highcharts('StockChart', {
+   /* $('#c1').highcharts('StockChart', {
 
         // titre
         title: {
@@ -261,13 +280,24 @@ var noiseAccordingDoorState = function() {
 
         series: [ noiseDoor[0], noiseDoor[1]]
     });
+    */
     finishedLoading();
 };
 
 
 var noiseAccordingWindowState = function() {
 
-    $('#c2').highcharts('StockChart', {
+    generate.widgetV2("Loudness in function of the door", "",
+        [
+            { "type": "decibel", "title": "loudness" },
+            { "type": "number", "title": "Nb of times the window got opened" }
+        ]
+        , "c2", "noiseWindow", function(data) {
+            console.log(data);
+            eval(data);
+        }, errorOccurred);
+
+/*    $('#c2').highcharts('StockChart', {
 
         // titre
         title : {
@@ -345,6 +375,7 @@ var noiseAccordingWindowState = function() {
         series: [ noiseWindow[0], noiseWindow[1]]
 
     });
+    */
     finishedLoading();
 };
 

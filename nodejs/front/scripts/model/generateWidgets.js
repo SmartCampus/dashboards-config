@@ -43,15 +43,16 @@ var generate = (function () {
                     errorCB();
                 });
         },
-        widgetV2: function (graphType, yAxesArray, graphName, seriesName, successCB, errorCB) {
+        widgetV2: function (graphTitle, graphType, yAxesArray, graphName, seriesName, successCB, errorCB) {
 
             $.post(genServer+widgetGen, {
-                    job : widgetGen,
+                    job : 'generateGraph',
                     config :
                     {
                         graphType: graphType,
                         yAxes : yAxesArray,
                         graphName:graphName,
+                        graphTitle:graphTitle,
                         seriesArrayName : seriesName
                     }
                 }
