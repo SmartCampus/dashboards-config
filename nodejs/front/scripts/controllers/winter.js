@@ -49,12 +49,15 @@ var firstSuccessInTemp = function (data, callback) {
 };
 
 var secondSuccessInTemp = function (data, callback) {
+    console.log(data.data);
     temperaturesArray[1] = {"type": "line", "name": "outside temparature", "data": data.data, "yAxis": 1};
     callback();
 };
 
 var thirdSuccessInTemp = function (data, callback) {
-    temperaturesArray[2] = {"type": "column", "name": "Heating status", "data": data.data[0].open, "yAxis": 0};
+    console.log(data.data);
+    temperaturesArray[2] = {"type": "column", "name": "Heating status", "data": data.data, "yAxis": 0,  "dataGrouping": {
+        "approximation": "average"}};
     callback();
 };
 
@@ -82,13 +85,14 @@ retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate,
     , errorOccurred);
 
 
-retrieveData.askForSeriesWithParam('DOOR443STATE/data/splitlist', 'true', beginDate, endDate,
+retrieveData.askForSeriesWithParam('AC_443STATE/data/reverse', "true", beginDate, endDate,
     function (data) {
         thirdSuccessInTemp(data, updateCallback);
     }
     , errorOccurred);
 
 var drawLineChart = function () {
+    console.log('************** drawing linechart');
     $('#c1').highcharts('StockChart', {
         chart: {
             zoomType: 'x'
@@ -96,6 +100,7 @@ var drawLineChart = function () {
         yAxis: [
             { // Primary yAxis
                 min: 0,
+                max: 100,
                 title: {
                     text: 'heating status',
                     style: {
