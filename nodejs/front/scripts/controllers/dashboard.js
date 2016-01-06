@@ -103,7 +103,7 @@ var layoutChosen = function(layoutHTML) {
         waitForWindowStateDrawing()
     }, errorOccurred);
 
-    generate.widgetBoolean("right1", "climState", "A/C", function(result) {
+    generate.widgetBoolean("right1", "climState", "Air Conditioning", function(result) {
         finishedLoading();
         acStateData = result;
         waitForAcStateDrawing();
