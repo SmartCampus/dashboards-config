@@ -99,6 +99,9 @@ function analyseGraphConfig(config) {
     }
     if (graphType) {
         config.grpPixelNb = graphType.grpPixelNb;
+        if (graphType === graphDefinitions.getGraphType("scatter")) {
+            config.scatter = true;
+        }
     }
     if (yAxes && yAxes.length > 1) {
         config.defineMultipleAxes = true;
