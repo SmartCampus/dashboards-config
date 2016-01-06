@@ -97,7 +97,9 @@ function analyseGraphConfig(config) {
             console.log("bad yAxesType");
         }
     }
-    config.grpPixelNb = graphType.grpPixelNb;
+    if (graphType) {
+        config.grpPixelNb = graphType.grpPixelNb;
+    }
     if (yAxes && yAxes.length > 1) {
         config.defineMultipleAxes = true;
     }
