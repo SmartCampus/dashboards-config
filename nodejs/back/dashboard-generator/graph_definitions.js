@@ -24,8 +24,8 @@ class YAxisType {
 }
 
 var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average"),
-	NUMBER = new YAxisType("number", 0, undefined, undefined, undefined, "sum"),
-	TEMPERATURE = new YAxisType("temperature", undefined, undefined, undefined,
+	NUMBER = new YAxisType("number", 0, undefined, " ", undefined, "sum"),
+	TEMPERATURE = new YAxisType("temperature", undefined, undefined, " ",
 		{
 			value: 0,
 			color: "red",
