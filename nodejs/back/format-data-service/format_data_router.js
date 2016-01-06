@@ -69,7 +69,7 @@ router.get("/sensor/:sensorId/data/last", function(req, res) {
 router.get("/sensor/:sensorId/data/reverse", function(req, res) {
     var sensorId = req.params.sensorId;
     if(sensorId != "AC_443STATE") {
-        res.send("Sorry bad sensor, this route should be used for AC_443 only.");
+        res.send("Sorry bad sensor, this route should be used for AC_443STATE only.");
     } else {
 
         var date = "";
