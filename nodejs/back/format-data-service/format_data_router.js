@@ -78,7 +78,6 @@ router.get("/sensor/:sensorId/data/reverse", function(req, res) {
         }
 
         request_handler.getReversedInformation(sensorId, date, function (value) {
-            console.log("yolo");
             res.send(value);
         })
     }
