@@ -158,6 +158,35 @@ function standardizeInformation(response, res) {
     });
 }
 
+function reverseInformation(res, callback) {
+    var stringData = "";
+
+    res.on("data", function(chunck) {
+        stringData += chunck;
+    });
+
+    res.on("end" , function() {
+        var sensorInfoJson = JSON.parse(stringData);
+        var responseInGoodFormat = {"data": []};
+
+        for(var i in sensorInfoJson.values) {
+            var responsePerTime = [];
+            responsePerTime.push(sensorInfoJson.values[i].date);
+
+            if(sensorInfoJson.values[i].value == "ON") {
+                responsePerTime.push("OFF");
+            } else if(sensorInfoJson.values[i].value == "OFF") {
+                responsePerTime.push("ON");
+            }
+            responseInGoodFormat.data.push(responsePerTime);
+        }
+
+        callback(responseInGoodFormat);
+    });
+}
+
+
+exports.reverseInformation = reverseInformation;
 
 exports.standardizeInformation = standardizeInformation;
 
