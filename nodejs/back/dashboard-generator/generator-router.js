@@ -28,7 +28,7 @@ function jobsRouter(message, res) {
             });
             break;
         default :
-            res.send("Bad JSON");
+            res.send("Bad job");
     }
 }
 
