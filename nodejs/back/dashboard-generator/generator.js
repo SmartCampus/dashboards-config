@@ -103,6 +103,10 @@ function analyseGraphConfig(config) {
             config.scatter = true;
         }
     }
+    else {
+        config.grpPixelNb = 50;
+        // TODO default graphType
+    }
     if (yAxes && yAxes.length > 1) {
         config.defineMultipleAxes = true;
     }
