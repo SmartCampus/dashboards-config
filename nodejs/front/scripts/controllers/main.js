@@ -1,5 +1,5 @@
 var sensors;
-var needs = ["Comparison", "See status", "Over time", "Summarize", "Hierarchy", "Proportion"];
+var needs = ["Comparison", "See status", "Overtime", "Summarize", "Hierarchy", "Proportion"];
 var maxOfWidgets = 4;
 var composition_sensors = [];
 var composition_needs = [];
@@ -158,47 +158,46 @@ function dropIt(event, ui) {
 }
 
 
-function displayGenerateButton() {
+var displayGenerateButton = function() {
     for (var i = 0; i < composition_sensors.length; i++) {
-        console.log(i, 'in composition_sensors.length');
         if (composition_sensors[i].length > 1) {
-            console.log(i, 'in composition_sensors[', i, '].length');
-
             $("#generateButton").show(700);
             break;
         }
     }
-}
+};
 
-var allTheNeeds = [];
 
 /*******************************
  **** JSON Of composition ******
  ******************************/
+var allTheNeeds = [];
 
 var declareNeeds = function () {
     establishCompositions();
     allTheNeeds.forEach(function (oneNeed, index) {
+        console.log(oneNeed);
         expression.need(oneNeed, function (answer) {
             console.log(answer);
+            oneNeed['graphType'] = answer;
+            //TODO:
         }, cantDo);
-
+document.cookie = JSON.stringify(allTheNeeds);
     });
-    for (var i = 0; i < maxOfWidgets; i++) {
-        allTheNeeds.push({"sensors": composition_sensors[i]});
-    }
 };
 var cantDo = function() {
+    //TODO: modale qui explique que c'est pas possible
     console.log('IT\'S IMPOSSIBRRRRUUUUU');
 };
 
-function establishCompositions() {
+var establishCompositions = function() {
+    allTheNeeds = [];
     for (var i = 0; i < maxOfWidgets; i++) {
         allTheNeeds.push(
             {
-                "need": composition_needs[i],
+                "needs": composition_needs[i],
                 "sensors": composition_sensors[i]
             }
         )
     }
-}
+};

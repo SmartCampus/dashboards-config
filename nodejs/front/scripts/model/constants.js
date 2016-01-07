@@ -9,4 +9,4 @@ needsServer = 'http://localhost:8084/';
 
 widgetGen = 'generateWidget';
 
-needsQuestion = 'expressNeeds';
+needsQuestion = 'expressNeed';

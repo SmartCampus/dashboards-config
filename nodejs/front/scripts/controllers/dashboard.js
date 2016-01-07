@@ -1,6 +1,7 @@
 /**
  * Created by Garance on 05/01/2016.
  */
+var existingPositions = ['right1', 'left1', 'right2', 'left2', 'right3', 'left3' ];
 
 if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
     beginDate = '2015-06-21 8:00:11';
@@ -81,17 +82,29 @@ retrieveData.askForSeriesWithParam('AC_443STATE/data', 'true', beginDate, endDat
 retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, endDate, successForWindowCount, errorOccurred);
 
 var layoutChosen = function(layoutHTML) {
-    console.log(layoutHTML);
+    //layout insertion
     var div = document.getElementById( 'dashboard' );
-
     div.insertAdjacentHTML( 'afterbegin', layoutHTML );
-    generate.widgetV2("Window openings and AC use", "column",  [{"type":"number","title":"Nb of times the window got opened"},{"type":"percent","title":"% of time AC is on"}]
-        , "right2", "countingArray", function(data) {
+    console.log(document.cookie);
+    generate.widgetV2("Title not defined", allTheNeeds[0]['graphType'],
+        [{"type":"number","title":"Nb of times the window got opened"},
+            {"type":"percent","title":"% of time AC is on"}]
+        , existingPositions[2], "countingArray", function(data) {
             barChartData = data;
             waitForBarChartDrawing();
         }, errorOccurred);
 
-    generate.widgetV2("Inside and outside temperatures", "line", [{type:"temperature", "title": "Temperature (°C)"}], "left2", "temperaturesArray", function(data) {
+    //widget generation
+  /*  generate.widgetV2("Window openings and AC use", "column",
+        [{"type":"number","title":"Nb of times the window got opened"},
+            {"type":"percent","title":"% of time AC is on"}]
+        , "right2", "countingArray", function(data) {
+            barChartData = data;
+            waitForBarChartDrawing();
+        }, errorOccurred);
+*/
+    generate.widgetV2("Inside and outside temperatures", "line",
+        [{type:"temperature", "title": "Temperature (°C)"}], "left2", "temperaturesArray", function(data) {
         lineChartData = data;
         waitForLineChartDrawing();
     }, errorOccurred);

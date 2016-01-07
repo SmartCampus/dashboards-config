@@ -4,15 +4,7 @@
 var expression = (function () {
     return { //exposed to public
         need: function (needsObject, successCB, errorCB) {
-        /*    $.post(needsServer + needsQuestion,
-                {
-                    job: "generateBoolean",
-                    config: {
-                        id: idWanted,
-                        position: position,
-                        boolName: name
-                    }
-                })
+            $.post(needsServer + needsQuestion, needsObject)
                 .done(function (data) {
                     console.log('request done !');
                     // console.log(data);
@@ -22,9 +14,9 @@ var expression = (function () {
                     console.log('error in post gen');
                     errorCB();
                 });
-    */
-            console.log(needsObject);
-            successCB('ok')
+
+           console.log(needsObject);
+           // successCB('ok')
         }
     }
 }());
