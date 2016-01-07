@@ -6,13 +6,14 @@
 
 class YAxisType {
 
-	constructor (name, minValue, maxValue, unit, plotLine, approxType) {
+	constructor (name, minValue, maxValue, unit, plotLine, approxType, vizType) {
 		this._name = name;
 		this._minValue = minValue;
 		this._maxValue = maxValue;
 		this._unit = unit;
 		this._plotLine = plotLine;
 		this._approxType = approxType;
+		this._vizType = vizType
 	}
 
 	get name () { return this._name }
@@ -21,11 +22,13 @@ class YAxisType {
 	get unit () { return this._unit }
 	get plotLine () { return this._plotLine }
 	get approxType() { return this._approxType }
+	get vizType() { return this._vizType }
+
 }
 
-var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average"),
-	NUMBER = new YAxisType("number", 0, undefined, undefined, undefined, "sum"),
-	TEMPERATURE = new YAxisType("temperature", undefined, undefined, undefined,
+var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average", ""),
+	NUMBER = new YAxisType("number", 0, undefined, " ", undefined, "sum", "column"),
+	TEMPERATURE = new YAxisType("temperature", undefined, undefined, " ",
 		{
 			value: 0,
 			color: "red",
@@ -33,15 +36,25 @@ var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average"),
 			width: 2,
 			label: {"text": "0°C"}
 		},
-	"average");
+		"average", ""),
+	DECIBEL = new YAxisType("decibel", 0, "undefined", "db",
+		{
+			value: 45,
+			color: "red",
+			dashStyle: "shortdash",
+			width: 2,
+			label: {"text": "Noise threshold"}
+		},
+		"average", "");
 
 var YAXIS_TYPES = {
 	percent: PERCENT,
 	number: NUMBER,
-	temperature: TEMPERATURE
+	temperature: TEMPERATURE,
+	decibel: DECIBEL
 };
 
-var YAXIS_TYPES_ARRAY = [PERCENT, NUMBER, TEMPERATURE]
+var YAXIS_TYPES_ARRAY = [PERCENT, NUMBER, TEMPERATURE, DECIBEL]
 
 function getYAxisType(type) {
 	for (var i in YAXIS_TYPES_ARRAY) {
@@ -59,6 +72,7 @@ function copyYAxisTypeProperties(type, target) {
 	else target.maxValue = "undefined";
 	if (type.unit) target.unit = type.unit;
 	if (type.plotLine) target.plotLine = type.plotLine;
+	target.vizType = type.vizType;
 }
 
 class GraphType {
@@ -73,11 +87,13 @@ class GraphType {
 }
 
 var LINE = new GraphType("line", 5),
-	COLUMN = new GraphType("column", 50);
+	COLUMN = new GraphType("column", 50),
+	SCATTER = new GraphType("scatter", undefined);
 
 var GRAPH_TYPES = {
 	line: LINE,
-	column: COLUMN
+	column: COLUMN,
+	scatter: SCATTER
 }
 
 function getGraphType(type) {

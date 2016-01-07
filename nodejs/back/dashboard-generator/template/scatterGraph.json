@@ -1,0 +1,7 @@
+{
+	"graphName": "TheYoloGraph",
+	"graphTitle": "YoloTitle9000",
+	"graphType": "scatterPlot",
+	"scatterGraph": true,
+	"seriesArrayName": "yoloSeriesArray"
+}

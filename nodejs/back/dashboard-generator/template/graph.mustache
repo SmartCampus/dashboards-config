@@ -3,10 +3,15 @@ $('#{{graphName}}').highcharts('StockChart', {
       type: '{{graphType}}',
       zoomType: 'x'
   },
+  title: {
+    text: '{{graphTitle}}'
+  },
   xAxis: {
       type: 'datetime'
   },
-  yAxis: [
+  yAxis:
+  {{^scatter}}
+    [
       {{#yAxes}}
         {
           min: {{minValue}},
@@ -45,7 +50,14 @@ $('#{{graphName}}').highcharts('StockChart', {
           ]
         }{{coma}}
       {{/yAxes}}
-      ],
+    ],
+  {{/scatter}}
+  {{#scatter}}
+    {
+      categories: ["Closed","Open"],
+      opposite: false
+    },
+  {{/scatter}}
   tooltip: {
       headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
       pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -69,7 +81,8 @@ $('#{{graphName}}').highcharts('StockChart', {
             approximation:'{{approxType}}',
             groupPixelWidth: {{grpPixelNb}}
           },
-          yAxis: {{index}}
+          yAxis: {{index}},
+          type: '{{vizType}}'
         }{{coma}}
       {{/yAxes}}
       ]

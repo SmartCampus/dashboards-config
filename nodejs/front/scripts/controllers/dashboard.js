@@ -85,14 +85,13 @@ var layoutChosen = function(layoutHTML) {
     var div = document.getElementById( 'dashboard' );
 
     div.insertAdjacentHTML( 'afterbegin', layoutHTML );
-    generate.widgetV2("column",  [{"type":"number","title":"Nb of times the window got opened"},{"type":"percent","title":"% of time AC is on"}]
+    generate.widgetV2("Window openings and AC use", "column",  [{"type":"number","title":"Nb of times the window got opened"},{"type":"percent","title":"% of time AC is on"}]
         , "right2", "countingArray", function(data) {
-            //   console.log(data);
             barChartData = data;
             waitForBarChartDrawing();
         }, errorOccurred);
 
-    generate.widgetV2("line", [{type:"temperature", "title": "Temperature (°C)"}], "left2", "temperaturesArray", function(data) {
+    generate.widgetV2("Inside and outside temperatures", "line", [{type:"temperature", "title": "Temperature (°C)"}], "left2", "temperaturesArray", function(data) {
         console.log(data);
         lineChartData = data;
         waitForLineChartDrawing();

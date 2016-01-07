@@ -173,8 +173,7 @@ var lightData={};
 retrieveData.askForSeries('LIGHT_444/data', beginDate, endDate,
     function (data) {
         successInLight(data)
-    }
-    , errorOccurred);
+    }, errorOccurred);
 
 var successInLight = function (data) {
     lightData.name = "Brightness level";

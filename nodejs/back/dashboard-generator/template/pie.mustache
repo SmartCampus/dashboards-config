@@ -1,0 +1,14 @@
+$('#{{graphName}}').highcharts({
+  chart: {
+    type: 'pie'
+  },
+  title: {
+    text: '{{graphTitle}}'
+  },
+  tooltip: {
+    pointFormat: '<b>{point.percentage:.1f}%</b>'
+  },
+  series: [{
+    data: [{{seriesArrayName}}[0], {{seriesArrayName}}[1]]
+  }]
+});

@@ -3,64 +3,10 @@
  */
 
 var Mustache = require("mustache"),
-    handlebar = require("handlebars"),
     fs = require('fs'),
     graphDefinitions = require("./graph_definitions");
 
-function loadTemperatureGraph(config ,res) {
-    var template = "";
-    var value =
-    {
-        "name": config.name,
-        "type": config.type,
-        "yAxis": config.yText,
-        "seriesName" : config.seriesName
-    };
-
-    fs.readFile(__dirname + '/template/TemperatureGraph.mustache', "utf-8", function (err, data) {
-        if (err) {
-            throw err;
-        }
-        template = data;
-        var rendered = Mustache.render(template, value);
-        res.send(rendered);
-    });
-};
-
-function loadBarGraph(config, res) {
-    var value = config;
-    for(var i in value.yAxis) {
-        if(value.yAxis[i].type == "number") {
-            value.yAxis[i].min = 0;
-            value.yAxis[i].max = "undefined";
-            value.yAxis[i].format = "";
-        } else if(value.yAxis[i].type == "percent") {
-            value.yAxis[i].min = 0;
-            value.yAxis[i].max = 100;
-            value.yAxis[i].format = "%";
-        }
-        if(i == (value.yAxis.length - 1)) {
-            value.yAxis[i].coma = "";
-        } else {
-            value.yAxis[i].coma = ",";
-        }
-
-        value.yAxis[i].index = i;
-    }
-
-    var template = "";
-
-    fs.readFile(__dirname + '/template/BarGraph.mustache', "utf-8", function (err, data) {
-        if (err) {
-            throw err;
-        }
-        template = data;
-        var rendered = Mustache.render(template, value);
-        res.send(rendered);
-    });
-}
-
-function loadBooleanGraph(config, res) {
+function generateBoolean(config, res) {
     var value = config;
     var template = "";
 
@@ -75,10 +21,11 @@ function loadBooleanGraph(config, res) {
 }
 
 /**
- * Generates code for a widget using the template/Widget.mustache .
+ * Generates code for a graph widget using the template/graph.mustache .
  * 
  * @param  {JSON}       config      configuration description as sent by the frontend,
- *                                  should match this template:
+ *                                  should match this template: (in case of scatter plot,
+ *                                  there should not be any "yAxes" property)
  *          ,_---~~~~~----._            {
  *   _,,_,*^____      _____``*g*\"*,        "graphName": string,
  *  / __/ /'     ^.  / \      ^@q   f       "graphType": string,
@@ -89,18 +36,19 @@ function loadBooleanGraph(config, res) {
  *   ]            | | |            |            },
  *   ]             ~ ~             |            ...
  *   |                            |         ],
- *    |                           |         "seriesArrayName": string
+ *    |                           |         "seriesArrayName": string,
+ *                                          "graphTitle": string
  *                                      }
  * @param  {Function}   callback    function to call with the resulting generated code
  */
-function generateWidget(config, callback) {
+function generateGraph(config, callback) {
     console.log(config);
-    fs.readFile(__dirname + "/template/Widget.mustache", "utf-8", function (err, template) {
+    fs.readFile(__dirname + "/template/graph.mustache", "utf-8", function (err, template) {
         if (err) {
             throw err;
         }
-        //config = require(__dirname + "/template/Widget.json");
-        config = analyseConfig(config);
+        //config = require(__dirname + "/template/graph.json");
+        config = analyseGraphConfig(config);
         console.log(config);
         // console.log("" + Mustache.render(template, config));
         callback(Mustache.render(template, config));
@@ -108,27 +56,29 @@ function generateWidget(config, callback) {
 }
 
 /**
- * Updates a widget generation configuration JSON received throught the web in order
- * to make it match the template/Widget.json sample file.
+ * Updates a graph widget generation configuration JSON received throught the web in order
+ * to make it match the template/graph.json sample file.
  * 
  * @param  {JSON}       config      configuration description as sent by the frontend,
- *                                  should match this template:
+ *                                  should match this template: (in case of scatter plot,
+ *                                  there should not be any "yAxes" property)
  *          ,_---~~~~~----._            {
  *   _,,_,*^____      _____``*g*\"*,        "graphName": string,
  *  / __/ /'     ^.  / \      ^@q   f       "graphType": string,
- * [  @f | @))    |  | @))    l  0 _/       "yAxes": [
+ * [  @f |    ((@ |  | @))    l  0 _/       "yAxes": [
  *  \`/   \~____ / __ \_____/    \              {
  *   |           _l__l_           I                 "title": string,
  *   }          [______]           I                "type": string
  *   ]            | | |            |            },
  *   ]             ~ ~             |            ...
  *   |                            |         ],
- *    |                           |         "seriesArrayName": string
+ *    |                           |         "seriesArrayName": string,
+ *                                          "graphTitle": string
  *                                      }
  * @return {JSON}                   the updated configuration JSON as specified in the
- *                                  template/Widget.json file
+ *                                  multipleYAxesGraph.json and scatterGraph.json files
  */
-function analyseConfig(config) {
+function analyseGraphConfig(config) {
     var yAxes = config.yAxes,
         graphType = graphDefinitions.getGraphType(config.graphType),
         yAxisType;
@@ -147,20 +97,49 @@ function analyseConfig(config) {
             console.log("bad yAxesType");
         }
     }
-    config.grpPixelNb = graphType.grpPixelNb;
-    if (yAxes.length > 1) {
+    if (graphType) {
+        config.grpPixelNb = graphType.grpPixelNb;
+        if (graphType === graphDefinitions.getGraphType("scatter")) {
+            config.scatter = true;
+        }
+    }
+    else {
+        config.grpPixelNb = 50;
+        // TODO default graphType
+    }
+    if (yAxes && yAxes.length > 1) {
         config.defineMultipleAxes = true;
     }
+
 
     return config;
 }
 
+/**
+ * Generates code for a pie chart widget using the template/pie.mustache .
+ * 
+ * @param  {JSON}       config    {
+ *                                    "graphName": string,
+ *                                    "graphTitle": string,
+ *                                    "seriesArrayName": string
+ *                                }
+ * @param  {Function}   callback    function to call with the resulting generated code
+ */
+function generatePie(config, callback) {
+    console.log(config);
+    fs.readFile(__dirname + "/template/pie.mustache", "utf-8", function (err, template) {
+        if (err) {
+            throw err;
+        }
+        //config = require(__dirname + "/template/pie.json");
+        callback(Mustache.render(template, config));
+    });
+}
+
 // Exports
 
-exports.loadBooleanGraph = loadBooleanGraph;
+exports.generateBoolean = generateBoolean;
 
-exports.loadBarGraph = loadBarGraph;
+exports.generateGraph = generateGraph;
 
-exports.loadTemperatureGraph = loadTemperatureGraph;
-
-exports.generateWidget = generateWidget;
+exports.generatePie = generatePie;
