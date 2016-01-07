@@ -4,7 +4,8 @@
 
 var Mustache = require("mustache"),
     fs = require('fs'),
-    graphDefinitions = require("./graph_definitions");
+    graphDefinitions = require("./graph_definitions"),
+    layoutDefinitions = require("./layout_definitions");
 
 function generateBoolean(config, res) {
     var value = config;
@@ -136,6 +137,18 @@ function generatePie(config, callback) {
     });
 }
 
+function generateLayout(config, callback) {
+    console.log(config);
+    fs.readFile(__dirname + "/template/layout.mustache", "utf-8", function (err, template) {
+        if (err) {
+            throw err;
+        }
+        //config = require(__dirname + "/template/layout.json");
+        config.widgetWidth = layoutDefinitions.getLayoutWidgetWidth(config.layoutType);
+        callback(null, Mustache.render(template, config));
+    });
+}
+
 // Exports
 
 exports.generateBoolean = generateBoolean;
@@ -143,3 +156,5 @@ exports.generateBoolean = generateBoolean;
 exports.generateGraph = generateGraph;
 
 exports.generatePie = generatePie;
+
+exports.generateLayout = generateLayout;

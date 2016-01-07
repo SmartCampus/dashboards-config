@@ -27,7 +27,18 @@ function jobsRouter(message, res) {
                 res.send(data);
             });
             break;
-        default :
+        case "generateLayout":
+            generator.generateLayout(message.config, function(err, data) {
+                if (err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                else {
+                    res.send(data);
+                }
+            });
+            break;
+        default:
             res.send("Bad job");
     }
 }
