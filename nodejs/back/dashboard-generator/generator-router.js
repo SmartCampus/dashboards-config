@@ -6,7 +6,7 @@ var express = require("express"),
     router = express.Router(),
     generator = require("./generator");
 
-router.post("/generateWidget", function(req, res) {
+router.post("/generationRequest", function(req, res) {
     jobsRouter(req.body, res);
 });
 

@@ -6,5 +6,5 @@ sensorAPI = 'sensor/';
 mainServer = 'http://localhost:8082/';
 genServer = 'http://localhost:8083/';
 
-widgetGen = 'generateWidget';
+widgetGen = 'generationRequest';
 
