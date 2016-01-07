@@ -8,15 +8,8 @@ var Mustache = require("mustache"),
     layoutDefinitions = require("./layout_definitions");
 
 function generateBoolean(config, res) {
-    var value = config;
-    var template = "";
-
-    fs.readFile(__dirname + '/template/BooleanWidget.mustache', "utf-8", function (err, data) {
-        if (err) {
-            throw err;
-        }
-        template = data;
-        var rendered = Mustache.render(template, value);
+    readTemplateFile("BooleanWidget.mustache", function (template) {
+        var rendered = Mustache.render(template, config);
         res.send(rendered);
     });
 }
@@ -44,10 +37,7 @@ function generateBoolean(config, res) {
  */
 function generateGraph(config, callback) {
     console.log(config);
-    fs.readFile(__dirname + "/template/graph.mustache", "utf-8", function (err, template) {
-        if (err) {
-            throw err;
-        }
+    readTemplateFile("graph.mustache", function (template) {
         //config = require(__dirname + "/template/graph.json");
         config = analyseGraphConfig(config);
         console.log(config);
@@ -128,10 +118,7 @@ function analyseGraphConfig(config) {
  */
 function generatePie(config, callback) {
     console.log(config);
-    fs.readFile(__dirname + "/template/pie.mustache", "utf-8", function (err, template) {
-        if (err) {
-            throw err;
-        }
+    readTemplateFile("pie.mustache", function (template) {
         //config = require(__dirname + "/template/pie.json");
         callback(Mustache.render(template, config));
     });
@@ -139,13 +126,19 @@ function generatePie(config, callback) {
 
 function generateLayout(config, callback) {
     console.log(config);
-    fs.readFile(__dirname + "/template/layout.mustache", "utf-8", function (err, template) {
-        if (err) {
-            throw err;
-        }
+    readTemplateFile("layout.mustache", function (template) {
         //config = require(__dirname + "/template/layout.json");
         config.widgetWidth = layoutDefinitions.getLayoutWidgetWidth(config.layoutType);
         callback(null, Mustache.render(template, config));
+    });
+}
+
+function readTemplateFile(templateFile, callback) {
+    fs.readFile(__dirname + "/template/" + templateFile, "utf-8", function (err, template) {
+        if (err) {
+            throw err;
+        }
+        callback(template);
     });
 }
 
