@@ -8,13 +8,17 @@ var express = require("express"),
 
 router.post("/expressNeed", function(req,res) {
     var body = req.body;
-    widget.findCorrespondingWidget(body.needs, function(response) {
-       if(response == undefined) {
-           res.send(422);
-       } else {
-           res.send(response);
-       }
-    });
+    if(body.need == undefined) {
+        res.send(422)
+    } else {
+        widget.findCorrespondingWidget(body.needs, function (response) {
+            if (response == undefined) {
+                res.send(422);
+            } else {
+                res.send(response);
+            }
+        });
+    }
 });
 
 module.exports = router;
