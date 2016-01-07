@@ -8,7 +8,8 @@ var express = require("express"),
 
 router.post("/expressNeed", function(req,res) {
     var body = req.body;
-    if(body.need == undefined) {
+    console.log(body);
+    if(body == undefined || body.need == undefined) {
         res.send(422)
     } else {
         widget.findCorrespondingWidget(body.needs, function (response) {
