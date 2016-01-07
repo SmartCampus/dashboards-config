@@ -92,7 +92,6 @@ var layoutChosen = function(layoutHTML) {
         }, errorOccurred);
 
     generate.widgetV2("Inside and outside temperatures", "line", [{type:"temperature", "title": "Temperature (°C)"}], "left2", "temperaturesArray", function(data) {
-        console.log(data);
         lineChartData = data;
         waitForLineChartDrawing();
     }, errorOccurred);

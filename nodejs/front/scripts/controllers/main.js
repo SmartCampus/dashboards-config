@@ -18,7 +18,7 @@ var composition_needs = [];
 
 
 /***********************************
- ******* Init windowd data *********
+ ******* Init window data *********
  ***********************************/
 
     function initWindowsData() {
@@ -192,5 +192,6 @@ var previous = [];
         }
 
         //return compositions;
+    console.log(composition);
         return JSON.stringify(compositions);
     }

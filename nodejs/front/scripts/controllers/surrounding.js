@@ -108,7 +108,6 @@ retrieveData.askForSeries('WINDOW443STATE/data/percent', beginDate, endDate, suc
 
 var doorGraphStateInTime = function() {
     generate.widgetV2("Door status over time", "scatter", "", "g1", "doorState", function(data) {
-        console.log(data);
         eval(data);
     }, errorOccurred);
 
@@ -118,7 +117,6 @@ var doorGraphStateInTime = function() {
 
 var windowGraphStateInTime = function() {
     generate.widgetV2("Window status over time", "scatter", "", "g2", "windowState", function(data) {
-        console.log(data);
         eval(data);
     }, errorOccurred);
     finishedLoading();
@@ -138,7 +136,6 @@ var noiseAccordingDoorState = function() {
             { "type": "number", "title": "Nb of times the door got opened" }
         ]
         , "c1", "noiseDoor", function(data) {
-        console.log(data);
         eval(data);
     }, errorOccurred);
     finishedLoading();
@@ -153,7 +150,6 @@ var noiseAccordingWindowState = function() {
             { "type": "number", "title": "Nb of times the window got opened" }
         ]
         , "c2", "noiseWindow", function(data) {
-            console.log(data);
             eval(data);
         }, errorOccurred);
     finishedLoading();
