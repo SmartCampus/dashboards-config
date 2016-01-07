@@ -42,10 +42,10 @@ class Widget {
 }
 
 var allWidgets = [];
-allWidgets.push(new Widget("linesCharts", ["Comparison","Overtime"]));
-allWidgets.push(new Widget("barsCharts", ["Comparison","Overtime", "Proportion"]));
-allWidgets.push(new Widget("columnLineCharts", ["Comparison","overtime","Relathionships"]));
-allWidgets.push(new Widget("pieCharts", ["Comparison"]));
+allWidgets.push(new Widget("linesCharts", ["Comparisons","Overtime"]));
+allWidgets.push(new Widget("barsCharts", ["Comparisons","Overtime", "Proportion"]));
+allWidgets.push(new Widget("columnLineCharts", ["Comparisons","overtime","Relathionships"]));
+allWidgets.push(new Widget("pieCharts", ["Comparisons"]));
 
 function findCorrespondingWidget(needs, callback) {
     for(var iterator in allWidgets) {
