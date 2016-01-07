@@ -7,7 +7,7 @@
  ************************************/
 
 if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
-    beginDate = '2015-05-01 8:00:11';
+    beginDate = '2015-10-01 8:00:11';
     endDate = '2015-12-01 18:00:11';
 }
 
@@ -42,7 +42,7 @@ var successForNoise = function (data) {
         doorState[0] = {"name": "open",  color: 'rgba(119, 152, 191, .5)' , "data": data.data[0].open};
         doorState[1] = {"name": "close" ,color: 'rgba(223, 83, 83, .5)', "data": data.data[1].close};
 
-        noiseDoor[1] = {"type": 'column', "name" : "door state", "data": data.data[0].open,  "dataGrouping": {
+        noiseDoor[1] = {"name" : "door opened", "data": data.data[0].open,  "dataGrouping": {
             "enable": false, "force": false}};
         doorGraphStateInTime();
 
@@ -53,7 +53,7 @@ var successForNoise = function (data) {
         windowState[0] = {"name": "open",  color: 'rgba(119, 152, 191, .5)' , "data": data.data[0].open};
         windowState[1] = {"name": "close" ,color: 'rgba(223, 83, 83, .5)', "data": data.data[1].close};
 
-        noiseWindow[1] = {"type": 'column', "name" : 'window state', "data": data.data[0].open};
+        noiseWindow[1] = {"name" : 'window opened', "data": data.data[0].open};
         windowGraphStateInTime();
 
         callback();
@@ -80,7 +80,7 @@ var successForNoise = function (data) {
         function (data) {
             successForWindowStateInTime(data, updateCallback);
         }, errorOccurred);
-}
+};
 
 
 
@@ -107,82 +107,20 @@ retrieveData.askForSeries('WINDOW443STATE/data/percent', beginDate, endDate, suc
  */
 
 var doorGraphStateInTime = function() {
-    generate.widgetV2("Door status over time", "scatter", [], "g1", "doorState", function(data) {
+    generate.widgetV2("Door status over time", "scatter", "", "g1", "doorState", function(data) {
         console.log(data);
         eval(data);
     }, errorOccurred);
-        /*$('#g1').highcharts('StockChart', {
-
-            chart: {
-                type: 'scatter',
-                zoomType: 'x'
-            },
-
-            title: {
-                text: 'Door status in time'
-            },
-
-            xAxis: {
-                type: 'datetime'
-            },
-
-            yAxis: {
-                categories: ['Close','Open'],
-                opposite: false
-            },
-
-            tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}</td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-
-            series : doorState
-        });
-        */
 
     finishedLoading();
 };
 
 
 var windowGraphStateInTime = function() {
-    generate.widgetV2("Window status over time", "scatter", [], "g2", "windowState", function(data) {
+    generate.widgetV2("Window status over time", "scatter", "", "g2", "windowState", function(data) {
         console.log(data);
         eval(data);
     }, errorOccurred);
-    /*$('#g2').highcharts('StockChart', {
-
-        chart: {
-            type: 'scatter',
-            zoomType: 'x'
-        },
-
-        title: {
-            text: 'Windows status in time '
-        },
-
-        xAxis: {
-            type: 'datetime'
-        },
-
-        yAxis: {
-            categories: ['Close','Open'],
-            opposite: false
-        },
-
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}</td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },
-
-        series : windowState
-    });
-    */
     finishedLoading();
 };
 
@@ -202,85 +140,6 @@ var noiseAccordingDoorState = function() {
         console.log(data);
         eval(data);
     }, errorOccurred);
-
-   /* $('#c1').highcharts('StockChart', {
-
-        // titre
-        title: {
-            text: 'Loudness in function of the door'
-        },
-
-        yAxis: [
-            { // Primary yAxis
-                min: 0,
-
-                title: {
-                    text: 'Nb of times the door got opened',
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    }
-                },
-
-                labels: {
-                    format: '{value}',
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    }
-                },
-
-                style: {
-                    color: Highcharts.getOptions().colors[1]
-                },
-
-                opposite: false
-            },
-            { // Secondary yAxis
-
-                title: {
-                    text: 'Loudness',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-
-                // Affichage seuil
-                plotLines: [{
-                    value: 45,
-                    color: 'red',
-                    dashStyle: 'shortdash', //pointillé
-                    width: 2,
-                    label: {
-                        text: 'Noise threshold'
-                    }
-                }],
-
-                labels: {
-                    format: '{value} db',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                },
-
-                allowDecimals: false,
-                opposite: true
-            }],
-
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },
-
-        series: [ noiseDoor[0], noiseDoor[1]]
-    });
-    */
     finishedLoading();
 };
 
@@ -296,86 +155,6 @@ var noiseAccordingWindowState = function() {
             console.log(data);
             eval(data);
         }, errorOccurred);
-
-/*    $('#c2').highcharts('StockChart', {
-
-        // titre
-        title : {
-            text : 'Loudness in function of the window'
-        },
-
-        yAxis: [
-            { // Primary yAxis
-                min: 0,
-
-                title: {
-                    text: 'Nb of times the windows got opened',
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    }
-                },
-
-                labels: {
-                    format: '{value}',
-                    style: {
-                        color: Highcharts.getOptions().colors[1]
-                    }
-                },
-
-                style: {
-                    color: Highcharts.getOptions().colors[1]
-                },
-
-                opposite: false
-            },
-            { // Secondary yAxis
-
-                title: {
-                    text: 'Loudness',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-
-                // Affichage seuil
-                plotLines: [{
-                    value: 45,
-                    color: 'red',
-                    dashStyle: 'shortdash', //pointillé
-                    width: 2,
-                    label: {
-                        text: 'Seuil du bruit'
-                    }
-                }],
-
-                labels: {
-                    format: '{value} db',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                },
-
-                allowDecimals: false,
-                opposite: true
-            }],
-
-        tooltip: {
-            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat:    '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
-            footerFormat: '</table>',
-            shared: true,
-            useHTML: true
-        },
-
-        series: [ noiseWindow[0], noiseWindow[1]]
-
-    });
-    */
     finishedLoading();
 };
 
@@ -398,31 +177,5 @@ var windowPercentageCamenbert = function() {
         eval (data);
     }, errorOccurred);
 
-
-    /*$('#cam2').highcharts({
-
-        chart: {
-            type: 'pie'
-        },
-
-        title: {
-            text: 'Windows'
-        },
-
-        tooltip: {
-            pointFormat: '<b>{point.percentage:.1f}%</b>'
-        },
-
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,     // selection d'une part
-                cursor: 'pointer',          // affichage avec pointeur
-            }
-        },
-        series: [{
-            data: [windowPercentage[0],windowPercentage[1]]
-        }]
-    });
-    */
     finishedLoading();
 };

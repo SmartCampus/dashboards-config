@@ -6,13 +6,14 @@
 
 class YAxisType {
 
-	constructor (name, minValue, maxValue, unit, plotLine, approxType) {
+	constructor (name, minValue, maxValue, unit, plotLine, approxType, vizType) {
 		this._name = name;
 		this._minValue = minValue;
 		this._maxValue = maxValue;
 		this._unit = unit;
 		this._plotLine = plotLine;
 		this._approxType = approxType;
+		this._vizType = vizType
 	}
 
 	get name () { return this._name }
@@ -21,10 +22,12 @@ class YAxisType {
 	get unit () { return this._unit }
 	get plotLine () { return this._plotLine }
 	get approxType() { return this._approxType }
+	get vizType() { return this._vizType }
+
 }
 
-var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average"),
-	NUMBER = new YAxisType("number", 0, undefined, " ", undefined, "sum"),
+var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average", ""),
+	NUMBER = new YAxisType("number", 0, undefined, " ", undefined, "sum", "column"),
 	TEMPERATURE = new YAxisType("temperature", undefined, undefined, " ",
 		{
 			value: 0,
@@ -33,7 +36,7 @@ var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average"),
 			width: 2,
 			label: {"text": "0°C"}
 		},
-		"average"),
+		"average", ""),
 	DECIBEL = new YAxisType("decibel", 0, "undefined", "db",
 		{
 			value: 45,
@@ -42,7 +45,7 @@ var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average"),
 			width: 2,
 			label: {"text": "Noise threshold"}
 		},
-		undefined);
+		"average", "");
 
 var YAXIS_TYPES = {
 	percent: PERCENT,
@@ -69,6 +72,7 @@ function copyYAxisTypeProperties(type, target) {
 	else target.maxValue = "undefined";
 	if (type.unit) target.unit = type.unit;
 	if (type.plotLine) target.plotLine = type.plotLine;
+	target.vizType = type.vizType;
 }
 
 class GraphType {

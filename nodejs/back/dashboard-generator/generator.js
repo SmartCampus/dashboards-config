@@ -111,6 +111,7 @@ function analyseGraphConfig(config) {
         config.defineMultipleAxes = true;
     }
 
+
     return config;
 }
 

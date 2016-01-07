@@ -43,11 +43,12 @@ function getAllSensors(callback) {
  */
 function getSensorData(name, date, convert, callback) {
     var url = SMARTCAMPUS_HOST + SENSORS_PATH + "/" + name + "/data?convert=" + convert + (date? "&date=" + date : "");
-
+    console.log('************************************ ',url);
     http.get(url, function (res) {
         callback(res);
     })
     .on('error', function (e) {
+        console.log('-----------------------------------------------------------');
         error(e, "getSensorData");
     });
 }
