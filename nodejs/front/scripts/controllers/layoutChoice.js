@@ -54,9 +54,9 @@ function divideInThreeEgal() {
 function divideInThreeNotEgal() {
 
     var content = "<div class=\"row\">"+
-        "<div class=\"col-md-3\" style=\"min-height: 500px; background-color: #cf867e;\">.col-md-4</div>"+
-        "<div class=\"col-md-6\" style=\"min-height: 500px; background-color: #66afe9;\">.col-md-4</div>"+
-        "<div class=\"col-md-3\" style=\"min-height: 500px; background-color: #000000;\">.col-md-4</div>"+
+        "<div class=\"col-md-3\" style=\"min-height: 500px; background-color: #cf867e;\">.col-md-3</div>"+
+        "<div class=\"col-md-6\" style=\"min-height: 500px; background-color: #66afe9;\">.col-md-6</div>"+
+        "<div class=\"col-md-3\" style=\"min-height: 500px; background-color: #000000;\">.col-md-3</div>"+
         "</div>";
     $("#add-content").append(content);
 }
