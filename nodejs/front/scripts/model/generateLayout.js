@@ -11,7 +11,7 @@ var layouts = (function () {
                     job : "generateLayout",
                     config :
                     {
-                        layoutType: layoutName,
+                        layoutType: layoutName
                     }
                 })
                 .done(function (data) {

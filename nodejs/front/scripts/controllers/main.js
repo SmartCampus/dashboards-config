@@ -180,9 +180,8 @@ var declareNeeds = function () {
         expression.need(oneNeed, function (answer) {
             console.log(answer);
             oneNeed['graphType'] = answer;
-            //TODO:
+            document.cookie = JSON.stringify(allTheNeeds);
         }, cantDo);
-document.cookie = JSON.stringify(allTheNeeds);
     });
 };
 var cantDo = function() {

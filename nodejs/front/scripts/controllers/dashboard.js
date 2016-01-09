@@ -2,7 +2,10 @@
  * Created by Garance on 05/01/2016.
  */
 var existingPositions = ['right1', 'left1', 'right2', 'left2', 'right3', 'left3' ];
+var theNeeds = JSON.parse((document.cookie).split(";")[2]);
+console.log(theNeeds);
 
+//TODO: demander à l'utilisateur les dates qu'il veut
 if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
     beginDate = '2015-06-21 8:00:11';
     endDate = '2015-09-21 18:00:11';
@@ -40,18 +43,20 @@ var temperaturesArray = [];
 var lineChartData;
 
 var firstSuccessInTemp = function (data) {
-    temperaturesArray[0] = {"name": "inside temparature", "data": data.data};
+    temperaturesArray[0] = {"name": "inside temperature", "data": data.data};
     waitForLineChartDrawing();
 };
-
-retrieveData.askForSeries('TEMP_443V/data', beginDate, endDate, firstSuccessInTemp, errorOccurred);
-
 var secondSuccessInTemp = function (data) {
-    temperaturesArray[1] = {"name": "outside temparature", "data": data.data};
+    temperaturesArray[1] = {"name": "outside temperature", "data": data.data};
     waitForLineChartDrawing();
 };
-//We need to get the outside temperatures now, to build our whole graph.
-retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate, secondSuccessInTemp, errorOccurred);
+//We're asking for the first widget data, that we "know" is NOT a boolean, and we only need regular series
+//We also "know" that there are precisely 2 sensors from which we need to retrieve data !
+//TODO: if we have a loop, how do we know to which success callback we should go ?
+retrieveData.askForSeries(theNeeds[0]['sensors'][1]+'/data', beginDate, endDate, firstSuccessInTemp, errorOccurred);
+retrieveData.askForSeries(theNeeds[0]['sensors'][0]+'/data', beginDate, endDate, secondSuccessInTemp, errorOccurred);
+
+
 
 
 var barChartData;
@@ -77,16 +82,17 @@ successForAcCount = function (data) {
     countingArray[1] = {"name": "% of time the AC is on", "data": data.data};
     waitForBarChartDrawing();
 };
-retrieveData.askForSeriesWithParam('AC_443STATE/data', 'true', beginDate, endDate, successForAcCount, errorOccurred);
+retrieveData.askForSeriesWithParam(theNeeds[1]['sensors'][0]+'/data', 'true', beginDate, endDate, successForAcCount, errorOccurred);
 
-retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, endDate, successForWindowCount, errorOccurred);
+retrieveData.askForSeriesWithParam(theNeeds[1]['sensors'][1]+'/data', 'true', beginDate, endDate, successForWindowCount, errorOccurred);
 
 var layoutChosen = function(layoutHTML) {
     //layout insertion
     var div = document.getElementById( 'dashboard' );
     div.insertAdjacentHTML( 'afterbegin', layoutHTML );
-    console.log(document.cookie);
-    generate.widgetV2("Title not defined", allTheNeeds[0]['graphType'],
+
+    //This is the second graph, comparing window & ac time on
+    generate.widgetV2("Title not defined", theNeeds[1]['graphType'],
         [{"type":"number","title":"Nb of times the window got opened"},
             {"type":"percent","title":"% of time AC is on"}]
         , existingPositions[2], "countingArray", function(data) {
@@ -94,27 +100,20 @@ var layoutChosen = function(layoutHTML) {
             waitForBarChartDrawing();
         }, errorOccurred);
 
-    //widget generation
-  /*  generate.widgetV2("Window openings and AC use", "column",
-        [{"type":"number","title":"Nb of times the window got opened"},
-            {"type":"percent","title":"% of time AC is on"}]
-        , "right2", "countingArray", function(data) {
-            barChartData = data;
-            waitForBarChartDrawing();
+    //This is the first graph, comparing tempartures
+    generate.widgetV2("Title not defined", theNeeds[0]['graphType'],
+        [{type:"temperature", "title": "Temperature (°C)"}]
+        , existingPositions[3], "temperaturesArray", function(data) {
+            lineChartData = data;
+            waitForLineChartDrawing();
         }, errorOccurred);
-*/
-    generate.widgetV2("Inside and outside temperatures", "line",
-        [{type:"temperature", "title": "Temperature (°C)"}], "left2", "temperaturesArray", function(data) {
-        lineChartData = data;
-        waitForLineChartDrawing();
-    }, errorOccurred);
 
-    generate.widgetBoolean("left1", "windowState", "Window", function(result) {
+    generate.widgetBoolean( existingPositions[1], "windowState", "Window", function(result) {
         windowStateData = result;
         waitForWindowStateDrawing()
     }, errorOccurred);
 
-    generate.widgetBoolean("right1", "climState", "Air Conditioning", function(result) {
+    generate.widgetBoolean( existingPositions[0], "climState", "Air Conditioning", function(result) {
         finishedLoading();
         acStateData = result;
         waitForAcStateDrawing();
@@ -165,5 +164,5 @@ var successForAC = function (data) {
     waitForAcStateDrawing();
 };
 
-retrieveData.askForStateNow('WINDOW443STATE', successForWindow, errorOccurred);
-retrieveData.askForStateNow('AC_443STATE', successForAC, errorOccurred);
+retrieveData.askForStateNow(theNeeds[2]['sensors'][0], successForWindow, errorOccurred);
+retrieveData.askForStateNow(theNeeds[3]['sensors'][0], successForAC, errorOccurred);
