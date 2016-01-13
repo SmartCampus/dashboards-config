@@ -2,13 +2,22 @@
 <html lang="fr">
 
 <head>
+
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="/styles/style.css">
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/icon.png" />
+
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Meta -->
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- JS -->
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/bower_components/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
-    <script>
-        $(function () {
-            $("head").load("header.html");
-        });
-    </script>
+
+
 </head>
 
 <body>
@@ -20,69 +29,75 @@
         <p class="lead">Welcome on our dashboards' generation web app !</p>
     </div>
 
-    <!-- <div class="text-center">
-        <a class="btn btn-default" href="/summer.html">Summer dashboard</a>
-        <a class="btn btn-default" href="/surrounding.html">Surrounding dashboard</a>
-    </div> -->
-
-
 
     <div class="row">
 
         <!--  WHAT -->
+        <div class="col-xs-4 col-md-4 col-lg-4  text-center" style="z-index: 3;">
 
-        <div class="col-xs-3 col-md-3 col-lg-3  text-center" id="c1" style="min-height: 450px;">
-
-            <div class="row"><h3>How do you want to visualize the data ?</h3>
-                For each widget, choose your(s) intent(s).
-
-            <div style="background-color: #cf867e;">
-                <div id="add-need"><!-- Insertion of content here--></div>
+            <div class="row" style="min-height : 110px; padding : 0 40px 0 40px;text-align: center; text-justify: inter-word;">
+                <h3>How do you want to visualize the data ?</h3>
+                <p>For each widget, choose your(s) intent(s).</p>
             </div>
+
+            <div class="panel panel-default" style="max-height: 410px;min-height: 410px;">
+                <div class="panel-body">
+                    <div id="add-need"><!-- Insertion of content here--></div>
+                </div>
             </div>
+
         </div>
 
 
         <!--  COMPOSITION -->
+        <div class="col-xs-4 col-md-4 col-lg-4 text-center" style="z-index: 2;">
 
-        <div class="col-xs-6 col-md-6 col-lg-6 text-center" id="c2" style="min-height: 450px;">
+            <div class="row" style="min-height : 110px; padding : 0 40px 0 40px;text-align: center; text-justify: inter-word;">
+                <h3>Composition</h3>
+                <p>Define the widgets you want to see in your dashboard under here.</p>
+            </div>
 
-            <div class="row"><h3>Composition</h3>
-                Define the widgets you want to see in your dashboard under here. </div>
-            <div id="add-rows"><!-- Insertion of content here--></div>
+            <div class="panel panel-default" style="max-height: 410px;min-height: 410px;">
+                <div class="panel-body">
+                    <div id="add-rows"><!-- Insertion of content here--></div>
+                </div>
+            </div>
 
         </div>
 
-
         <!--  WHERE -->
+        <div class="col-xs-4 col-md-4 col-lg-4 text-center" style="z-index: 3;">
 
-        <div class="col-xs-3 col-md-3 col-lg-3 text-center" id="c3" style="min-height: 450px">
+            <div class="row" style="min-height : 110px; padding : 0 40px 0 40px;text-align: center; text-justify: inter-word;">
+                <h3>Which sensors do you want to use ?</h3>
+                <p>For each widget, choose your(s) sensor(s).</p>
+            </div>
 
-            <div class="row">
-                <h3>Which sensors do you want to use ?</h3></div>
-                <div style="background-color: wheat;">
-                    <button type="button" id="goback" class="btn btn-default btn-sm">
-                    <span class="glyphicon glyphicon-arrow-left"></span> back
-                    </button>
 
-            <div id="add-captors"><!-- Insertion of content here--></div>
+            <div class="panel panel-default" style="min-height: 410px;">
+
+                <ol class="breadcrumb">
+                    <!-- Insertion of content here-->
+                </ol>
+
+                <div class="panel-body">
+                    <div id="add-captors"><!-- Insertion of content here--></div>
                 </div>
+            </div>
 
         </div>
 
 
     </div>
 
-    <div class="text-center" id="generateButton">
+    <div class="text-right" id="generateButton">
         <button type="button" onclick="declareNeeds()" class="btn btn-success">1 - Declare my widgets</button>
         <a type="button" href="dashboard.html" class="btn btn-success">2 - Generate</a>
-
     </div>
 
 </div>
 
 </body>
-
 <script src="/scripts/model/constants.js"></script>
 <script src="/scripts/model/expressNeeds.js"></script>
 <script src="/scripts/controllers/main.js"></script>

@@ -27,7 +27,9 @@
     "bootstrap-treeview": "latest",
     "eonasdan-bootstrap-datetimepicker": "~4.17.37",
     "highstock": "highstock-release#~2.1.9",
-    "jquery-ui": "jqueryui#~1.11.4"
+    "jquery-ui": "jqueryui#~1.11.4",
+    "gridstack": "~0.2.3",
+    "gridster": "gridster-js#~0.6.10"
   },
   "license": "none",
   "homepage": "views/index.html",
