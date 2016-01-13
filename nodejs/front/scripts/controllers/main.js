@@ -196,7 +196,7 @@ var declareNeeds = function () {
         expression.need(oneNeed, function (answer) {
             console.log(answer);
             oneNeed['graphType'] = answer;
-            document.cookie = JSON.stringify(allTheNeeds);
+            localStorage.setItem("bar", JSON.stringify(allTheNeeds));
         }, cantDo);
     });
 };
