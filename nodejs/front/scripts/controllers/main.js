@@ -123,7 +123,6 @@ $(document).on('click', '.nave', function (el) {
     var myelement = el.target.name;
     var navBar_copy = navbar;
     for(var i = navBar_copy.length-1; i > 0; i--) {
-        console.log(navBar_copy[i]);
         if (myelement != navBar_copy[i]) {
             navbar.pop();
             position = previous.pop();
@@ -143,7 +142,6 @@ $(document).on('click', '.node', function (el) {
     buildings = position.childContainer;
     navbar.push(position.name);
 
-    console.log(navbar)
     navigation();
 });
 
