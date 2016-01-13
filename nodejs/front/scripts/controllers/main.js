@@ -57,7 +57,7 @@ function addNeeds() {
 
     for (var i = 0; i < needs.length; i++) {
         $("#add-need").append(
-            "<div style=\"padding: 20px 0 0 0; text-align : center\"><p style=\"cursor : pointer\" class=\"draggable\" id=\"" + needs[i] + "\">" + needs[i] + "</p></div>"
+            "<div style=\"padding: 20px 0 0 0; text-align : center\"><span style=\"cursor : pointer\" class=\"draggable\" id=\"" + needs[i] + "\">" + needs[i] + "</span></div>"
         );
 
         $(".draggable").draggable({
@@ -94,7 +94,7 @@ function navigation() {
 
         for (var i = 0; i < position.directSensor.length; i++) {
             $("#add-captors").append(
-                "<div class=\"row\"><div class=\"draggable\" id=\"" + position.directSensor[i] + "\"><p style=\"cursor : pointer\">" + position.directSensor[i] + "</p></div></div>"
+                "<div class=\"row\"><span class=\"draggable\" id=\"" + position.directSensor[i] + "\" style=\"cursor : pointer\">" + position.directSensor[i] + "</span></div>"
             );
 
             $(".draggable").draggable({
