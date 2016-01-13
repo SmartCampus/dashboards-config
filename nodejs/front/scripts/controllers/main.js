@@ -3,6 +3,7 @@ var needs = ["Comparison", "See status", "Overtime", "Summarize", "Hierarchy", "
 var maxOfWidgets = 4;
 var composition_sensors = [];
 var composition_needs = [];
+var navbar = [];
 
 /**
  * Get all buildings captors et placements
@@ -28,12 +29,15 @@ function initWindowsData() {
         composition_sensors[i] = new Array();
     }
 
+
     position = sensors;
     buildings = sensors.childContainer;
     previous.push(position);
 
+    navbar.push(position.name);
+
     addTableRow();
-    abc();
+    addNeeds();
     navigation();
 }
 
@@ -41,18 +45,19 @@ function initWindowsData() {
 function addTableRow() {
 
     for (var i = 0; i < maxOfWidgets; i++) {
-        $("#add-rows").append("<div class=\"droppable\" id=\"" + i + "\" style=\"min-height: 70px; border: solid; margin-top: 30px\"></div>");
+        $("#add-rows").append("<div class=\"well\"><div class=\"droppable\" id=\"" + i + "\" style=\"min-height: 40px;\"></div></div>");
 
         $(".droppable").droppable({drop: dropIt});
     }
 }
 
 
-function abc() {
+
+function addNeeds() {
 
     for (var i = 0; i < needs.length; i++) {
         $("#add-need").append(
-            "<div class=\"row\" style=\"padding: 20px 0 0 0\"><div class=\"draggable\" id=\"" + needs[i] + "\"><p>" + needs[i] + "</p></div></div>"
+            "<div style=\"padding: 20px 0 0 0; text-align : center\"><p class=\"draggable\" id=\"" + needs[i] + "\">" + needs[i] + "</p></div>"
         );
 
         $(".draggable").draggable({
@@ -98,43 +103,53 @@ function navigation() {
             });
         }
     }
+
+    updateNavigation();
 }
+
+function updateNavigation(){
+    // clean DOM
+    $(".breadcrumb").empty();
+
+    for(var i = 0; i < navbar.length; i++){
+        $(".breadcrumb").append("<li><a class=\"nave\" name=\""+navbar[i]+"\">"+navbar[i]+"</a></li>");
+    }
+}
+
+
+// click on building
+$(document).on('click', '.nave', function (el) {
+
+    var myelement = el.target.name;
+    var navBar_copy = navbar;
+    for(var i = navBar_copy.length-1; i > 0; i--) {
+        if (myelement != navBar_copy[i]) {
+            navbar.pop();
+            position = previous.pop();
+            buildings = position.childContainer;
+            navigation();
+        }else{
+            break;
+        }
+    }
+});
 
 // click on building
 $(document).on('click', '.node', function (el) {
 
     previous.push(position);
-
     position = buildings[parseInt(el.target.id)];
-
     buildings = position.childContainer;
+    navbar.push(position.name);
 
     navigation();
-
 });
 
-
-// click on back button
-$("#goback").click(function () {
-
-    if (previous.length > 0) {
-
-        position = previous.pop();
-
-        buildings = position.childContainer;
-
-        navigation();
-    }
-
-});
 
 
 /************************
  **** DROP ELEMENT ******
  ***********************/
-
-
-
 function dropIt(event, ui) {
 
     var draggableId = ui.draggable.attr("id");

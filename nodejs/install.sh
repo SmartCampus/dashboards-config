@@ -14,6 +14,8 @@ cd ../sensor-containers-API
 npm install
 cd ../dashboard-generator
 npm install
+cd ../composition-engine
+npm install
 cd ../../front
 npm install
 bower install --allow-root

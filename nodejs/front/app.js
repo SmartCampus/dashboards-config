@@ -4,6 +4,7 @@ var express = require("express"),
 app.use(express.static(__dirname + "/views"));
 app.use("/scripts", express.static(__dirname + "/scripts"));
 app.use("/assets", express.static(__dirname + "/assets"));
+app.use("/styles", express.static(__dirname + "/styles"));
 
 
 app.use("/bower_components/jquery",
@@ -26,6 +27,11 @@ app.use("/bower_components/bootstrap-datetimepicker",
 
 app.use("/bower_components/jquery-ui",
     express.static(__dirname + "/bower_components/jquery-ui"));
+
+app.use("/bower_components/gridstack",
+	express.static(__dirname + "/bower_components/gridstack"));
+app.use("/bower_components/gridster",
+	express.static(__dirname + "/bower_components/gridster"));
 
 
 app.listen(process.env.PORT || 8080);
