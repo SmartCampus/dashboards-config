@@ -27,7 +27,7 @@ var allTheNeeds = [];
 function initWindowsData() {
 
     for (var i = 0; i < maxOfWidgets; i++) {
-        allTheNeeds[i] = {"needs":[], "sensors":[], "graphType":""};
+        allTheNeeds[i] = {"needs": [], "sensors": [], "graphType": ""};
         composition_needs[i] = new Array();
         composition_sensors[i] = new Array();
     }
@@ -55,7 +55,7 @@ function addTableRow() {
             + i
             + '" style="min-height: 40px;"></div></div>'
             + '<div class="col-md-2"> <br/>'
-            + '<div class="btn btn-default" onclick="deleteWidgetContent('+i+')"><span class="glyphicon glyphicon-trash">'
+            + '<div class="btn btn-default" onclick="deleteWidgetContent(' + i + ')"><span class="glyphicon glyphicon-trash">'
             + '</span></div></div>');
 
         $(".droppable").droppable({drop: dropIt});
@@ -63,13 +63,13 @@ function addTableRow() {
 }
 
 /*
-This functions empties a widget box, making it back to its original state
+ This functions empties a widget box, making it back to its original state
  */
 function deleteWidgetContent(widgetId) {
     composition_needs[widgetId] = [];
     composition_sensors[widgetId] = [];
-    allTheNeeds[widgetId] = {"needs":[], "sensors":[], "graphType":""};
-    $('#'+widgetId).empty();
+    allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
+    $('#' + widgetId).empty();
     //empty()
 }
 
@@ -101,7 +101,7 @@ var previous = [];
 
 
 /*
-This method fills the navigation panel. It makes the sensors draggable as well, but not the places.
+ This method fills the navigation panel. It makes the sensors draggable as well, but not the places.
  */
 function navigation() {
 
@@ -135,12 +135,12 @@ function navigation() {
     updateNavigation();
 }
 
-function updateNavigation(){
+function updateNavigation() {
     // clean DOM
     $(".breadcrumb").empty();
 
-    for(var i = 0; i < navbar.length; i++){
-        $(".breadcrumb").append("<li><a class=\"nave\" name=\""+navbar[i]+"\">"+navbar[i]+"</a></li>");
+    for (var i = 0; i < navbar.length; i++) {
+        $(".breadcrumb").append("<li><a class=\"nave\" name=\"" + navbar[i] + "\">" + navbar[i] + "</a></li>");
     }
 }
 
@@ -150,13 +150,13 @@ $(document).on('click', '.nave', function (el) {
 
     var myelement = el.target.name;
     var navBar_copy = navbar;
-    for(var i = navBar_copy.length-1; i > 0; i--) {
+    for (var i = navBar_copy.length - 1; i > 0; i--) {
         if (myelement != navBar_copy[i]) {
             navbar.pop();
             position = previous.pop();
             buildings = position.childContainer;
             navigation();
-        }else{
+        } else {
             break;
         }
     }
@@ -174,7 +174,6 @@ $(document).on('click', '.node', function (el) {
 });
 
 //The composition starts as empty. Max is as many as the widget number.
-
 
 
 /************************
@@ -208,7 +207,7 @@ function dropIt(event, ui) {
 }
 
 
-var displayGenerateButton = function() {
+var displayGenerateButton = function () {
     for (var i = 0; i < composition_sensors.length; i++) {
         if (composition_sensors[i].length > 1) {
             $("#generateButton").show(700);
@@ -224,19 +223,26 @@ var displayGenerateButton = function() {
 
 var declareNeeds = function () {
     allTheNeeds.forEach(function (oneNeed, index) {
-        console.log(oneNeed);
-        expression.need(oneNeed, function (answer) {
-            console.log(answer);
-            oneNeed.graphType = answer;
-            //If this is our last callback, set the whole result in local storage.
-            //Better than cookie bc same behaviour throughout browsers.
-         //   if (index >= allTheNeeds.length) {
+            console.log(oneNeed);
+            //We only ask the composition server if what was asked is possible enough
+            if (oneNeed.needs.length > 0 && oneNeed.sensors.length > 0) {
+                expression.need(oneNeed, function (answer) {
+                    console.log(answer);
+                    oneNeed.graphType = answer;
+                    //If this is our last callback, set the whole result in local storage.
+                    //Better than cookie bc same behaviour throughout browsers.
+                }, cantDo);
+            }
+        //Once we seen everything, we set the localstorage, and we go to the dashboard page .
+            if (index == allTheNeeds.length - 1) {
                 localStorage.setItem("bar", JSON.stringify(allTheNeeds));
-           // }
-        }, cantDo);
-    });
+                document.location.href = "dashboard.html";
+            }
+        }
+    );
 };
-var cantDo = function() {
+var cantDo = function () {
     //TODO: modale qui explique que c'est pas possible
+    alert('We couldn\'t generate your widgets ! Are you sure everything is in order ?');
     console.log('IT\'S IMPOSSIBRRRRUUUUU');
 };
