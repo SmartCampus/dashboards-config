@@ -4,6 +4,7 @@
 var existingPositions = ['right1', 'left1', 'right2', 'left2', 'right3', 'left3' ];
 
 var theNeeds = JSON.parse(localStorage.getItem("bar"));
+localStorage.removeItem("bar");
 console.log(theNeeds);
 
 //TODO: demander à l'utilisateur les dates qu'il veut

@@ -6,7 +6,7 @@ var layoutWanted = "halfNHalf";
 
 var setLayoutWanted = function(layoutName) {
     layoutWanted = layoutName;
-}
+};
 
 $("button").click(function(){
     var id = this.id;
