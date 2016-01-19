@@ -74,6 +74,10 @@ var addAWidget = function () {
     maxOfWidgets += 1;
 };
 
+var removeAWidget = function() {
+    //you want to remove a widget !
+    console.log('removing a widget box');
+}
 /*
  This functions empties a widget box, making it back to its original state
  */

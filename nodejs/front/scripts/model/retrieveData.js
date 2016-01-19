@@ -3,11 +3,11 @@
  */
 var retrieveData = (function () {
     return { //exposed to public
-        askForSeries: function (sensor, beginDate, endDate, successCB, failCB, sensorInfo) {
+        askForSeries: function (sensor, beginDate, endDate, successCB, failCB, sensorInfo, index) {
             $.get(mainServer+sensorAPI + sensor, {date: beginDate+"/"+endDate})
                 .done(function (data) {
                     console.log('got series for a timespan');
-                    successCB(data, sensorInfo);
+                    successCB(data, sensorInfo, index);
                 })
                 .fail(function (data) {
                     console.log(data);
@@ -18,11 +18,11 @@ var retrieveData = (function () {
                     console.log('For route '+ mainServer+sensorAPI + sensor + ' : \nbegin : ' + beginDate + '\nend : '+endDate);
                 });
         },
-        askForSeriesWithParam: function(sensor, param, beginDate, endDate, successCB, errorCB) {
+        askForSeriesWithParam: function(sensor, param, beginDate, endDate, successCB, errorCB, sensorInfo, index) {
             $.get(mainServer+sensorAPI + sensor, {state:param, date: beginDate+"/"+endDate})
                 .done(function (data) {
                     console.log('got series for a timespan with param');
-                    successCB(data);
+                    successCB(data, sensorInfo, index);
                 })
                 .fail(function (data) {
                     console.log(data);
