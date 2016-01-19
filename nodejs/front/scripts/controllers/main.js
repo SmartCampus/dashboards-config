@@ -1,6 +1,6 @@
 var sensors; //This array contains all the sensors we have
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
-var needs = ["Comparison", "See status", "Overtime", "Summarize", "Hierarchy", "Proportion"];
+var needs = ["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 var maxOfWidgets = 4; //this determines how many boxes are drawn in the center of the page
 var composition_sensors = [];
 var composition_needs = [];

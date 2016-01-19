@@ -44,8 +44,8 @@ class Widget {
 var allWidgets = [];
 allWidgets.push(new Widget("line", ["Comparison","Overtime"]));
 allWidgets.push(new Widget("column", ["Comparison","Overtime", "Proportion"]));
-allWidgets.push(new Widget("columnLineCharts", ["Comparison","overtime","Relationships"]));
-allWidgets.push(new Widget("pieCharts", ["Comparison"]));
+allWidgets.push(new Widget("mix", ["Comparison","Overtime","Relationships"]));
+allWidgets.push(new Widget("pieChart", ["Comparison"]));
 allWidgets.push(new Widget("boolean", ["See status"]));
 
 
