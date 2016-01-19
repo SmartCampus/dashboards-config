@@ -238,25 +238,14 @@ var displayGenerateButton = function () {
 
 var declareNeeds = function () {
     allTheNeeds.forEach(function (oneNeed, index) {
-        console.log(oneNeed);
         //We only ask the composition server if what was asked is possible enough
         expression.need(oneNeed, function (answer) {
-            console.log(answer);
             oneNeed.graphType = answer;
             localStorage.setItem("bar", JSON.stringify(allTheNeeds));
             //If this is our last callback, set the whole result in local storage.
             //Better than cookie bc same behaviour throughout browsers.
-            if (index == allTheNeeds.length - 1) {
-                document.location.href = "dashboard.html";
-            }
-        }, cantDo(index));
+        }, function() {
+            console.log('IT\'S IMPOSSIBRRRRUUUUU');
+        });
     });
-};
-var cantDo = function (index) {
-    //TODO: modale qui explique que c'est pas possible
-    alert('We couldn\'t generate your widgets ! Are you sure everything is in order ?');
-    if (index == allTheNeeds.length - 1) {
-        document.location.href = "dashboard.html";
-    }
-    console.log('IT\'S IMPOSSIBRRRRUUUUU');
 };

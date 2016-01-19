@@ -7,16 +7,12 @@ var expression = (function () {
             $.post(needsServer + needsQuestion, needsObject)
                 .done(function (data) {
                     console.log('request done !');
-                    // console.log(data);
                     successCB(data);
                 })
                 .fail(function (data) {
                     console.log('error in post gen');
                     errorCB();
                 });
-
-           console.log(needsObject);
-           // successCB('ok')
         }
     }
 }());
