@@ -4,22 +4,17 @@
 var existingPositions = ['right1', 'left1', 'right2', 'left2', 'right3', 'left3' ];
 
 var theNeeds = JSON.parse(localStorage.getItem("bar"));
-//localStorage.removeItem("bar");
-console.log(theNeeds);
 
-//TODO: demander à l'utilisateur les dates qu'il veut
 if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
     beginDate = '2015-06-21 8:00:11';
     endDate = '2015-09-21 18:00:11';
 }
-var allLoaded = 0;
-var finishedLoading = function() {
-    if (allLoaded < 3) {
-        allLoaded += 1;
-    }
-    else {
-        document.getElementById("loadingImg").className = "hidden";
-    }
+
+var sensorDataRetrievingSuccess = function (data, sensor) {
+    console.log('***********************');
+    console.log(sensor);
+    firstWidgetData.push({"name": sensor.title, "data": data.data});
+    waitForLineChartDrawing();
 };
 
 var errorOccurred = function() {
@@ -27,6 +22,52 @@ var errorOccurred = function() {
     document.getElementById("loadingImg").className = "hidden";
     document.getElementById("dashboard").className = "hidden";
 };
+
+
+//Quick and dirty definition !
+theNeeds.forEach(function(aNeed) {
+    //Besoin de connaître le type de graphe pour savoir la route exacte que je vais demander à SC.
+    if (aNeed.graphType == 'line') {
+        //Si tu veux un ligne, ben du coup je demande des data
+        aNeed.scRoute = '/data';
+    }
+
+    //Maintenant que je sais ça, pour chaque sensor : je récup les infos manquantes, & j'appelle les données.
+    aNeed.sensors.forEach(function(sensor) {
+        if (sensor.name == "TEMP_CAMPUS") {
+            sensor.unit= "temperature";
+            sensor.title="Outside Temperature";
+        }
+        else if (sensor.name == "TEMP_443V") {
+            sensor.unit= "temperature";
+            sensor.title="Inside Temperature";
+        }
+        else {
+            console.log('jai pas compris le capteur que tu voulais');
+        }
+        //The service could provide me with the info I will lack ! eg. everything i just gathered...
+        console.log(sensor.name+aNeed.scRoute);
+        retrieveData.askForSeries(sensor.name+ aNeed.scRoute, beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor);
+    });
+    console.log(aNeed);
+});
+
+
+localStorage.removeItem("bar");
+console.log(theNeeds);
+
+//TODO: demander à l'utilisateur les dates qu'il veut
+
+var allLoaded = 0;
+var finishedLoading = function() {
+    if (allLoaded < theNeeds.length - 1) {
+        allLoaded += 1;
+    }
+    else {
+        document.getElementById("loadingImg").className = "hidden";
+    }
+};
+
 
 var lineChartActors = 0;
 var waitForLineChartDrawing = function() {
@@ -41,22 +82,18 @@ var waitForLineChartDrawing = function() {
 };
 
 
-var temperaturesArray = [];
+var firstWidgetData = [];
 var lineChartData;
 
-var firstSuccessInTemp = function (data) {
-    temperaturesArray[0] = {"name": "inside temperature", "data": data.data};
-    waitForLineChartDrawing();
-};
+
 var secondSuccessInTemp = function (data) {
-    temperaturesArray[1] = {"name": "outside temperature", "data": data.data};
+    firstWidgetData[1] = {"name": "outside temperature", "data": data.data};
     waitForLineChartDrawing();
 };
 //We're asking for the first widget data, that we "know" is NOT a boolean, and we only need regular series
 //We also "know" that there are precisely 2 sensors from which we need to retrieve data !
 //TODO: if we have a loop, how do we know to which success callback we should go ?
-retrieveData.askForSeries(theNeeds[0]['sensors'][1]+'/data', beginDate, endDate, firstSuccessInTemp, errorOccurred);
-retrieveData.askForSeries(theNeeds[0]['sensors'][0]+'/data', beginDate, endDate, secondSuccessInTemp, errorOccurred);
+
 
 
 
@@ -84,9 +121,9 @@ successForAcCount = function (data) {
     countingArray[1] = {"name": "% of time the AC is on", "data": data.data};
     waitForBarChartDrawing();
 };
-retrieveData.askForSeriesWithParam(theNeeds[1]['sensors'][0]+'/data', 'true', beginDate, endDate, successForAcCount, errorOccurred);
+//retrieveData.askForSeriesWithParam(theNeeds[1]['sensors'][0]+'/data', 'true', beginDate, endDate, successForAcCount, errorOccurred);
 
-retrieveData.askForSeriesWithParam(theNeeds[1]['sensors'][1]+'/data', 'true', beginDate, endDate, successForWindowCount, errorOccurred);
+//retrieveData.askForSeriesWithParam(theNeeds[1]['sensors'][1]+'/data', 'true', beginDate, endDate, successForWindowCount, errorOccurred);
 
 var layoutChosen = function(layoutHTML) {
     //layout insertion
@@ -103,9 +140,10 @@ var layoutChosen = function(layoutHTML) {
         }, errorOccurred);
 
     //This is the first graph, comparing tempartures
+    //TODO: dans la generation, si je dis type = temperature, tu devines le titre.
     generate.widgetV2("Title not defined", theNeeds[0]['graphType'],
         [{type:"temperature", "title": "Temperature (°C)"}]
-        , existingPositions[3], "temperaturesArray", function(data) {
+        , existingPositions[3], "firstWidgetData", function(data) {
             lineChartData = data;
             waitForLineChartDrawing();
         }, errorOccurred);
@@ -166,5 +204,5 @@ var successForAC = function (data) {
     waitForAcStateDrawing();
 };
 
-retrieveData.askForStateNow(theNeeds[2]['sensors'][0], successForWindow, errorOccurred);
-retrieveData.askForStateNow(theNeeds[3]['sensors'][0], successForAC, errorOccurred);
+//retrieveData.askForStateNow(theNeeds[2]['sensors'][0], successForWindow, errorOccurred);
+//retrieveData.askForStateNow(theNeeds[3]['sensors'][0], successForAC, errorOccurred);

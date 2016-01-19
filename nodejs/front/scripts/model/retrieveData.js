@@ -3,11 +3,11 @@
  */
 var retrieveData = (function () {
     return { //exposed to public
-        askForSeries: function (sensor, beginDate, endDate, successCB, failCB) {
+        askForSeries: function (sensor, beginDate, endDate, successCB, failCB, sensorInfo) {
             $.get(mainServer+sensorAPI + sensor, {date: beginDate+"/"+endDate})
                 .done(function (data) {
                     console.log('got series for a timespan');
-                    successCB(data);
+                    successCB(data, sensorInfo);
                 })
                 .fail(function (data) {
                     console.log(data);

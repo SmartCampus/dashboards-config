@@ -30,6 +30,7 @@ function initWindowsData() {
         allTheNeeds[i] = {"needs": [], "sensors": [], "graphType": ""};
         composition_needs[i] = new Array();
         composition_sensors[i] = new Array();
+        addTableRow(i);
     }
 
     position = sensors;
@@ -37,8 +38,6 @@ function initWindowsData() {
     previous.push(position);
 
     navbar.push(position.name);
-
-    addTableRow();
     addNeeds();
     navigation();
 }
@@ -48,30 +47,42 @@ function initWindowsData() {
  * This adds a row to the middle panel, with the widgets.
  * For each, we also add a "delete" button, to remove all it contains if the user made a mistake
  */
-function addTableRow() {
+var addTableRow = function (index) {
+    $("#add-rows").append('<div class="well col-md-10"><div class="droppable" id="'
+        + index
+        + '" style="min-height: 40px;"></div></div>'
+        + '<div class="col-md-2"> <br/>'
+        + '<div class="btn btn-default" onclick="deleteWidgetContent(' + index + ')"><span class="glyphicon glyphicon-trash">'
+        + '</span></div></div>');
 
-    for (var i = 0; i < maxOfWidgets; i++) {
-        $("#add-rows").append('<div class="well col-md-10"><div class="droppable" id="'
-            + i
-            + '" style="min-height: 40px;"></div></div>'
-            + '<div class="col-md-2"> <br/>'
-            + '<div class="btn btn-default" onclick="deleteWidgetContent(' + i + ')"><span class="glyphicon glyphicon-trash">'
-            + '</span></div></div>');
+    $(".droppable").droppable({drop: dropIt});
+};
 
-        $(".droppable").droppable({drop: dropIt});
-    }
-}
+
+/**
+ * Function to add new widget boxes
+ * WE need to expand the different arrays that depend on the nb of widgets boxes as well !
+ */
+var addAWidget = function () {
+
+    allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
+    composition_needs[maxOfWidgets] = new Array();
+    composition_sensors[maxOfWidgets] = new Array();
+
+    addTableRow(maxOfWidgets);
+
+    maxOfWidgets += 1;
+};
 
 /*
  This functions empties a widget box, making it back to its original state
  */
-function deleteWidgetContent(widgetId) {
+var deleteWidgetContent = function (widgetId) {
     composition_needs[widgetId] = [];
     composition_sensors[widgetId] = [];
     allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
     $('#' + widgetId).empty();
-    //empty()
-}
+};
 
 
 /**
@@ -199,7 +210,7 @@ function dropIt(event, ui) {
         if (!($.inArray(draggableName, composition_sensors[droppableId]) > -1)) {
             composition_sensors[droppableId].push(draggableName);
             ui.draggable.clone().appendTo($(this));
-            allTheNeeds[droppableId].sensors.push(draggableName);
+            allTheNeeds[droppableId].sensors.push({"name": draggableName});
         }
     }
 
@@ -223,26 +234,25 @@ var displayGenerateButton = function () {
 
 var declareNeeds = function () {
     allTheNeeds.forEach(function (oneNeed, index) {
-            console.log(oneNeed);
-            //We only ask the composition server if what was asked is possible enough
-            if (oneNeed.needs.length > 0 && oneNeed.sensors.length > 0) {
-                expression.need(oneNeed, function (answer) {
-                    console.log(answer);
-                    oneNeed.graphType = answer;
-                    //If this is our last callback, set the whole result in local storage.
-                    //Better than cookie bc same behaviour throughout browsers.
-                }, cantDo);
-            }
-        //Once we seen everything, we set the localstorage, and we go to the dashboard page .
+        console.log(oneNeed);
+        //We only ask the composition server if what was asked is possible enough
+        expression.need(oneNeed, function (answer) {
+            console.log(answer);
+            oneNeed.graphType = answer;
+            localStorage.setItem("bar", JSON.stringify(allTheNeeds));
+            //If this is our last callback, set the whole result in local storage.
+            //Better than cookie bc same behaviour throughout browsers.
             if (index == allTheNeeds.length - 1) {
-                localStorage.setItem("bar", JSON.stringify(allTheNeeds));
                 document.location.href = "dashboard.html";
             }
-        }
-    );
+        }, cantDo(index));
+    });
 };
-var cantDo = function () {
+var cantDo = function (index) {
     //TODO: modale qui explique que c'est pas possible
     alert('We couldn\'t generate your widgets ! Are you sure everything is in order ?');
+    if (index == allTheNeeds.length - 1) {
+        document.location.href = "dashboard.html";
+    }
     console.log('IT\'S IMPOSSIBRRRRUUUUU');
 };
