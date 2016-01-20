@@ -145,13 +145,13 @@ var layoutChosen = function (layoutHTML) {
                     sensor.title = "Inside Temperature";
                 }
                 else if (sensor.name == "AC_443STATE") {
-                    sensor.type = "percent";
-                    sensor.title = "% of time AC is on";
+                    sensor.type = "number";
+                    sensor.title = "time AC is on";
                     sensor.booleanTitle = "AC"
                 }
                 else if (sensor.name == "WINDOW443STATE") {
                     sensor.type = "number";
-                    sensor.title = "Nb of times the window got opened";
+                    sensor.title = "times the window got opened";
                     sensor.booleanTitle = "Window"
                 }
                 else if (sensor.name == "NOISE_SPARKS_CORRIDOR") {
@@ -161,12 +161,17 @@ var layoutChosen = function (layoutHTML) {
                     retrieveData.askForSeries(sensor.name + aNeed.scRoute, beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
                 }
                 else if (sensor.name == "DOOR443STATE") {
-                    sensor.title = "Nb of times the door got opened";
+                    sensor.title = "times the door got opened";
                     sensor.type = "number";
                     sensor.booleanTitle = "Door"
                 }
                 else {
                     console.log('jai pas compris le capteur que tu voulais');
+                }
+                if (sensor.percent) {
+                    console.log('hé tas dit percent');
+                    sensor.type='percent';
+                    sensor.title = '% of ' + sensor.title;
                 }
                 //The service could provide me with the info I will lack ! eg. everything i just gathered...
                 //then we have to ask for series with a param !!!!
