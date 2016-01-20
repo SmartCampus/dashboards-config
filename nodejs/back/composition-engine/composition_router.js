@@ -1,10 +1,16 @@
 /**
- * Created by Quentin on 1/6/2016.
+ * @author Quentin Cornevin, Marc Karassev
  */
 
-var express = require("express"),
-    router = express.Router(),
-    widget = require('./widget');
+var router = require("express").Router(),
+    widget = require('./widget'),
+    winston = require("winston");
+
+var logger = new winston.Logger({
+	transports: [
+		new winston.transports.Console({colorize: true})
+	]
+});
 
 router.post("/expressNeed", function(req,res) {
     var body = req.body;
@@ -22,4 +28,17 @@ router.post("/expressNeed", function(req,res) {
     }
 });
 
-module.exports = router;
+router.post("/needSet", function (req, res) {
+	widget.checkSetConsistency(req.body, function (error, result) {
+		if (error) {
+			logger.warn(error);
+			// TODO check error, update response
+			res.status("500").send("could not check need set consistency");
+		}
+		else {
+			// TODO use something else than widget
+		}
+	});
+});
+
+module.exports = exports = router;

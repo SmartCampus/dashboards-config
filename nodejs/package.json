@@ -30,10 +30,10 @@
   },
   "dependencies": {
     "express": "^4.13.3",
-    "forever": "^0.15.1"
+    "forever": "^0.15.1",
+    "winston": "^2.1.1"
   },
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "private": true,
   "license": "no license"
 }
