@@ -97,10 +97,13 @@ function getSensorLastInformation(name, callback) {
 
 function getContainerChild(name, callback) {
     var containerList = sensors.getContainers();
+    console.log(containerList[0].getName().replace(/\s+/g, ''));
+    console.log(name);
     for(var i in containerList) {
         if(containerList[i].getName().replace(/\s+/g, '') == name) {
             var jsonResponse = {"name" : "Buildings",  childContainer : containerList[i].getChild()};
             //response.send(jsonResponse);
+            console.log("wtf");
             callback(jsonResponse);
         }
     }

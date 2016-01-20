@@ -1,8 +1,46 @@
-/**
- * Created by Quentin on 11/27/2015.
- */
 "use strict";
 var requesterSC = require("./request_smartcampus");
+
+
+class Sensor {
+    constructor(name, displayName, booleanTitle, description, unit) {
+        this._name = name;
+        this._description = description;
+        this._unit = unit;
+        this._displayName = displayName;
+        this._booleanTitle = booleanTitle;
+    }
+
+    get unit() {
+        return this._unit;
+    }
+
+    get description() {
+        return this._description;
+    }
+
+    get name() {
+        return this._name;
+    }
+
+    get displayName() {
+        return this._displayName;
+    }
+
+    get booleanTitle() {
+        return this._booleanTitle;
+    }
+
+    toJson() {
+        return {
+            name : this._name,
+            description : this._description,
+            unit : this._unit,
+            displayName : this._displayName,
+            booleanTitle : this._booleanTitle
+        }
+    }
+}
 
 /**
  * This class represent the set of containers. You shouldn't create SensorSet but {@link SensorContainer} oe {@link SensorCategory}
@@ -17,9 +55,10 @@ class SensorSet {
      * @param name      {string}        Name of the set of sensors
      * @param sensors   {array}         Array of all the sensor of the set
      */
-    constructor(name, sensors) {
+    constructor(name, sensors, filters) {
         this.name = name;
         this.sensors = sensors;
+        this.filters = filters;
     }
 
     /**
@@ -38,6 +77,16 @@ class SensorSet {
      */
     getName() {
         return this.name;
+    }
+
+    /**
+     * This method will return the array of filter. Those filters are used for the initialisation with the name of the
+     * sensors
+     *
+     * @returns         {array}     Array containing all the filters for the sensorSet
+     */
+    getFilters() {
+        return this.filters;
     }
 }
 
@@ -60,9 +109,8 @@ class SensorContainer extends SensorSet {
      *                                          in this container.
      */
     constructor(name, filters, sensors, childContainer) {
-        super(name, []);
+        super(name, [], filters);
         this.childContainer = childContainer;
-        this.filters = filters;
         this.directSensor = sensors;
     }
 
@@ -102,14 +150,6 @@ class SensorContainer extends SensorSet {
         return this.childContainer;
     };
 
-    /**
-     * This method return an array of the filter to match the name of the sensors in the API.
-     *
-     * @returns {array|*}
-     */
-    getFilters() {
-        return this.filters;
-    }
 
     /**
      * This method add a filter to the array of filter
@@ -128,6 +168,16 @@ class SensorContainer extends SensorSet {
     getName() {
         return this.name;
     }
+
+    /**
+     * This method will return the array of filter. Those filters are used for the initialisation with the name of the
+     * sensors
+     *
+     * @returns         {array}     Array containing all the filters for the sensorSet
+     */
+    getFilters() {
+        return this.filters;
+    }
 }
 
 
@@ -143,14 +193,25 @@ class SensorCategory extends SensorSet {
      * @param name          {string}        Name of the category of sensor
      * @param sensors       {array}         List of all the sensor for this category.
      */
-    constructor(name, sensors) {
-        super(name, sensors);
+    constructor(name, sensors, filters) {
+        super(name, sensors, filters);
+    }
+
+    /**
+     * This method will return the array of filter. Those filters are used for the initialisation with the name of the
+     * sensors
+     *
+     * @returns         {array}     Array containing all the filters for the sensorSet
+     */
+    getFilters() {
+        return this.filters;
     }
 }
 
 var smartCampus = [];
 var categories = [];
 var containers = [];
+var sensorList = {};
 
 /**
  * This function return the list of all the containers
@@ -191,28 +252,34 @@ function initSensors(data) {
     initCategories();
     initContainers();
 
-
     var json = JSON.parse(data);
+    upgradeSensorsInformation(json);
+
     var jsonContainers = json._items;
     for(var i in jsonContainers) {
         for(var iterator in categories) {
-            var filter = new RegExp("(?:^|[^A-Za-z])" + categories[iterator].getName() + "(?:[^A-Za-z]|$)", "ig");
-            if(filter.test(jsonContainers[i].name)) {
-                categories[iterator].getSensors().push(jsonContainers[i].name);
+            for(var filters in containers[iterator].getFilters()) {
+                var filter = new RegExp("(?:^|[^A-Za-z])" + categories[iterator].getFilters()[filters] + "(?:[^A-Za-z]|$)", "i");
+                if (filter.test(jsonContainers[i].name)) {
+                    categories[iterator].getSensors().push(jsonContainers[i].name);
+                }
             }
         }
     }
+
 
     for(var i in jsonContainers) {
         for(var iterator in containers) {
             for(var filters in containers[iterator].getFilters()) {
                 var filter = new RegExp(containers[iterator].getFilters()[filters], "i");
                 if(filter.test(jsonContainers[i].name)) {
-                    containers[iterator].getDirectSensors().push(jsonContainers[i].name);
+                    var name = jsonContainers[i].name;
+                    containers[iterator].getDirectSensors().push(sensorList.name);
                 }
             }
         }
     }
+
 
     for(var iterator in containers) {
         smartCampus.push(containers[iterator]);
@@ -222,6 +289,68 @@ function initSensors(data) {
     }
 }
 
+
+
+function upgradeSensorsInformation(sensors) {
+    for(var iterator in sensors._items) {
+        var sensor;
+        switch (sensors._items[iterator].name) {
+            case "TEMP_443V":
+                sensor = new Sensor(sensors._items[iterator].name, "Temperature Office 443", undefined,"Inside Temperature", "temperature");
+                break;
+            case "LIGHT_CAFE":
+                sensor = new Sensor(sensors._items[iterator].name, "Light value near coffee Machine", undefined ,"Light value", "lux");
+                break;
+            case "DOOR_SPARKS":
+                sensor = new Sensor(sensors._items[iterator].name, "Door Sparks floor",undefined ,"Door Sparks floor", "state");
+                break;
+            case "AC_443":
+                sensor = new Sensor(sensors._items[iterator].name, "Temperature in AC in office 443",undefined,"Temperature in AC in office 443", "temperature");
+                break;
+            case "DOOR443STATE":
+                sensor = new Sensor(sensors._items[iterator].name, "State of the Door 443", "Door","State of the Door 443", "state");
+                break;
+            case "TEMP_442V":
+                sensor = new Sensor(sensors._items[iterator].name, "Temperature in office 442", undefined,"Temperature in office 442", "temperature");
+                break;
+            case "TEMP_443V":
+                sensor = new Sensor(sensors._items[iterator].name, "Temperature in office 443", undefined,"Temperature in office 443", "temperature");
+                break;
+            case "WINDOW443STATE":
+                sensor = new Sensor(sensors._items[iterator].name, "State of the window in the office 443", "Window","State of the window in the office 443", "state");
+                break;
+            case "AC_443STATE":
+                sensor = new Sensor(sensors._items[iterator].name, "State of the AC in the office 443","AC" ,"State of the AC in the office 443","state");
+                break;
+            case "MW_energy":
+                sensor = new Sensor(sensors._items[iterator].name, "MicroWave energy", "MicroWave energy", undefined, "MicroWave energy", "watt");
+                break;
+            case "Coffee_energy":
+                sensor = new Sensor(sensors._items[iterator].name, "Coffee Energy", undefined,"Coffee Energy", "watt");
+                break;
+            case "LIGHT_444":
+                sensor = new Sensor(sensors._items[iterator].name, "Light in office 444", undefined,"Light in office 444", "lux");
+                break;
+            case "TEMP_CAMPUS":
+                sensor = new Sensor(sensors._items[iterator].name, "Outside Temperature", undefined,"Outside Temperature", "temperature");
+                break;
+            case "Window_Modalis":
+                sensor = new Sensor(sensors._items[iterator].name, "State of window Modalis", "Window","State of window Modalis", "state");
+                break;
+            case "Window_Coffee":
+                sensor = new Sensor(sensors._items[iterator].name, "State of the window coffee", "Window","State of the window coffee", "state");
+                break;
+        }
+        if(typeof sensor !== "undefined") {
+            var name = sensors._items[iterator].name;
+            sensorList.name = sensor.toJson();
+        }
+    }
+}
+
+
+
+
 /**
  *
  * This function init the different categories of sensors, which means the temperature, the doors,
@@ -229,12 +358,14 @@ function initSensors(data) {
  *
  */
 function initCategories() {
-    var temperatureSensors = new SensorCategory("TEMP", []);
-    var doorSensors = new SensorCategory("DOOR", []);
-    var airConditioningSensors = new SensorCategory("AC", []);
-    var windowSensors = new SensorCategory("WINDOW", []);
-    var lightSensors = new SensorCategory("LIGHT", []);
+    var temperatureSensors = new SensorCategory("TEMP", [], ["TEMP", "AC"]);
+    var doorSensors = new SensorCategory("DOOR", [], ["DOOR"]);
+    var airConditioningSensors = new SensorCategory("AC", [], ["AC"]);
+    var windowSensors = new SensorCategory("WINDOW", [], ["WINDOW"]);
+    var lightSensors = new SensorCategory("LIGHT", [], ["LIGHT"]);
+    var stateSensors = new SensorCategory("STATE", [], ["STATE"]);
 
+    categories.push(stateSensors);
     categories.push(temperatureSensors);
     categories.push(doorSensors);
     categories.push(airConditioningSensors);
