@@ -3,6 +3,8 @@
  */
 "use strict";
 
+// TODO move to another service because mock of Ivan's module?
+
 /**
  * This class represent a widget. A widget is define by a number of key words defined in an array and
  * by his name. The key words represent the need of the user for this widget.
