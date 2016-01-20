@@ -50,10 +50,12 @@ var successForNoise = function (data) {
     };
 
     var successForWindowStateInTime = function (data, callback) {
+        //scatter needs these 2 objects
         windowState[0] = {"name": "open",  color: 'rgba(119, 152, 191, .5)' , "data": data.data[0].open};
-        windowState[1] = {"name": "close" ,color: 'rgba(223, 83, 83, .5)', "data": data.data[1].close};
+        windowState[1] = {"name": "close", color: 'rgba(223, 83, 83, .5)', "data": data.data[1].close};
 
-        noiseWindow[1] = {"name" : 'window opened', "data": data.data[0].open};
+        noiseWindow[1] = {"name" : 'window opened', "data": data.data};
+        //calls scatter at the same time
         windowGraphStateInTime();
 
         callback();
@@ -129,7 +131,7 @@ var windowGraphStateInTime = function() {
  */
 
 var noiseAccordingDoorState = function() {
-
+    //ici, on ne donne pas de type au moteur de génération = graphe mixte !
     generate.widgetV2("Loudness in function of the door", "",
         [
             { "type": "decibel", "title": "loudness" },

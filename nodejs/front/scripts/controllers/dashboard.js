@@ -1,20 +1,68 @@
 /**
  * Created by Garance on 05/01/2016.
  */
-var existingPositions = ['right1', 'left1', 'right2', 'left2', 'right3', 'left3' ];
 
+    //Ca, ça va pas du tout. Ca fait que ca dépend de comment t'as rempli tes boites, et c'tout !
+var existingPositions = ['left2', 'right2', 'right1', 'left1', 'right3', 'left3'];
+var watchingArray = [{"dataSC":[], "counter":[]}, {"dataSC":[], "counter":[]}, {"dataSC":[], "counter":[]}, {"dataSC":[], "counter":[]}];
 var theNeeds = JSON.parse(localStorage.getItem("bar"));
-//localStorage.removeItem("bar");
+localStorage.removeItem("bar");
 console.log(theNeeds);
-
-//TODO: demander à l'utilisateur les dates qu'il veut
 if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
     beginDate = '2015-06-21 8:00:11';
     endDate = '2015-09-21 18:00:11';
 }
+
+
+var sensorDataRetrievingSuccess = function (data, sensor, index) {
+    //this works only if they are regular widgets.
+    //if i want the boolean to work the same way...
+    if (theNeeds[index].graphType == 'line' || theNeeds[index].graphType == 'column') {
+        console.log('line or column widget');
+        //TODO:probleme si les callbacks sont pas dans l'ordre que j'imagine là...
+        watchingArray[index].dataSC.push({"name": sensor.title, "data": data.data});
+        waitForFirstWidgetDrawing(firstWidgetData, sensor, index);
+    }
+    else if (theNeeds[index].graphType == 'boolean') {
+        //then i'm in AC or window !
+        console.log('boolean widget !');
+        goDrawBoolean(data, sensor, index);
+    }
+    else if (theNeeds[index].graphType == 'pieChart') {
+        watchingArray[index].dataSC.push({"name": "Open", "y": data.data[0].open});
+        watchingArray[index].dataSC.push(doorPercentage[1] = {"name": "Close", "y": data.data[1].close});
+        goDrawPie(sensor, index);
+    }
+    else if (theNeeds[index].graphType == 'mix') {
+
+        //in case it's noise
+        //It seems we can keep on putting stuff in the watching array. after all....
+        watchingArray[index].dataSC.push({"name": sensor.title, "data": data.data, "yAxis": 1});
+        //in case it's a mix, here is what we want to do with the other result
+        //problem : we want ONLY the open result. the name we can use the one we have it's ok
+        //not sure we really need the split list for a mix... the open though i guess i needed
+        watchingArray[index].dataSC.push({"name" : sensor.title, "data": data.data[0].open});
+
+    }
+    else if (theNeeds[index].graphType == 'scatter') {
+        //this is what happens to the data we get from a split, for a scatterplot
+        //as far as we know, the only times we want a scatter is to see open or closed doors
+        watchingArray[index].dataSC.push({"name": "open",  color: 'rgba(119, 152, 191, .5)' , "data": data.data[0].open});
+        watchingArray[index].dataSC.push({"name": "close" ,color: 'rgba(223, 83, 83, .5)', "data": data.data[1].close});
+    }
+};
+
+var errorOccurred = function () {
+    document.getElementById("errorOccurred").className = "row text-center show";
+    document.getElementById("loadingImg").className = "hidden";
+    document.getElementById("dashboard").className = "hidden";
+};
+
+//TODO: demander à l'utilisateur les dates qu'il veut
+
 var allLoaded = 0;
-var finishedLoading = function() {
-    if (allLoaded < 3) {
+var finishedLoading = function () {
+    if (allLoaded < theNeeds.length - 1) {
         allLoaded += 1;
     }
     else {
@@ -22,149 +70,117 @@ var finishedLoading = function() {
     }
 };
 
-var errorOccurred = function() {
-    document.getElementById("errorOccurred").className = "row text-center show";
-    document.getElementById("loadingImg").className = "hidden";
-    document.getElementById("dashboard").className = "hidden";
+var firstWCode;
+//An array of as many arrays as we have widgets.
+var waitForFirstWidgetDrawing = function (dataSC, sensor, index) {
+    //TODO: dans la generation, si je dis type = temperature, tu devines le titre.
+    //Pour le moment, je mets autre chose du coup c'est pas fou.
+    console.log('********************');
+    console.log(watchingArray[index]);
+    if (watchingArray[index].counter.length < theNeeds[index].sensors.length) {
+        watchingArray[index].counter.push(sensor);
+    }
+    if (watchingArray[index].counter.length == theNeeds[index].sensors.length) {
+        generate.widgetV2("Title not defined", theNeeds[index].graphType,
+            watchingArray[index].counter
+            , existingPositions[index], "watchingArray[index].dataSC", function (data) {
+                firstWCode = data;
+                eval(firstWCode); //TODO:is this the right place for eval ?
+                finishedLoading();
+            }, errorOccurred);
+    }
 };
 
-var lineChartActors = 0;
-var waitForLineChartDrawing = function() {
-    if (lineChartActors < 2) {
-        lineChartActors += 1;
-    }
-    else {
+var boolCode;
+var goDrawBoolean = function (data, sensor, index) {
+    generate.widgetBoolean(existingPositions[index], "data", sensor.booleanTitle, function (result) {
+        boolCode = result;
+        eval(boolCode);
         finishedLoading();
-        eval(lineChartData);
-        lineChartActors = 0;
-    }
+    }, errorOccurred);
 };
 
-
-var temperaturesArray = [];
-var lineChartData;
-
-var firstSuccessInTemp = function (data) {
-    temperaturesArray[0] = {"name": "inside temperature", "data": data.data};
-    waitForLineChartDrawing();
-};
-var secondSuccessInTemp = function (data) {
-    temperaturesArray[1] = {"name": "outside temperature", "data": data.data};
-    waitForLineChartDrawing();
-};
-//We're asking for the first widget data, that we "know" is NOT a boolean, and we only need regular series
-//We also "know" that there are precisely 2 sensors from which we need to retrieve data !
-//TODO: if we have a loop, how do we know to which success callback we should go ?
-retrieveData.askForSeries(theNeeds[0]['sensors'][1]+'/data', beginDate, endDate, firstSuccessInTemp, errorOccurred);
-retrieveData.askForSeries(theNeeds[0]['sensors'][0]+'/data', beginDate, endDate, secondSuccessInTemp, errorOccurred);
-
-
-
-
-var barChartData;
-var barChartActors = 0;
-function waitForBarChartDrawing() {
-    if (barChartActors < 2) {
-        barChartActors += 1;
-    }
-    else {
+var goDrawPie = function(sensor, index) {
+    generate.widgetPie(existingPositions[index], sensor.booleanTitle, "watchingArray[index].dataSC", function(data) {
+        eval (data);
         finishedLoading();
-        eval(barChartData);
-        barChartActors = 0;
-    }
-}
-
-var countingArray = [];
-var successForWindowCount = function (data) {
-    countingArray[0] = {"name": "nb of window openings", "data": data.data};
-    waitForBarChartDrawing();
+    }, errorOccurred);
 };
 
-successForAcCount = function (data) {
-    countingArray[1] = {"name": "% of time the AC is on", "data": data.data};
-    waitForBarChartDrawing();
-};
-retrieveData.askForSeriesWithParam(theNeeds[1]['sensors'][0]+'/data', 'true', beginDate, endDate, successForAcCount, errorOccurred);
+var firstWidgetData = [];
 
-retrieveData.askForSeriesWithParam(theNeeds[1]['sensors'][1]+'/data', 'true', beginDate, endDate, successForWindowCount, errorOccurred);
-
-var layoutChosen = function(layoutHTML) {
+var layoutChosen = function (layoutHTML) {
     //layout insertion
-    var div = document.getElementById( 'dashboard' );
-    div.insertAdjacentHTML( 'afterbegin', layoutHTML );
+    var div = document.getElementById('dashboard');
+    div.insertAdjacentHTML('afterbegin', layoutHTML);
 
-    //This is the second graph, comparing window & ac time on
-    generate.widgetV2("Title not defined", theNeeds[1]['graphType'],
-        [{"type":"number","title":"Nb of times the window got opened"},
-            {"type":"percent","title":"% of time AC is on"}]
-        , existingPositions[2], "countingArray", function(data) {
-            barChartData = data;
-            waitForBarChartDrawing();
-        }, errorOccurred);
+//Quick and dirty definition !
+    theNeeds.forEach(function (aNeed, index) {
+        if (aNeed.sensors.length > 0) { //we only do that if you asked for some sensors !
+            //Besoin de connaître le type de graphe pour savoir la route exacte que je vais demander à SC.
+            aNeed.additionnal = '';
 
-    //This is the first graph, comparing tempartures
-    generate.widgetV2("Title not defined", theNeeds[0]['graphType'],
-        [{type:"temperature", "title": "Temperature (°C)"}]
-        , existingPositions[3], "temperaturesArray", function(data) {
-            lineChartData = data;
-            waitForLineChartDrawing();
-        }, errorOccurred);
+            if (aNeed.graphType == 'line' || aNeed.graphType == 'column' || aNeed.graphType == 'mix'
+                || aNeed.graphType == 'pieChart' || aNeed.graphType == 'scatter' ) {
+                aNeed.scRoute = '/data';
+            }
+            if (aNeed.graphType == 'column') {
+                aNeed.withParam = true;
+            }
+            if (aNeed.graphType == 'mix' || aNeed.graphType == 'scatter' ) {
+                aNeed.additionnal = '/splitlist';
+                aNeed.withParam = true;
+            }
+            if (aNeed.graphType == 'pieChart') {
+                aNeed.additionnal = '/percent';
+            }
+            //Maintenant que je sais ça, pour chaque sensor : je récup les infos manquantes, & j'appelle les données.
+            aNeed.sensors.forEach(function (sensor) {
+                if (sensor.name == "TEMP_CAMPUS") {
+                    sensor.type = "temperature";
+                    sensor.title = "Outside Temperature";
+                }
+                else if (sensor.name == "TEMP_443V") {
+                    sensor.type = "temperature";
+                    sensor.title = "Inside Temperature";
+                }
+                else if (sensor.name == "AC_443STATE") {
+                    sensor.type = "percent";
+                    sensor.title = "% of time AC is on";
+                    sensor.booleanTitle = "AC"
+                }
+                else if (sensor.name == "WINDOW443STATE") {
+                    sensor.type = "number";
+                    sensor.title = "Nb of times the window got opened";
+                    sensor.booleanTitle = "Window"
+                }
+                else if (sensor.name == "NOISE_SPARKS_CORRIDOR") {
+                    sensor.title = "Noise";
+                    sensor.type = "decibel";
+                    //The other elements of a mix graph will require splitdata and all, but not him...
+                    retrieveData.askForSeries(sensor.name + aNeed.scRoute, beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                }
+                else if (sensor.name == "DOOR443STATE") {
+                    sensor.title = "Nb of times the door got opened";
+                    sensor.type = "number";
+                    sensor.booleanTitle = "Door"
+                }
+                else {
+                    console.log('jai pas compris le capteur que tu voulais');
+                }
+                //The service could provide me with the info I will lack ! eg. everything i just gathered...
+                //then we have to ask for series with a param !!!!
 
-    generate.widgetBoolean( existingPositions[1], "windowState", "Window", function(result) {
-        windowStateData = result;
-        waitForWindowStateDrawing()
-    }, errorOccurred);
-
-    generate.widgetBoolean( existingPositions[0], "climState", "Air Conditioning", function(result) {
-        finishedLoading();
-        acStateData = result;
-        waitForAcStateDrawing();
-    }, errorOccurred);
-
+                if (aNeed.withParam) {
+                    retrieveData.askForSeriesWithParam(sensor.name + aNeed.scRoute + aNeed.additionnal, aNeed.withParam.toString(), beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                }
+                else if (aNeed.graphType == 'boolean') {
+                    retrieveData.askForStateNow(sensor.name, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                }
+                else {
+                    retrieveData.askForSeries(sensor.name + aNeed.scRoute + aNeed.additionnal, beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                }
+            });
+        }
+    });
 };
-
-
-
-var windowStateData;
-var windowStateActors = 0;
-function waitForWindowStateDrawing() {
-    if (windowStateActors < 1) {
-        windowStateActors += 1;
-    }
-    else {
-        finishedLoading();
-        eval(windowStateData);
-        windowStateActors = 0;
-    }
-}
-
-
-var windowState;
-var climState;
-var successForWindow = function (data) {
-    windowState = data;
-    waitForWindowStateDrawing();
-};
-
-
-var acStateData;
-var acStateActors = 0;
-function waitForAcStateDrawing() {
-    if (acStateActors < 1) {
-        acStateActors += 1;
-    }
-    else {
-        finishedLoading();
-        eval(acStateData);
-        acStateActors = 0;
-    }
-}
-
-
-var successForAC = function (data) {
-    climState = data;
-    waitForAcStateDrawing();
-};
-
-retrieveData.askForStateNow(theNeeds[2]['sensors'][0], successForWindow, errorOccurred);
-retrieveData.askForStateNow(theNeeds[3]['sensors'][0], successForAC, errorOccurred);
