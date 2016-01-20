@@ -1,7 +1,7 @@
 var sensors; //This array contains all the sensors we have
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 var needs = ["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
-var maxOfWidgets = 4; //this determines how many boxes are drawn in the center of the page
+var maxOfWidgets = 1; //this determines how many boxes are drawn in the center of the page
 var composition_sensors = [];
 var composition_needs = [];
 var navbar = [];
@@ -77,7 +77,7 @@ var addAWidget = function () {
 var removeAWidget = function() {
     //you want to remove a widget !
     console.log('removing a widget box');
-}
+};
 /*
  This functions empties a widget box, making it back to its original state
  */
@@ -212,16 +212,45 @@ function dropIt(event, ui) {
     } else {
         //the sensor mustn't already be in the widget
         if (!($.inArray(draggableName, composition_sensors[droppableId]) > -1)) {
+            //Here, we add a new sensor to the widget. So we must append the toggle button at the same time.
             composition_sensors[droppableId].push(draggableName);
+
+            //We create the button for the sensor we add
+            var togglePercent = document.createElement("button");        // Create a <button> element
+            togglePercent.setAttribute('class', 'btn btn-default btn-xs');
+            togglePercent.setAttribute('onclick', 'setColor(event, "'+draggableName+'", "'+droppableId+'", "#0000FF")');
+            togglePercent.setAttribute('data-count', '1');
+            var buttonContent = document.createTextNode("%");       // Create a text node
+            togglePercent.appendChild(buttonContent);          // Append the text to <button>
             ui.draggable.clone().appendTo($(this));
             allTheNeeds[droppableId].sensors.push({"name": draggableName});
+            document.getElementById(draggableName).appendChild(togglePercent);
         }
     }
 
     displayGenerateButton();
 }
 
+var setColor = function(event, btnName, widgetIndex, color) {
 
+    var target = event.target,
+        count = +target.dataset.count;
+
+    allTheNeeds[widgetIndex].sensors.forEach(function(sensor) {
+        if (sensor.name == btnName) {
+            sensor.percent = count;
+        }
+    });
+
+    if (count === 1) { //= wasn't selected before
+        target.style.backgroundColor = color;
+        target.dataset.count = 0;
+    } else {
+        target.style.backgroundColor = '#FFFFFF';
+        target.dataset.count = 1;
+    }
+
+};
 var displayGenerateButton = function () {
     for (var i = 0; i < composition_sensors.length; i++) {
         if (composition_sensors[i].length > 1) {
