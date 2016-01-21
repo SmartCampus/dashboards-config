@@ -92,7 +92,6 @@ retrieveData.askForSeriesWithParam('AC_443STATE/data/reverse', "true", beginDate
     , errorOccurred);
 
 var drawLineChart = function () {
-    console.log('************** drawing linechart');
     $('#c1').highcharts('StockChart', {
         chart: {
             zoomType: 'x'
@@ -107,7 +106,6 @@ var drawLineChart = function () {
                         color: Highcharts.getOptions().colors[1]
                     }
                 },
-
                 labels: {
                     format: '{value}',
                     style: {
@@ -182,49 +180,61 @@ var successInLight = function (data) {
 };
 
 var drawLineChartForLight = function () {
-    $('#lightLevel').highcharts('StockChart', {
-        chart: {
-            zoomType: 'x'
-        },
-        rangeSelector: {
-            selected: 1
-        },
-        yAxis: { // Primary yAxis
-            min: 8,
-            title: {
-                text: 'Brightness level',
+    console.log("in the draw line chart for light");
+    var lightInArray = [];
+    lightInArray.push(lightData);
+    generate.widgetV2("Brightness level evolution", "line", [{type:"lux", "title":"Brightness level"}], "lightLevel", "lightInArray", function(data) {
+        eval(data);
+}, function(error) {
+    console.log('error :(');
+});
+};
+
+
+        /*$('#lightLevel').highcharts('StockChart', {
+            chart: {
+                zoomType: 'x'
+            },
+            rangeSelector: {
+                selected: 1
+            },
+            yAxis: { // Primary yAxis
+                min: 8,
+                title: {
+                    text: 'Brightness level',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+
+                labels: {
+                    format: '{value} lumen',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+
                 style: {
                     color: Highcharts.getOptions().colors[0]
-                }
+                },
+                plotLines: [{
+                    value: 400,
+                    color: 'red',
+                    dashStyle: 'shortdash', //pointillé
+                    width: 2,
+                    label: {
+                        text: 'Day / night threshold'
+                    }
+                }]
             },
-
-            labels: {
-                format: '{value} lumen',
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                }
-            },
-
-            style: {
-                color: Highcharts.getOptions().colors[0]
-            },
-            plotLines: [{
-                value: 400,
-                color: 'red',
-                dashStyle: 'shortdash', //pointillé
-                width: 2,
-                label: {
-                    text: 'Day / night threshold'
+            series: [{
+                name: lightData.name,
+                data: lightData.data,
+                tooltip: {
+                    valueDecimals: 0
                 }
             }]
-        },
-        series: [{
-            name: lightData.name,
-            data: lightData.data,
-            tooltip: {
-                valueDecimals: 0
-            }
-        }]
-    });
-};
+        });
+        */
+
 

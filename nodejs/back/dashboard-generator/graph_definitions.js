@@ -45,16 +45,26 @@ var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average", ""),
 			width: 2,
 			label: {"text": "Noise threshold"}
 		},
+		"average", ""),
+		LUX = new YAxisType("lux", 8, "undefined", "lux",
+				{
+					value: 400,
+					color: "red",
+					dashStyle: "shortdash",
+					width: 2,
+					label: {"text": "Day / Night threshold"}
+				},
 		"average", "");
 
 var YAXIS_TYPES = {
+	lux: LUX,
 	percent: PERCENT,
 	number: NUMBER,
 	temperature: TEMPERATURE,
 	decibel: DECIBEL
 };
 
-var YAXIS_TYPES_ARRAY = [PERCENT, NUMBER, TEMPERATURE, DECIBEL]
+var YAXIS_TYPES_ARRAY = [LUX, PERCENT, NUMBER, TEMPERATURE, DECIBEL]
 
 function getYAxisType(type) {
 	for (var i in YAXIS_TYPES_ARRAY) {
@@ -94,7 +104,7 @@ var GRAPH_TYPES = {
 	line: LINE,
 	column: COLUMN,
 	scatter: SCATTER
-}
+};
 
 function getGraphType(type) {
 	for (var property in GRAPH_TYPES) {
