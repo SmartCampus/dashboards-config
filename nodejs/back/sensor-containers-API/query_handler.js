@@ -63,7 +63,6 @@ function getSensorsFromQuery(queries) {
 
     for(var query in queries) {
         var queryResult = [];
-        console.log(sensors.getSmartCampusSensors().length);
         var smartCampusSensors = sensors.getSmartCampusSensors();
         for(var iterator in smartCampusSensors) {
             var name = smartCampusSensors[iterator].getName();
