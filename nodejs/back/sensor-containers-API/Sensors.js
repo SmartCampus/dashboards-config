@@ -258,7 +258,6 @@ function initSensors(data) {
     var jsonContainers = json._items;
 
     for(var i in sensorList) {
-        console.log(sensorList[i].unit);
         if(sensorList[i].unit === "state") {
             categories.STATE.getSensors().push(sensorList[i]);
         } else if(sensorList[i].unit === "temperature") {
