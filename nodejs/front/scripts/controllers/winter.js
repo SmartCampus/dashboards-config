@@ -55,9 +55,11 @@ var secondSuccessInTemp = function (data, callback) {
 };
 
 var thirdSuccessInTemp = function (data, callback) {
-    console.log(data.data);
-    temperaturesArray[2] = {"type": "column", "name": "Heating status", "data": data.data, "yAxis": 0,  "dataGrouping": {
-        "approximation": "average"}};
+    temperaturesArray[2] = {
+        "type": "column", "name": "Heating status", "data": data.data, "yAxis": 0, "dataGrouping": {
+            "approximation": "average"
+        }
+    };
     callback();
 };
 
@@ -92,7 +94,23 @@ retrieveData.askForSeriesWithParam('AC_443STATE/data/reverse', "true", beginDate
     , errorOccurred);
 
 var drawLineChart = function () {
-    $('#c1').highcharts('StockChart', {
+    generate.widgetV2("Heating status in comparison to inside and outside temperatures", "",
+        [{
+            type: "state",
+            "title": "Heating status"
+        }, {
+            type: "temperature",
+            "title": "Température (°C)"
+        }], "c1", "temperaturesArray", function(data) {
+            console.log(data);
+            eval(data);
+
+        }, function(error) {
+           console.log('error :(');
+
+        });
+
+    /*$('#c1').highcharts('StockChart', {
         chart: {
             zoomType: 'x'
         },
@@ -163,10 +181,10 @@ var drawLineChart = function () {
         },
 
         series: temperaturesArray
-    });
+    });*/
     finishedLoading();
 };
-var lightData={};
+var lightData = {};
 
 retrieveData.askForSeries('LIGHT_444/data', beginDate, endDate,
     function (data) {
@@ -180,61 +198,14 @@ var successInLight = function (data) {
 };
 
 var drawLineChartForLight = function () {
-    console.log("in the draw line chart for light");
     var lightInArray = [];
     lightInArray.push(lightData);
-    generate.widgetV2("Brightness level evolution", "line", [{type:"lux", "title":"Brightness level"}], "lightLevel", "lightInArray", function(data) {
+    generate.widgetV2("Brightness level evolution", "line", [{
+        type: "lux",
+        "title": "Brightness level"
+    }], "lightLevel", "lightInArray", function (data) {
         eval(data);
-}, function(error) {
-    console.log('error :(');
-});
+    }, function (error) {
+        console.log('error :(');
+    });
 };
-
-
-        /*$('#lightLevel').highcharts('StockChart', {
-            chart: {
-                zoomType: 'x'
-            },
-            rangeSelector: {
-                selected: 1
-            },
-            yAxis: { // Primary yAxis
-                min: 8,
-                title: {
-                    text: 'Brightness level',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-
-                labels: {
-                    format: '{value} lumen',
-                    style: {
-                        color: Highcharts.getOptions().colors[0]
-                    }
-                },
-
-                style: {
-                    color: Highcharts.getOptions().colors[0]
-                },
-                plotLines: [{
-                    value: 400,
-                    color: 'red',
-                    dashStyle: 'shortdash', //pointillé
-                    width: 2,
-                    label: {
-                        text: 'Day / night threshold'
-                    }
-                }]
-            },
-            series: [{
-                name: lightData.name,
-                data: lightData.data,
-                tooltip: {
-                    valueDecimals: 0
-                }
-            }]
-        });
-        */
-
-

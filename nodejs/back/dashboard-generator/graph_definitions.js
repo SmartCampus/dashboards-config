@@ -28,7 +28,7 @@ class YAxisType {
 
 var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average", ""),
 	NUMBER = new YAxisType("number", 0, undefined, " ", undefined, "sum", "column"),
-	TEMPERATURE = new YAxisType("temperature", undefined, undefined, " ",
+	TEMPERATURE = new YAxisType("temperature", undefined, undefined, " °C ",
 		{
 			value: 0,
 			color: "red",
@@ -54,17 +54,26 @@ var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average", ""),
 					width: 2,
 					label: {"text": "Day / Night threshold"}
 				},
-		"average", "");
+		"average", ""),
+		STATE = new YAxisType("state", 0, 100, "", undefined, "average", "column");
+
+/*
+ min: 0,
+ max: 100,
+ title: {
+ text: 'heating status',
+ */
 
 var YAXIS_TYPES = {
 	lux: LUX,
 	percent: PERCENT,
 	number: NUMBER,
 	temperature: TEMPERATURE,
-	decibel: DECIBEL
+	decibel: DECIBEL,
+	state: STATE
 };
 
-var YAXIS_TYPES_ARRAY = [LUX, PERCENT, NUMBER, TEMPERATURE, DECIBEL]
+var YAXIS_TYPES_ARRAY = [LUX, PERCENT, NUMBER, TEMPERATURE, DECIBEL, STATE];
 
 function getYAxisType(type) {
 	for (var i in YAXIS_TYPES_ARRAY) {
