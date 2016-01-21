@@ -267,19 +267,17 @@ function initSensors(data) {
         }
     }
 
-
     for(var i in jsonContainers) {
         for(var iterator in containers) {
             for(var filters in containers[iterator].getFilters()) {
                 var filter = new RegExp(containers[iterator].getFilters()[filters], "i");
-                if(filter.test(jsonContainers[i].name)) {
-                    var name = jsonContainers[i].name;
-                    containers[iterator].getDirectSensors().push(sensorList.name);
+                var name = jsonContainers[i].name;
+                if(filter.test(jsonContainers[i].name) && (sensorList[name] !== undefined) ) {
+                    containers[iterator].getDirectSensors().push(sensorList[name]);
                 }
             }
         }
     }
-
 
     for(var iterator in containers) {
         smartCampus.push(containers[iterator]);
@@ -290,10 +288,16 @@ function initSensors(data) {
 }
 
 
-
+/**
+ * This method run through all the sensors and create an instance of {Sensor} with an additionnel name, description and unit.
+ * For that we check the name of the sensor, if the name is not in the switch then the sensor is not treated
+ *
+ *
+ * @param sensors {json} list of all the sensor
+ */
 function upgradeSensorsInformation(sensors) {
     for(var iterator in sensors._items) {
-        var sensor;
+        var sensor = undefined;
         switch (sensors._items[iterator].name) {
             case "TEMP_443V":
                 sensor = new Sensor(sensors._items[iterator].name, "Temperature Office 443", undefined,"Inside Temperature", "temperature");
@@ -340,15 +344,16 @@ function upgradeSensorsInformation(sensors) {
             case "Window_Coffee":
                 sensor = new Sensor(sensors._items[iterator].name, "State of the window coffee", "Window","State of the window coffee", "state");
                 break;
+            default:
+                break;
         }
         if(typeof sensor !== "undefined") {
             var name = sensors._items[iterator].name;
-            sensorList.name = sensor.toJson();
+            sensorList[name] = sensor.toJson();
+
         }
     }
 }
-
-
 
 
 /**
