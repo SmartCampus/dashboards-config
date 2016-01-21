@@ -58,7 +58,7 @@ router.get("/sensor/:sensorId/data/splitList", function(req, res) {
         date = req.query.date;
     }
 
-    request_handler.getStateInformationSplit(sensorId, date,res);
+    request_handler.getStateInformationSplit(sensorId, date,res)
 });
 
 router.get("/sensor/:sensorId/data/last", function(req, res) {

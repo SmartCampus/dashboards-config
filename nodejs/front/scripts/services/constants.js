@@ -10,3 +10,4 @@ needsServer = 'http://localhost:8084/';
 widgetGen = 'generationRequest';
 
 needsQuestion = 'expressNeed';
+needSet = 'needSet';
