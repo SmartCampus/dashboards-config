@@ -4,12 +4,15 @@
 
 "use strict";
 
-var logger = require("./logger");
+var async = require("async"),
+	logger = require("./logger"),
+	requestSmartcampus = require("./request_smartcampus");
 
 class Need {
 	
-	constructor (name) {
+	constructor (name, sensorCategories) {
 		this._name = name;
+		this._sensorCategories = sensorCategories;
 	}
 
 	get name() { return this._name; }
@@ -17,9 +20,13 @@ class Need {
 	set compatibleNeeds(compatibleNeeds) { this._compatibileNeeds = compatibleNeeds; }
 }
 
-var COMPARISON = new Need("Comparison"), SEE_STATUS = new Need("See status"), OVERTIME = new Need("Overtime"),
-	RELATIONSHIPS = new Need("Relationships"), HIERARCHY = new Need("Hierarchy"),
-	PROPORTION = new Need("Proportion"), SUMMARIZE = new Need("Summarize");
+var COMPARISON = new Need("Comparison", ["TEMP", "LIGHT", "ENERGY", "STATE"]),
+	SEE_STATUS = new Need("See status", ["STATE"]),
+	OVERTIME = new Need("Overtime", ["TEMP", "LIGHT", "ENERGY", "STATE"]),
+	RELATIONSHIPS = new Need("Relationships", []),
+	HIERARCHY = new Need("Hierarchy", []),
+	PROPORTION = new Need("Proportion", ["TEMP", "LIGHT", "ENERGY", "STATE"]),
+	SUMMARIZE = new Need("Summarize", []);
 
 COMPARISON.compatibleNeeds = [OVERTIME, PROPORTION];
 SEE_STATUS.compatibleNeeds = [];
@@ -40,13 +47,49 @@ var NEEDS = {
 }
 
 function getSensorsMatchingNeeds(needs, callback) {
+	var sensors = [], sensorCategories;
+
 	if (!checkNeedsConsistency(needs)) {
 		var err = new Error("unconsistent need set");
 
 		err.unconsistentNeedSet = true;
 		callback(err, null);
 	}
-	// TODO
+	sensorCategories = mergeCategories(needs);
+	async.map(sensorCategories, function (category, callback) {
+		requestSmartcampus.getSensorsByCategories(function (err, results) {
+			if (err) {
+				logger.warn("error while getting sensors from category " + category);
+				callback(err, null);
+			}
+			else {
+				callback(null, results);
+			}
+		});
+	}, function (err, results) {
+		if (err) {
+			logger.error("error while getting sensors from categories");
+			callback(err, null);
+		}
+		else {
+			callback(null, results);
+		}
+	});
+}
+
+function mergeCategories(needs) {
+	var categories = [], need, category;
+
+	for (var i = needs.length - 1; i >= 0; i--) {
+		need = needs[i];
+		for (var j = need.sensorCategories.length - 1; j >= 0; j--) {
+			category = need.sensorCategories[j];
+			if (categories.indexOf(category) > -1) {
+				categories.push(category);
+			}
+		}
+	}
+	return categories;
 }
 
 function checkNeedsConsistency(needs) {
@@ -61,8 +104,8 @@ function checkNeedsConsistency(needs) {
 			}) == -1) {
 				return false;
 			}
-		};
-	};
+		}
+	}
 	return true;
 }
 

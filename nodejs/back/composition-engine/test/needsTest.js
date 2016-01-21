@@ -8,7 +8,7 @@ describe("needs", function () {
 
 	describe("#checkNeedsConsistency()", function () {
 
-		describe("summer dashobard", function () {
+		describe("summer dashboard", function () {
 
 			it("should be a consistent need set", function () {
 				assert(needs.checkNeedsConsistency([
