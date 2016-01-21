@@ -209,7 +209,7 @@ class SensorCategory extends SensorSet {
 }
 
 var smartCampus = [];
-var categories = [];
+var categories = {};
 var containers = [];
 var sensorList = {};
 
@@ -256,14 +256,16 @@ function initSensors(data) {
     upgradeSensorsInformation(json);
 
     var jsonContainers = json._items;
-    for(var i in jsonContainers) {
-        for(var iterator in categories) {
-            for(var filters in containers[iterator].getFilters()) {
-                var filter = new RegExp("(?:^|[^A-Za-z])" + categories[iterator].getFilters()[filters] + "(?:[^A-Za-z]|$)", "i");
-                if (filter.test(jsonContainers[i].name)) {
-                    categories[iterator].getSensors().push(jsonContainers[i].name);
-                }
-            }
+
+    for(var i in sensorList) {
+        if(sensorList[i].unit === "state") {
+            categories.STATE.getSensors().push(sensorList[i]);
+        } else if(sensorList[i].unit === "temperature") {
+            categories.TEMP.getSensors().push(sensorList[i]);
+        } else if(sensorList[i].unit === "lux") {
+            categories.LIGHT.getSensors().push(sensorList[i]);
+        } else if(sensorList[i].unit === "watt") {
+            categories.ENERGY.getSensors().push(sensorList[i]);
         }
     }
 
@@ -371,18 +373,19 @@ function upgradeSensorsInformation(sensors) {
  */
 function initCategories() {
     var temperatureSensors = new SensorCategory("TEMP", [], ["TEMP", "AC"]);
-    var doorSensors = new SensorCategory("DOOR", [], ["DOOR"]);
-    var airConditioningSensors = new SensorCategory("AC", [], ["AC"]);
-    var windowSensors = new SensorCategory("WINDOW", [], ["WINDOW"]);
     var lightSensors = new SensorCategory("LIGHT", [], ["LIGHT"]);
     var stateSensors = new SensorCategory("STATE", [], ["STATE"]);
+    var energySensors = new SensorCategory("ENERGY", [], ["ENERGY"]);
 
-    categories.push(stateSensors);
-    categories.push(temperatureSensors);
-    categories.push(doorSensors);
-    categories.push(airConditioningSensors);
-    categories.push(windowSensors);
-    categories.push(lightSensors);
+    categories.LIGHT = lightSensors;
+    categories.TEMP = temperatureSensors;
+    categories.STATE = stateSensors;
+    categories.ENERGY = energySensors;
+
+ //   categories.push(stateSensors);
+   // categories.push(temperatureSensors);
+   // categories.push(lightSensors);
+   // categories.push(energySensors);
 }
 
 /**
