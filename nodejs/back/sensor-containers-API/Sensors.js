@@ -371,18 +371,14 @@ function upgradeSensorsInformation(sensors) {
  */
 function initCategories() {
     var temperatureSensors = new SensorCategory("TEMP", [], ["TEMP", "AC"]);
-    var doorSensors = new SensorCategory("DOOR", [], ["DOOR"]);
-    var airConditioningSensors = new SensorCategory("AC", [], ["AC"]);
-    var windowSensors = new SensorCategory("WINDOW", [], ["WINDOW"]);
     var lightSensors = new SensorCategory("LIGHT", [], ["LIGHT"]);
     var stateSensors = new SensorCategory("STATE", [], ["STATE"]);
+    var energySensors = new SensorCategory("ENERGY", [], ["ENERGY"]);
 
     categories.push(stateSensors);
     categories.push(temperatureSensors);
-    categories.push(doorSensors);
-    categories.push(airConditioningSensors);
-    categories.push(windowSensors);
     categories.push(lightSensors);
+    categories.push(energySensors);
 }
 
 /**
