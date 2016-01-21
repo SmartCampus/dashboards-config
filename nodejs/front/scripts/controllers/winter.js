@@ -25,7 +25,7 @@ var finishedLoading = function () {
 };
 
 var errorOccurred = function () {
-    document.getElementById("errorOccured").className = "row text-center show";
+    document.getElementById("errorOccurred").className = "row text-center show";
     document.getElementById("loadingImg").className = "hidden";
     document.getElementById("dashboard").className = "hidden";
 };
@@ -49,7 +49,7 @@ var firstSuccessInTemp = function (data, callback) {
 };
 
 var secondSuccessInTemp = function (data, callback) {
-    console.log(data.data);
+    //console.log(data.data);
     temperaturesArray[1] = {"type": "line", "name": "outside temparature", "data": data.data, "yAxis": 1};
     callback();
 };

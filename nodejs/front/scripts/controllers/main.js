@@ -13,6 +13,7 @@ var navbar = [];
     $.get(mainServer + "container/Root/child")
         .done(function (data) {
             sensors = data;
+            console.log(sensors);
             //needs = data;
             callback();
         });
@@ -56,22 +57,28 @@ var addTableRow = function (index) {
         + '</span></div></div>');
 
     $(".droppable").droppable({drop: dropIt});
+
 };
 
 
 /**
  * Function to add new widget boxes
  * WE need to expand the different arrays that depend on the nb of widgets boxes as well !
+ * For now, when we add a line, the other boxes become unavailable !
  */
 var addAWidget = function () {
-
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
-    composition_needs[maxOfWidgets] = new Array();
-    composition_sensors[maxOfWidgets] = new Array();
+    composition_needs[maxOfWidgets] = [];
+    composition_sensors[maxOfWidgets] = [];
 
     addTableRow(maxOfWidgets);
-
+    /*var theId = (maxOfWidgets-1).toString();
+    console.log(maxOfWidgets);
+    console.log(theId);
+    document.getElementById(theId).disabled = true;
+    */
     maxOfWidgets += 1;
+
 };
 
 var removeAWidget = function() {
@@ -136,7 +143,9 @@ function navigation() {
 
         for (var i = 0; i < position.directSensor.length; i++) {
             $("#add-captors").append(
-                "<div class=\"row\"><span class=\"draggable\" id=\"" + position.directSensor[i] + "\" style=\"cursor : pointer;\">" + position.directSensor[i] + "</span></div>"
+                "<div class=\"row\"><span class=\"draggable\" id=\""
+                + position.directSensor[i].displayName + "\" style=\"cursor : pointer;\">"
+                + position.directSensor[i].displayName + "</span></div>"
             );
 
             $(".draggable").draggable({
@@ -205,9 +214,18 @@ function dropIt(event, ui) {
     //It must exist, and it mustn't already be in the widget
     if ($.inArray(draggableName, needs) > -1) {
         if (!($.inArray(draggableName, composition_needs[droppableId]) > -1)) {
-            composition_needs[droppableId].push(draggableName);
-            ui.draggable.clone().appendTo($(this));
-            allTheNeeds[droppableId].needs.push(draggableName);
+            expression.needList( composition_needs, function (answer) {
+                buildings = answer;
+                navigation();
+                //maybe ?
+                composition_needs[droppableId].push(draggableName);
+                ui.draggable.clone().appendTo($(this));
+                allTheNeeds[droppableId].needs.push(draggableName);
+
+            }, function() {
+                console.log('IT\'S IMPOSSIBRRRRUUUUU');
+            });
+
         }
     } else {
         //the sensor mustn't already be in the widget
@@ -223,6 +241,8 @@ function dropIt(event, ui) {
             var buttonContent = document.createTextNode("%");       // Create a text node
             togglePercent.appendChild(buttonContent);          // Append the text to <button>
             ui.draggable.clone().appendTo($(this));
+
+
             allTheNeeds[droppableId].sensors.push({"name": draggableName});
             document.getElementById(draggableName).appendChild(togglePercent);
         }
@@ -232,7 +252,6 @@ function dropIt(event, ui) {
 }
 
 var setColor = function(event, btnName, widgetIndex, color) {
-
     var target = event.target,
         count = +target.dataset.count;
 
@@ -264,7 +283,6 @@ var displayGenerateButton = function () {
 /*******************************
  **** JSON Of composition ******
  ******************************/
-
 var declareNeeds = function () {
     allTheNeeds.forEach(function (oneNeed, index) {
         //We only ask the composition server if what was asked is possible enough
