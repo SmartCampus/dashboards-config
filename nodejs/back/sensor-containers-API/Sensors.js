@@ -280,6 +280,16 @@ function initSensors(data) {
     }
 
     for(var iterator in containers) {
+        if(containers[iterator].getName() == "Modalis corridor") {
+            var sensor = new Sensor("NOISE_SPARKS_CORRIDOR", "Level of noise", undefined, "Level of noise", "decibel");
+            containers[iterator].getDirectSensors().push(sensor.toJson());
+        } else if(containers[iterator].getName() == "Office 443") {
+            var sensor = new Sensor("HEATING_443", "Heat in office", undefined, "Heat in office", "temperature");
+            containers[iterator].getDirectSensors().push(sensor.toJson());
+        }
+    }
+
+    for(var iterator in containers) {
         smartCampus.push(containers[iterator]);
     }
     for(var iterator in categories) {
@@ -300,7 +310,7 @@ function upgradeSensorsInformation(sensors) {
         var sensor = undefined;
         switch (sensors._items[iterator].name) {
             case "TEMP_443V":
-                sensor = new Sensor(sensors._items[iterator].name, "Temperature Office 443", undefined,"Inside Temperature", "temperature");
+                sensor = new Sensor(sensors._items[iterator].name, "Temperature in Office", undefined,"Inside Temperature", "temperature");
                 break;
             case "LIGHT_CAFE":
                 sensor = new Sensor(sensors._items[iterator].name, "Light value near coffee Machine", undefined ,"Light value", "lux");
@@ -309,48 +319,45 @@ function upgradeSensorsInformation(sensors) {
                 sensor = new Sensor(sensors._items[iterator].name, "Door Sparks floor",undefined ,"Door Sparks floor", "state");
                 break;
             case "AC_443":
-                sensor = new Sensor(sensors._items[iterator].name, "Temperature in AC in office 443",undefined,"Temperature in AC in office 443", "temperature");
+                sensor = new Sensor(sensors._items[iterator].name, "Temperature in AC",undefined,"Temperature in AC in office 443", "temperature");
                 break;
             case "DOOR443STATE":
-                sensor = new Sensor(sensors._items[iterator].name, "State of the Door 443", "Door","State of the Door 443", "state");
+                sensor = new Sensor(sensors._items[iterator].name, "State of the Door", "Door","State of the Door", "state");
                 break;
             case "TEMP_442V":
-                sensor = new Sensor(sensors._items[iterator].name, "Temperature in office 442", undefined,"Temperature in office 442", "temperature");
+                sensor = new Sensor(sensors._items[iterator].name, "Temperature in office", undefined,"Temperature in office", "temperature");
                 break;
             case "TEMP_443V":
-                sensor = new Sensor(sensors._items[iterator].name, "Temperature in office 443", undefined,"Temperature in office 443", "temperature");
+                sensor = new Sensor(sensors._items[iterator].name, "Temperature in office", undefined,"Temperature in office", "temperature");
                 break;
             case "WINDOW443STATE":
-                sensor = new Sensor(sensors._items[iterator].name, "State of the window in the office 443", "Window","State of the window in the office 443", "state");
+                sensor = new Sensor(sensors._items[iterator].name, "State of the window", "Window","State of the window", "state");
                 break;
             case "AC_443STATE":
-                sensor = new Sensor(sensors._items[iterator].name, "State of the AC in the office 443","AC" ,"State of the AC in the office 443","state");
+                sensor = new Sensor(sensors._items[iterator].name, "State of the AC","AC" ,"State of the AC","state");
                 break;
             case "MW_energy":
-                sensor = new Sensor(sensors._items[iterator].name, "MicroWave energy", "MicroWave energy", undefined, "MicroWave energy", "watt");
+                sensor = new Sensor(sensors._items[iterator].name, "Microwave energy", "MicroWave energy", undefined, "MicroWave energy", "watt");
                 break;
             case "Coffee_energy":
                 sensor = new Sensor(sensors._items[iterator].name, "Coffee Energy", undefined,"Coffee Energy", "watt");
                 break;
             case "LIGHT_444":
-                sensor = new Sensor(sensors._items[iterator].name, "Light in office 444", undefined,"Light in office 444", "lux");
+                sensor = new Sensor(sensors._items[iterator].name, "Light in office", undefined,"Light in office", "lux");
                 break;
             case "TEMP_CAMPUS":
                 sensor = new Sensor(sensors._items[iterator].name, "Outside Temperature", undefined,"Outside Temperature", "temperature");
                 break;
             case "Window_Modalis":
-                sensor = new Sensor(sensors._items[iterator].name, "State of window Modalis", "Window","State of window Modalis", "state");
+                sensor = new Sensor(sensors._items[iterator].name, "State of the window", "Window","State of the window", "state");
                 break;
             case "Window_Coffee":
-                sensor = new Sensor(sensors._items[iterator].name, "State of the window coffee", "Window","State of the window coffee", "state");
-                break;
-            default:
+                sensor = new Sensor(sensors._items[iterator].name, "State of the window", "Window","State of the window", "state");
                 break;
         }
         if(typeof sensor !== "undefined") {
             var name = sensors._items[iterator].name;
             sensorList[name] = sensor.toJson();
-
         }
     }
 }
@@ -388,10 +395,10 @@ function initContainers() {
     var fourthFloor = new SensorContainer("4th floor", ["SPARKS"] ,[], []);
     var coffeeCorner = new SensorContainer("Coffee corner", ["COFFEE", "CAFE"], [], []);
     var sousRepartiteur = new SensorContainer("Sous repartiteur", ["MW"] , [], []);
-    var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis", "CORRIDOR"], ["NOISE_SPARKS_CORRIDOR"], []);
+    var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis", "CORRIDOR"], [], []);
     var office445 = new SensorContainer("Office 445", ["445"], [], []);
-    var office443 = new SensorContainer("Office 443", ["443"], ["HEATING_443"], []);
-    var office444 = new SensorContainer("Office 444", ["444"], [], []);
+    var office443 = new SensorContainer("Office 443", ["443"], [], []);
+    var office444 = new SensorContainer("Office 444", ["444"], ["HEATING_443"], []);
     // TODO : Solution très sale mais pour les capteurs virtuels y a juste aucune norme !!!
     var virtualSensors = new SensorContainer("Virtual Sensors", ["2V", "STATE", "3V", "TEMP_CAMPUS"], [], []);
     var root = new SensorContainer("Root", [], [], []);

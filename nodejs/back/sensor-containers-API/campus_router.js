@@ -42,7 +42,6 @@ router.get("/sensor/:sensorId/data", function(req, res) {
         date = req.query.date;
     }
     queryHandler.getSensorInformation(sensorId, date, function(jsonResponse) {
-        console.log(jsonResponse);
         putValueInResponse(res,jsonResponse);
     });
 });
