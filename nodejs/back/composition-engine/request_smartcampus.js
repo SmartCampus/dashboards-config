@@ -24,3 +24,7 @@ function getSensorsByCategory(category, callback) {
 		callback(error, null);
 	});
 }
+
+// Exports
+
+exports.getSensorsByCategory = getSensorsByCategory;

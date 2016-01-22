@@ -16,6 +16,9 @@ class Need {
 	}
 
 	get name() { return this._name; }
+
+	get sensorCategories() { return this._sensorCategories; }
+
 	get compatibleNeeds() { return this._compatibileNeeds; }
 	set compatibleNeeds(compatibleNeeds) { this._compatibileNeeds = compatibleNeeds; }
 }
@@ -55,26 +58,29 @@ function getSensorsMatchingNeeds(needs, callback) {
 		err.unconsistentNeedSet = true;
 		callback(err, null);
 	}
-	sensorCategories = mergeCategories(needs);
-	async.map(sensorCategories, function (category, callback) {
-		requestSmartcampus.getSensorsByCategories(function (err, results) {
+	else {
+		sensorCategories = mergeCategories(needs);
+		logger.debug("categories:", sensorCategories);
+		async.map(sensorCategories, function (category, callback) {
+			requestSmartcampus.getSensorsByCategory(category, function (err, results) {
+				if (err) {
+					logger.warn("error while getting sensors from category " + category);
+					callback(err, null);
+				}
+				else {
+					callback(null, results);
+				}
+			});
+		}, function (err, results) {
 			if (err) {
-				logger.warn("error while getting sensors from category " + category);
+				logger.error("error while getting sensors from categories");
 				callback(err, null);
 			}
 			else {
 				callback(null, results);
 			}
 		});
-	}, function (err, results) {
-		if (err) {
-			logger.error("error while getting sensors from categories");
-			callback(err, null);
-		}
-		else {
-			callback(null, results);
-		}
-	});
+	}
 }
 
 function mergeCategories(needs) {
@@ -84,7 +90,7 @@ function mergeCategories(needs) {
 		need = needs[i];
 		for (var j = need.sensorCategories.length - 1; j >= 0; j--) {
 			category = need.sensorCategories[j];
-			if (categories.indexOf(category) > -1) {
+			if (categories.indexOf(category) == -1) {
 				categories.push(category);
 			}
 		}

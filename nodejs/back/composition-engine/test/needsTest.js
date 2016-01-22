@@ -4,6 +4,11 @@ var assert = require("assert")
 
 var NEEDS = needs.NEEDS;
 
+var summerWidget1Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME],
+	summerWidget2Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION],
+	summerWidget34Needs = [NEEDS.SEE_STATUS],
+	unconsistentNeeds = [NEEDS.COMPARISON, NEEDS.RELATIONSHIPS, NEEDS.SUMMARIZE];
+
 describe("needs", function () {
 
 	describe("#checkNeedsConsistency()", function () {
@@ -11,33 +16,37 @@ describe("needs", function () {
 		describe("summer dashboard", function () {
 
 			it("should be a consistent need set", function () {
-				assert(needs.checkNeedsConsistency([
-					NEEDS.COMPARISON,
-					NEEDS.OVERTIME
-				]));
+				assert(needs.checkNeedsConsistency(summerWidget1Needs));
 			});
 
 			it("should be a consistent need set", function () {
-				assert(needs.checkNeedsConsistency([
-					NEEDS.COMPARISON,
-					NEEDS.OVERTIME,
-					NEEDS.PROPORTION
-				]));
+				assert(needs.checkNeedsConsistency(summerWidget2Needs));
 			});
 
 			it("should be a consistent need set", function () {
-				assert(needs.checkNeedsConsistency([
-					NEEDS.SEE_STATUS
-				]));
+				assert(needs.checkNeedsConsistency(summerWidget34Needs));
 			});
 		});
 
 		it("should not be a consistent need set", function () {
-			assert(!needs.checkNeedsConsistency([
-				NEEDS.COMPARISON,
-				NEEDS.RELATIONSHIPS,
-				NEEDS.SUMMARIZE
-			]));
+			assert(!needs.checkNeedsConsistency(unconsistentNeeds));
+		});
+	});
+
+	describe("#getSensorsMatchingNeeds()", function () {
+
+		describe("summer dashboard", function () {
+
+			it("should return all sensor categories", function (done) {
+				needs.getSensorsMatchingNeeds(summerWidget1Needs, function (err, results) {
+					if(err) {
+						logger.error(err);
+						throw err;
+					}
+					logger.info(results);
+					done();
+				})
+			});
 		});
 	});
 });
