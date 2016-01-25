@@ -8,6 +8,22 @@ var async = require("async"),
 	logger = require("./logger"),
 	requestSmartcampus = require("./request_smartcampus");
 
+// Sensor categories
+
+var TEMP = "TEMP",
+	LIGHT = "LIGHT",
+	ENERGY = "ENERGY",
+	STATE = "STATE";
+
+var SENSOR_CATEGORIES = {
+	TEMP: TEMP,
+	LIGHT: LIGHT,
+	ENERGY: ENERGY,
+	STATE: STATE
+}
+
+// Visualization needs
+
 class Need {
 	
 	constructor (name, sensorCategories) {
@@ -23,12 +39,12 @@ class Need {
 	set compatibleNeeds(compatibleNeeds) { this._compatibileNeeds = compatibleNeeds; }
 }
 
-var COMPARISON = new Need("Comparison", ["TEMP", "LIGHT", "ENERGY", "STATE"]),
-	SEE_STATUS = new Need("See status", ["STATE"]),
-	OVERTIME = new Need("Overtime", ["TEMP", "LIGHT", "ENERGY", "STATE"]),
+var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, STATE]),
+	SEE_STATUS = new Need("See status", [STATE]),
+	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, STATE]),
 	RELATIONSHIPS = new Need("Relationships", []),
 	HIERARCHY = new Need("Hierarchy", []),
-	PROPORTION = new Need("Proportion", ["TEMP", "LIGHT", "ENERGY", "STATE"]),
+	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, STATE]),
 	SUMMARIZE = new Need("Summarize", []);
 
 COMPARISON.compatibleNeeds = [OVERTIME, PROPORTION];
@@ -68,7 +84,7 @@ function getSensorsMatchingNeeds(needs, callback) {
 					callback(err, null);
 				}
 				else {
-					callback(null, results);
+					callback(null, {set: category, sensors: JSON.parse(results)});
 				}
 			});
 		}, function (err, results) {
@@ -117,6 +133,7 @@ function checkNeedsConsistency(needs) {
 
 // Exports
 
+exports.SENSOR_CATEGORIES = SENSOR_CATEGORIES;
 exports.NEEDS = NEEDS;
 exports.getSensorsMatchingNeeds = getSensorsMatchingNeeds;
 exports.checkNeedsConsistency = checkNeedsConsistency;
