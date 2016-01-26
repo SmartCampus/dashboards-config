@@ -65,6 +65,106 @@ describe("needs", function () {
 			});
 		});
 
-		// TODO other dasboards?
+		// TODO other dashboards?
+	});
+
+	describe("#getNeedsMatchingSensors", function () {
+
+		function testGetNeedsMatchingSensors(sensors, expectedNeeds, only, done) {
+			needs.getNeedsMatchingSensors(sensors, function (err, results) {
+				if (err) {
+					logger.error(err);
+					throw err;
+				}
+				else {
+					if (only) {
+						assert.equal(expectedNeeds.length, results.length);
+					}
+					expectedNeeds.forEach(function (expected) {
+						assert(results.find(function (result) {
+							return result.name === expected.name;
+						}));
+					});
+					done();
+				}
+			});
+		}
+
+		describe("summer dashboard", function () {
+
+			var temp443V = { name: "TEMP_443V" },
+				tempCampus = { name: "TEMP_CAMPUS" },
+				ac443State = { name: "AC_443STATE" },
+				window443State = { name: "WINDOW443STATE" };
+
+			it("should return Comparison and Overtime needs", function (done) {
+				async.parallel([
+					function (callback) {
+						testGetNeedsMatchingSensors([temp443V], [NEEDS.COMPARISON, NEEDS.OVERTIME],
+							false, function () {
+							callback(null);
+						});
+					},
+					function (callback) {
+						testGetNeedsMatchingSensors([tempCampus], [NEEDS.COMPARISON, NEEDS.OVERTIME],
+							false, function () {
+							callback(null);
+						});
+					}
+				], function join (err, results) {
+					done();
+				});
+			});
+
+			it("should return ONLY Comparison and Overtime needs", function (done) {
+				testGetNeedsMatchingSensors([temp443V, tempCampus],
+					[NEEDS.COMPARISON, NEEDS.OVERTIME], true, done);
+			});
+
+			it("should return Comparison, Overtime and Proportion needs", function (done) {
+				async.parallel([
+					function (callback) {
+						testGetNeedsMatchingSensors([ac443State],
+							[NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION], false,
+							function () {
+							callback(null);
+						});
+					},
+					function (callback) {
+						testGetNeedsMatchingSensors([window443State],
+							[NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION], false,
+							function () {
+							callback(null);
+						});
+					}
+				], function join (err, results) {
+					done();
+				});
+			});
+
+			it("should return ONLY Comparison, Overtime and Proportion needs", function (done) {
+				testGetNeedsMatchingSensors([ac443State, window443State],
+					[NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION], true, done);
+			});
+
+			it("should return See Status need", function (done) {
+				async.parallel([
+					function (callback) {
+						testGetNeedsMatchingSensors([ac443State], [NEEDS.SEE_STATUS],
+							false, function () {
+							callback(null);
+						});
+					},
+					function (callback) {
+						testGetNeedsMatchingSensors([window443State], [NEEDS.SEE_STATUS],
+							false, function () {
+							callback(null);
+						});
+					}
+				], function join (err, results) {
+					done();
+				});
+			});
+		});
 	});
 });

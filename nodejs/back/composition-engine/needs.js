@@ -131,9 +131,14 @@ function checkNeedsConsistency(needs) {
 	return true;
 }
 
+function getNeedsMatchingSensors(sensors, callback) {
+	// est-ce que j'ai la catégorie ? Oui selon Quentin.
+}
+
 // Exports
 
 exports.SENSOR_CATEGORIES = SENSOR_CATEGORIES;
 exports.NEEDS = NEEDS;
 exports.getSensorsMatchingNeeds = getSensorsMatchingNeeds;
+exports.getNeedsMatchingSensors = getNeedsMatchingSensors;
 exports.checkNeedsConsistency = checkNeedsConsistency;
