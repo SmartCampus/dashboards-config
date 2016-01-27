@@ -13,13 +13,13 @@ var async = require("async"),
 var TEMP = "TEMP",
 	LIGHT = "LIGHT",
 	ENERGY = "ENERGY",
-	STATE = "STATE";
+	NUMBER = "NUMBER";
 
 var SENSOR_CATEGORIES = {
 	TEMP: TEMP,
 	LIGHT: LIGHT,
 	ENERGY: ENERGY,
-	STATE: STATE
+	NUMBER: NUMBER
 }
 
 // Visualization needs
@@ -39,12 +39,12 @@ class Need {
 	set compatibleNeeds(compatibleNeeds) { this._compatibileNeeds = compatibleNeeds; }
 }
 
-var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, STATE]),
-	SEE_STATUS = new Need("See status", [STATE]),
-	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, STATE]),
+var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, NUMBER]),
+	SEE_STATUS = new Need("See status", [NUMBER]),
+	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, NUMBER]),
 	RELATIONSHIPS = new Need("Relationships", []),
 	HIERARCHY = new Need("Hierarchy", []),
-	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, STATE]),
+	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, NUMBER]),
 	SUMMARIZE = new Need("Summarize", []);
 
 COMPARISON.compatibleNeeds = [OVERTIME, PROPORTION];
