@@ -61,7 +61,7 @@ router.get("/sensor/:sensorId/data/last", function(req, res) {
 
 function putValueInResponse(res, jsonResponse) {
     res.send(jsonResponse);
-    console.timeEnd("call-to-real-smartcampus");
+   // console.timeEnd("call-to-real-smartcampus");
 }
 
 
