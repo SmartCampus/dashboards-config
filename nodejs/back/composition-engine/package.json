@@ -29,13 +29,8 @@
     "url": "https://atlas.i3s.unice.fr/jira/secure/RapidBoard.jspa?rapidView=246&view=planning.nodetail"
   },
   "dependencies": {
-    "moment": "^2.10.6"
-  },
-  "dependencies": {
+    "async": "^1.5.2",
     "body-parser": "^1.14.1"
-  },
-  "devDependencies": {
-    "mocha": "^2.3.4"
   },
   "devDependencies": {},
   "private": true,

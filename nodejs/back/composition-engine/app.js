@@ -1,16 +1,15 @@
 /**
- * Created by Quentin on 1/6/2016.
+ * @author Quentin Cornevin, Marc Karassev
  */
 
 var express = require("express"),
-    router = require("./composition_router"),
     app = express(),
     bodyParser = require('body-parser'),
-    widget = require('./widget');
+    router = require("./composition_router"),
+    logger = require("./logger");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
-
 
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
@@ -32,7 +31,5 @@ app.use(function (req, res, next) {
 
 app.use("/", router);
 
-
 app.listen(8084);
-console.log('Composition engine is now listening on port 8084.');
-
+logger.info('Composition engine is now listening on port 8084.');

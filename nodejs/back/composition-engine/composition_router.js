@@ -4,13 +4,8 @@
 
 var router = require("express").Router(),
     widget = require('./widget'),
-    winston = require("winston");
-
-var logger = new winston.Logger({
-	transports: [
-		new winston.transports.Console({colorize: true})
-	]
-});
+    needs = require("./needs"),
+    logger = require("./logger");
 
 router.post("/expressNeed", function(req,res) {
     var body = req.body;
@@ -29,16 +24,23 @@ router.post("/expressNeed", function(req,res) {
 });
 
 router.post("/needSet", function (req, res) {
-	widget.checkSetConsistency(req.body, function (error, result) {
+	needs.getSensorsMatchingNeeds(req.body, function (error, result) {
 		if (error) {
-			logger.warn(error);
-			// TODO check error, update response
-			res.status("500").send("could not check need set consistency");
+			logger.debug(error);
+            if (error.unconsistentNeedSet) {
+                res.status(400);
+            }
+            else {
+			    res.status(500);
+            }
+            res.send(error.message);
 		}
 		else {
-			// TODO use something else than widget
+			res.status(200).send(result);
 		}
 	});
 });
+
+// Exports
 
 module.exports = exports = router;
