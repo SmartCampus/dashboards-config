@@ -5,6 +5,7 @@ var maxOfWidgets = 1; //this determines how many boxes are drawn in the center o
 var composition_sensors = [];
 var composition_needs = [];
 var navbar = [];
+var selectedBox = 0;
 
 /**
  * Get all buildings sensors et placements
@@ -13,7 +14,6 @@ var navbar = [];
     $.get(mainServer + "container/Root/child")
         .done(function (data) {
             sensors = data;
-            console.log(sensors);
             //needs = data;
             callback();
         });
@@ -49,16 +49,44 @@ function initWindowsData() {
  * For each, we also add a "delete" button, to remove all it contains if the user made a mistake
  */
 var addTableRow = function (index) {
-    $("#add-rows").append('<div class="well col-md-10"><div class="droppable" id="'
+    $("#add-rows").append('<div class="well col-md-10" id="'
         + index
-        + '" style="min-height: 40px;"></div></div>'
+        + '" style="min-height: 80px;"></div>'
         + '<div class="col-md-2"> <br/>'
         + '<div class="btn btn-default" onclick="deleteWidgetContent(' + index + ')"><span class="glyphicon glyphicon-trash">'
         + '</span></div></div>');
 
-    $(".droppable").droppable({drop: dropIt});
-
+    updateDisableBox();
 };
+
+function updateDisableBox() {
+
+    $("#add-rows > div").each(function(){
+        var id = $(this).attr('id');
+        if( id == selectedBox){
+            $(this).css("border-color" , "green");
+            $("#"+id).droppable({drop: dropIt, disabled : false });
+        }else{
+            $(this).css("border-color" , "red");
+            $("#"+id).droppable({drop: dropIt, disabled : true });
+        }
+    });
+}
+
+$( "#add-rows" ).click(function ( event ) {
+    selectedBox = event.target.id;
+
+    $("#add-rows > div").each(function(){
+        var id = $(this).attr('id');
+        if( id === selectedBox){
+            $(this).css("border-color" , "green");
+            $("#"+id).droppable({drop: dropIt, disabled : false });
+        }else{
+            $(this).css("border-color" , "red");
+            $("#"+id).droppable({drop: dropIt, disabled : true });
+        }
+    });
+});
 
 
 /**
@@ -83,8 +111,22 @@ var addAWidget = function () {
 
 var removeAWidget = function() {
     //you want to remove a widget !
-    console.log('removing a widget box');
+
+    var domSize = $("#add-rows div").length;
+
+    if(domSize > 3){
+        if(parseInt(+selectedBox+1) === (domSize/3)){
+            selectedBox--;
+            for(var i = 0; i < 3; i++)
+                $('#add-rows div').last().remove();
+            updateDisableBox();
+        }else{
+            for(var i = 0; i < 3; i++)
+                $('#add-rows div').last().remove();
+        }
+    }
 };
+
 /*
  This functions empties a widget box, making it back to its original state
  */
@@ -210,6 +252,7 @@ function dropIt(event, ui) {
     var draggableName = ui.draggable.attr("id");
     var droppableId = $(this).attr("id");
 
+    console.log(draggableName);
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
     if ($.inArray(draggableName, needs) > -1) {
