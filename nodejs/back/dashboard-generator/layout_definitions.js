@@ -5,8 +5,9 @@
 "use strict";
 
 var LAYOUT_WIDGET_WIDTHS = {
-	halfNHalf: "col-md-6"
-}
+	halfNHalf: "col-md-6",
+	threeThirds: "col-md-4"
+};
 
 function getLayoutWidgetWidth(layout) {
 	for (var property in LAYOUT_WIDGET_WIDTHS) {

@@ -4,6 +4,7 @@
 
 var express = require("express"),
     request_handler = require("./request_handler"),
+    processor = require("./response_processor"),
     router = express.Router();
 
 
@@ -83,5 +84,33 @@ router.get("/sensor/:sensorId/data/reverse", function(req, res) {
     }
 });
 
+
+router.post("/sensors/common/hierarchical", function(req, res) {
+    var givenSensor = req.body;
+    console.log(givenSensor)
+    request_handler.getContainersChild("Root", function(response) {
+        console.log(response);
+        processor.sortHierarchicalSensor(givenSensor, response, function(response, err) {
+            if(err) {
+                res.sendStatus(400);
+            } else {
+                res.send(response);
+            }
+        })
+    });
+});
+
+
+router.get("/sensor/:sensorName/enhanced", function(req, res) {
+    var sensorName = req.params.sensorName;
+    request_handler.getSensorsEnhancedInformation(sensorName, function(response, err) {
+       if(response != null) {
+           res.send(response);
+       } else {
+           res.sendStatus(404);
+       }
+    });
+
+});
 
 module.exports = router;

@@ -99,7 +99,7 @@ function getContainerChild(name, callback) {
     for(var i in containerList) {
         if(containerList[i].getName().replace(/\s+/g, '') == name) {
             var jsonResponse = {"name" : "Buildings",  childContainer : containerList[i].getChild()};
-            //response.send(jsonResponse);
+            console.log(jsonResponse);
             callback(jsonResponse);
         }
     }

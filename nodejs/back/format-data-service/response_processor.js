@@ -4,7 +4,7 @@
 var moment = require("moment");
 
 
-function concatenateResponse(response, res) {
+function concatenateResponse(callback, res) {
     var stringData = "";
 
     res.on("data", function(chunck) {
@@ -12,8 +12,8 @@ function concatenateResponse(response, res) {
     });
 
     res.on("end", function() {
-        var tempPerTime = JSON.parse(stringData);
-        response.send(tempPerTime);
+        var json = JSON.parse(stringData);
+        callback(json);
     });
 }
 
@@ -185,6 +185,31 @@ function reverseInformation(res, callback) {
     });
 }
 
+function sortHierarchicalSensor(sensors, hierarchicalSensors, callback) {
+    for(var iterator in hierarchicalSensors.childContainer) {
+        recursiveClear(hierarchicalSensors.childContainer[iterator]);
+    }
+    function recursiveClear(container) {
+        for(var iterator in container.directSensor) {
+            if(sensors.indexOf(container.directSensor[iterator].name) === -1) {
+                delete container.directSensor[iterator]
+            }
+        }
+
+        if(container.childContainer.length > 0) {
+            for(var iterator in container.childContainer) {
+                recursiveClear(container.childContainer[iterator])
+            }
+        }
+    }
+    callback(hierarchicalSensors);
+}
+
+function checkDirectSensors(sensors, hierarchicalSensors, callback) {
+}
+
+
+exports.sortHierarchicalSensor = sortHierarchicalSensor;
 
 exports.reverseInformation = reverseInformation;
 

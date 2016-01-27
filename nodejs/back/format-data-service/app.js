@@ -4,7 +4,11 @@
 
 var express = require("express"),
     campusRouter = require("./format_data_router"),
+    bodyParser = require('body-parser'),
     app = express();
+
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use(function (req, res, next) {
     // Website you wish to allow to connect

@@ -86,9 +86,9 @@ function getLastInformation(sensorId, response) {
 }
 
 
-function getContainersChild(containerId, response) {
+function getContainersChild(containerId, callback) {
     requester.getContainerChild(containerId, function (res) {
-        processor.concatenateResponse(response, res);
+        processor.concatenateResponse(callback, res);
     });
 }
 
@@ -98,10 +98,17 @@ function getReversedInformation(sensorId, date, callback) {
     });
 }
 
+function getSensorsEnhancedInformation(sensorName, callback) {
+    requester.getEnhancedSensorsData(sensorName, function(res, err) {
+        callback(res,err);
+    });
+}
+
+exports.getSensorsEnhancedInformation = getSensorsEnhancedInformation;
+
 exports.getReversedInformation = getReversedInformation;
 
 exports.getContainersChild = getContainersChild;
-
 
 exports.getLastInformation = getLastInformation;
 
