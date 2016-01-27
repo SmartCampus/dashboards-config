@@ -62,8 +62,12 @@ router.get("/sensor/:sensorId/data/last", function(req, res) {
  */
 router.get("/sensor/:sensorName/fullInformation", function(req, res){
     var sensorName = req.params.sensorName;
-    if(sensorData.sensorList[sensorName] !== undefined) {
+    if(sensorName === "all") {
+        res.send(sensorData.sensorList);
+    } else if(sensorData.sensorList[sensorName] !== undefined) {
         res.send(sensorData.sensorList[sensorName]);
+    } else {
+        res.sendStatus(404);
     }
 });
 
