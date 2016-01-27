@@ -94,8 +94,8 @@ describe("needs", function () {
 
 			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
 				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
-				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.STATE },
-				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
+				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.NUMBER },
+				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.NUMBER };
 
 			it("should return Comparison and Overtime needs", function (done) {
 				async.parallel([
