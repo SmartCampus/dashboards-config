@@ -281,7 +281,6 @@ function initSensors(data) {
         }
     }
 
-    console.log(containers);
     for(var iterator in containers) {
         if(containers[iterator].getName() == "Modalis corridor") {
             var sensor = new Sensor("NOISE_SPARKS_CORRIDOR", "Level of noise", undefined, "Level of noise", "decibel");
@@ -482,3 +481,6 @@ exports.initSystem = initSystem;
  * @type {getContainers}
  */
 exports.getContainers = getContainers;
+
+
+exports.sensorList = sensorList;

@@ -1,5 +1,6 @@
 var express = require("express"),
     queryHandler = require('./query_handler.js'),
+    sensorData = require('./Sensors.js'),
     router = express.Router();
 
 
@@ -31,8 +32,6 @@ router.get("/container/:containerId/child", function(req, res) {
     });
 });
 
-
-
 /**
  *
  */
@@ -56,6 +55,15 @@ router.get("/sensor/:sensorId/data/last", function(req, res) {
     queryHandler.getSensorLastInformation(sensorId, function(jsonResponse) {
         putValueInResponse(res,jsonResponse);
     });
+});
+
+
+router.get("/sensor/:sensorName/fullInformation", function(req, res){
+    var sensorName = req.params.sensorName;
+    console.log(sensorName);
+    if(sensorData.sensorList[sensorName] !== undefined) {
+        res.send(sensorData.sensorList[sensorName]);
+    }
 });
 
 
