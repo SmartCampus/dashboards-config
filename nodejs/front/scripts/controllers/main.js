@@ -124,6 +124,9 @@ var removeAWidget = function() {
             for(var i = 0; i < 3; i++)
                 $('#add-rows div').last().remove();
         }
+
+        maxOfWidgets -= 1;
+
     }
 };
 
