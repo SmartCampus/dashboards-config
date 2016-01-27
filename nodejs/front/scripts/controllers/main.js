@@ -73,15 +73,15 @@ var addAWidget = function () {
 
     addTableRow(maxOfWidgets);
     /*var theId = (maxOfWidgets-1).toString();
-    console.log(maxOfWidgets);
-    console.log(theId);
-    document.getElementById(theId).disabled = true;
-    */
+     console.log(maxOfWidgets);
+     console.log(theId);
+     document.getElementById(theId).disabled = true;
+     */
     maxOfWidgets += 1;
 
 };
 
-var removeAWidget = function() {
+var removeAWidget = function () {
     //you want to remove a widget !
     console.log('removing a widget box');
 };
@@ -144,7 +144,7 @@ function navigation() {
         for (var i = 0; i < position.directSensor.length; i++) {
             $("#add-captors").append(
                 "<div class=\"row\"><span class=\"draggable\" id=\""
-                + position.directSensor[i].displayName + "\" style=\"cursor : pointer;\">"
+                + position.directSensor[i].name + "\" style=\"cursor : pointer;\">"
                 + position.directSensor[i].displayName + "</span></div>"
             );
 
@@ -206,58 +206,63 @@ $(document).on('click', '.node', function (el) {
  * Add this element to the widget description array, to prepare for generation
  ***********************/
 function dropIt(event, ui) {
-
+    var self = this;
     var draggableName = ui.draggable.attr("id");
-    var droppableId = $(this).attr("id");
-
+    var droppableId = $(self).attr("id");
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
     if ($.inArray(draggableName, needs) > -1) {
         if (!($.inArray(draggableName, composition_needs[droppableId]) > -1)) {
             /*expression.needList( composition_needs, function (answer) {
-                buildings = answer;
-                navigation();
-                //maybe ?
-                composition_needs[droppableId].push(draggableName);
-                ui.draggable.clone().appendTo($(this));
-                allTheNeeds[droppableId].needs.push(draggableName);
+             buildings = answer;
+             navigation();
+             //maybe ?
+             composition_needs[droppableId].push(draggableName);
+             ui.draggable.clone().appendTo($(this));
+             allTheNeeds[droppableId].needs.push(draggableName);
 
-            }, function() {
-                console.log('IT\'S IMPOSSIBRRRRUUUUU');
-            });*/
+             }, function() {
+             console.log('IT\'S IMPOSSIBRRRRUUUUU');
+             });*/
             composition_needs[droppableId].push(draggableName);
-            ui.draggable.clone().appendTo($(this));
+            ui.draggable.clone().appendTo($(self));
             allTheNeeds[droppableId].needs.push(draggableName);
         }
-    } else {
-        //the sensor mustn't already be in the widget
+    } else {//Means it's a sensor
         if (!($.inArray(draggableName, composition_sensors[droppableId]) > -1)) {
-            //Here, we add a new sensor to the widget. So we must append the toggle button at the same time.
-            composition_sensors[droppableId].push(draggableName);
+            $.get(mainServer + "sensor/" + draggableName + "/enhanced")
+                .done(function (data) {
+                    //the sensor mustn't already be in the widget
+                    composition_sensors[droppableId].push(draggableName);
+                    //Here, we add a new sensor to the widget.
+                    ui.draggable.clone().appendTo($(self));
+                    createAndAddPercentButton(draggableName, droppableId);
 
-            //We create the button for the sensor we add
-            var togglePercent = document.createElement("button");        // Create a <button> element
-            togglePercent.setAttribute('class', 'btn btn-default btn-xs');
-            togglePercent.setAttribute('onclick', 'setColor(event, "'+draggableName+'", "'+droppableId+'", "#0000FF")');
-            togglePercent.setAttribute('data-count', '1');
-            var buttonContent = document.createTextNode("%");       // Create a text node
-            togglePercent.appendChild(buttonContent);          // Append the text to <button>
-            ui.draggable.clone().appendTo($(this));
+                    allTheNeeds[droppableId].sensors.push(data);
 
-
-            allTheNeeds[droppableId].sensors.push({"name": draggableName});
-            document.getElementById(draggableName).appendChild(togglePercent);
+                });
         }
     }
-
     displayGenerateButton();
 }
 
-var setColor = function(event, btnName, widgetIndex, color) {
+//This method creates a percent button and appends it to a specific sensorname
+var createAndAddPercentButton = function(draggableName, droppableId) {
+    var togglePercent = document.createElement("button");        // Create a <button> element
+    togglePercent.setAttribute('class', 'btn btn-default btn-xs');
+    togglePercent.setAttribute('onclick', 'setColor(event, "' + draggableName + '", "' + droppableId + '", "#0000FF")');
+    togglePercent.setAttribute('data-count', '1');
+    var buttonContent = document.createTextNode("%");       // Create a text node
+    togglePercent.appendChild(buttonContent);          // Append the text to <button>
+    document.getElementById(draggableName).appendChild(togglePercent);
+
+};
+
+var setColor = function (event, btnName, widgetIndex, color) {
     var target = event.target,
         count = +target.dataset.count;
 
-    allTheNeeds[widgetIndex].sensors.forEach(function(sensor) {
+    allTheNeeds[widgetIndex].sensors.forEach(function (sensor) {
         if (sensor.name == btnName) {
             sensor.percent = count;
         }
@@ -293,7 +298,7 @@ var declareNeeds = function () {
             localStorage.setItem("bar", JSON.stringify(allTheNeeds));
             //If this is our last callback, set the whole result in local storage.
             //Better than cookie bc same behaviour throughout browsers.
-        }, function() {
+        }, function () {
             console.log('IT\'S IMPOSSIBRRRRUUUUU');
         });
     });
