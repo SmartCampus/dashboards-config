@@ -42,7 +42,6 @@ router.post("/needSet", function (req, res) {
 });
 
 router.post("/sensorSet", function (req, res) {
-    logger.debug("reqbody:", req.body);
     needs.getNeedsMatchingSensors(req.body, function (error, result) {
         if (error) {
             logger.debug(error);
@@ -55,7 +54,6 @@ router.post("/sensorSet", function (req, res) {
             result.forEach(function (need) {
                 toSend.push({ name: need.name });
             });
-            logger.debug("toSend", toSend);
             res.status(200).send(toSend);
         }
     });

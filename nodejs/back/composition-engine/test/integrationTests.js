@@ -17,24 +17,23 @@ describe("composition engine", function () {
 
 		var sensorSetPath = "/sensorSet";
 
-		// function testPostSensorSet(sensors, expectedNeeds, callback) {
-		// 	request(app)
-		// 		.post(sensorSetPath)
-		// 		.send(sensors)
-		// 		.expect(200)
-		// 		.expect(function (response) {
-		// 			var results = response.body;
+		function testPostSensorSet(sensors, expectedNeeds, callback) {
+			request(app)
+				.post(sensorSetPath)
+				.send(sensors)
+				.expect(200)
+				.expect(function (response) {
+					var results = response.body;
 
-		// 			assert(Array.isArray(results));
-		// 			assert(results.find(function (result) {
-		// 				return result.name === NEEDS.COMPARISON.name;
-		// 			}));
-		// 			assert(results.find(function (result) {
-		// 				return result.name === NEEDS.OVERTIME.name;
-		// 			}));
-		// 		})
-		// 		.end(callback);
-		// }
+					assert(Array.isArray(results));
+					expectedNeeds.forEach(function (expected) {
+						assert(results.find(function (result) {
+							return result.name === expected.name;
+						}));
+					});
+				})
+				.end(callback);
+		}
 
 		describe("summer dashboard", function () {
 
@@ -47,22 +46,9 @@ describe("composition engine", function () {
 				var requestsBodies = [temp443V, tempCampus];
 				
 				async.each(requestsBodies, function iterator (item, callback) {
-					request(app)
-						.post(sensorSetPath)
-						.send([item])
-						.expect(200)
-						.expect(function (response) {
-							var results = response.body;
-
-							assert(Array.isArray(results));
-							assert(results.find(function (result) {
-								return result.name === NEEDS.COMPARISON.name;
-							}));
-							assert(results.find(function (result) {
-								return result.name === NEEDS.OVERTIME.name;
-							}));
-						})
-						.end(callback);
+					testPostSensorSet([item], [NEEDS.OVERTIME, NEEDS.COMPARISON], function () {
+						callback(null);
+					});
 				}, function join (err) {
 					if (err) {
 						logger.error(err);
@@ -81,25 +67,10 @@ describe("composition engine", function () {
 				var requestsBodies = [ac443State, window443State];
 				
 				async.each(requestsBodies, function iterator (item, callback) {
-					request(app)
-						.post(sensorSetPath)
-						.send([item])
-						.expect(200)
-						.expect(function (response) {
-							var results = response.body;
-
-							assert(Array.isArray(results));
-							assert(results.find(function (result) {
-								return result.name === NEEDS.COMPARISON.name;
-							}));
-							assert(results.find(function (result) {
-								return result.name === NEEDS.OVERTIME.name;
-							}));
-							assert(results.find(function (result) {
-								return result.name === NEEDS.PROPORTION.name;
-							}));
-						})
-						.end(callback);
+					testPostSensorSet([item],
+						[NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.PROPORTION], function () {
+						callback(null);
+					});
 				}, function join (err) {
 					if (err) {
 						logger.error(err);
@@ -118,19 +89,9 @@ describe("composition engine", function () {
 				var requestsBodies = [ac443State, window443State];
 				
 				async.each(requestsBodies, function iterator (item, callback) {
-					request(app)
-						.post(sensorSetPath)
-						.send([item])
-						.expect(200)
-						.expect(function (response) {
-							var results = response.body;
-
-							assert(Array.isArray(results));
-							assert(results.find(function (result) {
-								return result.name === NEEDS.SEE_STATUS.name;
-							}));
-						})
-						.end(callback);
+					testPostSensorSet([item], [NEEDS.SEE_STATUS], function () {
+						callback(null);
+					});
 				}, function join (err) {
 					if (err) {
 						logger.error(err);
