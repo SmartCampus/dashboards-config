@@ -75,7 +75,7 @@ function analyseGraphConfig(config) {
         yAxisType;
 
     for (var i in yAxes) {
-        yAxisType = graphDefinitions.getYAxisType(yAxes[i].type);
+        yAxisType = graphDefinitions.getYAxisType(yAxes[i].unit);
         if (yAxisType) {
             graphDefinitions.copyYAxisTypeProperties(yAxisType, yAxes[i]);
             yAxes[i].index = i;
