@@ -41,6 +41,26 @@ router.post("/needSet", function (req, res) {
 	});
 });
 
+router.post("/sensorSet", function (req, res) {
+    logger.debug("reqbody:", req.body);
+    needs.getNeedsMatchingSensors(req.body, function (error, result) {
+        if (error) {
+            logger.debug(error);
+            // TODO check err and return status
+            res.send(error.message);
+        }
+        else {
+            var toSend = [];
+
+            result.forEach(function (need) {
+                toSend.push({ name: need.name });
+            });
+            logger.debug("toSend", toSend);
+            res.status(200).send(toSend);
+        }
+    });
+});
+
 // Exports
 
 module.exports = exports = router;
