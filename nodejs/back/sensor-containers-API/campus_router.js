@@ -9,7 +9,7 @@ var express = require("express"),
  */
 router.get("/sensors", function(req, res) {
     var queries = req.query;
-    var count = Object.keys(queries).length
+    var count = Object.keys(queries).length;
 
     if(count != 0) {
         queryHandler.handleQuery(queries, function(jsonResponse) {
@@ -57,10 +57,11 @@ router.get("/sensor/:sensorId/data/last", function(req, res) {
     });
 });
 
-
+/**
+ * This route allow the user to have all the information about a Sensor with the given name
+ */
 router.get("/sensor/:sensorName/fullInformation", function(req, res){
     var sensorName = req.params.sensorName;
-    console.log(sensorName);
     if(sensorData.sensorList[sensorName] !== undefined) {
         res.send(sensorData.sensorList[sensorName]);
     }
@@ -71,6 +72,5 @@ function putValueInResponse(res, jsonResponse) {
     res.send(jsonResponse);
    // console.timeEnd("call-to-real-smartcampus");
 }
-
 
 module.exports = router;

@@ -83,6 +83,35 @@ function getContainerChild(name, callback) {
         });
 }
 
+/**
+ * This function will ask the sensor container api to have the enhanced information about the sensor with the given name
+ *
+ * @param   sensorName      {string}    Name of the sensor
+ * @param   callback        {function}  Function called with the given response or error
+ */
+function getEnhancedSensorsData(sensorName, callback) {
+    var url = API_HOST + SENSOR_PATH + "/" + sensorName + "/fullInformation"
+    console.log(url);
+    http.get(url, function(res) {
+        var stringData = "";
+
+        res.on("data", function(chunck) {
+            stringData += chunck;
+        });
+
+        res.on("end", function() {
+            var json = JSON.parse(stringData);
+            callback(json, null);
+        });
+
+    })
+        .on('error', function(e) {
+            callback(null, e);
+            error(e, "getSensorsFullInformation")
+        });
+}
+
+exports.getEnhancedSensorsData = getEnhancedSensorsData;
 
 exports.getContainerChild = getContainerChild;
 

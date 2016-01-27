@@ -98,10 +98,17 @@ function getReversedInformation(sensorId, date, callback) {
     });
 }
 
+function getSensorsEnhancedInformation(sensorName, callback) {
+    requester.getEnhancedSensorsData(sensorName, function(res, err) {
+        callback(res,err);
+    });
+}
+
+exports.getSensorsEnhancedInformation = getSensorsEnhancedInformation;
+
 exports.getReversedInformation = getReversedInformation;
 
 exports.getContainersChild = getContainersChild;
-
 
 exports.getLastInformation = getLastInformation;
 
