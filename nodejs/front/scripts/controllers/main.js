@@ -258,7 +258,7 @@ function dropIt(event, ui) {
     //It must exist, and it mustn't already be in the widget
     if ($.inArray(draggableName, needs) > -1) {
         if (!($.inArray(draggableName, composition_needs[droppableId]) > -1)) {
-            /*expression.needList( composition_needs, function (answer) {
+            expression.needList( composition_needs, function (answer) {
              buildings = answer;
              navigation();
              //maybe ?
@@ -268,7 +268,7 @@ function dropIt(event, ui) {
 
              }, function() {
              console.log('IT\'S IMPOSSIBRRRRUUUUU');
-             });*/
+             });
             composition_needs[droppableId].push(draggableName);
             ui.draggable.clone().appendTo($(self));
             allTheNeeds[droppableId].needs.push(draggableName);
