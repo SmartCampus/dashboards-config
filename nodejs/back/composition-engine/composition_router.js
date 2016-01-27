@@ -24,6 +24,7 @@ router.post("/expressNeed", function(req,res) {
 });
 
 router.post("/needSet", function (req, res) {
+    // TODO get needs by name 
 	needs.getSensorsMatchingNeeds(req.body, function (error, result) {
 		if (error) {
 			logger.debug(error);

@@ -13,6 +13,65 @@ var NEEDS = require("../needs").NEEDS,
 
 describe("composition engine", function () {
 
+	describe("POST needSet", function () {
+
+		var needSetPath = "/needSet";
+
+		function testPostNeedSet(needs, expectedSensors, callback) {
+			request(app)
+				.post(needSetPath)
+				.send(needs)
+				.expect(200)
+				.expect(function (response) {
+					var results = response.body;
+
+					assert(Array.isArray(results));
+					// expectedSensors.forEach(function (expected) {
+					// 	assert(results.find(function (result) {
+					// 		return result.name === expected.name;
+					// 	}));
+					// });
+				})
+				.end(callback);
+		}
+
+		describe("summer dashboard", function () {
+
+			var summerWidget1Needs = [NEEDS.COMPARISON.name, NEEDS.OVERTIME.name],
+				summerWidget2Needs = [NEEDS.COMPARISON.name, NEEDS.OVERTIME.name,
+					NEEDS.PROPORTION.name],
+				summerWidget34Needs = [NEEDS.SEE_STATUS.name],
+				unconsistentNeeds = [NEEDS.COMPARISON.name, NEEDS.RELATIONSHIPS.name,
+					NEEDS.SUMMARIZE.name];
+
+			it("should return all sensor categories", function (done) {
+				request(app)
+					.post(needSetPath)
+					.send(summerWidget1Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body;
+
+						logger.debug(results);
+						assert.equal(Object.keys(SENSOR_CATEGORIES).length, results.length);
+						for (var category in SENSOR_CATEGORIES) {
+							assert(results.find(function predicate(element, index, array) {
+								return element.set === category;
+							}));
+						}
+						for (var i = results.length - 1; i >= 0; i--) {
+							assert(Array.isArray(results[i].sensors));
+						};
+					})
+					.end(done);
+			});
+
+			// TODO other widgets?
+		});
+
+		// TODO error cases
+	});
+
 	describe("POST sensorSet", function () {
 
 		var sensorSetPath = "/sensorSet";
@@ -100,6 +159,8 @@ describe("composition engine", function () {
 					done();
 				});
 			});
+
+			// TODO error cases
 		});
 	});
 });
