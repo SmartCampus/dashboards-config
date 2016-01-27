@@ -132,7 +132,48 @@ function checkNeedsConsistency(needs) {
 }
 
 function getNeedsMatchingSensors(sensors, callback) {
-	// est-ce que j'ai la catégorie ? Oui selon Quentin.
+	callback(null, mergeNeedsFromCategories(getCategoriesFromSensors(sensors)));
+}
+
+function findElementInArray(array, element) {
+	return array.find(function (el) {
+		return el === element;
+	});
+}
+
+function findCategoriesInArray(array, categories) {
+	for (var i = categories.length - 1; i >= 0; i--) {
+		if (!findElementInArray(array, categories[i])) {
+			return false;
+		}
+	};
+	return true;
+}
+
+function mergeNeedsFromCategories(categories) {
+	var needs = [], need;
+
+	for (var property in NEEDS) {
+		need = NEEDS[property];
+		if (!findElementInArray(needs, need)) {
+			if (findCategoriesInArray(need.sensorCategories, categories)) {
+				needs.push(need);
+			}
+		}
+	}
+	return needs;
+}
+
+function getCategoriesFromSensors(sensors) {
+	var sensor, categories = [], category;
+
+	for (var i = sensors.length - 1; i >= 0; i--) {
+		category = sensors[i].category;
+		if (!findElementInArray(categories, category)) {
+			categories.push(category);
+		}
+	};
+	return categories;
 }
 
 // Exports
