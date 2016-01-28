@@ -39,6 +39,28 @@ describe("needs", function () {
 		});
 	});
 
+	describe("#getNeedsByName()", function () {
+
+		describe("summer dashboard", function () {
+
+			it("should return summerWidget1Needs", function () {
+				assert.deepEqual(summerWidget1Needs, needs.getNeedsByName(["Comparison", "Overtime"]));
+			});
+
+			it("should return summerWidget2Needs", function () {
+				assert.deepEqual(summerWidget2Needs, needs.getNeedsByName(["Comparison", "Overtime", "Proportion"]));
+			});
+
+			it("should return summerWidget34Needs", function () {
+				assert.deepEqual(summerWidget34Needs, needs.getNeedsByName(["See status"]));
+			});
+		});
+
+		it ("should return an empty need array", function () {
+			assert.deepEqual([], needs.getNeedsByName(["Truc", "Bidule"]));
+		});
+	});
+
 	// TODO getNeedsByName
 
 	describe("#getSensorsMatchingNeeds()", function () {
