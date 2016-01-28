@@ -39,6 +39,8 @@ describe("needs", function () {
 		});
 	});
 
+	// TODO getNeedsByName
+
 	describe("#getSensorsMatchingNeeds()", function () {
 
 		describe("summer dashboard", function () {
