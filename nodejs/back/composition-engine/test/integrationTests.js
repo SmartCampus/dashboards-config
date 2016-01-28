@@ -15,7 +15,9 @@ describe("composition engine", function () {
 
 	describe("POST needSet", function () {
 
-		var needSetPath = "/needSet";
+		var needSetPath = "/needSet",
+			unconsistentNeeds = [NEEDS.COMPARISON.name, NEEDS.RELATIONSHIPS.name,
+					NEEDS.SUMMARIZE.name];;
 
 		function testPostNeedSet(needs, expectedSensors, callback) {
 			request(app)
@@ -35,14 +37,21 @@ describe("composition engine", function () {
 				.end(callback);
 		}
 
+		it ("should respond with a 400 flag with an inconsistent need set", function (done) {
+			request(app)
+				.post(needSetPath)
+				.send(unconsistentNeeds)
+				.expect(400)
+				// TODO error message
+				.end(done);
+		});
+
 		describe("summer dashboard", function () {
 
 			var summerWidget1Needs = [NEEDS.COMPARISON.name, NEEDS.OVERTIME.name],
 				summerWidget2Needs = [NEEDS.COMPARISON.name, NEEDS.OVERTIME.name,
 					NEEDS.PROPORTION.name],
-				summerWidget34Needs = [NEEDS.SEE_STATUS.name],
-				unconsistentNeeds = [NEEDS.COMPARISON.name, NEEDS.RELATIONSHIPS.name,
-					NEEDS.SUMMARIZE.name];
+				summerWidget34Needs = [NEEDS.SEE_STATUS.name];
 
 			it("should return all sensor categories", function (done) {
 				async.each([summerWidget1Needs, summerWidget2Needs], function iterator (item, callback) {
@@ -90,8 +99,6 @@ describe("composition engine", function () {
 					.end(done);
 			});
 		});
-
-		// TODO error cases
 	});
 
 	describe("POST sensorSet", function () {
