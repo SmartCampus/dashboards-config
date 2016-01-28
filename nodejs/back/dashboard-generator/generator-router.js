@@ -4,6 +4,7 @@
 
 var express = require("express"),
     router = express.Router(),
+    layout = require("./layout_definitions"),
     generator = require("./generator");
 
 router.post("/generationRequest", function(req, res) {
@@ -34,6 +35,7 @@ function jobsRouter(message, res) {
                     res.send(err);
                 }
                 else {
+
                     res.send(data);
                 }
             });
@@ -42,6 +44,17 @@ function jobsRouter(message, res) {
             res.send("Bad job");
     }
 }
+
+router.get("/:widgetType/widgetList", function(req ,res) {
+    var widget = req.params.widgetType
+   console.log(widget);
+    if(layout.widgetIdList[widget]) {
+        res.send(layout.widgetIdList[widget]);
+    } else {
+        res.sendStatus(404);
+    }
+});
+
 
 // Exports
 

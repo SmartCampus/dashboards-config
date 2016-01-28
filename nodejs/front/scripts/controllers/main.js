@@ -258,17 +258,29 @@ function dropIt(event, ui) {
     //It must exist, and it mustn't already be in the widget
     if ($.inArray(draggableName, needs) > -1) {
         if (!($.inArray(draggableName, composition_needs[droppableId]) > -1)) {
-            expression.needList( composition_needs, function (answer) {
-             buildings = answer;
-             navigation();
-             //maybe ?
-             composition_needs[droppableId].push(draggableName);
-             ui.draggable.clone().appendTo($(this));
-             allTheNeeds[droppableId].needs.push(draggableName);
-
+          /*  var tmpNeedsArray = allTheNeeds[droppableId].needs;
+            tmpNeedsArray.push(draggableName);
+            expression.needList(tmpNeedsArray, function (answer) {
+                console.log('marcs answer : ');
+                console.log(answer);
+                $.post(mainServer + 'sensors/common/hierarchical', answer)
+                    .done(function (data) {*/
+                        console.log('request done !');
+                        console.log(data);
+                        buildings = data;
+                        navigation();
+                        //maybe ?
+                        composition_needs[droppableId].push(draggableName);
+                        ui.draggable.clone().appendTo($(this));
+                        allTheNeeds[droppableId].needs.push(draggableName);
+                    /*})
+                    .fail(function (data) {
+                        console.log('error in quentin');
+                        console.log(data);
+                    });
              }, function() {
              console.log('IT\'S IMPOSSIBRRRRUUUUU');
-             });
+             });*/
             composition_needs[droppableId].push(draggableName);
             ui.draggable.clone().appendTo($(self));
             allTheNeeds[droppableId].needs.push(draggableName);

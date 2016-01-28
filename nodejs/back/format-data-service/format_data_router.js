@@ -47,7 +47,9 @@ router.get("/sensor/:sensorId/data/percent", function(req, res) {
 
 router.get("/container/:containerId/child", function(req, res) {
     var sensor = req.params.containerId;
-    request_handler.getContainersChild(sensor, res);
+    request_handler.getContainersChild(sensor, function(response) {
+        res.send(response);
+    });
 });
 
 router.get("/sensor/:sensorId/data/splitList", function(req, res) {
