@@ -24,6 +24,7 @@ router.post("/expressNeed", function(req,res) {
 });
 
 router.post("/needSet", function (req, res) {
+    // TODO get needs by name 
 	needs.getSensorsMatchingNeeds(req.body, function (error, result) {
 		if (error) {
 			logger.debug(error);
@@ -39,6 +40,24 @@ router.post("/needSet", function (req, res) {
 			res.status(200).send(result);
 		}
 	});
+});
+
+router.post("/sensorSet", function (req, res) {
+    needs.getNeedsMatchingSensors(req.body, function (error, result) {
+        if (error) {
+            logger.debug(error);
+            // TODO check err and return status
+            res.send(error.message);
+        }
+        else {
+            var toSend = [];
+
+            result.forEach(function (need) {
+                toSend.push({ name: need.name });
+            });
+            res.status(200).send(toSend);
+        }
+    });
 });
 
 // Exports
