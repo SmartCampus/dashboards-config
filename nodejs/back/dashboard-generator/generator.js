@@ -128,8 +128,8 @@ function generateLayout(config, callback) {
     console.log(config);
     readTemplateFile("layout.mustache", function (template) {
         //config = require(__dirname + "/template/layout.json");
-        config.widgetWidth = layoutDefinitions.getLayoutWidgetWidth(config.layoutType);
-        callback(null, Mustache.render(template, config));
+        //config.widgetWidth = layoutDefinitions.getLayoutWidgetWidth(config.layoutType);
+        callback(null, Mustache.render(template, layoutDefinitions.getLayoutWidgetWidth(config.layoutType)));
     });
 }
 
