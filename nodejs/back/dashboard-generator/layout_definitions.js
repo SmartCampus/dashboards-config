@@ -6,7 +6,9 @@
 
 var widgetIdList = {
 	halfNHalf: ["left1", "right1", "left2", "right2", "left3", "right3"],
-	threeThirds: ["left1", "center1" ,"right1" ,"left2", "center2" ,"right2", "left3", "center3" ,"right3"]
+	threeThirds: ["left1", "center1" ,"right1" ,"left2", "center2" ,"right2", "left3", "center3" ,"right3"],
+	oneThirdTwoThirds: ["left1", "right1", "left2", "right2", "left3", "right3"],
+
 }
 
 
@@ -40,6 +42,20 @@ var LAYOUT_WIDGET_WIDTHS = {
 			{"widgetId" : widgetIdList.threeThirds[6] , "widgetWidth" : "col-md-4"},
 			{"widgetId" : widgetIdList.threeThirds[7] , "widgetWidth" : "col-md-4"},
 			{"widgetId" : widgetIdList.threeThirds[8] , "widgetWidth" : "col-md-4"}
+		]
+	},
+	oneThirdTwoThirds: {
+		"row1" : [
+			{"widgetId" : widgetIdList.oneThirdTwoThirds[0] , "widgetWidth" : "col-md-4"},
+			{"widgetId" : widgetIdList.oneThirdTwoThirds[1] , "widgetWidth" : "col-md-8"}
+		],
+		"row2" : [
+			{"widgetId" : widgetIdList.oneThirdTwoThirds[2] , "widgetWidth" : "col-md-4"},
+			{"widgetId" : widgetIdList.oneThirdTwoThirds[3] , "widgetWidth" : "col-md-8"}
+		],
+		"row3" : [
+			{"widgetId" : widgetIdList.oneThirdTwoThirds[4] , "widgetWidth" : "col-md-4"},
+			{"widgetId" : widgetIdList.oneThirdTwoThirds[5] , "widgetWidth" : "col-md-8"}
 		]
 	}
 };
