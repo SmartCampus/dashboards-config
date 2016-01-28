@@ -26,11 +26,11 @@ describe("composition engine", function () {
 					var results = response.body;
 
 					assert(Array.isArray(results));
-					// expectedSensors.forEach(function (expected) {
-					// 	assert(results.find(function (result) {
-					// 		return result.name === expected.name;
-					// 	}));
-					// });
+					expectedSensors.forEach(function (expected) {
+						assert(results.find(function (result) {
+							return result.name === expected.name;
+						}));
+					});
 				})
 				.end(callback);
 		}

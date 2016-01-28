@@ -61,34 +61,52 @@ describe("needs", function () {
 		});
 	});
 
-	// TODO getNeedsByName
-
 	describe("#getSensorsMatchingNeeds()", function () {
 
 		describe("summer dashboard", function () {
 
 			it("should return all sensor categories", function (done) {
-				needs.getSensorsMatchingNeeds(summerWidget1Needs, function (err, results) {
-					if(err) {
+				async.each([summerWidget1Needs, summerWidget2Needs], function iterator (item, callback) {
+					needs.getSensorsMatchingNeeds(item, function (err, results) {
+						if(err) {
+							logger.error(err);
+							throw err;
+						}
+						assert.equal(Object.keys(SENSOR_CATEGORIES).length, results.length);
+						for (var category in SENSOR_CATEGORIES) {
+							assert(results.find(function predicate(element, index, array) {
+								return element.set === category;
+							}));
+						}
+						for (var i = results.length - 1; i >= 0; i--) {
+							assert(Array.isArray(results[i].sensors));
+						};
+						// TODO mock and test content? that would be very expensive...
+						logger.debug(results);
+						callback(null);
+					})
+				}, function join (err) {
+					if (err) {
 						logger.error(err);
 						throw err;
 					}
-					assert.equal(Object.keys(SENSOR_CATEGORIES).length, results.length);
-					for (var category in SENSOR_CATEGORIES) {
-						assert(results.find(function predicate(element, index, array) {
-							return element.set === category;
-						}));
-					}
-					for (var i = results.length - 1; i >= 0; i--) {
-						assert(Array.isArray(results[i].sensors));
-					};
-					// TODO mock and test content? that would be very expensive...
-					logger.info(results);
 					done();
 				});
 			});
 
-			// TODO other widgets?
+			it("should return NUMBER category", function (done) {
+				needs.getSensorsMatchingNeeds(summerWidget34Needs, function (err, results) {
+					if(err) {
+						logger.error(err);
+						throw err;
+					}
+					assert.equal(1, results.length);
+					assert.equal(SENSOR_CATEGORIES.NUMBER, results[0].set);
+					assert(Array.isArray(results[0].sensors));
+					logger.debug(results[0].sensors);
+					done();
+				});
+			});
 		});
 
 		// TODO other dashboards?
