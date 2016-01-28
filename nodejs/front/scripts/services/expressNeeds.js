@@ -15,6 +15,8 @@ var expression = (function () {
                 });
         },
         needList: function(needsList, successCB, errorCB) {
+            console.log('asking with');
+            console.log(needsList);
             $.post(needsServer + needSet, needsList)
                 .done(function (data) {
                     console.log('request done ! All the sensors left you can use : ');
