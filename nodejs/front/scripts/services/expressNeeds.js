@@ -37,7 +37,7 @@ var expression = (function () {
                     sensors:sensorsList
                 })
                 .done(function (data) {
-                    console.log('request done ! All the sensors left you can use : ');
+                    console.log('request done ! All the needs left you can use : ');
                     if (data.length <= 0) {
                         console.log('liste vide');
                     }

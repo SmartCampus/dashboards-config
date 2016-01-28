@@ -1,8 +1,8 @@
 var sensors; //This array contains all the sensors we have
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
-var needs = ["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+
+var needs = [{name : "Comparison"}, {name : "Mock need"}, {name : "See status"}, {name : "Overtime"}, {name : "Relationships"}, {name : "Hierarchy"}, {name : "Proportion"}, {name : "Summarize"}];
 var maxOfWidgets = 1; //this determines how many boxes are drawn in the center of the page
-var composition_sensors = [];
 var navbar = [];
 var selectedBox = 0;
 
@@ -13,7 +13,6 @@ var selectedBox = 0;
     $.get(mainServer + "container/Root/child")
         .done(function (data) {
             sensors = data;
-            //needs = data;
             callback();
         });
 })(initWindowsData);
@@ -28,7 +27,6 @@ function initWindowsData() {
 
     for (var i = 0; i < maxOfWidgets; i++) {
         allTheNeeds[i] = {"needs": [], "sensors": [], "graphType": ""};
-        composition_sensors[i] = new Array();
         addTableRow(i);
     }
 
@@ -94,7 +92,6 @@ $("#add-rows").click(function (event) {
  */
 var addAWidget = function () {
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
-    composition_sensors[maxOfWidgets] = [];
 
     addTableRow(maxOfWidgets);
     /*var theId = (maxOfWidgets-1).toString();
@@ -131,7 +128,6 @@ var removeAWidget = function () {
  This functions empties a widget box, making it back to its original state
  */
 var deleteWidgetContent = function (widgetId) {
-    composition_sensors[widgetId] = [];
     allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
     $('#' + widgetId).empty();
 };
@@ -141,9 +137,11 @@ var deleteWidgetContent = function (widgetId) {
  * This function fills the visulization needs panel, and set its elements to being draggable elements
  */
 function addNeeds() {
+    $("#add-need").empty();
+
     for (var i = 0; i < needs.length; i++) {
         $("#add-need").append(
-            "<div style=\"padding: 20px 0 0 0; text-align : center\"><span style=\"cursor : pointer;\" class=\"draggable\" id=\"" + needs[i] + "\">" + needs[i] + "</span></div>"
+            "<div style=\"padding: 20px 0 0 0; text-align : center\"><span style=\"cursor : pointer;\" class=\"draggable\" id=\"" + needs[i].name + "\">" + needs[i].name + "</span></div>"
         );
 
         $(".draggable").draggable({
@@ -253,10 +251,10 @@ function dropIt(event, ui) {
     var droppableId = $(self).attr("id");
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
-    if ($.inArray(draggableName, needs) > -1) {
+    if ($.inArray(draggableName, needs) > -1) {//TODO still works ?
         if (!($.inArray(draggableName, allTheNeeds[droppableId].needs) > -1)) {
             allTheNeeds[droppableId].needs.forEach(function(aNeed) {
-                aTemporaryArrayOfNeeds.push(aNeed);
+                aTemporaryArrayOfNeeds.push(aNeed.name);
             });
             aTemporaryArrayOfNeeds.push(draggableName);
             expression.needList(aTemporaryArrayOfNeeds, function (answer) {
@@ -290,21 +288,34 @@ function dropIt(event, ui) {
         }
     }
     else {//Means it's a sensor
-        if (!($.inArray(draggableName, composition_sensors[droppableId]) > -1)) {
+        if (!($.inArray(draggableName,  allTheNeeds[droppableId].sensors) > -1)) {
+            var temporarySensorsList = [];
+
             $.get(mainServer + "sensor/" + draggableName + "/enhanced")
                 .done(function (data) {
-                    //the sensor mustn't already be in the widget
-                    composition_sensors[droppableId].push(draggableName);
-                    //Here, we add a new sensor to the widget.
-                    ui.draggable.clone().appendTo($(self));
-                    createAndAddPercentButton(draggableName, droppableId);
+                    allTheNeeds[droppableId].sensors.forEach(function(aSensor) {
+                        temporarySensorsList.push(aSensor);
+                    });
+                    temporarySensorsList.push(data);
 
-                    allTheNeeds[droppableId].sensors.push(data);
+                    expression.sensorList(temporarySensorsList, function (answer) {
+                        needs = answer;
+                        addNeeds();
+                        //Here, we add a new sensor to the widget.
+                        ui.draggable.clone().appendTo($(self));
+                        createAndAddPercentButton(draggableName, droppableId);
+
+                        allTheNeeds[droppableId].sensors.push(data);
+                    }, function(error) {
+                        console.log(':(');
+                        console.log(error);
+
+                    });
+
 
                 });
         }
     }
-    //  displayGenerateButton();
 }
 
 //This method creates a percent button and appends it to a specific sensorname
@@ -337,14 +348,6 @@ var setColor = function (event, btnName, widgetIndex, color) {
         target.dataset.count = 1;
     }
 
-};
-var displayGenerateButton = function () {
-    for (var i = 0; i < composition_sensors.length; i++) {
-        if (composition_sensors[i].length > 1) {
-            $("#generateButton").show(700);
-            break;
-        }
-    }
 };
 
 
