@@ -3,7 +3,6 @@ var sensors; //This array contains all the sensors we have
 var needs = ["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 var maxOfWidgets = 1; //this determines how many boxes are drawn in the center of the page
 var composition_sensors = [];
-var composition_needs = [];
 var navbar = [];
 var selectedBox = 0;
 
@@ -29,14 +28,13 @@ function initWindowsData() {
 
     for (var i = 0; i < maxOfWidgets; i++) {
         allTheNeeds[i] = {"needs": [], "sensors": [], "graphType": ""};
-        composition_needs[i] = new Array();
         composition_sensors[i] = new Array();
         addTableRow(i);
     }
 
     position = sensors;
     buildings = sensors.childContainer;
-    previous.push(position);
+    //   previous.push(position);
 
     navbar.push(position.name);
     addNeeds();
@@ -61,29 +59,29 @@ var addTableRow = function (index) {
 
 function updateDisableBox() {
 
-    $("#add-rows > div").each(function(){
+    $("#add-rows > div").each(function () {
         var id = $(this).attr('id');
-        if( id == selectedBox){
-            $(this).css("border-color" , "green");
-            $("#"+id).droppable({drop: dropIt, disabled : false });
-        }else{
-            $(this).css("border-color" , "red");
-            $("#"+id).droppable({drop: dropIt, disabled : true });
+        if (id == selectedBox) {
+            $(this).css("border-color", "green");
+            $("#" + id).droppable({drop: dropIt, disabled: false});
+        } else {
+            $(this).css("border-color", "red");
+            $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });
 }
 
-$( "#add-rows" ).click(function ( event ) {
+$("#add-rows").click(function (event) {
     selectedBox = event.target.id;
 
-    $("#add-rows > div").each(function(){
+    $("#add-rows > div").each(function () {
         var id = $(this).attr('id');
-        if( id === selectedBox){
-            $(this).css("border-color" , "green");
-            $("#"+id).droppable({drop: dropIt, disabled : false });
-        }else{
-            $(this).css("border-color" , "red");
-            $("#"+id).droppable({drop: dropIt, disabled : true });
+        if (id === selectedBox) {
+            $(this).css("border-color", "green");
+            $("#" + id).droppable({drop: dropIt, disabled: false});
+        } else {
+            $(this).css("border-color", "red");
+            $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });
 });
@@ -96,7 +94,6 @@ $( "#add-rows" ).click(function ( event ) {
  */
 var addAWidget = function () {
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
-    composition_needs[maxOfWidgets] = [];
     composition_sensors[maxOfWidgets] = [];
 
     addTableRow(maxOfWidgets);
@@ -114,14 +111,14 @@ var removeAWidget = function () {
 
     var domSize = $("#add-rows div").length;
 
-    if(domSize > 3){
-        if(parseInt(+selectedBox+1) === (domSize/3)){
+    if (domSize > 3) {
+        if (parseInt(+selectedBox + 1) === (domSize / 3)) {
             selectedBox--;
-            for(var i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
                 $('#add-rows div').last().remove();
             updateDisableBox();
-        }else{
-            for(var i = 0; i < 3; i++)
+        } else {
+            for (var i = 0; i < 3; i++)
                 $('#add-rows div').last().remove();
         }
 
@@ -134,7 +131,6 @@ var removeAWidget = function () {
  This functions empties a widget box, making it back to its original state
  */
 var deleteWidgetContent = function (widgetId) {
-    composition_needs[widgetId] = [];
     composition_sensors[widgetId] = [];
     allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
     $('#' + widgetId).empty();
@@ -252,40 +248,48 @@ $(document).on('click', '.node', function (el) {
  ***********************/
 function dropIt(event, ui) {
     var self = this;
+    var aTemporaryArrayOfNeeds = [];
     var draggableName = ui.draggable.attr("id");
     var droppableId = $(self).attr("id");
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
     if ($.inArray(draggableName, needs) > -1) {
-        if (!($.inArray(draggableName, composition_needs[droppableId]) > -1)) {
-          /*  var tmpNeedsArray = allTheNeeds[droppableId].needs;
-            tmpNeedsArray.push(draggableName);
-            expression.needList(tmpNeedsArray, function (answer) {
-                console.log('marcs answer : ');
-                console.log(answer);
-                $.post(mainServer + 'sensors/common/hierarchical', answer)
-                    .done(function (data) {*/
-                        console.log('request done !');
-                        console.log(data);
-                        buildings = data;
+        if (!($.inArray(draggableName, allTheNeeds[droppableId].needs) > -1)) {
+            allTheNeeds[droppableId].needs.forEach(function(aNeed) {
+                aTemporaryArrayOfNeeds.push(aNeed);
+            });
+            aTemporaryArrayOfNeeds.push(draggableName);
+            expression.needList(aTemporaryArrayOfNeeds, function (answer) {
+                var tmpSensorList = [];
+                answer.forEach(function (oneSensorSet) {
+                    oneSensorSet.sensors.forEach(function (sensor) {
+                        tmpSensorList.push(sensor.name);
+                    })
+                });
+                $.post(mainServer + 'sensors/common/hierarchical', {
+                    sensors: tmpSensorList
+                }).done(function (data) {
+                    console.log('in the hierarchical post done ');
+                        position = data;
+                        buildings = data.childContainer;
+                        navbar.push(position.name);
                         navigation();
-                        //maybe ?
-                        composition_needs[droppableId].push(draggableName);
-                        ui.draggable.clone().appendTo($(this));
+                        ui.draggable.clone().appendTo($(self));
                         allTheNeeds[droppableId].needs.push(draggableName);
-                    /*})
+                    })
                     .fail(function (data) {
                         console.log('error in quentin');
                         console.log(data);
                     });
-             }, function() {
-             console.log('IT\'S IMPOSSIBRRRRUUUUU');
-             });*/
-            composition_needs[droppableId].push(draggableName);
-            ui.draggable.clone().appendTo($(self));
-            allTheNeeds[droppableId].needs.push(draggableName);
+            }, function (error) {
+                if (error.status === 400) {
+                    alert(error.responseText);
+                }
+                console.log('IT\'S IMPOSSIBRRRRUUUUU');
+            });
         }
-    } else {//Means it's a sensor
+    }
+    else {//Means it's a sensor
         if (!($.inArray(draggableName, composition_sensors[droppableId]) > -1)) {
             $.get(mainServer + "sensor/" + draggableName + "/enhanced")
                 .done(function (data) {
@@ -300,11 +304,11 @@ function dropIt(event, ui) {
                 });
         }
     }
-    displayGenerateButton();
+    //  displayGenerateButton();
 }
 
 //This method creates a percent button and appends it to a specific sensorname
-var createAndAddPercentButton = function(draggableName, droppableId) {
+var createAndAddPercentButton = function (draggableName, droppableId) {
     var togglePercent = document.createElement("button");        // Create a <button> element
     togglePercent.setAttribute('class', 'btn btn-default btn-xs');
     togglePercent.setAttribute('onclick', 'setColor(event, "' + draggableName + '", "' + droppableId + '", "#0000FF")');

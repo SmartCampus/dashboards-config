@@ -24,7 +24,7 @@ router.post("/expressNeed", function(req,res) {
 });
 
 router.post("/needSet", function (req, res) {
-	needs.getSensorsMatchingNeeds(needs.getNeedsByName(req.body),
+	needs.getSensorsMatchingNeeds(needs.getNeedsByName(req.body.needs),
         function (error, result) {
 		if (error) {
 			logger.debug(error);
@@ -43,7 +43,7 @@ router.post("/needSet", function (req, res) {
 });
 
 router.post("/sensorSet", function (req, res) {
-    needs.getNeedsMatchingSensors(req.body, function (error, result) {
+    needs.getNeedsMatchingSensors(req.body.sensors, function (error, result) {
         if (error) {
             logger.debug(error);
             // TODO check err and return status
