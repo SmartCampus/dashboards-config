@@ -88,7 +88,7 @@ router.get("/sensor/:sensorId/data/reverse", function(req, res) {
 
 
 router.post("/sensors/common/hierarchical", function(req, res) {
-    var givenSensor = req.body;
+    var givenSensor = req.body.sensors;
     console.log(givenSensor)
     request_handler.getContainersChild("Root", function(response) {
         console.log(response);
