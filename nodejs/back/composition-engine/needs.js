@@ -65,6 +65,19 @@ var NEEDS = {
 	SUMMARIZE: SUMMARIZE
 }
 
+function getNeedsByName(needStrings) {
+	var needs = [];
+
+	for (var need in NEEDS) {
+		if (needStrings.find(function (str) {
+			return str == NEEDS[need].name;
+		})) {
+			needs.push(NEEDS[need]);
+		}
+	}
+	return needs;
+}
+
 function getSensorsMatchingNeeds(needs, callback) {
 	var sensors = [], sensorCategories;
 
@@ -183,3 +196,4 @@ exports.NEEDS = NEEDS;
 exports.getSensorsMatchingNeeds = getSensorsMatchingNeeds;
 exports.getNeedsMatchingSensors = getNeedsMatchingSensors;
 exports.checkNeedsConsistency = checkNeedsConsistency;
+exports.getNeedsByName = getNeedsByName;

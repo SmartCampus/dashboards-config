@@ -26,11 +26,11 @@ describe("composition engine", function () {
 					var results = response.body;
 
 					assert(Array.isArray(results));
-					// expectedSensors.forEach(function (expected) {
-					// 	assert(results.find(function (result) {
-					// 		return result.name === expected.name;
-					// 	}));
-					// });
+					expectedSensors.forEach(function (expected) {
+						assert(results.find(function (result) {
+							return result.name === expected.name;
+						}));
+					});
 				})
 				.end(callback);
 		}
@@ -45,28 +45,50 @@ describe("composition engine", function () {
 					NEEDS.SUMMARIZE.name];
 
 			it("should return all sensor categories", function (done) {
+				async.each([summerWidget1Needs, summerWidget2Needs], function iterator (item, callback) {
+					request(app)
+						.post(needSetPath)
+						.send(item)
+						.expect(200)
+						.expect(function (response) {
+							var results = response.body;
+
+							logger.debug(results);
+							assert.equal(Object.keys(SENSOR_CATEGORIES).length, results.length);
+							for (var category in SENSOR_CATEGORIES) {
+								assert(results.find(function predicate(element, index, array) {
+									return element.set === category;
+								}));
+							}
+							for (var i = results.length - 1; i >= 0; i--) {
+								assert(Array.isArray(results[i].sensors));
+							};
+						})
+						.end(callback);
+				}, function join (err) {
+					if (err) {
+						logger.error(err);
+						throw err;
+					}
+					done();
+				});
+			});
+
+			it("should return NUMBER category", function (done) {
 				request(app)
 					.post(needSetPath)
-					.send(summerWidget1Needs)
+					.send(summerWidget34Needs)
 					.expect(200)
 					.expect(function (response) {
 						var results = response.body;
 
-						logger.debug(results);
-						assert.equal(Object.keys(SENSOR_CATEGORIES).length, results.length);
-						for (var category in SENSOR_CATEGORIES) {
-							assert(results.find(function predicate(element, index, array) {
-								return element.set === category;
-							}));
-						}
-						for (var i = results.length - 1; i >= 0; i--) {
-							assert(Array.isArray(results[i].sensors));
-						};
+						assert.equal(1, results.length);
+						assert.equal(SENSOR_CATEGORIES.NUMBER, results[0].set);
+						assert(Array.isArray(results[0].sensors));
+						logger.debug(results[0].sensors);
 					})
 					.end(done);
 			});
-
-			// TODO other widgets?
 		});
 
 		// TODO error cases
