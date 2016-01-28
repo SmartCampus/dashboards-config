@@ -129,11 +129,7 @@ function generateLayout(config, callback) {
     readTemplateFile("layout.mustache", function (template) {
         //config = require(__dirname + "/template/layout.json");
         //config.widgetWidth = layoutDefinitions.getLayoutWidgetWidth(config.layoutType);
-        var json = {
-            "widgetIdList" : layoutDefinitions.widgetIdList[config.layoutType],
-            "dashboard" : Mustache.render(template, layoutDefinitions.getLayoutWidgetWidth(config.layoutType))
-        }
-        callback(null, json);
+        callback(null, Mustache.render(template, layoutDefinitions.getLayoutWidgetWidth(config.layoutType)));
     });
 }
 
