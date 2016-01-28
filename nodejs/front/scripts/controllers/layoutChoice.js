@@ -19,9 +19,9 @@ $("button").click(function(){
         divideInTwoThirds();
     }else if(id == 2){
         divideInThreeEgal();
-    }else{
-        divideInThreeNotEgal();
-    }
+    }/*else{
+       divideInThreeNotEgal();
+    }*/
 });
 
 
@@ -51,7 +51,7 @@ function divideInThreeEgal() {
     $("#add-content").append(content);
 }
 
-function divideInThreeNotEgal() {
+/*function divideInThreeNotEgal() {
 
     var content = "<div class=\"row\">"+
         "<div class=\"col-md-3\" style=\"min-height: 500px; background-color: rgba(207, 134, 126, 0.55) ;\">One third</div>"+
@@ -59,4 +59,4 @@ function divideInThreeNotEgal() {
         "<div class=\"col-md-3\" style=\"min-height: 500px; background-color: rgba(112, 215, 0, 0.56);\">One third</div>"+
         "</div>";
     $("#add-content").append(content);
-}
+}*/
