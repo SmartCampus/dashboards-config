@@ -16,8 +16,8 @@ describe("composition engine", function () {
 	describe("POST needSet", function () {
 
 		var needSetPath = "/needSet",
-			unconsistentNeeds = [NEEDS.COMPARISON.name, NEEDS.RELATIONSHIPS.name,
-					NEEDS.SUMMARIZE.name];;
+			unconsistentNeeds = { needs: [NEEDS.COMPARISON.name, NEEDS.RELATIONSHIPS.name,
+					NEEDS.SUMMARIZE.name] };
 
 		function testPostNeedSet(needs, expectedSensors, callback) {
 			request(app)
@@ -48,10 +48,10 @@ describe("composition engine", function () {
 
 		describe("summer dashboard", function () {
 
-			var summerWidget1Needs = [NEEDS.COMPARISON.name, NEEDS.OVERTIME.name],
-				summerWidget2Needs = [NEEDS.COMPARISON.name, NEEDS.OVERTIME.name,
-					NEEDS.PROPORTION.name],
-				summerWidget34Needs = [NEEDS.SEE_STATUS.name];
+			var summerWidget1Needs = { needs: [NEEDS.COMPARISON.name, NEEDS.OVERTIME.name] },
+				summerWidget2Needs = { needs: [NEEDS.COMPARISON.name, NEEDS.OVERTIME.name,
+					NEEDS.PROPORTION.name] },
+				summerWidget34Needs = { needs: [NEEDS.SEE_STATUS.name] };
 
 			it("should return all sensor categories", function (done) {
 				async.each([summerWidget1Needs, summerWidget2Needs], function iterator (item, callback) {
@@ -134,12 +134,13 @@ describe("composition engine", function () {
 				var requestsBodies = [temp443V, tempCampus];
 				
 				async.each(requestsBodies, function iterator (item, callback) {
-					testPostSensorSet([item], [NEEDS.OVERTIME, NEEDS.COMPARISON], function () {
+					testPostSensorSet({ sensors: [item] }, [NEEDS.OVERTIME, NEEDS.COMPARISON], function () {
 						callback(null);
 					});
 				}, function join (err) {
 					if (err) {
 						logger.error(err);
+						assert(!err);
 						throw err;
 					}
 					done();
@@ -155,7 +156,7 @@ describe("composition engine", function () {
 				var requestsBodies = [ac443State, window443State];
 				
 				async.each(requestsBodies, function iterator (item, callback) {
-					testPostSensorSet([item],
+					testPostSensorSet({ sensors: [item] },
 						[NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.PROPORTION], function () {
 						callback(null);
 					});
@@ -177,7 +178,7 @@ describe("composition engine", function () {
 				var requestsBodies = [ac443State, window443State];
 				
 				async.each(requestsBodies, function iterator (item, callback) {
-					testPostSensorSet([item], [NEEDS.SEE_STATUS], function () {
+					testPostSensorSet({ sensors: [item] }, [NEEDS.SEE_STATUS], function () {
 						callback(null);
 					});
 				}, function join (err) {
