@@ -96,11 +96,13 @@ retrieveData.askForSeriesWithParam('AC_443STATE/data/reverse', "true", beginDate
 var drawLineChart = function () {
     generate.widgetV2("Heating status in comparison to inside and outside temperatures", "",
         [{
-            type: "state",
-            "title": "Heating status"
+            unit: "state",
+            "title": "Heating status",
+            "amount": 1
         }, {
-            type: "temperature",
-            "title": "Température (°C)"
+            unit: "temperature",
+            "title": "Température (°C)",
+            "amount": 2
         }], "c1", "temperaturesArray", function(data) {
             console.log(data);
             eval(data);
@@ -200,12 +202,12 @@ var successInLight = function (data) {
 var drawLineChartForLight = function () {
     var lightInArray = [];
     lightInArray.push(lightData);
-    generate.widgetV2("Brightness level evolution", "line", [{
+  /*  generate.widgetV2("Brightness level evolution", "line", [{
         type: "lux",
         "title": "Brightness level"
     }], "lightLevel", "lightInArray", function (data) {
         eval(data);
     }, function (error) {
         console.log('error :(');
-    });
+    }); */
 };

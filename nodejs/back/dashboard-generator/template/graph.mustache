@@ -72,19 +72,19 @@ $('#{{graphName}}').highcharts('StockChart', {
     {{/defineMultipleAxes}}
     {{#defineMultipleAxes}}
       [
-      {{#yAxes}}
+      {{#series}}
         {
-          name: {{seriesArrayName}}[{{index}}].name,
-          data: {{seriesArrayName}}[{{index}}].data,
+          name: {{seriesArrayName}}[{{serieIndex}}].name,
+          data: {{seriesArrayName}}[{{serieIndex}}].data,
           dataGrouping: {
             forced: true,
             approximation:'{{approxType}}',
             groupPixelWidth: {{grpPixelNb}}
           },
-          yAxis: {{index}},
+          yAxis: {{serieIndex}},
           type: '{{vizType}}'
         }{{coma}}
-      {{/yAxes}}
+      {{/series}}
       ]
     {{/defineMultipleAxes}}
 });

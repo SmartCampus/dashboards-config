@@ -36,11 +36,16 @@ function generateBoolean(config, res) {
  * @param  {Function}   callback    function to call with the resulting generated code
  */
 function generateGraph(config, callback) {
-    console.log(config);
+    console.log("------------------------ Config Before---------------------------------------------")
+    console.log(config)
+    console.log("---------------------------------------------------------------------")
+
     readTemplateFile("graph.mustache", function (template) {
         //config = require(__dirname + "/template/graph.json");
         config = analyseGraphConfig(config);
+        console.log("-------------------------- Config After ------------------------------------")
         console.log(config);
+        console.log("---------------------------------------------------------------------")
         // console.log("" + Mustache.render(template, config));
         callback(Mustache.render(template, config));
     });
@@ -74,7 +79,11 @@ function analyseGraphConfig(config) {
         graphType = graphDefinitions.getGraphType(config.graphType),
         yAxisType;
 
+    var series = [];
+    var counter = 0;
+
     for (var i in yAxes) {
+        var serie = {};
         yAxisType = graphDefinitions.getYAxisType(yAxes[i].unit);
         if (yAxisType) {
             graphDefinitions.copyYAxisTypeProperties(yAxisType, yAxes[i]);
@@ -83,11 +92,38 @@ function analyseGraphConfig(config) {
             if (i < yAxes.length - 1) {
                 yAxes[i].coma = ",";
             }
+
+            if(yAxes[i].amount === 1) {
+                serie.serieIndex = i;
+                serie.approxType = yAxisType.approxType;
+                graphDefinitions.copyYAxisTypeProperties(yAxisType, serie);
+
+                series.push(serie);
+                if (i < yAxes.length - 1) {
+                    serie.coma = ",";
+                }
+            } else {
+                for(var j = 0; j < yAxes[i].amount; j++) {
+
+                    serie.serieIndex = i;
+                    serie.approxType = yAxisType.approxType;
+                    graphDefinitions.copyYAxisTypeProperties(yAxisType, serie);
+
+                    if (i < yAxes.length - 1 || j < yAxes[i].amount) {
+                        serie.coma = ",";
+                    }
+                    series.push(serie);
+                    counter++;
+                }
+            }
         }
         else {
             console.log("bad yAxesType");
         }
+        config.series = series
+
     }
+
     if (graphType) {
         config.grpPixelNb = graphType.grpPixelNb;
         if (graphType === graphDefinitions.getGraphType("scatter")) {
