@@ -9,6 +9,8 @@ app.use("/styles", express.static(__dirname + "/styles"));
 
 app.use("/bower_components/jquery",
 	express.static(__dirname + "/bower_components/jquery"));
+app.use("/bower_components/konami-code",
+	express.static(__dirname + "/bower_components/konami-code"));
 app.use("/bower_components/highcharts",
 	express.static(__dirname + "/bower_components/highcharts-release"));
 app.use("/bower_components/highstock",
@@ -32,6 +34,9 @@ app.use("/bower_components/gridstack",
 	express.static(__dirname + "/bower_components/gridstack"));
 app.use("/bower_components/gridster",
 	express.static(__dirname + "/bower_components/gridster"));
+
+app.use("/libs/blockrain",
+	express.static(__dirname + "/libs/blockrain"));
 
 //404 not found
 app.get('/*', function (req, res) {
