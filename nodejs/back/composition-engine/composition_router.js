@@ -9,7 +9,6 @@ var router = require("express").Router(),
 
 router.post("/expressNeed", function(req,res) {
     var body = req.body;
-    console.log(body);
     if(body == undefined || body.needs == undefined) {
         res.send(422)
     } else {

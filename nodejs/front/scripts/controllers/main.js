@@ -2,6 +2,7 @@ var sensors; //This array contains all the sensors we have
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 
 var needs = [{name : "Comparison"}, {name : "Mock need"}, {name : "See status"}, {name : "Overtime"}, {name : "Relationships"}, {name : "Hierarchy"}, {name : "Proportion"}, {name : "Summarize"}];
+var needsSimple = ["Comparison", "Mock need", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 var maxOfWidgets = 1; //this determines how many boxes are drawn in the center of the page
 var navbar = [];
 var selectedBox = 0;
@@ -251,7 +252,11 @@ function dropIt(event, ui) {
     var droppableId = $(self).attr("id");
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
-    if ($.inArray(draggableName, needs) > -1) {//TODO still works ?
+    console.log('dropped ', draggableName);
+    console.log('is it in ', needsSimple);
+   if ($.inArray(draggableName, needsSimple) > -1) {//TODO still works ?
+    //if (needsSimple.indexOf(draggableName) > -1) {
+        console.log('is it in ', allTheNeeds[droppableId].needs);
         if (!($.inArray(draggableName, allTheNeeds[droppableId].needs) > -1)) {
             allTheNeeds[droppableId].needs.forEach(function(aNeed) {
                 aTemporaryArrayOfNeeds.push(aNeed.name);
@@ -259,13 +264,17 @@ function dropIt(event, ui) {
             aTemporaryArrayOfNeeds.push(draggableName);
             expression.needList(aTemporaryArrayOfNeeds, function (answer) {
                 var tmpSensorList = [];
+                console.log(answer);
                 answer.forEach(function (oneSensorSet) {
+                    console.log('for ', oneSensorSet);
                     oneSensorSet.sensors.forEach(function (sensor) {
+                        console.log('for one ', sensor);
                         tmpSensorList.push(sensor.name);
                     })
                 });
+                console.log(tmpSensorList);
                 $.post(mainServer + 'sensors/common/hierarchical', {
-                    sensors: tmpSensorList
+                    "sensors": tmpSensorList
                 }).done(function (data) {
                     console.log('in the hierarchical post done ');
                         position = data;
