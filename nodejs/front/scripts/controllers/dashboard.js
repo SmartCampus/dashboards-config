@@ -76,13 +76,11 @@ var finishedLoading = function () {
 var firstWCode;
 //An array of as many arrays as we have widgets.
 var waitForFirstWidgetDrawing = function (dataSC, sensor, index) {
-    //TODO: dans la generation, si je dis type = temperature, tu devines le titre.
-    //Pour le moment, je mets autre chose du coup c'est pas fou.
     console.log('********************');
     console.log(watchingArray[index]);
     if (watchingArray[index].counter.length < theNeeds[index].sensors.length) {
         watchingArray[index].counter.push(sensor);
-    }
+    }//TODO: pour le moment, on push des sensors à la place des yaxes : dans le cas de winter ça va plus être possible...
     if (watchingArray[index].counter.length == theNeeds[index].sensors.length) {
         generate.widgetV2("Title not defined", theNeeds[index].graphType,
             watchingArray[index].counter

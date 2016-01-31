@@ -10,14 +10,13 @@ var selectedBox = 0;
 /**
  * Get all buildings sensors et placements
  */
-(function getSensors(callback) {
     $.get(mainServer + "container/Root/child")
         .done(function (data) {
+            console.log('got the data');
             sensors = data;
-            //needs = data;
-            callback();
+            initWindowsData();
         });
-})(initWindowsData);
+
 
 var allTheNeeds = [];
 /***********************************
