@@ -93,8 +93,10 @@ function analyseGraphConfig(config) {
                 yAxes[i].coma = ",";
             }
 
-            if(yAxes[i].amount === 1) {
+            if(yAxes[i].amount == 1) {
+                console.log('yAxes amount is 1. ');
                 serie.serieIndex = i;
+                serie.yAxisIndex = i;
                 serie.approxType = yAxisType.approxType;
                 graphDefinitions.copyYAxisTypeProperties(yAxisType, serie);
 
@@ -103,9 +105,13 @@ function analyseGraphConfig(config) {
                     serie.coma = ",";
                 }
             } else {
+                console.log('yAxes amount is not 1 : ', yAxes[i].amount);
                 for(var j = 0; j < yAxes[i].amount; j++) {
-
-                    serie.serieIndex = i;
+                    var serie = {};
+                    console.log('looping through one of my amount');
+                    console.log(i, '+', j);
+                    serie.serieIndex = parseInt(i) + parseInt(j);
+                    serie.yAxisIndex = i;//PB: on utilise ça pour l'index du tableau et pour l'index de l'axe y !
                     serie.approxType = yAxisType.approxType;
                     graphDefinitions.copyYAxisTypeProperties(yAxisType, serie);
 
@@ -114,6 +120,7 @@ function analyseGraphConfig(config) {
                     }
                     series.push(serie);
                     counter++;
+
                 }
             }
         }

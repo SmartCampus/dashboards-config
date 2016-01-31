@@ -57,12 +57,6 @@ var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average", ""),
 		"average", ""),
 		STATE = new YAxisType("state", 0, 100, "", undefined, "average", "column");
 
-/*
- min: 0,
- max: 100,
- title: {
- text: 'heating status',
- */
 
 var YAXIS_TYPES = {
 	lux: LUX,

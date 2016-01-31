@@ -44,7 +44,7 @@ retrieveData.askForStateNow('HEATING_443', successForHeating, errorOccurred);
 var temperaturesArray = [];
 
 var firstSuccessInTemp = function (data, callback) {
-    temperaturesArray[0] = {"type": "line", "name": "inside temparature", "data": data.data, "yAxis": 1};
+    temperaturesArray[2] = {"type": "line", "name": "inside temparature", "data": data.data, "yAxis": 1};
     callback();
 };
 
@@ -55,7 +55,7 @@ var secondSuccessInTemp = function (data, callback) {
 };
 
 var thirdSuccessInTemp = function (data, callback) {
-    temperaturesArray[2] = {
+    temperaturesArray[0] = {
         "type": "column", "name": "Heating status", "data": data.data, "yAxis": 0, "dataGrouping": {
             "approximation": "average"
         }
@@ -94,6 +94,7 @@ retrieveData.askForSeriesWithParam('AC_443STATE/data/reverse', "true", beginDate
     , errorOccurred);
 
 var drawLineChart = function () {
+    //The y axes must be declared in the same order as how they are used in the data array
     generate.widgetV2("Heating status in comparison to inside and outside temperatures", "",
         [{
             unit: "state",
@@ -188,6 +189,7 @@ var drawLineChart = function () {
 };
 var lightData = {};
 
+
 retrieveData.askForSeries('LIGHT_444/data', beginDate, endDate,
     function (data) {
         successInLight(data)
@@ -202,12 +204,13 @@ var successInLight = function (data) {
 var drawLineChartForLight = function () {
     var lightInArray = [];
     lightInArray.push(lightData);
-  /*  generate.widgetV2("Brightness level evolution", "line", [{
-        type: "lux",
-        "title": "Brightness level"
+    generate.widgetV2("Brightness level evolution", "line", [{
+        unit: "lux",
+        "title": "Brightness level",
+        "amount": 1
     }], "lightLevel", "lightInArray", function (data) {
         eval(data);
     }, function (error) {
         console.log('error :(');
-    }); */
+    });
 };
