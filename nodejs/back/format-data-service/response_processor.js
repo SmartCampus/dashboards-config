@@ -33,7 +33,6 @@ function highChartFormatTransformation(response, res, state) {
         }
 
         response.send(responseInGoodFormat);
-        console.timeEnd("Get-specific-sensor-data")
     });
 }
 
@@ -88,7 +87,6 @@ function splitInformation(response, res) {
         responseInGoodFormat.data.push({"close" : closeList});
 
         response.send(responseInGoodFormat);
-        console.timeEnd("Get-specific-sensor-splitList-data");
     });
 }
 
@@ -130,7 +128,6 @@ function informationInPercent(res, response, date) {
         responseInGoodFormat.data.push({"close": (1 - percent)*100});
 
         response.send(responseInGoodFormat);
-        console.timeEnd('Get-specific-sensor-percent-data');
     });
 }
 

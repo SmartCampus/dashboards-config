@@ -38,7 +38,6 @@ router.get("/container/:containerId/child", function(req, res) {
 router.get("/sensor/:sensorId/data", function(req, res) {
     var sensorId = req.params.sensorId;
     var date = "";
-    console.time("call-to-real-smartcampus");
     if(req.query.date !== undefined) {
         date = req.query.date;
     }
@@ -74,7 +73,6 @@ router.get("/sensor/:sensorName/fullInformation", function(req, res){
 
 function putValueInResponse(res, jsonResponse) {
     res.send(jsonResponse);
-   // console.timeEnd("call-to-real-smartcampus");
 }
 
 module.exports = router;
