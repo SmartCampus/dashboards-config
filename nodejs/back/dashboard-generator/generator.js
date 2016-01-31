@@ -93,7 +93,7 @@ function analyseGraphConfig(config) {
                 yAxes[i].coma = ",";
             }
 
-            if(yAxes[i].amount == 1) {
+            if(yAxes[i].amount == 1 || typeof(yAxes[i].amount) == 'undefined') {
                 console.log('yAxes amount is 1. ');
                 serie.serieIndex = i;
                 serie.yAxisIndex = i;
