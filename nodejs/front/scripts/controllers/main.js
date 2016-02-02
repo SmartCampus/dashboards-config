@@ -1,7 +1,7 @@
 var sensors; //This array contains all the sensors we have
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 
-var needs = [{name : "Comparison"}, {name : "Mock need"}, {name : "See status"}, {name : "Overtime"}, {name : "Relationships"}, {name : "Hierarchy"}, {name : "Proportion"}, {name : "Summarize"}];
+var needs = [{name: "Comparison"}, {name: "Mock need"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
 var needsSimple = ["Comparison", "Mock need", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 var maxOfWidgets = 1; //this determines how many boxes are drawn in the center of the page
 var navbar = [];
@@ -10,11 +10,11 @@ var selectedBox = 0;
 /**
  * Get all buildings sensors et placements
  */
-    $.get(mainServer + "container/Root/child")
-        .done(function (data) {
-            sensors = data;
-            initWindowsData();
-        });
+$.get(mainServer + "container/Root/child")
+    .done(function (data) {
+        sensors = data;
+        initWindowsData();
+    });
 
 
 var allTheNeeds = [];
@@ -32,8 +32,6 @@ function initWindowsData() {
 
     position = sensors;
     buildings = sensors.childContainer;
-    //   previous.push(position);
-
     navbar.push(position.name);
     addNeeds();
     navigation();
@@ -119,7 +117,7 @@ var removeAWidget = function () {
             for (var i = 0; i < 3; i++)
                 $('#add-rows div').last().remove();
         }
-        allTheNeeds.splice(-1,1);
+        allTheNeeds.splice(-1, 1);
         maxOfWidgets -= 1;
     }
 };
@@ -174,12 +172,11 @@ function navigation() {
 
     for (var i = 0; i < buildings.length; i++) {
         $("#add-captors").append(
-            "<div class=\"row\"><a class=\"node\" id=\"" + i + "\">" + buildings[i].name + "</a></div>"
+            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a></div>"
         );
     }
 
     if (position.directSensor != null) {
-
         for (var i = 0; i < position.directSensor.length; i++) {
             $("#add-captors").append(
                 "<div class=\"row\"><span class=\"draggable\" id=\""
@@ -202,8 +199,8 @@ function updateNavigation() {
     // clean DOM
     $(".breadcrumb").empty();
 
-    for (var i = 0; i < navbar.length; i++) {
-        $(".breadcrumb").append("<li><a class=\"nave\" name=\"" + navbar[i] + "\">" + navbar[i] + "</a></li>");
+    for (var i = 0; i < navbar.length - 1; i++) {
+        $(".breadcrumb").append("<li><a class=\"nave\" name=\"" + navbar[i] + "\" style=\"cursor : pointer;\">" + navbar[i] + "</a></li>");
     }
 }
 
@@ -251,10 +248,10 @@ function dropIt(event, ui) {
     var droppableId = $(self).attr("id");
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
-   if ($.inArray(draggableName, needsSimple) > -1) {//TODO still works ?
-    //if (needsSimple.indexOf(draggableName) > -1) {
+    if ($.inArray(draggableName, needsSimple) > -1) {//TODO still works ?
+        //if (needsSimple.indexOf(draggableName) > -1) {
         if (!($.inArray(draggableName, allTheNeeds[droppableId].needs) > -1)) {
-            allTheNeeds[droppableId].needs.forEach(function(aNeed) {
+            allTheNeeds[droppableId].needs.forEach(function (aNeed) {
                 aTemporaryArrayOfNeeds.push(aNeed.name);
             });
             aTemporaryArrayOfNeeds.push(draggableName);
@@ -268,6 +265,11 @@ function dropIt(event, ui) {
                 $.post(mainServer + 'sensors/common/hierarchical', {
                     "sensors": tmpSensorList
                 }).done(function (data) {
+                        //Resetting all the sensors data we have to get the new one
+                        position = {};
+                        buildings.splice(0, buildings.length);
+                        navbar.splice(0, navbar.length);
+
                         position = data;
                         buildings = data.childContainer;
                         navbar.push(position.name);
@@ -287,12 +289,12 @@ function dropIt(event, ui) {
         }
     }
     else {//Means it's a sensor
-        if (!($.inArray(draggableName,  allTheNeeds[droppableId].sensors) > -1)) {
+        if (!($.inArray(draggableName, allTheNeeds[droppableId].sensors) > -1)) {
             var temporarySensorsList = [];
 
             $.get(mainServer + "sensor/" + draggableName + "/enhanced")
                 .done(function (data) {
-                    allTheNeeds[droppableId].sensors.forEach(function(aSensor) {
+                    allTheNeeds[droppableId].sensors.forEach(function (aSensor) {
                         temporarySensorsList.push(aSensor);
                     });
                     temporarySensorsList.push(data);
@@ -305,12 +307,9 @@ function dropIt(event, ui) {
                         createAndAddPercentButton(draggableName, droppableId);
 
                         allTheNeeds[droppableId].sensors.push(data);
-                    }, function(error) {
+                    }, function (error) {
                         console.log(error);
-
                     });
-
-
                 });
         }
     }
@@ -319,15 +318,15 @@ function dropIt(event, ui) {
 //This method creates a percent button and appends it to a specific sensorname
 var createAndAddPercentButton = function (draggableName, droppableId) {
     var togglePercent = document.createElement("button");        // Create a <button> element
-  //  togglePercent.setAttribute('class', 'btn btn-default btn-xs');
+    //  togglePercent.setAttribute('class', 'btn btn-default btn-xs');
     togglePercent.setAttribute('onclick', 'setColor(event, "' + draggableName + '", "' + droppableId + '", "#0000FF")');
     togglePercent.setAttribute('data-count', '1');
-    togglePercent.setAttribute('style',  'display : -webkit-inline-box');
+    togglePercent.setAttribute('style', 'display : -webkit-inline-box');
     var buttonContent = document.createTextNode("%");       // Create a text node
     togglePercent.appendChild(buttonContent);          // Append the text to <button>
 
-    $("#add-rows > div").each(function(){
-        if( $(this).attr('id') == droppableId){
+    $("#add-rows > div").each(function () {
+        if ($(this).attr('id') == droppableId) {
             $(this).append(togglePercent);
         }
     });
@@ -374,8 +373,8 @@ var declareNeeds = function () {
 
 $(window).konami();
 $(window).konami({
-    code : [38,38,40,40,37,39,37,39], // up up down down left right left right
-    cheat: function() {
+    code: [38, 38, 40, 40, 37, 39, 37, 39], // up up down down left right left right
+    cheat: function () {
         console.log('cheat code activated');
         $(".tetris").attr("style", "width:250px; height:500px;");
         $(".tetris").blockrain();
