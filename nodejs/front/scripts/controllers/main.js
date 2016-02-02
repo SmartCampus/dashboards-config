@@ -2,8 +2,12 @@ var sensors; //This array contains all the sensors we have
 
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 //2 versions bc easier for now, even if not really useful...
-var needs = [{name: "Comparison"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
-var needsSimple = ["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+var needsOrigin = [{name: "Comparison"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
+var needsSimpleOrigin = ["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+
+var needs = [[{name: "Comparison"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
+var needsSimple = [["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
+
 
 
 var maxOfWidgets = 1; //this determines how many boxes are drawn in the center of the page
@@ -37,7 +41,7 @@ function initWindowsData() {
     position = sensors;
     buildings = sensors.childContainer;
     navbar.push(position.name);
-    addNeeds();
+    addNeeds(0);
     navigation();
 }
 
@@ -83,6 +87,7 @@ $("#add-rows").click(function (event) {
     $("#add-rows > div").each(function () {
         var id = $(this).attr('id');
         if (id === selectedBox) {
+            addNeeds(selectedBox);
             $(this).css("border-color", "green");
             $("#" + id).droppable(
                 {
@@ -106,7 +111,11 @@ $("#add-rows").click(function (event) {
 var addAWidget = function () {
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
 
+    needs[maxOfWidgets] = needsOrigin;
+    needsSimple[maxOfWidgets] = needsSimpleOrigin;
     addTableRow(maxOfWidgets);
+
+   // addNeeds(maxOfWidgets);
     maxOfWidgets += 1;
 
 };
@@ -142,18 +151,18 @@ var deleteWidgetContent = function (widgetId) {
 /**
  * This function fills the visulization needs panel, and set its elements to being draggable elements
  */
-function addNeeds() {
+function addNeeds(boxIndex) {
     $("#add-need").empty();
 
-    for (var i = 0; i < needs.length; i++) {
+    for (var i = 0; i < needs[boxIndex].length; i++) {
         $("#add-need").append(
-            "<div class=\"needInList\"><span style=\"cursor : grab;\" class=\"draggable\" id=\"" + needs[i].name + "\">" + needs[i].name + "</span></div>"
+            "<div class=\"needInList\"><span style=\"cursor : grab;\" class=\"draggable\" id=\"" + needs[boxIndex][i].name + "\">" + needs[boxIndex][i].name + "</span></div>"
         );
 
         $(".draggable").draggable({
             //This defines what the user is actually dragging around
             helper: function (event) {
-                return $("<div style='cursor: grabbing' id='" + event.target.id + "'>" + event.target.id + "</div>");
+                return $("<div style='cursor: grabbing' id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
             },
             revert: "invalid"
 
@@ -188,21 +197,21 @@ function navigation() {
         );
     }
 
-    if (position.directSensor != null) {
+    if (position.directSensor != null && typeof(position.directSensor) !== 'undefined' && position.directSensor != [null]) {
         for (var i = 0; i < position.directSensor.length; i++) {
+            if (position.directSensor[i] != null) {
             $("#add-captors").append(
                 "<div class=\"row sensorInList\"><span class=\"draggable\" id=\""
                 + position.directSensor[i].name + "\" style=\"cursor : grab;\">"
                 + position.directSensor[i].displayName + "</span></div>"
             );
-
             $(".draggable").draggable({
                 helper: function (event) {
                     return $("<div style='cursor: grabbing'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
                 },
-                revert: "invalid",
-                cursor: "pointer"
+                revert: "invalid"
             });
+        }
         }
     }
 
@@ -262,7 +271,7 @@ function dropIt(event, ui) {
     var droppableId = $(self).attr("id");
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
-    if ($.inArray(draggableId, needsSimple) > -1) {
+    if ($.inArray(draggableId, needsSimple[droppableId]) > -1) {
         if (!($.inArray(draggableId, allTheNeeds[droppableId].needs) > -1)) {
             allTheNeeds[droppableId].needs.forEach(function (aNeed) {
                 aTemporaryArrayOfNeeds.push(aNeed.name);
@@ -279,7 +288,6 @@ function dropIt(event, ui) {
                     "sensors": tmpSensorList
                 }).done(function (data) {
                         //Resetting all the sensors data we have to get the new one
-                        position = {};
                         buildings.splice(0, buildings.length);
                         navbar.splice(0, navbar.length);
 
@@ -317,8 +325,8 @@ function dropIt(event, ui) {
                     temporarySensorsList.push(enhancedSensor);
 
                     expression.sensorList(temporarySensorsList, function (answer) {
-                        needs = answer;
-                        addNeeds();
+                        needs[droppableId] = answer;
+                        addNeeds(droppableId);
                         //Here, we add a new sensor to the widget.
                         var needSpan = $(document.createElement('span'));
                         needSpan.attr("id", draggableId);
