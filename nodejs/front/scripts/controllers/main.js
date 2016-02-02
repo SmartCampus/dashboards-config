@@ -325,7 +325,7 @@ function dropIt(event, ui) {
                         needSpan.css('cursor', 'default');
                         needSpan.html(enhancedSensor.displayName);
                         needSpan.appendTo($(self));
-                        createAndAddPercentButton(draggableId, droppableId);
+                        createAndAddPercentButton(($(self)).attr('id'), draggableId, droppableId);
 
                         allTheNeeds[droppableId].sensors.push(enhancedSensor);
                     }, function (error) {
@@ -338,21 +338,13 @@ function dropIt(event, ui) {
 
 ////////////////////////////////////// Percent button on sensors  //////////////////////////////////////////////////////
 //This method creates a percent button and appends it to a specific sensorname
-var createAndAddPercentButton = function (draggableName, droppableId) {
-    var togglePercent = document.createElement("button");        // Create a <button> element
-    //  togglePercent.setAttribute('class', 'btn btn-default btn-xs');
-    togglePercent.setAttribute('onclick', 'setColor(event, "' + draggableName + '", "' + droppableId + '", "#0000FF")');
-    togglePercent.setAttribute('data-count', '1');
-    togglePercent.setAttribute('style', 'display : -webkit-inline-box');
-    var buttonContent = document.createTextNode("%");       // Create a text node
-    togglePercent.appendChild(buttonContent);          // Append the text to <button>
+var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableId) {
+    var togglePercent = $(document.createElement("button"));        // Create a <button> element
+    togglePercent.attr('onclick', 'setColor(event, "' + draggableName + '", "' + droppableId + '", "#0000FF")');
+    togglePercent.attr('data-count', '1');
+    togglePercent.html("%");          // Append the text to <button>
 
-    $("#add-rows > div").each(function () {
-        if ($(this).attr('id') == droppableId) {
-            $(this).append(togglePercent);
-        }
-    });
-
+    togglePercent.appendTo($("#"+widgetBoxId + " #"+draggableName));
 };
 
 var setColor = function (event, btnName, widgetIndex, color) {

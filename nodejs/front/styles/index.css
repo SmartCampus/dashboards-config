@@ -20,3 +20,8 @@
 .sensorInList {
     text-shadow: 2px 2px 8px #70d700;
 }
+
+
+#add-rows div span {
+    display: block;
+}
