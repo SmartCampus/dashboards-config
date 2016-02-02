@@ -340,7 +340,8 @@ function dropIt(event, ui) {
 //This method creates a percent button and appends it to a specific sensorname
 var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableId) {
     var togglePercent = $(document.createElement("button"));        // Create a <button> element
-    togglePercent.attr('onclick', 'setColor(event, "' + draggableName + '", "' + droppableId + '", "#0000FF")');
+    togglePercent.attr('onclick', 'setColor(event, "' + draggableName + '", "' + droppableId + '", "#20C6D7")');
+    togglePercent.attr('class', 'btn btn-default btn-xs');
     togglePercent.attr('data-count', '1');
     togglePercent.html("%");          // Append the text to <button>
 
