@@ -1,0 +1,25 @@
+/**
+Style sheet for the layout picking modal
+*/
+
+.layoutImg {
+    width:80%;
+    padding: 1.2em;
+    cursor:pointer;
+}
+
+.layoutImg:link{
+    background-color: rgba(70, 177, 255, 0.29);
+}
+
+.layoutImg:visited {
+    background-color: rgba(70, 177, 255, 0.29);
+}
+
+.layoutImg:hover{
+    background-color: rgba(70, 177, 255, 0.29);
+}
+
+.layoutImg:active{
+    background-color: rgba(70, 177, 255, 0.29);
+}

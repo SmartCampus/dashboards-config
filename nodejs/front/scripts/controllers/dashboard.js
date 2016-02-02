@@ -9,10 +9,17 @@ var watchingArray = [{"dataSC": [], "counter": []}, {"dataSC": [], "counter": []
     "counter": []
 }, {"dataSC": [], "counter": []}];
 
+////////////////////////////// Generic function to fire in case of server error ///////////////////////////////////////
+var errorOccurred = function () {
+    document.getElementById("errorOccurred").className = "row text-center show";
+    document.getElementById("loadingImg").className = "hidden";
+    document.getElementById("dashboard").className = "hidden";
+};
+
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
 var theNeeds = JSON.parse(localStorage.getItem("bar"));
 localStorage.removeItem("bar");
-console.log(theNeeds);
+if (theNeeds == null) {errorOccurred()}
 
 
 if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
@@ -59,11 +66,6 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
     }
 };
 
-var errorOccurred = function () {
-    document.getElementById("errorOccurred").className = "row text-center show";
-    document.getElementById("loadingImg").className = "hidden";
-    document.getElementById("dashboard").className = "hidden";
-};
 
 //TODO: demander à l'utilisateur les dates qu'il veut
 

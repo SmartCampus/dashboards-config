@@ -5,6 +5,7 @@
 var layouts = (function () {
     return { //exposed to public
         newLayout: function(layoutName, successCB, errorCB) {
+            console.log('you want ', layoutName);
             $.post(genServer+widgetGen,
                 {
                     job : "generateLayout",
@@ -18,9 +19,9 @@ var layouts = (function () {
                 })
                 .fail(function (data) {
                     console.log('error in post gen layout');
+                    console.log(data);
                     errorCB();
                 });
-            //successCB(halfnhalfLayout);
         },
         widgetsIds: function(layoutNeeded, successCB, errorCB) {
             //http://localhost:8083/threeThirds/widgetList

@@ -2,13 +2,14 @@
  * Created by Garance on 05/01/2016.
  */
 
-var layoutWanted = "halfNHalf";
+var existingLayouts = ["halfNHalf"];
 
 var setLayoutWanted = function(layoutName) {
+    console.log('you want ', layoutName);
     layoutWanted = layoutName;
 };
 
-$("button").click(function(){
+/*$("button").click(function(){
     var id = this.id;
 
     $( "#add-content" ).empty(); // clean DOM
@@ -22,10 +23,10 @@ $("button").click(function(){
     }/*else{
        divideInThreeNotEgal();
     }*/
-});
+//});
 
 
-function divideInTwoEgal() {
+/*function divideInTwoEgal() {
     var content = "<div class=\"row\">"+
         "<div class=\"col-md-6\" style=\"min-height: 500px; background-color: rgba(207, 134, 126, 0.55);\">One half</div>"+
         "<div class=\"col-md-6\" style=\"min-height: 500px; background-color: rgba(102, 175, 233, 0.55);\">One half</div>"+
@@ -51,7 +52,7 @@ function divideInThreeEgal() {
     $("#add-content").append(content);
 }
 
-/*function divideInThreeNotEgal() {
+function divideInThreeNotEgal() {
 
     var content = "<div class=\"row\">"+
         "<div class=\"col-md-3\" style=\"min-height: 500px; background-color: rgba(207, 134, 126, 0.55) ;\">One third</div>"+

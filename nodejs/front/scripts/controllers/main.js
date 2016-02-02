@@ -1,9 +1,13 @@
 var sensors; //This array contains all the sensors we have
-//these are the visualization intentions we know of and use. Should be part of Ivan's work.
 
-var needs = [{name: "Comparison"}, {name: "Mock need"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
-var needsSimple = ["Comparison", "Mock need", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+//these are the visualization intentions we know of and use. Should be part of Ivan's work.
+//2 versions bc easier for now, even if not really useful...
+var needs = [{name: "Comparison"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
+var needsSimple = ["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+
+
 var maxOfWidgets = 1; //this determines how many boxes are drawn in the center of the page
+
 var navbar = [];
 var selectedBox = 0;
 
@@ -85,26 +89,19 @@ $("#add-rows").click(function (event) {
 
 /**
  * Function to add new widget boxes
- * WE need to expand the different arrays that depend on the nb of widgets boxes as well !
+ * We need to expand the array describing the widgets
  * For now, when we add a line, the other boxes become unavailable !
  */
 var addAWidget = function () {
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
 
     addTableRow(maxOfWidgets);
-    /*var theId = (maxOfWidgets-1).toString();
-     console.log(maxOfWidgets);
-     console.log(theId);
-     document.getElementById(theId).disabled = true;
-     */
     maxOfWidgets += 1;
 
 };
 
 /////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
 var removeAWidget = function () {
-    //you want to remove a widget !
-
     var domSize = $("#add-rows div").length;
 
     if (domSize > 3) {
@@ -139,12 +136,16 @@ function addNeeds() {
 
     for (var i = 0; i < needs.length; i++) {
         $("#add-need").append(
-            "<div style=\"padding: 20px 0 0 0; text-align : center\"><span style=\"cursor : pointer;\" class=\"draggable\" id=\"" + needs[i].name + "\">" + needs[i].name + "</span></div>"
+            "<div style=\"padding: 20px 0 0 0; text-align : center\"><span style=\"cursor : grab;\" class=\"draggable\" id=\"" + needs[i].name + "\">" + needs[i].name + "</span></div>"
         );
 
         $(".draggable").draggable({
-            helper: 'clone',
+            //This defines what the user is actually dragging around
+            helper: function( event ) {
+                return $( "<div style='cursor: grabbing' id='"+event.target.id+"'>"+ event.target.id +"</div>" );
+            },
             revert: "invalid"
+
         });
     }
 }
@@ -180,12 +181,14 @@ function navigation() {
         for (var i = 0; i < position.directSensor.length; i++) {
             $("#add-captors").append(
                 "<div class=\"row\"><span class=\"draggable\" id=\""
-                + position.directSensor[i].name + "\" style=\"cursor : pointer;\">"
+                + position.directSensor[i].name + "\" style=\"cursor : grab;\">"
                 + position.directSensor[i].displayName + "</span></div>"
             );
 
             $(".draggable").draggable({
-                helper: 'clone',
+                helper: function( event ) {
+                    return $( "<div style='cursor: grabbing'  id='"+event.target.id+"'>"+ event.target.innerHTML +"</div>" );
+                },
                 revert: "invalid",
                 cursor: "pointer"
             });
@@ -244,17 +247,16 @@ $(document).on('click', '.node', function (el) {
 function dropIt(event, ui) {
     var self = this;
     var aTemporaryArrayOfNeeds = [];
-    var draggableName = ui.draggable.attr("id");
+    var draggableId = ui.draggable.attr("id");
     var droppableId = $(self).attr("id");
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
-    if ($.inArray(draggableName, needsSimple) > -1) {//TODO still works ?
-        //if (needsSimple.indexOf(draggableName) > -1) {
-        if (!($.inArray(draggableName, allTheNeeds[droppableId].needs) > -1)) {
+    if ($.inArray(draggableId, needsSimple) > -1) {
+        if (!($.inArray(draggableId, allTheNeeds[droppableId].needs) > -1)) {
             allTheNeeds[droppableId].needs.forEach(function (aNeed) {
                 aTemporaryArrayOfNeeds.push(aNeed.name);
             });
-            aTemporaryArrayOfNeeds.push(draggableName);
+            aTemporaryArrayOfNeeds.push(draggableId);
             expression.needList(aTemporaryArrayOfNeeds, function (answer) {
                 var tmpSensorList = [];
                 answer.forEach(function (oneSensorSet) {
@@ -274,8 +276,12 @@ function dropIt(event, ui) {
                         buildings = data.childContainer;
                         navbar.push(position.name);
                         navigation();
-                        ui.draggable.clone().appendTo($(self));
-                        allTheNeeds[droppableId].needs.push(draggableName);
+                        var needSpan = $( document.createElement('span') );
+                        needSpan.attr("id",draggableId);
+                        needSpan.css('cursor', 'default' );
+                        needSpan.html(draggableId);
+                        needSpan.appendTo($(self));
+                        allTheNeeds[droppableId].needs.push(draggableId);
                     })
                     .fail(function (data) {
                         console.log(data);
@@ -289,24 +295,28 @@ function dropIt(event, ui) {
         }
     }
     else {//Means it's a sensor
-        if (!($.inArray(draggableName, allTheNeeds[droppableId].sensors) > -1)) {
+        if (!($.inArray(draggableId, allTheNeeds[droppableId].sensors) > -1)) {
             var temporarySensorsList = [];
 
-            $.get(mainServer + "sensor/" + draggableName + "/enhanced")
-                .done(function (data) {
+            $.get(mainServer + "sensor/" + draggableId + "/enhanced")
+                .done(function (enhancedSensor) {
                     allTheNeeds[droppableId].sensors.forEach(function (aSensor) {
                         temporarySensorsList.push(aSensor);
                     });
-                    temporarySensorsList.push(data);
+                    temporarySensorsList.push(enhancedSensor);
 
                     expression.sensorList(temporarySensorsList, function (answer) {
                         needs = answer;
                         addNeeds();
                         //Here, we add a new sensor to the widget.
-                        ui.draggable.clone().appendTo($(self));
-                        createAndAddPercentButton(draggableName, droppableId);
+                        var needSpan = $( document.createElement('span') );
+                        needSpan.attr("id",draggableId);
+                        needSpan.css('cursor', 'default' );
+                        needSpan.html(enhancedSensor.displayName);
+                        needSpan.appendTo($(self));
+                        createAndAddPercentButton(draggableId, droppableId);
 
-                        allTheNeeds[droppableId].sensors.push(data);
+                        allTheNeeds[droppableId].sensors.push(enhancedSensor);
                     }, function (error) {
                         console.log(error);
                     });
@@ -315,6 +325,7 @@ function dropIt(event, ui) {
     }
 }
 
+////////////////////////////////////// Percent button on sensors  //////////////////////////////////////////////////////
 //This method creates a percent button and appends it to a specific sensorname
 var createAndAddPercentButton = function (draggableName, droppableId) {
     var togglePercent = document.createElement("button");        // Create a <button> element
@@ -371,9 +382,10 @@ var declareNeeds = function () {
     });
 };
 
+//////////////////////////////////////// Quentin's easter egg ///////////////////////////////////////////////
 $(window).konami();
 $(window).konami({
-    code: [38, 38, 40, 40, 37, 39, 37, 39], // up up down down left right left right
+    code: [38, 38, 40, 40, 37, 39, 37, 39],
     cheat: function () {
         console.log('cheat code activated');
         $(".tetris").attr("style", "width:250px; height:500px;");

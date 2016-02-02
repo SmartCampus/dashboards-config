@@ -6,11 +6,9 @@ var expression = (function () {
         need: function (needsObject, successCB, errorCB) {//{sensors:[]}
             $.post(needsServer + needsQuestion, needsObject)
                 .done(function (data) {
-                    console.log('request done !');
                     successCB(data);
                 })
                 .fail(function (data) {
-                    console.log('error in post needs expression');
                     errorCB();
                 });
         },
@@ -20,32 +18,28 @@ var expression = (function () {
             })
                 .done(function (data) {
                     if (data.length <= 0) {
-                        console.log('liste vide');
+                        console.log('no more sensors possible. must do stg');
+                        errorCB(data);
                     }
                     successCB(data);
                 })
                 .fail(function (data) {
-                    console.log('error in post ');
                     console.log(data);
                     errorCB(data);
                 });
         },
         sensorList: function(sensorsList, successCB, errorCB) {
-            console.log('asking with');
-            console.log(sensorsList);
             $.post(needsServer + sensorSet, {
                     sensors:sensorsList
                 })
                 .done(function (data) {
-                    console.log('request done ! All the needs left you can use : ');
                     if (data.length <= 0) {
-                        console.log('liste vide');
+                        console.log('no more needs possible. Must do stg. ');
+                        errorCB(data);
                     }
-                    console.log(data);
                     successCB(data);
                 })
                 .fail(function (data) {
-                    console.log('error in post ');
                     console.log(data);
                     errorCB(data);
                 });
