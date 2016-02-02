@@ -25,3 +25,8 @@
 #add-rows div span {
     display: block;
 }
+
+body {
+    background:url("../assets/images/4400.jpg") no-repeat fixed center;
+    /*background:url("../assets/images/51953.jpg") no-repeat fixed center;*/
+}
