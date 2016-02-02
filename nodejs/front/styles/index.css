@@ -8,28 +8,15 @@
     text-justify: inter-word;
 }
 
-/**[draggable=true] {
-    -moz-user-select:none;
-    -khtml-user-drag: element;
-    -webkit-user-drag: element;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    cursor: move;
+.well.col-md-10.ui-droppable.myActiveDroppable {
+    background: rgba(112, 215, 0, 0.17);
 }
 
-#Comparison {
-    background-color: #90ee90;
-    border: solid 2px #006400;
-    cursor: pointer;
-    display: block;
-    height: 70px;
-    width: 70px;
-
+.needInList {
+    text-shadow: 2px 2px 8px #70d700;
+    padding: 20px 0 0 0;
+    text-align : center;
 }
-
-#0 {
-    background-color: #add8e6;
-    border: solid 2px darkblue;
-    margin-bottom: 14px;
-    padding: 7px;
-}*/
+.sensorInList {
+    text-shadow: 2px 2px 8px #70d700;
+}

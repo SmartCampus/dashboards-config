@@ -63,7 +63,13 @@ function updateDisableBox() {
         var id = $(this).attr('id');
         if (id == selectedBox) {
             $(this).css("border-color", "green");
-            $("#" + id).droppable({drop: dropIt, disabled: false});
+            $("#" + id).droppable(
+                {
+                    drop: dropIt,
+                    disabled: false,
+                    activeClass: "myActiveDroppable"
+                }
+            );
         } else {
             $(this).css("border-color", "red");
             $("#" + id).droppable({drop: dropIt, disabled: true});
@@ -78,7 +84,12 @@ $("#add-rows").click(function (event) {
         var id = $(this).attr('id');
         if (id === selectedBox) {
             $(this).css("border-color", "green");
-            $("#" + id).droppable({drop: dropIt, disabled: false});
+            $("#" + id).droppable(
+                {
+                    drop: dropIt,
+                    disabled: false,
+                    activeClass: "myActiveDroppable"
+                });
         } else {
             $(this).css("border-color", "red");
             $("#" + id).droppable({drop: dropIt, disabled: true});
@@ -136,13 +147,13 @@ function addNeeds() {
 
     for (var i = 0; i < needs.length; i++) {
         $("#add-need").append(
-            "<div style=\"padding: 20px 0 0 0; text-align : center\"><span style=\"cursor : grab;\" class=\"draggable\" id=\"" + needs[i].name + "\">" + needs[i].name + "</span></div>"
+            "<div class=\"needInList\"><span style=\"cursor : grab;\" class=\"draggable\" id=\"" + needs[i].name + "\">" + needs[i].name + "</span></div>"
         );
 
         $(".draggable").draggable({
             //This defines what the user is actually dragging around
-            helper: function( event ) {
-                return $( "<div style='cursor: grabbing' id='"+event.target.id+"'>"+ event.target.id +"</div>" );
+            helper: function (event) {
+                return $("<div style='cursor: grabbing' id='" + event.target.id + "'>" + event.target.id + "</div>");
             },
             revert: "invalid"
 
@@ -180,14 +191,14 @@ function navigation() {
     if (position.directSensor != null) {
         for (var i = 0; i < position.directSensor.length; i++) {
             $("#add-captors").append(
-                "<div class=\"row\"><span class=\"draggable\" id=\""
+                "<div class=\"row sensorInList\"><span class=\"draggable\" id=\""
                 + position.directSensor[i].name + "\" style=\"cursor : grab;\">"
                 + position.directSensor[i].displayName + "</span></div>"
             );
 
             $(".draggable").draggable({
-                helper: function( event ) {
-                    return $( "<div style='cursor: grabbing'  id='"+event.target.id+"'>"+ event.target.innerHTML +"</div>" );
+                helper: function (event) {
+                    return $("<div style='cursor: grabbing'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
                 },
                 revert: "invalid",
                 cursor: "pointer"
@@ -276,9 +287,9 @@ function dropIt(event, ui) {
                         buildings = data.childContainer;
                         navbar.push(position.name);
                         navigation();
-                        var needSpan = $( document.createElement('span') );
-                        needSpan.attr("id",draggableId);
-                        needSpan.css('cursor', 'default' );
+                        var needSpan = $(document.createElement('span'));
+                        needSpan.attr("id", draggableId);
+                        needSpan.css('cursor', 'default');
                         needSpan.html(draggableId);
                         needSpan.appendTo($(self));
                         allTheNeeds[droppableId].needs.push(draggableId);
@@ -309,9 +320,9 @@ function dropIt(event, ui) {
                         needs = answer;
                         addNeeds();
                         //Here, we add a new sensor to the widget.
-                        var needSpan = $( document.createElement('span') );
-                        needSpan.attr("id",draggableId);
-                        needSpan.css('cursor', 'default' );
+                        var needSpan = $(document.createElement('span'));
+                        needSpan.attr("id", draggableId);
+                        needSpan.css('cursor', 'default');
                         needSpan.html(enhancedSensor.displayName);
                         needSpan.appendTo($(self));
                         createAndAddPercentButton(draggableId, droppableId);
