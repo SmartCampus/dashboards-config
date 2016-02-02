@@ -103,6 +103,7 @@ var addAWidget = function () {
 
 };
 
+/////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
 var removeAWidget = function () {
     //you want to remove a widget !
 
@@ -118,9 +119,8 @@ var removeAWidget = function () {
             for (var i = 0; i < 3; i++)
                 $('#add-rows div').last().remove();
         }
-
+        allTheNeeds.splice(-1,1);
         maxOfWidgets -= 1;
-
     }
 };
 
@@ -251,11 +251,8 @@ function dropIt(event, ui) {
     var droppableId = $(self).attr("id");
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
-    console.log('dropped ', draggableName);
-    console.log('is it in ', needsSimple);
    if ($.inArray(draggableName, needsSimple) > -1) {//TODO still works ?
     //if (needsSimple.indexOf(draggableName) > -1) {
-        console.log('is it in ', allTheNeeds[droppableId].needs);
         if (!($.inArray(draggableName, allTheNeeds[droppableId].needs) > -1)) {
             allTheNeeds[droppableId].needs.forEach(function(aNeed) {
                 aTemporaryArrayOfNeeds.push(aNeed.name);
@@ -263,19 +260,14 @@ function dropIt(event, ui) {
             aTemporaryArrayOfNeeds.push(draggableName);
             expression.needList(aTemporaryArrayOfNeeds, function (answer) {
                 var tmpSensorList = [];
-                console.log(answer);
                 answer.forEach(function (oneSensorSet) {
-                    console.log('for ', oneSensorSet);
                     oneSensorSet.sensors.forEach(function (sensor) {
-                        console.log('for one ', sensor);
                         tmpSensorList.push(sensor.name);
                     })
                 });
-                console.log(tmpSensorList);
                 $.post(mainServer + 'sensors/common/hierarchical', {
                     "sensors": tmpSensorList
                 }).done(function (data) {
-                    console.log('in the hierarchical post done ');
                         position = data;
                         buildings = data.childContainer;
                         navbar.push(position.name);
@@ -284,7 +276,6 @@ function dropIt(event, ui) {
                         allTheNeeds[droppableId].needs.push(draggableName);
                     })
                     .fail(function (data) {
-                        console.log('error in quentin');
                         console.log(data);
                     });
             }, function (error) {
@@ -315,7 +306,6 @@ function dropIt(event, ui) {
 
                         allTheNeeds[droppableId].sensors.push(data);
                     }, function(error) {
-                        console.log(':(');
                         console.log(error);
 
                     });

@@ -8,9 +8,13 @@ var watchingArray = [{"dataSC": [], "counter": []}, {"dataSC": [], "counter": []
     "dataSC": [],
     "counter": []
 }, {"dataSC": [], "counter": []}];
+
+////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
 var theNeeds = JSON.parse(localStorage.getItem("bar"));
 localStorage.removeItem("bar");
 console.log(theNeeds);
+
+
 if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
     beginDate = '2015-06-21 8:00:11';
     endDate = '2015-09-21 18:00:11';
