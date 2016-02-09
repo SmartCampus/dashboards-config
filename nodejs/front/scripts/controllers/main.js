@@ -9,7 +9,7 @@ var needs = [[{name: "Comparison"}, {name: "See status"}, {name: "Overtime"}, {n
 var needsSimple = [["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
 
 
-
+$("#generateButton").attr("disabled", "disabled"); //The generate button starts by being disabled
 var maxOfWidgets = 1; //this determines how many boxes are drawn in the center of the page
 
 var navbar = [];
@@ -63,7 +63,7 @@ var addTableRow = function (index) {
 
 function updateDisableBox() {
 
-    $("#add-rows > div").each(function () {
+    $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
         if (id == selectedBox) {
             $(this).css("border-color", "green");
@@ -84,7 +84,7 @@ function updateDisableBox() {
 $("#add-rows").click(function (event) {
     selectedBox = event.target.id;
 
-    $("#add-rows > div").each(function () {
+    $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
         if (id === selectedBox) {
             addNeeds(selectedBox);
@@ -115,24 +115,22 @@ var addAWidget = function () {
     needsSimple[maxOfWidgets] = needsSimpleOrigin;
     addTableRow(maxOfWidgets);
 
-   // addNeeds(maxOfWidgets);
     maxOfWidgets += 1;
 
 };
 
 /////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
 var removeAWidget = function () {
-    var domSize = $("#add-rows div").length;
+    var $addRowsDiv = $("#add-rows").find(" > div");
+    var domSize = $addRowsDiv.length;
 
-    if (domSize > 3) {
-        if (parseInt(+selectedBox + 1) === (domSize / 3)) {
+    if (domSize > 3) { //means I have at least 2 widget boxes : so we can delete one indeed
+        if (parseInt(+selectedBox + 1) === (domSize / 3)) { //It was the last box that was selected
             selectedBox--;
-            for (var i = 0; i < 3; i++)
-                $('#add-rows div').last().remove();
+            $addRowsDiv.slice(-2).remove();
             updateDisableBox();
-        } else {
-            for (var i = 0; i < 3; i++)
-                $('#add-rows div').last().remove();
+        } else { //it's not the last box that was selected
+            $addRowsDiv.slice(-2).remove();
         }
         allTheNeeds.splice(-1, 1);
         maxOfWidgets -= 1;
@@ -152,10 +150,10 @@ var deleteWidgetContent = function (widgetId) {
  * This function fills the visulization needs panel, and set its elements to being draggable elements
  */
 function addNeeds(boxIndex) {
-    $("#add-need").empty();
+    var $addNeed = $("#add-need").empty();
 
     for (var i = 0; i < needs[boxIndex].length; i++) {
-        $("#add-need").append(
+        $addNeed.append(
             "<div class=\"needInList\"><span style=\"cursor : grab;\" class=\"draggable\" id=\"" + needs[boxIndex][i].name + "\">" + needs[boxIndex][i].name + "</span></div>"
         );
 
@@ -186,32 +184,32 @@ var previous = [];
 function navigation() {
 
     // clean DOM
-    $("#add-captors").empty();
+    var $addCaptors = $("#add-captors").empty();
 
 
-    $("#add-captors").append("<div class=\"row\"><h3>" + position.name + "</h3></div>");
-
-    for (var i = 0; i < buildings.length; i++) {
-        $("#add-captors").append(
+    $addCaptors.append("<div class=\"row\"><h3>" + position.name + "</h3></div>");
+    var i;
+    for (i = 0; i < buildings.length; i++) {
+        $addCaptors.append(
             "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a></div>"
         );
     }
 
     if (position.directSensor != null && typeof(position.directSensor) !== 'undefined' && position.directSensor != [null]) {
-        for (var i = 0; i < position.directSensor.length; i++) {
+        for (i = 0; i < position.directSensor.length; i++) {
             if (position.directSensor[i] != null) {
-            $("#add-captors").append(
-                "<div class=\"row sensorInList\"><span class=\"draggable\" id=\""
-                + position.directSensor[i].name + "\" style=\"cursor : grab;\">"
-                + position.directSensor[i].displayName + "</span></div>"
-            );
-            $(".draggable").draggable({
-                helper: function (event) {
-                    return $("<div style='cursor: grabbing'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
-                },
-                revert: "invalid"
-            });
-        }
+                $addCaptors.append(
+                    "<div class=\"row sensorInList\"><span class=\"draggable\" id=\""
+                    + position.directSensor[i].name + "\" style=\"cursor : grab;\">"
+                    + position.directSensor[i].displayName + "</span></div>"
+                );
+                $(".draggable").draggable({
+                    helper: function (event) {
+                        return $("<div style='cursor: grabbing'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
+                    },
+                    revert: "invalid"
+                });
+            }
         }
     }
 
@@ -220,10 +218,10 @@ function navigation() {
 
 function updateNavigation() {
     // clean DOM
-    $(".breadcrumb").empty();
+    var $breadCrumb = $(".breadcrumb").empty();
 
     for (var i = 0; i < navbar.length - 1; i++) {
-        $(".breadcrumb").append("<li><a class=\"nave\" name=\"" + navbar[i] + "\" style=\"cursor : pointer;\">" + navbar[i] + "</a></li>");
+        $breadCrumb.append("<li><a class=\"nave\" name=\"" + navbar[i] + "\" style=\"cursor : pointer;\">" + navbar[i] + "</a></li>");
     }
 }
 
@@ -301,6 +299,7 @@ function dropIt(event, ui) {
                         needSpan.html(draggableId);
                         needSpan.appendTo($(self));
                         allTheNeeds[droppableId].needs.push(draggableId);
+                        $("#generateButton").removeAttr("disabled");
                     })
                     .fail(function (data) {
                         console.log(data);
@@ -334,7 +333,7 @@ function dropIt(event, ui) {
                         needSpan.html(enhancedSensor.displayName);
                         needSpan.appendTo($(self));
                         createAndAddPercentButton(($(self)).attr('id'), draggableId, droppableId);
-
+                        $("#generateButton").removeAttr("disabled");
                         allTheNeeds[droppableId].sensors.push(enhancedSensor);
                     }, function (error) {
                         console.log(error);
@@ -353,7 +352,7 @@ var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableI
     togglePercent.attr('data-count', '1');
     togglePercent.html("%");          // Append the text to <button>
 
-    togglePercent.appendTo($("#"+widgetBoxId + " #"+draggableName));
+    togglePercent.appendTo($("#" + widgetBoxId + " #" + draggableName));
 };
 
 var setColor = function (event, btnName, widgetIndex, color) {
@@ -386,20 +385,21 @@ var declareNeeds = function () {
         expression.need(oneNeed, function (answer) {
             oneNeed.graphType = answer;
             //Better than cookie bc same behaviour throughout browsers.
-           if (index == allTheNeeds.length - 1) {
-               console.log('we got everything !');
-               localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
-               //Once we got everything
-               $("#dashboardNameForm").show();
-               $("#generateButton").hide();
-           }
+            if (index == allTheNeeds.length - 1) {
+                console.log('we got everything !');
+                localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
+                //Once we got everything
+                $("#dashboardNameForm").show();
+                $("#generateButton").hide();
+            }
         }, function () {
+            $("#generateButton").attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...
             console.log('IT\'S IMPOSSIBRRRRUUUUU');
         });
     });
 };
 
-var setDashboardName = function() {
+var setDashboardName = function () {
     localStorage.setItem("dashboardTitle", $("#dashboardName").val());
 
     return true;
@@ -411,7 +411,7 @@ $(window).konami({
     code: [38, 38, 40, 40, 37, 39, 37, 39],
     cheat: function () {
         console.log('cheat code activated');
-        $(".tetris").attr("style", "width:250px; height:500px;");
-        $(".tetris").blockrain();
+        var $tetris = $(".tetris").attr("style", "width:250px; height:500px;");
+        $tetris.blockrain();
     }
 });
