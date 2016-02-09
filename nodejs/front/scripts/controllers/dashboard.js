@@ -4,6 +4,8 @@
 
 //Ca, ça va pas du tout. Ca fait que ca dépend de comment t'as rempli tes boites, et c'tout !
 var existingPositions = [];
+var beginDate='';
+var endDate = '';
 var watchingArray = [{"dataSC": [], "counter": []}, {"dataSC": [], "counter": []}, {
     "dataSC": [],
     "counter": []
@@ -17,12 +19,14 @@ var errorOccurred = function () {
 };
 
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
-var theNeeds = JSON.parse(localStorage.getItem("bar"));
-localStorage.removeItem("bar");
-if (theNeeds == null) {errorOccurred()}
+var theNeeds = JSON.parse(localStorage.getItem("widgetsDescription"));
+localStorage.removeItem("widgetsDescription");
+if (theNeeds === null) {errorOccurred()}
+if (localStorage.getItem("dashboardTitle") !== null) {
+    $("#theGeneralTitle").html(localStorage.getItem("dashboardTitle"));
+} //else we just don't write any title
 
-
-if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
+if (beginDate === '' || endDate == '') {
     beginDate = '2015-06-21 8:00:11';
     endDate = '2015-09-21 18:00:11';
 }

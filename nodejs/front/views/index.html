@@ -64,7 +64,7 @@
                 <p>Define the widgets you want to see in your dashboard under here.</p>
             </div>
 
-            <div class="panel panel-default" style="min-height: 410px; margin-top:8%">
+            <div class="panel panel-default" style="min-height: 410px;">
                 <div class="panel-body">
                     <div id="add-rows"><!-- Insertion of content here--></div>
                 </div>
@@ -101,9 +101,21 @@
 
     </div>
 
-    <div class="text-right" id="generateButton">
-        <button type="button" onclick="declareNeeds()" class="btn btn-success"> Declare needs !</button>
-        <a type="button" href="dashboard.html" class="btn btn-success"> Generate !</a>
+    <div class="text-right">
+
+   <button id="generateButton" class="btn btn-success" onclick="declareNeeds()">Generate !</button>
+
+    <form class="form-inline" id="dashboardNameForm" style="display: none;">
+        <div class="form-group input-group">
+            <input class="form-control" id="dashboardName" placeholder="Your dashboard's name">
+          <span class="input-group-btn">
+              <a type="button"  onclick="return setDashboardName()" href="dashboard.html" class="btn btn-default">
+                  <i class="glyphicon glyphicon-ok-circle"></i>
+              </a>
+          </span>
+        </div>
+    </form>
+
 
     </div>
 

@@ -385,13 +385,24 @@ var declareNeeds = function () {
         //We only ask the composition server if what was asked is possible enough
         expression.need(oneNeed, function (answer) {
             oneNeed.graphType = answer;
-            localStorage.setItem("bar", JSON.stringify(allTheNeeds));
-            //If this is our last callback, set the whole result in local storage.
             //Better than cookie bc same behaviour throughout browsers.
+           if (index == allTheNeeds.length - 1) {
+               console.log('we got everything !');
+               localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
+               //Once we got everything
+               $("#dashboardNameForm").show();
+               $("#generateButton").hide();
+           }
         }, function () {
             console.log('IT\'S IMPOSSIBRRRRUUUUU');
         });
     });
+};
+
+var setDashboardName = function() {
+    localStorage.setItem("dashboardTitle", $("#dashboardName").val());
+
+    return true;
 };
 
 //////////////////////////////////////// Quentin's easter egg ///////////////////////////////////////////////
