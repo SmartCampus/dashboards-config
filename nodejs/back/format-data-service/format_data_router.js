@@ -7,9 +7,9 @@ var express = require("express"),
     processor = require("./response_processor"),
     router = express.Router();
 
-
 /**
- *
+ *  This route allow the user to have the list of all the sensors with the container given in query param
+ *  Example : /sensors?container=CampusSophiaTech
  */
 router.get("/sensors", function(req, res) {
     var queries = req.query;
@@ -17,7 +17,8 @@ router.get("/sensors", function(req, res) {
 });
 
 /**
- *
+ * This route allow the user to have the data for the sensor with the given id for the interval of date given in query param
+ * If no date are given, all the data are sent.
  */
 router.get("/sensor/:sensorId/data", function(req, res) {
     var sensorId = req.params.sensorId;
@@ -32,7 +33,9 @@ router.get("/sensor/:sensorId/data", function(req, res) {
 
 });
 
-
+/**
+ * This route allow the user to have the data retrieved in percent. Only work if the category of the sensor is STATE.
+ */
 router.get("/sensor/:sensorId/data/percent", function(req, res) {
     var date = "";
     if(req.query.date !== undefined) {
@@ -41,6 +44,9 @@ router.get("/sensor/:sensorId/data/percent", function(req, res) {
     request_handler.getInformationInPercent(req.params.sensorId, date, res);
 });
 
+/**
+ * This route allow the user to have all the geographic child for the given container.
+ */
 router.get("/container/:containerId/child", function(req, res) {
     var sensor = req.params.containerId;
     request_handler.getContainersChild(sensor, function(response) {
@@ -48,21 +54,30 @@ router.get("/container/:containerId/child", function(req, res) {
     });
 });
 
+/**
+ * This route allow the user to have the information about the sensor with the given id in two different list.
+ * Format needed for a HighCharts graph
+ */
 router.get("/sensor/:sensorId/data/splitList", function(req, res) {
     var sensorId = req.params.sensorId;
     var date = "";
     if(req.query.date !== undefined) {
         date = req.query.date;
     }
-
     request_handler.getStateInformationSplit(sensorId, date,res)
 });
 
+/**
+ * This route allow the user to have the last data for the sensor with the given Id.
+ */
 router.get("/sensor/:sensorId/data/last", function(req, res) {
     var sensorId = req.params.sensorId;
     request_handler.getLastInformation(sensorId, res);
 });
 
+/**
+ *
+ */
 router.get("/sensor/:sensorId/data/reverse", function(req, res) {
     var sensorId = req.params.sensorId;
     if(sensorId != "AC_443STATE") {
@@ -80,7 +95,9 @@ router.get("/sensor/:sensorId/data/reverse", function(req, res) {
     }
 });
 
-
+/**
+ * This route allow the user to have all the sensors sorted in a hierarchical way.
+ */
 router.post("/sensors/common/hierarchical", function(req, res) {
     var givenSensor = req.body.sensors;
     console.log(givenSensor);
@@ -95,7 +112,9 @@ router.post("/sensors/common/hierarchical", function(req, res) {
     });
 });
 
-
+/**
+ * This route allow the user to have more information about the sensor with the given sensorName
+ */
 router.get("/sensor/:sensorName/enhanced", function(req, res) {
     var sensorName = req.params.sensorName;
     request_handler.getSensorsEnhancedInformation(sensorName, function(response, err) {
@@ -105,7 +124,6 @@ router.get("/sensor/:sensorName/enhanced", function(req, res) {
            res.sendStatus(404);
        }
     });
-
 });
 
 module.exports = router;
