@@ -12,25 +12,45 @@ var NEEDS = needs.NEEDS,
 
 var summerWidget1Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME],
 	summerWidget2Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION],
-	summerWidget34Needs = [NEEDS.SEE_STATUS],
-	unconsistentNeeds = [NEEDS.COMPARISON, NEEDS.RELATIONSHIPS, NEEDS.SUMMARIZE];
+	summerWidget34Needs = [NEEDS.SEE_STATUS];
+
+var unconsistentNeeds = [NEEDS.COMPARISON, NEEDS.RELATIONSHIPS, NEEDS.SUMMARIZE];
+
+var surroundingWidget12Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS],
+	surroundingWidget34Needs = [NEEDS.PROPORTION],
+	surroundingWidget56Needs = [NEEDS.OVERTIME, NEEDS.PATTERN];
 
 describe("needs", function () {
 
-	describe("#checkNeedsConsistency()", function () {
+	describe.only("#checkNeedsConsistency()", function () {
 
 		describe("summer dashboard", function () {
 
-			it("should be a consistent need set", function () {
+			it("widget 1 needs should be a consistent need set", function () {
 				assert(needs.checkNeedsConsistency(summerWidget1Needs));
 			});
 
-			it("should be a consistent need set", function () {
+			it("widget 2 needs should be a consistent need set", function () {
 				assert(needs.checkNeedsConsistency(summerWidget2Needs));
 			});
 
-			it("should be a consistent need set", function () {
+			it("widget 34 needs should be a consistent need set", function () {
 				assert(needs.checkNeedsConsistency(summerWidget34Needs));
+			});
+		});
+
+		describe("surrounding dashboard", function () {
+
+			it("widget 12 needs should be a consistent need set", function () {
+				assert(needs.checkNeedsConsistency(surroundingWidget12Needs));
+			});
+
+			it("widget 34 needs should be a consistent need set", function () {
+				assert(needs.checkNeedsConsistency(surroundingWidget34Needs));
+			});
+
+			it("widget 56 needs should be a consistent need set", function () {
+				assert(needs.checkNeedsConsistency(surroundingWidget56Needs));
 			});
 		});
 

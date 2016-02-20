@@ -13,13 +13,15 @@ var async = require("async"),
 var TEMP = "TEMP",
 	LIGHT = "LIGHT",
 	ENERGY = "ENERGY",
-	NUMBER = "NUMBER";
+	NUMBER = "NUMBER",
+	SOUND = "SOUND";
 
 var SENSOR_CATEGORIES = {
 	TEMP: TEMP,
 	LIGHT: LIGHT,
 	ENERGY: ENERGY,
-	NUMBER: NUMBER
+	NUMBER: NUMBER,
+	SOUND: SOUND
 }
 
 // Visualization needs
@@ -39,21 +41,23 @@ class Need {
 	set compatibleNeeds(compatibleNeeds) { this._compatibileNeeds = compatibleNeeds; }
 }
 
-var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, NUMBER]),
+var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, NUMBER, SOUND]),
 	SEE_STATUS = new Need("See status", [NUMBER]),
-	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, NUMBER]),
-	RELATIONSHIPS = new Need("Relationships", []),
+	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, NUMBER, SOUND]),
+	RELATIONSHIPS = new Need("Relationships", [SOUND, NUMBER]),
 	HIERARCHY = new Need("Hierarchy", []),
 	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, NUMBER]),
-	SUMMARIZE = new Need("Summarize", []);
+	SUMMARIZE = new Need("Summarize", []),
+	PATTERN = new Need("Pattern", [NUMBER]);
 
-COMPARISON.compatibleNeeds = [OVERTIME, PROPORTION];
+COMPARISON.compatibleNeeds = [OVERTIME, PROPORTION, RELATIONSHIPS];
 SEE_STATUS.compatibleNeeds = [];
-OVERTIME.compatibleNeeds = [COMPARISON, PROPORTION];
-RELATIONSHIPS.compatibleNeeds = [];
+OVERTIME.compatibleNeeds = [COMPARISON, PROPORTION, RELATIONSHIPS, PATTERN];
+RELATIONSHIPS.compatibleNeeds = [COMPARISON, OVERTIME];
 HIERARCHY.compatibleNeeds = [];
 PROPORTION.compatibleNeeds = [COMPARISON, OVERTIME];
-SUMMARIZE.compatibleNeeds = [];
+SUMMARIZE.compatibleNeeds = [],
+PATTERN.compatibleNeeds = [OVERTIME];
 
 var NEEDS = {
 	COMPARISON: COMPARISON,
@@ -62,7 +66,8 @@ var NEEDS = {
 	RELATIONSHIPS: RELATIONSHIPS,
 	HIERARCHY: HIERARCHY,
 	PROPORTION: PROPORTION,
-	SUMMARIZE: SUMMARIZE
+	SUMMARIZE: SUMMARIZE,
+	PATTERN: PATTERN
 }
 
 function getNeedsByName(needStrings) {
