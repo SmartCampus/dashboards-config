@@ -60,7 +60,6 @@ function getStateInformationSplit(sensorId, date, response) {
     });
 }
 
-
 /**
  * This function request the information for the sensor with the given {@param sensorId} for the given interval of
  * {@param date} with the function {@link getSensorData}. Then we run through the result with the method
@@ -78,26 +77,53 @@ function getInformationInPercent(sensorId, date, response) {
     });
 }
 
-
+/**
+ * This function request the information for the sensor with the given {@param sensorId}, and return the last data
+ * registered by this sensor.
+ *
+ * @param   sensorId        {string}        Id of sensor requested in the API
+ * @param   response        {function}      Response of the request
+ */
 function getLastInformation(sensorId, response) {
     requester.getLastSensorData(sensorId, function(res) {
        processor.standardizeInformation(response, res);
     });
 }
 
-
+/**
+ * This function request the geographical child for the container with the given {@param containerId}
+ *
+ * @param   containerId     {string}        Id of the container requested in the API
+ * @param   callback        {function}      Function containing the information requested.
+ */
 function getContainersChild(containerId, callback) {
     requester.getContainerChild(containerId, function (res) {
         processor.concatenateResponse(callback, res);
     });
 }
 
+/**
+ * This function request the SmartCampus to have the information about the sensor with the given sensorId. In addition,
+ * this method will change the value "ON" by 0 and the value "OFF" by 100. This method only with a sensor of the category
+ * STATE
+ *
+ * @param   sensorId        {string}        Name of the sensor requested on the API
+ * @param   date            {string}        String representing the interval of date requested to the API.
+ *                                          If there is no date, then all the information are requested
+ * @param   callback        {function}      Function containing the response of the request.
+ */
 function getReversedInformation(sensorId, date, callback) {
     requester.getSensorData(sensorId, date, function(response) {
         processor.reverseInformation(response, callback);
     });
 }
 
+/**
+ * This function request the enhanced information about the sensor with the given sensor Name.
+ *
+ * @param   sensorName      {string}        Name of the sensor requested on the API
+ * @param   callback        {function}      Function containing the response of the request.
+ */
 function getSensorsEnhancedInformation(sensorName, callback) {
     requester.getEnhancedSensorsData(sensorName, function(res, err) {
         callback(res,err);

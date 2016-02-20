@@ -5,7 +5,7 @@ var express = require("express"),
 
 
 /**
- * This route
+ * This route is here to retrieve all the sensors available in smartCampus
  */
 router.get("/sensors", function(req, res) {
     var queries = req.query;
@@ -25,6 +25,9 @@ router.get("/sensors", function(req, res) {
 });
 
 
+/**
+ * This route allow the user to ask all the child with the given containerId. Which means all the geographic child.
+ */
 router.get("/container/:containerId/child", function(req, res) {
     var sensor = req.params.containerId;
     queryHandler.getContainerChild(sensor, function(jsonResponse) {
@@ -33,7 +36,8 @@ router.get("/container/:containerId/child", function(req, res) {
 });
 
 /**
- *
+ * This route allow the user to have all the information about the sensor with the givenId for the date given in the
+ * the query param.
  */
 router.get("/sensor/:sensorId/data", function(req, res) {
     var sensorId = req.params.sensorId;
@@ -47,7 +51,7 @@ router.get("/sensor/:sensorId/data", function(req, res) {
 });
 
 /**
- *
+ * This rouute allow the user to have the last data registered by the given sensor.
  */
 router.get("/sensor/:sensorId/data/last", function(req, res) {
    var sensorId = req.params.sensorId;

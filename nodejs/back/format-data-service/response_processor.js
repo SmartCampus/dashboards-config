@@ -1,9 +1,18 @@
 /**
  * Created by Quentin on 12/1/2015.
+ *
+ * This module handle all the process of the data sent by smartCampus to put it in a more usefull format by the format
+ * for the frontend
+ *
  */
 var moment = require("moment");
 
-
+/**
+ * This function concatenate the response received and put in a jsonin the callback.
+ *
+ * @param callback
+ * @param res
+ */
 function concatenateResponse(callback, res) {
     var stringData = "";
 
@@ -17,6 +26,14 @@ function concatenateResponse(callback, res) {
     });
 }
 
+/**
+ * This function put the information send by SmartCampus to a format readable for HighChart. Which means :
+ *      { data : [] }
+ *
+ * @param   response    {function}      Response of the method
+ * @param   res         {function}      Response to the request of SmartCampus
+ * @param   state       {boolean}       Boolean to check if the sensor is in the category state or not.
+ */
 function highChartFormatTransformation(response, res, state) {
     var stringData = "";
 
@@ -31,11 +48,19 @@ function highChartFormatTransformation(response, res, state) {
         for(var i in sensorInfoJson.values) {
             responseInGoodFormat.data.push(handleState(state, sensorInfoJson, i));
         }
-
         response.send(responseInGoodFormat);
     });
 }
 
+/**
+ * This function handle the case if the sensor request is a state. Which means the information "ON" is changed into
+ * a 100 and a "OPEN" is changed into a 1 and "OFF" or "CLOSE" are changed into 0.
+ *
+ * @param   state               {string}        Value of the state sent by the sensor-container-API
+ * @param   sensorInfoJson      {json}          JSON with all the information.
+ * @param   i                   {int}           Iterator in the json
+ * @returns sensorPerTime       {Array}         Array with all the information the good format.
+ */
 function handleState(state, sensorInfoJson, i) {
     var sensorPerTime = [];
     sensorPerTime.push((sensorInfoJson.values[i].date)*1000);
@@ -55,6 +80,13 @@ function handleState(state, sensorInfoJson, i) {
     return sensorPerTime;
 }
 
+/**
+ * This method split the information in two list, the first one with all the "OPEN" and their date, and a second one
+ * with all the "CLOSE". In addition, the "OPEN" are changed into 1 and the "ClOSE" into 0.
+ *
+ * @param   response    {function}      Response send by the function
+ * @param   res         {function}      Response of the request to the sensor-containers-API
+ */
 function splitInformation(response, res) {
     var stringData = "";
 
@@ -90,7 +122,15 @@ function splitInformation(response, res) {
     });
 }
 
-
+/**
+ * This function put the information in percent, which means it count all the "OPEN" and the "CLOSE" and return a JSON
+ * object with two JSON in it. The first one with the percent of OPEN and the second one with the percent of time it's
+ * close.
+ *
+ * @param   res             {function}      Response of the request
+ * @param   response        {function}      Response of the function
+ * @param   date            {string}        Interval of date
+ */
 function informationInPercent(res, response, date) {
     var stringData = "";
     var dates = date.split("/")
@@ -131,6 +171,12 @@ function informationInPercent(res, response, date) {
     });
 }
 
+/**
+ * This function change the information "OPEN"/"ON" and "CLOSE"/"OFF" in 0 and 1.
+ *
+ * @param   response        {function}      Response of the function
+ * @param   res             {function}      Response of the request
+ */
 function standardizeInformation(response, res) {
     var stringData = "";
 
@@ -155,6 +201,13 @@ function standardizeInformation(response, res) {
     });
 }
 
+/**
+ * This function change the format of the information for the sensor of the category STATE. The value "ON" is changed
+ * into 0 and the the value "OFF" into 100.
+ *
+ * @param   res         {function}      Response of the request made to sensor-container-API
+ * @param   callback    {function}      Callback with one parameter which is the response.
+ */
 function reverseInformation(res, callback) {
     var stringData = "";
 
@@ -182,6 +235,15 @@ function reverseInformation(res, callback) {
     });
 }
 
+/**
+ * This function sort the sensor in a hierarchical order. With this, the biggest geographical container is in the
+ * first one in the JSON and all his child and sensor are nested in an other JSON. This function contains a nested
+ * recursive function.
+ *
+ * @param   sensors                 {Array}     Array with all the sensor with have to sort hierarchically
+ * @param   hierarchicalSensors     {json}      Json containing the information
+ * @param   callback                {function}  Function with one parameter which is the response
+ */
 function sortHierarchicalSensor(sensors, hierarchicalSensors, callback) {
     for(var iterator in hierarchicalSensors.childContainer) {
         recursiveClear(hierarchicalSensors.childContainer[iterator]);
@@ -202,9 +264,9 @@ function sortHierarchicalSensor(sensors, hierarchicalSensors, callback) {
     callback(hierarchicalSensors);
 }
 
-function checkDirectSensors(sensors, hierarchicalSensors, callback) {
-}
-
+/**
+ *  Exports of the function :
+ */
 
 exports.sortHierarchicalSensor = sortHierarchicalSensor;
 
