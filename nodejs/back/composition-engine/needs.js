@@ -189,6 +189,14 @@ function getNeedsMatchingSensors(sensors, callback) {
 	callback(null, mergeNeedsFromCategories(getCategoriesFromSensors(sensors)));
 }
 
+/**
+ * Tests strictly (===) if the given element is contained in the given array.
+ * 
+ * @param  Array 	array	the array to look up
+ * @param  			element the element to look for
+ * @return boolean 			true if the element is contained in the array,
+ * 							false otherwise
+ */
 function findElementInArray(array, element) {
 	return array.find(function (el) {
 		return el === element;

@@ -224,6 +224,9 @@ describe("needs", function () {
 							return result.name === expected.name;
 						}));
 					});
+					results.forEach(function (result) {
+						logger.debug(result.name);
+					});
 					done();
 				}
 			});
@@ -264,15 +267,13 @@ describe("needs", function () {
 				async.parallel([
 					function (callback) {
 						testGetNeedsMatchingSensors([ac443State],
-							[NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION], false,
-							function () {
+							[NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION], false, function () {
 							callback(null);
 						});
 					},
 					function (callback) {
 						testGetNeedsMatchingSensors([window443State],
-							[NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION], false,
-							function () {
+							[NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION], false, function () {
 							callback(null);
 						});
 					}
@@ -297,6 +298,70 @@ describe("needs", function () {
 					function (callback) {
 						testGetNeedsMatchingSensors([window443State], [NEEDS.SEE_STATUS],
 							false, function () {
+							callback(null);
+						});
+					}
+				], function join (err, results) {
+					done();
+				});
+			});
+		});
+
+		describe("surrounding dashboard", function () {
+
+			var noiseSparksCorridor = { name: "NOISE_SPARKS_CORRIDOR", category: SENSOR_CATEGORIES.SOUND },
+				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.NUMBER },
+				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.NUMBER };
+
+			it("should return Comparison, Overtime and Relationships needs", function (done) {
+				var needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS];
+
+				async.parallel([
+					function (callback) {
+						testGetNeedsMatchingSensors([noiseSparksCorridor, door443State], needs, false,
+							function () {
+							callback(null);
+						});
+					},
+					function (callback) {
+						testGetNeedsMatchingSensors([noiseSparksCorridor, window443State], needs, false,
+							function () {
+							callback(null);
+						});
+					}
+				], function join (err, results) {
+					done();
+				});
+			});
+
+			it("should return Proportion need", function (done) {
+				async.parallel([
+					function (callback) {
+						testGetNeedsMatchingSensors([door443State], [NEEDS.PROPORTION], false, function () {
+							callback(null);
+						});
+					},
+					function (callback) {
+						testGetNeedsMatchingSensors([window443State], [NEEDS.PROPORTION], false, function () {
+							callback(null);
+						});
+					}
+				], function join (err, results) {
+					done();
+				});
+			});
+
+			it("should return Overtime and Pattern needs", function (done) {
+				var needs = [NEEDS.OVERTIME, NEEDS.PATTERN];
+
+				async.parallel([
+					function (callback) {
+						testGetNeedsMatchingSensors([door443State], needs, false, function () {
+							callback(null);
+						});
+					},
+					function (callback) {
+						testGetNeedsMatchingSensors([window443State], needs, false, function () {
 							callback(null);
 						});
 					}
