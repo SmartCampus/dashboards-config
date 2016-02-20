@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Meta -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- JS -->
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="/styles/layouts.css">
+
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/images/icon.png"/>
 
     <title>SmartCampus : dashboards</title>
 
@@ -17,15 +19,20 @@
     <!-- <script src="/bower_components/highstock/modules/exporting.js"></script>
     Only useful if we want to let people print or save the db as an image-->
     <script type="text/javascript">
-        $(window).load(function(){
+        $(window).load(function () {
             $('#myDashboardConfigModal').modal('show');
         });
     </script>
 </head>
 <body>
+<div class="page-header text-center">
+    <!-- <img src="../assets/images/cat-header.jpg"> -->
+    <h1 id="theGeneralTitle"></h1>
+</div>
 
 <!--This loading / error part si always the same, no matter the dashboard-->
-<div class="row text-center" id="loadingImg"><img src="/assets/images/loading.gif" alt="loading" class="img-circle"></div>
+<div class="row text-center" id="loadingImg"><img src="/assets/images/loading.gif" alt="loading" class="img-circle">
+</div>
 <div class="hidden" id="errorOccurred">
     <img src="/assets/images/errorCat.gif" alt="loading">
     <h1 class="text-danger">An error occurred. You should reload the page !</h1>
@@ -45,26 +52,25 @@
                 <h4 class="modal-title">Choose your dashboard layout</h4>
             </div>
             <div class="modal-body">
-                You can click on a layout to see how your screen will be divided.
-                For now, we choose for you how the widgets will be set considering the layout.
-                <div class="text-center">
-                    <button type="button" class="btn btn-success" onclick="setLayoutWanted('halfNHalf')" id="0">50 - 50</button>
-                    <button type="button" class="btn btn-success" onclick="setLayoutWanted('oneThirdTwoThirds')" id="1">33 - 66</button>
-                    <button type="button" class="btn btn-success" onclick="setLayoutWanted('threeThirds')" id="2">33 - 33 - 33</button>
-                  <!--  <button type="button" class="btn btn-success" onclick="setLayoutWanted('halfNHalf')" id="3">25 - 50 - 25</button> -->
-                </div>
-                <div id="add-content">
-                    <!-- Insert content -->
-                </div>
-
+                <p>Click on the layout you want for your app !</p>
+                <p>For now, we choose for you how the widgets will be displayed considering the layout.</p>
+            <div class="row">
+                <a class="col-xs-12 col-md-4 " onclick="layouts.newLayout('halfNHalf', layoutChosen, errorOccurred)" data-dismiss="modal">
+                    <img class="well layoutImg" src="/assets/images/layouts/halfNhalf.png"/>
+                </a>
+                <a class="col-xs-12 col-md-4" onclick="layouts.newLayout('oneThirdTwoThirds', layoutChosen, errorOccurred)" data-dismiss="modal">
+                    <img class="well layoutImg" src="/assets/images/layouts/oneThirdTwoThirds.png"/>
+                </a>
+                <a class="col-xs-12 col-md-4" onclick="layouts.newLayout('threeThirds', layoutChosen, errorOccurred)" data-dismiss="modal">
+                    <img class="well layoutImg" src="/assets/images/layouts/threeThirds.png"/>
+                </a>
             </div>
-            <div class="modal-footer"><!--Ici, besoin de rajouter en paramètre de newLayout( donc de la génération) ce qui a été effectivement choisi-->
-                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="layouts.newLayout(layoutWanted, layoutChosen, errorOccurred)">Pick this layout</button>
-            </div>
-        </div>
-
-    </div>
-</div>
+            </div> <!--modal-body-->
+            <div class="modal-footer">
+            </div> <!--modal-footer -->
+        </div> <!--modal-content-->
+    </div> <!--modal-dialog -->
+</div> <!--modal-->
 
 
 </body>

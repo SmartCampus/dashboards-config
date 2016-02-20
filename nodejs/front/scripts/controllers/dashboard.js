@@ -4,14 +4,29 @@
 
 //Ca, ça va pas du tout. Ca fait que ca dépend de comment t'as rempli tes boites, et c'tout !
 var existingPositions = [];
+var beginDate='';
+var endDate = '';
 var watchingArray = [{"dataSC": [], "counter": []}, {"dataSC": [], "counter": []}, {
     "dataSC": [],
     "counter": []
 }, {"dataSC": [], "counter": []}];
-var theNeeds = JSON.parse(localStorage.getItem("bar"));
-localStorage.removeItem("bar");
-console.log(theNeeds);
-if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
+
+////////////////////////////// Generic function to fire in case of server error ///////////////////////////////////////
+var errorOccurred = function () {
+    document.getElementById("errorOccurred").className = "row text-center show";
+    document.getElementById("loadingImg").className = "hidden";
+    document.getElementById("dashboard").className = "hidden";
+};
+
+////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
+var theNeeds = JSON.parse(localStorage.getItem("widgetsDescription"));
+localStorage.removeItem("widgetsDescription");
+if (theNeeds === null) {errorOccurred()}
+if (localStorage.getItem("dashboardTitle") !== null) {
+    $("#theGeneralTitle").html(localStorage.getItem("dashboardTitle"));
+} //else we just don't write any title
+
+if (beginDate === '' || endDate == '') {
     beginDate = '2015-06-21 8:00:11';
     endDate = '2015-09-21 18:00:11';
 }
@@ -55,11 +70,6 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
     }
 };
 
-var errorOccurred = function () {
-    document.getElementById("errorOccurred").className = "row text-center show";
-    document.getElementById("loadingImg").className = "hidden";
-    document.getElementById("dashboard").className = "hidden";
-};
 
 //TODO: demander à l'utilisateur les dates qu'il veut
 
