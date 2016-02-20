@@ -289,7 +289,7 @@ function initSensors(data) {
 
     for(var iterator in containers) {
         if(containers[iterator].getName() == "Modalis corridor") {
-            var sensor = new Sensor("NOISE_SPARKS_CORRIDOR", "Level of noise", undefined, "Level of noise", "decibel");
+            var sensor = new Sensor("NOISE_SPARKS_CORRIDOR", "Level of noise", undefined, "Level of noise", "decibel", "SOUND");
             containers[iterator].getDirectSensors().push(sensor.toJson());
         } else if(containers[iterator].getName() == "Office 443") {
             var sensor = new Sensor("HEATING_443", "Heat in office", undefined, "Heat in office", "temperature");
