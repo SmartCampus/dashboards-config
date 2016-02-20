@@ -186,6 +186,9 @@ describe("composition engine", function () {
 							return result.name === expected.name;
 						}));
 					});
+					results.forEach(function (result) {
+						logger.debug(result.name);
+					});
 				})
 				.end(callback);
 		}
@@ -246,6 +249,67 @@ describe("composition engine", function () {
 				
 				async.each(requestsBodies, function iterator (item, callback) {
 					testPostSensorSet({ sensors: [item] }, [NEEDS.SEE_STATUS], function () {
+						callback(null);
+					});
+				}, function join (err) {
+					if (err) {
+						logger.error(err);
+						throw err;
+					}
+					done();
+				});
+			});
+
+			// TODO error cases
+		});
+
+		describe("surrounding dashboard", function () {
+
+			var noiseSparksCorridor = { name: "NOISE_SPARKS_CORRIDOR", category: SENSOR_CATEGORIES.SOUND },
+				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.NUMBER },
+				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.NUMBER };
+
+			it("should get Comparison Overtime and Relationship needs", function (done) {
+				var needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS],
+					requestsBodies = [[noiseSparksCorridor, door443State],
+									  [noiseSparksCorridor, window443State]];
+				
+				async.each(requestsBodies, function iterator (item, callback) {
+					testPostSensorSet({ sensors: item }, needs, function () {
+						callback(null);
+					});
+				}, function join (err) {
+					if (err) {
+						logger.error(err);
+						assert(!err);
+						throw err;
+					}
+					done();
+				});
+			});
+
+			it("should return Proportion need", function (done) {
+				var requestsBodies = [[door443State], [window443State]];
+				
+				async.each(requestsBodies, function iterator (item, callback) {
+					testPostSensorSet({ sensors: item }, [NEEDS.PROPORTION], function () {
+						callback(null);
+					});
+				}, function join (err) {
+					if (err) {
+						logger.error(err);
+						throw err;
+					}
+					done();
+				});
+			});
+
+			it("should return Overtime and Pattern needs", function (done) {
+				var needs = [NEEDS.OVERTIME, NEEDS.PATTERN],
+					requestsBodies = [[door443State], [window443State]];
+				
+				async.each(requestsBodies, function iterator (item, callback) {
+					testPostSensorSet({ sensors: item }, needs, function () {
 						callback(null);
 					});
 				}, function join (err) {
