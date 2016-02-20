@@ -186,17 +186,17 @@ function getCategoriesFromSensors(sensors) {
 	var sensor, categories = [], category;
 
 	for (var i = sensors.length - 1; i >= 0; i--) {
-		category = sensors[i].unit;
+		category = sensors[i].category;
 		//TODO: quick fix pour que categories & unit arrêtent de poser pb
-		if (category === "temperature") {
-			category = TEMP;
-		} else if (category === "watt") {
-			category = ENERGY;
-		} else if (category === "number") {
-			category = NUMBER;
-		} else if (category === "lux") {
-			category = LIGHT;
-		}
+		// if (category === "temperature") {
+		// 	category = TEMP;
+		// } else if (category === "watt") {
+		// 	category = ENERGY;
+		// } else if (category === "number") {
+		// 	category = NUMBER;
+		// } else if (category === "lux") {
+		// 	category = LIGHT;
+		// }
 		if (!findElementInArray(categories, category)) {
 			categories.push(category);
 		}

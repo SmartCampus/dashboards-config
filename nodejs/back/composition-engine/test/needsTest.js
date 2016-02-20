@@ -22,7 +22,7 @@ var surroundingWidget12Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATION
 
 describe("needs", function () {
 
-	describe.only("#checkNeedsConsistency()", function () {
+	describe("#checkNeedsConsistency()", function () {
 
 		describe("summer dashboard", function () {
 
@@ -73,6 +73,21 @@ describe("needs", function () {
 
 			it("should return summerWidget34Needs", function () {
 				assert.deepEqual(summerWidget34Needs, needs.getNeedsByName(["See status"]));
+			});
+		});
+
+		describe("surrounding dashboard", function () {
+
+			it("should return surroundingWidget12Needs", function () {
+				assert.deepEqual(surroundingWidget12Needs, needs.getNeedsByName(["Comparison", "Overtime", "Relationships"]));
+			});
+
+			it("should return surroundingWidget34Needs", function () {
+				assert.deepEqual(surroundingWidget34Needs, needs.getNeedsByName(["Proportion"]));
+			});
+
+			it("should return surroundingWidget56Needs", function () {
+				assert.deepEqual(surroundingWidget56Needs, needs.getNeedsByName(["Overtime", "Pattern"]));
 			});
 		});
 
