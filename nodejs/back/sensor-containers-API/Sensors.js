@@ -381,11 +381,6 @@ function initCategories() {
     categories.TEMP = temperatureSensors;
     categories.NUMBER = numberSensors;
     categories.ENERGY = energySensors;
-
- //   categories.push(numberSensors);
-   // categories.push(temperatureSensors);
-   // categories.push(lightSensors);
-   // categories.push(energySensors);
 }
 
 /**
