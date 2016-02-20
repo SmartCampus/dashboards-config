@@ -3,13 +3,13 @@ var requesterSC = require("./request_smartcampus");
 
 
 class Sensor {
-    constructor(name, displayName, booleanTitle, description, unit, categorie) {
+    constructor(name, displayName, booleanTitle, description, unit, category) {
         this._name = name;
         this._description = description;
         this._unit = unit;
         this._displayName = displayName;
         this._booleanTitle = booleanTitle;
-        this._categorie = categorie;
+        this._category = category;
     }
 
     get unit() {
@@ -32,8 +32,8 @@ class Sensor {
         return this._booleanTitle;
     }
 
-    get categorie() {
-        return this._categorie;
+    get category() {
+        return this._category;
     }
 
     toJson() {
@@ -43,7 +43,7 @@ class Sensor {
             unit : this._unit,
             displayName : this._displayName,
             booleanTitle : this._booleanTitle,
-            categorie : this._categorie
+            category : this._category
         }
     }
 }
