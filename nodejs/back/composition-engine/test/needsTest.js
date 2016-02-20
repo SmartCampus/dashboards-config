@@ -129,7 +129,7 @@ describe("needs", function () {
 				});
 			});
 
-			it("should return NUMBER category", function (done) {
+			it("should return only NUMBER category", function (done) {
 				needs.getSensorsMatchingNeeds(summerWidget34Needs, function (err, results) {
 					if(err) {
 						logger.error(err);
@@ -144,7 +144,67 @@ describe("needs", function () {
 			});
 		});
 
-		// TODO other dashboards?
+		describe("surrounding dashboard", function () {
+
+			it("it should return only NUMBER and SOUND categories", function (done) {
+				var categories = [SENSOR_CATEGORIES.NUMBER, SENSOR_CATEGORIES.SOUND];
+
+				needs.getSensorsMatchingNeeds(surroundingWidget12Needs, function (err, results) {
+					if(err) {
+						logger.error(err);
+						throw err;
+					}
+					assert.equal(categories.length, results.length);
+					categories.forEach(function (category) {
+						assert(results.find(function predicate(result) {
+							return result.set == category;
+						}));
+					});
+					results.forEach(function (result) {
+						assert(Array.isArray(result.sensors));
+					});
+					logger.debug(results);
+					done();
+				});
+			});
+
+			it("should return NUMBER category", function (done) {
+				needs.getSensorsMatchingNeeds(surroundingWidget34Needs, function (err, results) {
+					var actual;
+
+					if(err) {
+						logger.error(err);
+						throw err;
+					}
+					assert(1 <= results.length);
+					actual = results.find(function predicate(result) {
+						return result.set == SENSOR_CATEGORIES.NUMBER;
+					});
+					assert(actual);
+					assert(Array.isArray(actual.sensors));
+					logger.debug(actual.sensors);
+					done();
+				});
+			});
+
+			it("should return only NUMBER category", function (done) {
+				needs.getSensorsMatchingNeeds(surroundingWidget56Needs, function (err, results) {
+					var actual;
+
+					if(err) {
+						logger.error(err);
+						throw err;
+					}
+					assert.equal(1, results.length);
+					assert.equal(SENSOR_CATEGORIES.NUMBER, results[0].set);
+					assert(Array.isArray(results[0].sensors));
+					logger.debug(results[0].sensors);
+					done();
+				});
+			});
+		});
+
+		// TODO other dashboards
 	});
 
 	describe("#getNeedsMatchingSensors", function () {

@@ -46,7 +46,7 @@ var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, NUMBER, SOUND]),
 	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, NUMBER, SOUND]),
 	RELATIONSHIPS = new Need("Relationships", [SOUND, NUMBER]),
 	HIERARCHY = new Need("Hierarchy", []),
-	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, NUMBER]),
+	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, NUMBER, SOUND]),
 	SUMMARIZE = new Need("Summarize", []),
 	PATTERN = new Need("Pattern", [NUMBER]);
 
@@ -83,6 +83,14 @@ function getNeedsByName(needStrings) {
 	return needs;
 }
 
+/**
+ * Gets the whole compatible sensors with the given need array.
+ * 
+ * @param  [Need]		needs 		the array of needs in relation with the sensors 
+ * 									have to be retrieved
+ * @param  Function 	callback	the callback to call with err dans results parameters
+ * 									if no error, results is a sensor objects array
+ */
 function getSensorsMatchingNeeds(needs, callback) {
 	var sensors = [], sensorCategories;
 
@@ -93,7 +101,7 @@ function getSensorsMatchingNeeds(needs, callback) {
 		callback(err, null);
 	}
 	else {
-		sensorCategories = mergeCategories(needs);
+		sensorCategories = intersectCategories(needs);
 		logger.debug("categories:", sensorCategories);
 		async.map(sensorCategories, function (category, callback) {
 			requestSmartcampus.getSensorsByCategory(category, function (err, results) {
@@ -117,19 +125,47 @@ function getSensorsMatchingNeeds(needs, callback) {
 	}
 }
 
-function mergeCategories(needs) {
+/**
+ * Intersects the categories contained by the given need array.
+ * complexity: O(n²)
+ * 
+ * @param  [Need]	needs 	the array containing the needs containing the categories
+ * 							to intersect
+ * @return [string]			an array of resulting categories
+ */
+function intersectCategories(needs) {
 	var categories = [], need, category;
 
 	for (var i = needs.length - 1; i >= 0; i--) {
 		need = needs[i];
 		for (var j = need.sensorCategories.length - 1; j >= 0; j--) {
 			category = need.sensorCategories[j];
-			if (categories.indexOf(category) == -1) {
+			if (categories.indexOf(category) == -1 && needsContainsCategory(needs, category)) {
 				categories.push(category);
 			}
 		}
 	}
 	return categories;
+}
+
+/**
+ * Tests if all the needs in the given array have the given category in their categories.
+ * complexity: O(n)
+ * 
+ * @param  [Need]	needs 		the need array to check
+ * @param  string 	category 	the category to look for
+ * @return boolean				true if the category is contained by all needs,
+ * 								fale otherwise
+ */
+function needsContainsCategory(needs, category) {
+	for (var i in needs) {
+		if (!needs[i].sensorCategories.find(function predicate(element) {
+			return element === category;
+		})) {
+			return false;
+		}
+	}
+	return true;
 }
 
 function checkNeedsConsistency(needs) {
