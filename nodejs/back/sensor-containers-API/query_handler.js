@@ -33,7 +33,13 @@ function checkArrays(arrays) {
     return result;
 }
 
-
+/**
+ * This method ask all the data to the SmartCampus API for the given data.
+ *
+ * @param       {string}        name of the sensor
+ * @param       {string}        interval of date we want the information
+ * @param       {function}      callback with one parameter which is the response
+ */
 function getSensorInformation(name, date, callback) {
     requester.getSensorData(name, date, false, function(res) {
         var stringData = "";
@@ -77,7 +83,12 @@ function getSensorsFromQuery(queries) {
     return sensorsArray;
 }
 
-
+/**
+ * This function ask the last data registered by the sensor with the given name to smartCampus.
+ *
+ * @param       {string}        name of the sensor we want the last data.
+ * @param       {function}      callback with one parameter which is the response
+ */
 function getSensorLastInformation(name, callback) {
     requester.getLastSensorData(name, false, function(res) {
         var stringData = "";
@@ -94,6 +105,12 @@ function getSensorLastInformation(name, callback) {
     });
 }
 
+/**
+ * This function ask all the geographic child of the given container to smartCampus.
+ *
+ * @param       {string}    name of the container which contains the child
+ * @param       {function}  callback with one parameter which is the response
+ */
 function getContainerChild(name, callback) {
     var containerList = sensors.getContainers();
     for(var i in containerList) {
