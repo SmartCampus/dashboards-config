@@ -83,10 +83,77 @@ describe("composition engine", function () {
 				});
 			});
 
-			it("should return NUMBER category", function (done) {
+			it("should return only NUMBER category", function (done) {
 				request(app)
 					.post(needSetPath)
 					.send(summerWidget34Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body;
+
+						assert.equal(1, results.length);
+						assert.equal(SENSOR_CATEGORIES.NUMBER, results[0].set);
+						assert(Array.isArray(results[0].sensors));
+						logger.debug(results[0].sensors);
+					})
+					.end(done);
+			});
+		});
+
+		describe("surrounding dashboard", function () {
+
+			var surroundingWidget12Needs = { needs: [NEEDS.COMPARISON.name, NEEDS.OVERTIME.name,
+					NEEDS.RELATIONSHIPS.name] },
+				surroundingWidget34Needs = { needs: [NEEDS.PROPORTION.name] },
+				surroundingWidget56Needs = { needs: [NEEDS.OVERTIME.name, NEEDS.PATTERN.name] };
+
+			it("it should return only NUMBER and SOUND categories", function (done) {
+				var categories = [SENSOR_CATEGORIES.NUMBER, SENSOR_CATEGORIES.SOUND];
+
+				request(app)
+					.post(needSetPath)
+					.send(surroundingWidget12Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body;
+
+						assert.equal(categories.length, results.length);
+						categories.forEach(function (category) {
+							assert(results.find(function predicate(result) {
+								return result.set == category;
+							}));
+						});
+						results.forEach(function (result) {
+							assert(Array.isArray(result.sensors));
+						});
+						logger.debug(results);
+					})
+					.end(done);
+			});
+
+			it("should return NUMBER category", function (done) {
+				request(app)
+					.post(needSetPath)
+					.send(surroundingWidget56Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body, actual;
+
+						assert(1 <= results.length);
+						actual = results.find(function predicate(result) {
+							return result.set == SENSOR_CATEGORIES.NUMBER;
+						});
+						assert(actual);
+						assert(Array.isArray(actual.sensors));
+						logger.debug(actual.sensors);
+					})
+					.end(done);
+			});
+
+			it("should return only NUMBER category", function (done) {
+				request(app)
+					.post(needSetPath)
+					.send(surroundingWidget56Needs)
 					.expect(200)
 					.expect(function (response) {
 						var results = response.body;
