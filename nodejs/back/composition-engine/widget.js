@@ -47,8 +47,9 @@ var allWidgets = [];
 allWidgets.push(new Widget("line", ["Comparison","Overtime"]));
 allWidgets.push(new Widget("column", ["Comparison","Overtime", "Proportion"]));
 allWidgets.push(new Widget("mix", ["Comparison","Overtime","Relationships"]));
-allWidgets.push(new Widget("pieChart", ["Comparison"]));
+allWidgets.push(new Widget("pieChart", ["Proportion"]));
 allWidgets.push(new Widget("boolean", ["See status"]));
+allWidgets.push(new Widget("scatterplot", ["Overtime", "Pattern"]));
 
 
 function findCorrespondingWidget(needs, callback) {
