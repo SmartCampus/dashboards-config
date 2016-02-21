@@ -26,6 +26,11 @@
     display: block;
 }
 
+.tinySelectGroup {
+    font-size: 9px;
+}
+
+
 body {
     /*background:url("../assets/images/4400.jpg") no-repeat fixed center; */
     background:url("../assets/images/R2D2.jpg") no-repeat fixed center;
