@@ -18,14 +18,14 @@ var async = require("async"),
 var TEMP = "TEMP",
 	LIGHT = "LIGHT",
 	ENERGY = "ENERGY",
-	NUMBER = "NUMBER",
+	STATE = "STATE",
 	SOUND = "SOUND";
 
 var SENSOR_CATEGORIES = {
 	TEMP: TEMP,
 	LIGHT: LIGHT,
 	ENERGY: ENERGY,
-	NUMBER: NUMBER,
+	STATE: STATE,
 	SOUND: SOUND
 }
 
@@ -50,14 +50,14 @@ class Need {
 
 // Needs and NEEDS namespace initialization
 
-var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, NUMBER, SOUND]),
-	SEE_STATUS = new Need("See status", [NUMBER]),
-	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, NUMBER, SOUND]),
-	RELATIONSHIPS = new Need("Relationships", [SOUND, NUMBER]),
+var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
+	SEE_STATUS = new Need("See status", [STATE]),
+	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
+	RELATIONSHIPS = new Need("Relationships", [SOUND, STATE]),
 	HIERARCHY = new Need("Hierarchy", []),
-	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, NUMBER, SOUND]),
+	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
 	SUMMARIZE = new Need("Summarize", []),
-	PATTERN = new Need("Pattern", [NUMBER]);
+	PATTERN = new Need("Pattern", [STATE]);
 
 COMPARISON.compatibleNeeds = [OVERTIME, PROPORTION, RELATIONSHIPS];
 SEE_STATUS.compatibleNeeds = [];
@@ -296,7 +296,7 @@ function getCategoriesFromSensors(sensors) {
 		// } else if (category === "watt") {
 		// 	category = ENERGY;
 		// } else if (category === "number") {
-		// 	category = NUMBER;
+		// 	category = STATE;
 		// } else if (category === "lux") {
 		// 	category = LIGHT;
 		// }

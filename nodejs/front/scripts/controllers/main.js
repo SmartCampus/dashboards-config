@@ -66,7 +66,7 @@ function updateDisableBox() {
     $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
         if (id == selectedBox) {
-            $(this).css("border-color", "green");
+            $(this).css("border-color", "#0266C8");
             $("#" + id).droppable(
                 {
                     drop: dropIt,
@@ -75,7 +75,7 @@ function updateDisableBox() {
                 }
             );
         } else {
-            $(this).css("border-color", "red");
+            $(this).css("border-color", "black");
             $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });
@@ -88,7 +88,7 @@ $("#add-rows").click(function (event) {
         var id = $(this).attr('id');
         if (id === selectedBox) {
             addNeeds(selectedBox);
-            $(this).css("border-color", "green");
+            $(this).css("border-color", "#0266C8");
             $("#" + id).droppable(
                 {
                     drop: dropIt,
@@ -96,7 +96,7 @@ $("#add-rows").click(function (event) {
                     activeClass: "myActiveDroppable"
                 });
         } else {
-            $(this).css("border-color", "red");
+            $(this).css("border-color", "black");
             $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });

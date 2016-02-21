@@ -67,8 +67,7 @@ function handleState(state, sensorInfoJson, i) {
     if(state) {
         if(sensorInfoJson.values[i].value == 'ON') {
             sensorPerTime.push(100);
-        }
-        if(sensorInfoJson.values[i].value == 'OPEN') {
+        } else if(sensorInfoJson.values[i].value == 'OPEN') {
             sensorPerTime.push(1);
         }
         else {
@@ -96,31 +95,46 @@ function splitInformation(response, res) {
 
     res.on("end" , function() {
         var tempPerTime = JSON.parse(stringData);
-        var responseInGoodFormat = {"data": []};
-
-        var openList = [];
-        var closeList = [];
-
-        for(var i in tempPerTime.values) {
-            var loopArray = [];
-            if(tempPerTime.values[i].value == "OPEN")  {
-                loopArray.push((tempPerTime.values[i].date)*1000);
-                loopArray.push(1);
-                openList.push(loopArray);
-            }
-            else {
-                loopArray.push((tempPerTime.values[i].date)*1000);
-                loopArray.push(0);
-                closeList.push(loopArray);
-            }
-        }
-
-        responseInGoodFormat.data.push({"open" : openList});
-        responseInGoodFormat.data.push({"close" : closeList});
-
+        var responseInGoodFormat = splittedInformation(tempPerTime);
         response.send(responseInGoodFormat);
     });
 }
+
+/**
+ * This function take a JSON in the format :
+ * { values : [{value : 'CLOSE', date : 1}]}
+ * then splitted in two list in the following format :
+ * {data : [{open : []}, {close : [[1000, 0]]}]}
+ *
+ * @param       {json}              tempPerTime
+ * @returns     {{data: Array}}
+ */
+function splittedInformation(tempPerTime) {
+    var openList = [];
+    var closeList = [];
+
+    var responseInGoodFormat = {"data": []};
+    for(var i in tempPerTime.values) {
+        var loopArray = [];
+        if(tempPerTime.values[i].value == "OPEN")  {
+            loopArray.push((tempPerTime.values[i].date)*1000);
+            loopArray.push(1);
+            openList.push(loopArray);
+        }
+        else {
+            loopArray.push((tempPerTime.values[i].date)*1000);
+            loopArray.push(0);
+            closeList.push(loopArray);
+        }
+    }
+
+    responseInGoodFormat.data.push({"open" : openList});
+    responseInGoodFormat.data.push({"close" : closeList});
+
+    return responseInGoodFormat;
+}
+
+
 
 /**
  * This function put the information in percent, which means it count all the "OPEN" and the "CLOSE" and return a JSON
@@ -281,3 +295,7 @@ exports.splitInformation = splitInformation;
 exports.highChartFormatTransformation = highChartFormatTransformation;
 
 exports.concatenateResponse = concatenateResponse;
+
+exports.handleState = handleState;
+
+exports.splittedInformation = splittedInformation;

@@ -83,7 +83,7 @@ describe("composition engine", function () {
 				});
 			});
 
-			it("should return only NUMBER category", function (done) {
+			it("should return only STATE category", function (done) {
 				request(app)
 					.post(needSetPath)
 					.send(summerWidget34Needs)
@@ -92,7 +92,7 @@ describe("composition engine", function () {
 						var results = response.body;
 
 						assert.equal(1, results.length);
-						assert.equal(SENSOR_CATEGORIES.NUMBER, results[0].set);
+						assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
 						assert(Array.isArray(results[0].sensors));
 						logger.debug(results[0].sensors);
 					})
@@ -107,8 +107,8 @@ describe("composition engine", function () {
 				surroundingWidget34Needs = { needs: [NEEDS.PROPORTION.name] },
 				surroundingWidget56Needs = { needs: [NEEDS.OVERTIME.name, NEEDS.PATTERN.name] };
 
-			it("it should return only NUMBER and SOUND categories", function (done) {
-				var categories = [SENSOR_CATEGORIES.NUMBER, SENSOR_CATEGORIES.SOUND];
+			it("it should return only STATE and SOUND categories", function (done) {
+				var categories = [SENSOR_CATEGORIES.STATE, SENSOR_CATEGORIES.SOUND];
 
 				request(app)
 					.post(needSetPath)
@@ -131,7 +131,7 @@ describe("composition engine", function () {
 					.end(done);
 			});
 
-			it("should return NUMBER category", function (done) {
+			it("should return STATE category", function (done) {
 				request(app)
 					.post(needSetPath)
 					.send(surroundingWidget56Needs)
@@ -141,7 +141,7 @@ describe("composition engine", function () {
 
 						assert(1 <= results.length);
 						actual = results.find(function predicate(result) {
-							return result.set == SENSOR_CATEGORIES.NUMBER;
+							return result.set == SENSOR_CATEGORIES.STATE;
 						});
 						assert(actual);
 						assert(Array.isArray(actual.sensors));
@@ -150,7 +150,7 @@ describe("composition engine", function () {
 					.end(done);
 			});
 
-			it("should return only NUMBER category", function (done) {
+			it("should return only STATE category", function (done) {
 				request(app)
 					.post(needSetPath)
 					.send(surroundingWidget56Needs)
@@ -159,7 +159,7 @@ describe("composition engine", function () {
 						var results = response.body;
 
 						assert.equal(1, results.length);
-						assert.equal(SENSOR_CATEGORIES.NUMBER, results[0].set);
+						assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
 						assert(Array.isArray(results[0].sensors));
 						logger.debug(results[0].sensors);
 					})
@@ -197,8 +197,8 @@ describe("composition engine", function () {
 
 			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
 				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
-				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.NUMBER },
-				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.NUMBER };
+				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.STATE },
+				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
 
 			it("should get Comparison and Overtime needs", function (done) {
 				var requestsBodies = [temp443V, tempCampus];
@@ -266,8 +266,8 @@ describe("composition engine", function () {
 		describe("surrounding dashboard", function () {
 
 			var noiseSparksCorridor = { name: "NOISE_SPARKS_CORRIDOR", category: SENSOR_CATEGORIES.SOUND },
-				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.NUMBER },
-				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.NUMBER };
+				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.STATE },
+				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
 
 			it("should get Comparison Overtime and Relationship needs", function (done) {
 				var needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS],

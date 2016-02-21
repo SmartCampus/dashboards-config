@@ -129,14 +129,14 @@ describe("needs", function () {
 				});
 			});
 
-			it("should return only NUMBER category", function (done) {
+			it("should return only STATE category", function (done) {
 				needs.getSensorsMatchingNeeds(summerWidget34Needs, function (err, results) {
 					if(err) {
 						logger.error(err);
 						throw err;
 					}
 					assert.equal(1, results.length);
-					assert.equal(SENSOR_CATEGORIES.NUMBER, results[0].set);
+					assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
 					assert(Array.isArray(results[0].sensors));
 					logger.debug(results[0].sensors);
 					done();
@@ -146,8 +146,8 @@ describe("needs", function () {
 
 		describe("surrounding dashboard", function () {
 
-			it("it should return only NUMBER and SOUND categories", function (done) {
-				var categories = [SENSOR_CATEGORIES.NUMBER, SENSOR_CATEGORIES.SOUND];
+			it("it should return only STATE and SOUND categories", function (done) {
+				var categories = [SENSOR_CATEGORIES.STATE, SENSOR_CATEGORIES.SOUND];
 
 				needs.getSensorsMatchingNeeds(surroundingWidget12Needs, function (err, results) {
 					if(err) {
@@ -168,7 +168,7 @@ describe("needs", function () {
 				});
 			});
 
-			it("should return NUMBER category", function (done) {
+			it("should return STATE category", function (done) {
 				needs.getSensorsMatchingNeeds(surroundingWidget34Needs, function (err, results) {
 					var actual;
 
@@ -178,7 +178,7 @@ describe("needs", function () {
 					}
 					assert(1 <= results.length);
 					actual = results.find(function predicate(result) {
-						return result.set == SENSOR_CATEGORIES.NUMBER;
+						return result.set == SENSOR_CATEGORIES.STATE;
 					});
 					assert(actual);
 					assert(Array.isArray(actual.sensors));
@@ -187,7 +187,7 @@ describe("needs", function () {
 				});
 			});
 
-			it("should return only NUMBER category", function (done) {
+			it("should return only STATE category", function (done) {
 				needs.getSensorsMatchingNeeds(surroundingWidget56Needs, function (err, results) {
 					var actual;
 
@@ -196,7 +196,7 @@ describe("needs", function () {
 						throw err;
 					}
 					assert.equal(1, results.length);
-					assert.equal(SENSOR_CATEGORIES.NUMBER, results[0].set);
+					assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
 					assert(Array.isArray(results[0].sensors));
 					logger.debug(results[0].sensors);
 					done();
@@ -236,8 +236,8 @@ describe("needs", function () {
 
 			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
 				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
-				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.NUMBER },
-				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.NUMBER };
+				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.STATE },
+				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
 
 			it("should return Comparison and Overtime needs", function (done) {
 				async.parallel([
@@ -310,8 +310,8 @@ describe("needs", function () {
 		describe("surrounding dashboard", function () {
 
 			var noiseSparksCorridor = { name: "NOISE_SPARKS_CORRIDOR", category: SENSOR_CATEGORIES.SOUND },
-				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.NUMBER },
-				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.NUMBER };
+				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.STATE },
+				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
 
 			it("should return Comparison, Overtime and Relationships needs", function (done) {
 				var needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS];
