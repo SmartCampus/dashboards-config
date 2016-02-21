@@ -1,5 +1,9 @@
 /**
  * @author Marc Karassev
+ *
+ * This module defines domain concepts such as the different sensor categories and needs that
+ * can be expressed by a user. It encapsulates the complexity of matching sensors to needs
+ * and needs to sensors.
  */
 
 "use strict";
@@ -9,6 +13,7 @@ var async = require("async"),
 	requestSmartcampus = require("./request_smartcampus");
 
 // Sensor categories
+// TODO get it from the sensor container API?
 
 var TEMP = "TEMP",
 	LIGHT = "LIGHT",
@@ -24,8 +29,10 @@ var SENSOR_CATEGORIES = {
 	SOUND: SOUND
 }
 
-// Visualization needs
-
+/**
+ * Visualization needs, a need has three properties. It has a name that should be unique,
+ * a set of compatible sensor categories and a set of compatible needs.
+ */
 class Need {
 	
 	constructor (name, sensorCategories) {
@@ -40,6 +47,8 @@ class Need {
 	get compatibleNeeds() { return this._compatibileNeeds; }
 	set compatibleNeeds(compatibleNeeds) { this._compatibileNeeds = compatibleNeeds; }
 }
+
+// Needs and NEEDS namespace initialization
 
 var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, NUMBER, SOUND]),
 	SEE_STATUS = new Need("See status", [NUMBER]),
@@ -70,6 +79,12 @@ var NEEDS = {
 	PATTERN: PATTERN
 }
 
+/**
+ * Utility function that looks up the NEEDS namespace in order to find need instances.
+ * 
+ * @param  [string] needStrings 	string array containing the needs name to look for
+ * @return [Need]					an array containing the matched Need class instances
+ */
 function getNeedsByName(needStrings) {
 	var needs = [];
 
@@ -168,6 +183,14 @@ function needsContainsCategory(needs, category) {
 	return true;
 }
 
+/**
+ * Tests whether a need set is consistent meaning that all needs contained by the given
+ * set are compatible with each other.
+ * 
+ * @param  [Need]	needs 	an array of needs to check mutual compatibility
+ * @return boolean       	true if all the given needs are compatible among each other,
+ *                          false otherwise
+ */
 function checkNeedsConsistency(needs) {
 	var need;
 
@@ -185,6 +208,16 @@ function checkNeedsConsistency(needs) {
 	return true;
 }
 
+/**
+ * Gets the whole compatible needs with the given sensor array.
+ * 
+ * @param  [JSON]		sensor 		the array of sensors in relation with the related needs 
+ * 									have to be retrieved, a sensor should at least have a
+ * 									"category" property with a value matching one of those
+ * 									defined above
+ * @param  Function 	callback	the callback to call with err dans results parameters
+ * 									if no error, results is a need objects array
+ */
 function getNeedsMatchingSensors(sensors, callback) {
 	callback(null, mergeNeedsFromCategories(getCategoriesFromSensors(sensors)));
 }
@@ -203,6 +236,15 @@ function findElementInArray(array, element) {
 	});
 }
 
+/**
+ * Tests strictly (===) if the given categories are all contained in the given array.
+ * 
+ * @param  Array 	array     	the array to look up
+ * @param  [string] categories 	the categories array containing the sensor categories
+ *                              to look for
+ * @return boolean            	true if all the categories are contained in the array,
+ *                              false otherwise
+ */
 function findCategoriesInArray(array, categories) {
 	for (var i = categories.length - 1; i >= 0; i--) {
 		if (!findElementInArray(array, categories[i])) {
@@ -212,6 +254,13 @@ function findCategoriesInArray(array, categories) {
 	return true;
 }
 
+/**
+ * Finds all needs that are compatible with all the given categories.
+ * 
+ * @param  [string]	categories 	the categories array containing the sensor categories
+ *                              to look for
+ * @return [Need]	            an array of matching Need class instances
+ */
 function mergeNeedsFromCategories(categories) {
 	var needs = [], need;
 
@@ -226,12 +275,22 @@ function mergeNeedsFromCategories(categories) {
 	return needs;
 }
 
+/**
+ * Gets all the categories of the given sensors.
+ * 
+ * @param  [JSON]	sensors 	the array of sensors in relation with the related categories 
+ * 									have to be extracted, a sensor should at least have a
+ * 									"category" property with a value matching one of those
+ * 									defined above
+ * @return [string]				an array of sensor categories as defined above
+ */
 function getCategoriesFromSensors(sensors) {
 	var sensor, categories = [], category;
 
 	for (var i = sensors.length - 1; i >= 0; i--) {
 		category = sensors[i].category;
-		//TODO: quick fix pour que categories & unit arrêtent de poser pb
+		// TODO: quick fix pour que categories & unit arrêtent de poser pb
+		// category = sensors[i].unit;
 		// if (category === "temperature") {
 		// 	category = TEMP;
 		// } else if (category === "watt") {
