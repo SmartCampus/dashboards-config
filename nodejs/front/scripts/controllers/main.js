@@ -1,21 +1,28 @@
 var sensors; //This array contains all the sensors we have
+
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
-var needs = ["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+//2 versions bc easier for now, even if not really useful...
+var needsOrigin = [{name: "Comparison"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
+var needsSimpleOrigin = ["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+
+var needs = [[{name: "Comparison"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
+var needsSimple = [["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
+
+
+$("#generateButton").attr("disabled", "disabled"); //The generate button starts by being disabled
 var maxOfWidgets = 1; //this determines how many boxes are drawn in the center of the page
-var composition_sensors = [];
-var composition_needs = [];
+
 var navbar = [];
 var selectedBox = 0;
 
 /**
  * Get all buildings sensors et placements
  */
-    $.get(mainServer + "container/Root/child")
-        .done(function (data) {
-            console.log('got the data');
-            sensors = data;
-            initWindowsData();
-        });
+$.get(mainServer + "container/Root/child")
+    .done(function (data) {
+        sensors = data;
+        initWindowsData();
+    });
 
 
 var allTheNeeds = [];
@@ -28,17 +35,13 @@ function initWindowsData() {
 
     for (var i = 0; i < maxOfWidgets; i++) {
         allTheNeeds[i] = {"needs": [], "sensors": [], "graphType": ""};
-        composition_needs[i] = new Array();
-        composition_sensors[i] = new Array();
         addTableRow(i);
     }
 
     position = sensors;
     buildings = sensors.childContainer;
-    previous.push(position);
-
     navbar.push(position.name);
-    addNeeds();
+    addNeeds(0);
     navigation();
 }
 
@@ -60,29 +63,41 @@ var addTableRow = function (index) {
 
 function updateDisableBox() {
 
-    $("#add-rows > div").each(function(){
+    $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
-        if( id == selectedBox){
-            $(this).css("border-color" , "green");
-            $("#"+id).droppable({drop: dropIt, disabled : false });
-        }else{
-            $(this).css("border-color" , "red");
-            $("#"+id).droppable({drop: dropIt, disabled : true });
+        if (id == selectedBox) {
+            $(this).css("border-color", "#0266C8");
+            $("#" + id).droppable(
+                {
+                    drop: dropIt,
+                    disabled: false,
+                    activeClass: "myActiveDroppable"
+                }
+            );
+        } else {
+            $(this).css("border-color", "black");
+            $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });
 }
 
-$( "#add-rows" ).click(function ( event ) {
+$("#add-rows").click(function (event) {
     selectedBox = event.target.id;
 
-    $("#add-rows > div").each(function(){
+    $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
-        if( id === selectedBox){
-            $(this).css("border-color" , "green");
-            $("#"+id).droppable({drop: dropIt, disabled : false });
-        }else{
-            $(this).css("border-color" , "red");
-            $("#"+id).droppable({drop: dropIt, disabled : true });
+        if (id === selectedBox) {
+            addNeeds(selectedBox);
+            $(this).css("border-color", "#0266C8");
+            $("#" + id).droppable(
+                {
+                    drop: dropIt,
+                    disabled: false,
+                    activeClass: "myActiveDroppable"
+                });
+        } else {
+            $(this).css("border-color", "black");
+            $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });
 });
@@ -90,42 +105,35 @@ $( "#add-rows" ).click(function ( event ) {
 
 /**
  * Function to add new widget boxes
- * WE need to expand the different arrays that depend on the nb of widgets boxes as well !
+ * We need to expand the array describing the widgets
  * For now, when we add a line, the other boxes become unavailable !
  */
 var addAWidget = function () {
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
-    composition_needs[maxOfWidgets] = [];
-    composition_sensors[maxOfWidgets] = [];
 
+    needs[maxOfWidgets] = needsOrigin;
+    needsSimple[maxOfWidgets] = needsSimpleOrigin;
     addTableRow(maxOfWidgets);
-    /*var theId = (maxOfWidgets-1).toString();
-     console.log(maxOfWidgets);
-     console.log(theId);
-     document.getElementById(theId).disabled = true;
-     */
+
     maxOfWidgets += 1;
 
 };
 
+/////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
 var removeAWidget = function () {
-    //you want to remove a widget !
+    var $addRowsDiv = $("#add-rows").find(" > div");
+    var domSize = $addRowsDiv.length;
 
-    var domSize = $("#add-rows div").length;
-
-    if(domSize > 3){
-        if(parseInt(+selectedBox+1) === (domSize/3)){
+    if (domSize > 3) { //means I have at least 2 widget boxes : so we can delete one indeed
+        if (parseInt(+selectedBox + 1) === (domSize / 3)) { //It was the last box that was selected
             selectedBox--;
-            for(var i = 0; i < 3; i++)
-                $('#add-rows div').last().remove();
+            $addRowsDiv.slice(-2).remove();
             updateDisableBox();
-        }else{
-            for(var i = 0; i < 3; i++)
-                $('#add-rows div').last().remove();
+        } else { //it's not the last box that was selected
+            $addRowsDiv.slice(-2).remove();
         }
-
+        allTheNeeds.splice(-1, 1);
         maxOfWidgets -= 1;
-
     }
 };
 
@@ -133,8 +141,6 @@ var removeAWidget = function () {
  This functions empties a widget box, making it back to its original state
  */
 var deleteWidgetContent = function (widgetId) {
-    composition_needs[widgetId] = [];
-    composition_sensors[widgetId] = [];
     allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
     $('#' + widgetId).empty();
 };
@@ -143,15 +149,21 @@ var deleteWidgetContent = function (widgetId) {
 /**
  * This function fills the visulization needs panel, and set its elements to being draggable elements
  */
-function addNeeds() {
-    for (var i = 0; i < needs.length; i++) {
-        $("#add-need").append(
-            "<div style=\"padding: 20px 0 0 0; text-align : center\"><span style=\"cursor : pointer;\" class=\"draggable\" id=\"" + needs[i] + "\">" + needs[i] + "</span></div>"
+function addNeeds(boxIndex) {
+    var $addNeed = $("#add-need").empty();
+
+    for (var i = 0; i < needs[boxIndex].length; i++) {
+        $addNeed.append(
+            "<div class=\"needInList\"><span style=\"cursor : grab;\" class=\"draggable\" id=\"" + needs[boxIndex][i].name + "\">" + needs[boxIndex][i].name + "</span></div>"
         );
 
         $(".draggable").draggable({
-            helper: 'clone',
+            //This defines what the user is actually dragging around
+            helper: function (event) {
+                return $("<div style='cursor: grabbing' id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
+            },
             revert: "invalid"
+
         });
     }
 }
@@ -172,31 +184,32 @@ var previous = [];
 function navigation() {
 
     // clean DOM
-    $("#add-captors").empty();
+    var $addCaptors = $("#add-captors").empty();
 
 
-    $("#add-captors").append("<div class=\"row\"><h3>" + position.name + "</h3></div>");
-
-    for (var i = 0; i < buildings.length; i++) {
-        $("#add-captors").append(
-            "<div class=\"row\"><a class=\"node\" id=\"" + i + "\">" + buildings[i].name + "</a></div>"
+    $addCaptors.append("<div class=\"row\"><h3>" + position.name + "</h3></div>");
+    var i;
+    for (i = 0; i < buildings.length; i++) {
+        $addCaptors.append(
+            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a></div>"
         );
     }
 
-    if (position.directSensor != null) {
-
-        for (var i = 0; i < position.directSensor.length; i++) {
-            $("#add-captors").append(
-                "<div class=\"row\"><span class=\"draggable\" id=\""
-                + position.directSensor[i].name + "\" style=\"cursor : pointer;\">"
-                + position.directSensor[i].displayName + "</span></div>"
-            );
-
-            $(".draggable").draggable({
-                helper: 'clone',
-                revert: "invalid",
-                cursor: "pointer"
-            });
+    if (position.directSensor != null && typeof(position.directSensor) !== 'undefined' && position.directSensor != [null]) {
+        for (i = 0; i < position.directSensor.length; i++) {
+            if (position.directSensor[i] != null) {
+                $addCaptors.append(
+                    "<div class=\"row sensorInList\"><span class=\"draggable\" id=\""
+                    + position.directSensor[i].name + "\" style=\"cursor : grab;\">"
+                    + position.directSensor[i].displayName + "</span></div>"
+                );
+                $(".draggable").draggable({
+                    helper: function (event) {
+                        return $("<div style='cursor: grabbing'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
+                    },
+                    revert: "invalid"
+                });
+            }
         }
     }
 
@@ -205,10 +218,10 @@ function navigation() {
 
 function updateNavigation() {
     // clean DOM
-    $(".breadcrumb").empty();
+    var $breadCrumb = $(".breadcrumb").empty();
 
-    for (var i = 0; i < navbar.length; i++) {
-        $(".breadcrumb").append("<li><a class=\"nave\" name=\"" + navbar[i] + "\">" + navbar[i] + "</a></li>");
+    for (var i = 0; i < navbar.length - 1; i++) {
+        $breadCrumb.append("<li><a class=\"nave\" name=\"" + navbar[i] + "\" style=\"cursor : pointer;\">" + navbar[i] + "</a></li>");
     }
 }
 
@@ -251,61 +264,95 @@ $(document).on('click', '.node', function (el) {
  ***********************/
 function dropIt(event, ui) {
     var self = this;
-    var draggableName = ui.draggable.attr("id");
+    var aTemporaryArrayOfNeeds = [];
+    var draggableId = ui.draggable.attr("id");
     var droppableId = $(self).attr("id");
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
-    if ($.inArray(draggableName, needs) > -1) {
-        if (!($.inArray(draggableName, composition_needs[droppableId]) > -1)) {
-            expression.needList( composition_needs, function (answer) {
-             buildings = answer;
-             navigation();
-             //maybe ?
-             composition_needs[droppableId].push(draggableName);
-             ui.draggable.clone().appendTo($(this));
-             allTheNeeds[droppableId].needs.push(draggableName);
+    if ($.inArray(draggableId, needsSimple[droppableId]) > -1) {
+        if (!($.inArray(draggableId, allTheNeeds[droppableId].needs) > -1)) {
+            allTheNeeds[droppableId].needs.forEach(function (aNeed) {
+                aTemporaryArrayOfNeeds.push(aNeed.name);
+            });
+            aTemporaryArrayOfNeeds.push(draggableId);
+            expression.needList(aTemporaryArrayOfNeeds, function (answer) {
+                var tmpSensorList = [];
+                answer.forEach(function (oneSensorSet) {
+                    oneSensorSet.sensors.forEach(function (sensor) {
+                        tmpSensorList.push(sensor.name);
+                    })
+                });
+                $.post(mainServer + 'sensors/common/hierarchical', {
+                    "sensors": tmpSensorList
+                }).done(function (data) {
+                        //Resetting all the sensors data we have to get the new one
+                        buildings.splice(0, buildings.length);
+                        navbar.splice(0, navbar.length);
 
-             }, function() {
-             console.log('IT\'S IMPOSSIBRRRRUUUUU');
-             });
-            composition_needs[droppableId].push(draggableName);
-            ui.draggable.clone().appendTo($(self));
-            allTheNeeds[droppableId].needs.push(draggableName);
+                        position = data;
+                        buildings = data.childContainer;
+                        navbar.push(position.name);
+                        navigation();
+                        var needSpan = $(document.createElement('span'));
+                        needSpan.attr("id", draggableId);
+                        needSpan.css('cursor', 'default');
+                        needSpan.html(draggableId);
+                        needSpan.appendTo($(self));
+                        allTheNeeds[droppableId].needs.push(draggableId);
+                        $("#generateButton").removeAttr("disabled");
+                    })
+                    .fail(function (data) {
+                        console.log(data);
+                    });
+            }, function (error) {
+                if (error.status === 400) {
+                    alert(error.responseText);
+                }
+                console.log('IT\'S IMPOSSIBRRRRUUUUU');
+            });
         }
-    } else {//Means it's a sensor
-        if (!($.inArray(draggableName, composition_sensors[droppableId]) > -1)) {
-            $.get(mainServer + "sensor/" + draggableName + "/enhanced")
-                .done(function (data) {
-                    //the sensor mustn't already be in the widget
-                    composition_sensors[droppableId].push(draggableName);
-                    //Here, we add a new sensor to the widget.
-                    ui.draggable.clone().appendTo($(self));
-                    createAndAddPercentButton(draggableName, droppableId);
+    }
+    else {//Means it's a sensor
+        if (!($.inArray(draggableId, allTheNeeds[droppableId].sensors) > -1)) {
+            var temporarySensorsList = [];
 
-                    allTheNeeds[droppableId].sensors.push(data);
+            $.get(mainServer + "sensor/" + draggableId + "/enhanced")
+                .done(function (enhancedSensor) {
+                    allTheNeeds[droppableId].sensors.forEach(function (aSensor) {
+                        temporarySensorsList.push(aSensor);
+                    });
+                    temporarySensorsList.push(enhancedSensor);
 
+                    expression.sensorList(temporarySensorsList, function (answer) {
+                        needs[droppableId] = answer;
+                        addNeeds(droppableId);
+                        //Here, we add a new sensor to the widget.
+                        var needSpan = $(document.createElement('span'));
+                        needSpan.attr("id", draggableId);
+                        needSpan.css('cursor', 'default');
+                        needSpan.html(enhancedSensor.displayName);
+                        needSpan.appendTo($(self));
+                        createAndAddPercentButton(($(self)).attr('id'), draggableId, droppableId);
+                        $("#generateButton").removeAttr("disabled");
+                        allTheNeeds[droppableId].sensors.push(enhancedSensor);
+                    }, function (error) {
+                        console.log(error);
+                    });
                 });
         }
     }
-    displayGenerateButton();
 }
 
+////////////////////////////////////// Percent button on sensors  //////////////////////////////////////////////////////
 //This method creates a percent button and appends it to a specific sensorname
-var createAndAddPercentButton = function(draggableName, droppableId) {
-    var togglePercent = document.createElement("afe");        // Create a <button> element
-   // togglePercent.setAttribute('class', 'btn btn-default btn-xs');
-    togglePercent.setAttribute('onclick', 'setColor(event, "' + draggableName + '", "' + droppableId + '", "#0000FF")');
-    togglePercent.setAttribute('data-count', '1');
-    togglePercent.setAttribute('style',  'display : -webkit-inline-box');
-    var buttonContent = document.createTextNode("%");       // Create a text node
-    togglePercent.appendChild(buttonContent);          // Append the text to <button>
+var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableId) {
+    var togglePercent = $(document.createElement("button"));        // Create a <button> element
+    togglePercent.attr('onclick', 'setColor(event, "' + draggableName + '", "' + droppableId + '", "#20C6D7")');
+    togglePercent.attr('class', 'btn btn-default btn-xs');
+    togglePercent.attr('data-count', '1');
+    togglePercent.html("%");          // Append the text to <button>
 
-    $("#add-rows > div").each(function(){
-        if( $(this).attr('id') == droppableId){
-            $(this).append(togglePercent);
-        }
-    });
-
+    togglePercent.appendTo($("#" + widgetBoxId + " #" + draggableName));
 };
 
 var setColor = function (event, btnName, widgetIndex, color) {
@@ -327,14 +374,6 @@ var setColor = function (event, btnName, widgetIndex, color) {
     }
 
 };
-var displayGenerateButton = function () {
-    for (var i = 0; i < composition_sensors.length; i++) {
-        if (composition_sensors[i].length > 1) {
-            $("#generateButton").show(700);
-            break;
-        }
-    }
-};
 
 
 /*******************************
@@ -345,11 +384,34 @@ var declareNeeds = function () {
         //We only ask the composition server if what was asked is possible enough
         expression.need(oneNeed, function (answer) {
             oneNeed.graphType = answer;
-            localStorage.setItem("bar", JSON.stringify(allTheNeeds));
-            //If this is our last callback, set the whole result in local storage.
             //Better than cookie bc same behaviour throughout browsers.
+            if (index == allTheNeeds.length - 1) {
+                console.log('we got everything !');
+                localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
+                //Once we got everything
+                $("#dashboardNameForm").show();
+                $("#generateButton").hide();
+            }
         }, function () {
+            $("#generateButton").attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...
             console.log('IT\'S IMPOSSIBRRRRUUUUU');
         });
     });
 };
+
+var setDashboardName = function () {
+    localStorage.setItem("dashboardTitle", $("#dashboardName").val());
+
+    return true;
+};
+
+//////////////////////////////////////// Quentin's easter egg ///////////////////////////////////////////////
+$(window).konami();
+$(window).konami({
+    code: [38, 38, 40, 40, 37, 39, 37, 39],
+    cheat: function () {
+        console.log('cheat code activated');
+        var $tetris = $(".tetris").attr("style", "width:250px; height:500px;");
+        $tetris.blockrain();
+    }
+});

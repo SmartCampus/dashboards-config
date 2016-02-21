@@ -3,29 +3,43 @@
  */
 var expression = (function () {
     return { //exposed to public
-        need: function (needsObject, successCB, errorCB) {
+        need: function (needsObject, successCB, errorCB) {//{sensors:[]}
             $.post(needsServer + needsQuestion, needsObject)
                 .done(function (data) {
-                    console.log('request done !');
                     successCB(data);
                 })
                 .fail(function (data) {
-                    console.log('error in post needs expression');
                     errorCB();
                 });
         },
         needList: function(needsList, successCB, errorCB) {
-            $.post(needsServer + needSet, needsList)
+            $.post(needsServer + needSet, {
+                needs:needsList
+            })
                 .done(function (data) {
-                    console.log('request done ! All the sensors left you can use : ');
                     if (data.length <= 0) {
-                        console.log('liste vide');
+                        console.log('no more sensors possible. must do stg');
+                        errorCB(data);
                     }
-                    console.log(data);
                     successCB(data);
                 })
                 .fail(function (data) {
-                    console.log('error in post ');
+                    console.log(data);
+                    errorCB(data);
+                });
+        },
+        sensorList: function(sensorsList, successCB, errorCB) {
+            $.post(needsServer + sensorSet, {
+                    sensors:sensorsList
+                })
+                .done(function (data) {
+                    if (data.length <= 0) {
+                        console.log('no more needs possible. Must do stg. ');
+                        errorCB(data);
+                    }
+                    successCB(data);
+                })
+                .fail(function (data) {
                     console.log(data);
                     errorCB(data);
                 });

@@ -3,15 +3,30 @@
  */
 
 //Ca, ça va pas du tout. Ca fait que ca dépend de comment t'as rempli tes boites, et c'tout !
-var existingPositions = ['left2', 'right2', 'right1', 'left1', 'right3', 'left3'];
+var existingPositions = [];
+var beginDate='';
+var endDate = '';
 var watchingArray = [{"dataSC": [], "counter": []}, {"dataSC": [], "counter": []}, {
     "dataSC": [],
     "counter": []
 }, {"dataSC": [], "counter": []}];
-var theNeeds = JSON.parse(localStorage.getItem("bar"));
-localStorage.removeItem("bar");
-console.log(theNeeds);
-if (typeof beginDate == 'undefined' || typeof endDate == 'undefined') {
+
+////////////////////////////// Generic function to fire in case of server error ///////////////////////////////////////
+var errorOccurred = function () {
+    document.getElementById("errorOccurred").className = "row text-center show";
+    document.getElementById("loadingImg").className = "hidden";
+    document.getElementById("dashboard").className = "hidden";
+};
+
+////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
+var theNeeds = JSON.parse(localStorage.getItem("widgetsDescription"));
+localStorage.removeItem("widgetsDescription");
+if (theNeeds === null) {errorOccurred()}
+if (localStorage.getItem("dashboardTitle") !== null) {
+    $("#theGeneralTitle").html(localStorage.getItem("dashboardTitle"));
+} //else we just don't write any title
+
+if (beginDate === '' || endDate == '') {
     beginDate = '2015-06-21 8:00:11';
     endDate = '2015-09-21 18:00:11';
 }
@@ -55,11 +70,6 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
     }
 };
 
-var errorOccurred = function () {
-    document.getElementById("errorOccurred").className = "row text-center show";
-    document.getElementById("loadingImg").className = "hidden";
-    document.getElementById("dashboard").className = "hidden";
-};
 
 //TODO: demander à l'utilisateur les dates qu'il veut
 
@@ -110,55 +120,62 @@ var goDrawPie = function (sensor, index) {
 
 var firstWidgetData = [];
 
-var layoutChosen = function (layoutHTML) {
+var layoutChosen = function (layoutName, layoutAnswer) {
     //layout insertion
     var div = document.getElementById('dashboard');
-    div.insertAdjacentHTML('afterbegin', layoutHTML);
 
-//Quick and dirty definition !
-    theNeeds.forEach(function (aNeed, index) {
-        if (aNeed.sensors.length > 0) { //we only do that if you asked for some sensors !
-            //Besoin de connaître le type de graphe pour savoir la route exacte que je vais demander à SC.
-            aNeed.additionnal = '';
+    //After getting the layout generated, the same server has to give us the list of the div ids it created.
+    layouts.widgetsIds(layoutName, function (widgetsArray) {
+        console.log(widgetsArray);
+        existingPositions = widgetsArray;
+        div.insertAdjacentHTML('afterbegin', layoutAnswer);
 
-            if (aNeed.graphType == 'line' || aNeed.graphType == 'column' || aNeed.graphType == 'mix'
-                || aNeed.graphType == 'pieChart' || aNeed.graphType == 'scatter') {
-                aNeed.scRoute = '/data';
-            }
-            if (aNeed.graphType == 'column') {
-                aNeed.withParam = true;
-            }
-            if (aNeed.graphType == 'mix' || aNeed.graphType == 'scatter') {
-                aNeed.additionnal = '/splitlist';
-                aNeed.withParam = true;
-            }
-            if (aNeed.graphType == 'pieChart') {
-                aNeed.additionnal = '/percent';
-            }
-            //Maintenant que je sais ça, pour chaque sensor : je récup les infos manquantes, & j'appelle les données.
-            aNeed.sensors.forEach(function (sensor) {
-                if (sensor.name == "NOISE_SPARKS_CORRIDOR") {
-                    //The other elements of a mix graph will require splitdata and all, but not him...
-                    retrieveData.askForSeries(sensor.name + aNeed.scRoute, beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
-                }
-                if (sensor.percent) {
-                    console.log('hé tas dit percent');
-                    sensor.unit = 'percent';
-                    sensor.description = '% of ' + sensor.description;
-                }
-                //The service could provide me with the info I will lack ! eg. everything i just gathered...
-                //then we have to ask for series with a param !!!!
+        theNeeds.forEach(function (aNeed, index) {
+            if (aNeed.sensors.length > 0) { //we only do that if you asked for some sensors !
+                //Besoin de connaître le type de graphe pour savoir la route exacte que je vais demander à SC.
+                aNeed.additionnal = '';
 
-                if (aNeed.withParam) {
-                    retrieveData.askForSeriesWithParam(sensor.name + aNeed.scRoute + aNeed.additionnal, aNeed.withParam.toString(), beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                if (aNeed.graphType == 'line' || aNeed.graphType == 'column' || aNeed.graphType == 'mix'
+                    || aNeed.graphType == 'pieChart' || aNeed.graphType == 'scatter') {
+                    aNeed.scRoute = '/data';
                 }
-                else if (aNeed.graphType == 'boolean') {
-                    retrieveData.askForStateNow(sensor.name, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                if (aNeed.graphType == 'column') {
+                    aNeed.withParam = true;
                 }
-                else {
-                    retrieveData.askForSeries(sensor.name + aNeed.scRoute + aNeed.additionnal, beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                if (aNeed.graphType == 'mix' || aNeed.graphType == 'scatter') {
+                    aNeed.additionnal = '/splitlist';
+                    aNeed.withParam = true;
                 }
-            });
-        }
-    });
+                if (aNeed.graphType == 'pieChart') {
+                    aNeed.additionnal = '/percent';
+                }
+                //Maintenant que je sais ça, pour chaque sensor : je récup les infos manquantes, & j'appelle les données.
+                aNeed.sensors.forEach(function (sensor) {
+                    if (sensor.name == "NOISE_SPARKS_CORRIDOR") {
+                        //The other elements of a mix graph will require splitdata and all, but not him...
+                        retrieveData.askForSeries(sensor.name + aNeed.scRoute, beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                    }
+                    if (sensor.percent) {
+                        console.log('hé tas dit percent');
+                        sensor.unit = 'percent';
+                        sensor.description = '% of ' + sensor.description;
+                    }
+                    //The service could provide me with the info I will lack ! eg. everything i just gathered...
+                    //then we have to ask for series with a param !!!!
+
+                    if (aNeed.withParam) {
+                        retrieveData.askForSeriesWithParam(sensor.name + aNeed.scRoute + aNeed.additionnal, aNeed.withParam.toString(), beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                    }
+                    else if (aNeed.graphType == 'boolean') {
+                        retrieveData.askForStateNow(sensor.name, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                    }
+                    else {
+                        retrieveData.askForSeries(sensor.name + aNeed.scRoute + aNeed.additionnal, beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                    }
+                });
+            }
+        });
+
+    }, errorOccurred);
+
 };

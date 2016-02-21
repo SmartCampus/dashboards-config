@@ -33,3 +33,7 @@ app.use("/", router);
 
 app.listen(8084);
 logger.info('Composition engine is now listening on port 8084.');
+
+// Exports
+
+module.exports = exports = app;

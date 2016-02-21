@@ -93,7 +93,7 @@ function analyseGraphConfig(config) {
                 yAxes[i].coma = ",";
             }
 
-            if(yAxes[i].amount == 1) {
+            if(yAxes[i].amount == 1 || typeof(yAxes[i].amount) == 'undefined') {
                 console.log('yAxes amount is 1. ');
                 serie.serieIndex = i;
                 serie.yAxisIndex = i;
@@ -171,8 +171,12 @@ function generateLayout(config, callback) {
     console.log(config);
     readTemplateFile("layout.mustache", function (template) {
         //config = require(__dirname + "/template/layout.json");
-        config.widgetWidth = layoutDefinitions.getLayoutWidgetWidth(config.layoutType);
-        callback(null, Mustache.render(template, config));
+        //config.widgetWidth = layoutDefinitions.getLayoutWidgetWidth(config.layoutType);
+        if(config.layoutType) {
+            callback(null, Mustache.render(template, layoutDefinitions.getLayoutWidgetWidth(config.layoutType)));
+        } else {
+            callback("error", null);
+        }
     });
 }
 

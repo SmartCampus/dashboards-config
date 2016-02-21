@@ -1,0 +1,33 @@
+
+
+/*This class is each part title : for intentions, widget boxes and sensors*/
+.indexTitle {
+    min-height : 110px;
+    padding : 0 40px 0 40px;
+    text-align: center;
+    text-justify: inter-word;
+}
+
+.well.col-md-10.ui-droppable.myActiveDroppable {
+    background: rgba(112, 215, 0, 0.17);
+}
+
+.needInList {
+    text-shadow: 2px 2px 8px #0266C8;
+    padding: 20px 0 0 0;
+    text-align : center;
+}
+.sensorInList {
+    text-shadow: 2px 2px 8px #0266C8;
+}
+
+
+#add-rows div span {
+    display: block;
+}
+
+body {
+    /*background:url("../assets/images/4400.jpg") no-repeat fixed center; */
+    background:url("../assets/images/R2D2.jpg") no-repeat fixed center;
+    /*background:url("../assets/images/51953.jpg") no-repeat fixed center;*/
+}

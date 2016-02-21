@@ -11,3 +11,4 @@ widgetGen = 'generationRequest';
 
 needsQuestion = 'expressNeed';
 needSet = 'needSet';
+sensorSet = 'sensorSet';

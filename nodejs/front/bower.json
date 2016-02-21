@@ -29,7 +29,8 @@
     "highstock": "highstock-release#~2.1.9",
     "jquery-ui": "jqueryui#~1.11.4",
     "gridstack": "~0.2.3",
-    "gridster": "gridster-js#~0.6.10"
+    "gridster": "gridster-js#~0.6.10",
+    "konami-code": "~1.3.2"
   },
   "license": "none",
   "homepage": "views/index.html",

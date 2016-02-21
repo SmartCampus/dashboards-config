@@ -13,13 +13,13 @@ var async = require("async"),
 var TEMP = "TEMP",
 	LIGHT = "LIGHT",
 	ENERGY = "ENERGY",
-	STATE = "STATE";
+	NUMBER = "NUMBER";
 
 var SENSOR_CATEGORIES = {
 	TEMP: TEMP,
 	LIGHT: LIGHT,
 	ENERGY: ENERGY,
-	STATE: STATE
+	NUMBER: NUMBER
 }
 
 // Visualization needs
@@ -39,12 +39,12 @@ class Need {
 	set compatibleNeeds(compatibleNeeds) { this._compatibileNeeds = compatibleNeeds; }
 }
 
-var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, STATE]),
-	SEE_STATUS = new Need("See status", [STATE]),
-	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, STATE]),
+var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, NUMBER]),
+	SEE_STATUS = new Need("See status", [NUMBER]),
+	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, NUMBER]),
 	RELATIONSHIPS = new Need("Relationships", []),
 	HIERARCHY = new Need("Hierarchy", []),
-	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, STATE]),
+	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, NUMBER]),
 	SUMMARIZE = new Need("Summarize", []);
 
 COMPARISON.compatibleNeeds = [OVERTIME, PROPORTION];
@@ -63,6 +63,19 @@ var NEEDS = {
 	HIERARCHY: HIERARCHY,
 	PROPORTION: PROPORTION,
 	SUMMARIZE: SUMMARIZE
+}
+
+function getNeedsByName(needStrings) {
+	var needs = [];
+
+	for (var need in NEEDS) {
+		if (needStrings.find(function (str) {
+			return str == NEEDS[need].name;
+		})) {
+			needs.push(NEEDS[need]);
+		}
+	}
+	return needs;
 }
 
 function getSensorsMatchingNeeds(needs, callback) {
@@ -131,9 +144,66 @@ function checkNeedsConsistency(needs) {
 	return true;
 }
 
+function getNeedsMatchingSensors(sensors, callback) {
+	callback(null, mergeNeedsFromCategories(getCategoriesFromSensors(sensors)));
+}
+
+function findElementInArray(array, element) {
+	return array.find(function (el) {
+		return el === element;
+	});
+}
+
+function findCategoriesInArray(array, categories) {
+	for (var i = categories.length - 1; i >= 0; i--) {
+		if (!findElementInArray(array, categories[i])) {
+			return false;
+		}
+	};
+	return true;
+}
+
+function mergeNeedsFromCategories(categories) {
+	var needs = [], need;
+
+	for (var property in NEEDS) {
+		need = NEEDS[property];
+		if (!findElementInArray(needs, need)) {
+			if (findCategoriesInArray(need.sensorCategories, categories)) {
+				needs.push(need);
+			}
+		}
+	}
+	return needs;
+}
+
+function getCategoriesFromSensors(sensors) {
+	var sensor, categories = [], category;
+
+	for (var i = sensors.length - 1; i >= 0; i--) {
+		category = sensors[i].unit;
+		//TODO: quick fix pour que categories & unit arrêtent de poser pb
+		if (category === "temperature") {
+			category = TEMP;
+		} else if (category === "watt") {
+			category = ENERGY;
+		} else if (category === "number") {
+			category = NUMBER;
+		} else if (category === "lux") {
+			category = LIGHT;
+		}
+		if (!findElementInArray(categories, category)) {
+			categories.push(category);
+		}
+	};
+	return categories;
+}
+
 // Exports
 
 exports.SENSOR_CATEGORIES = SENSOR_CATEGORIES;
 exports.NEEDS = NEEDS;
 exports.getSensorsMatchingNeeds = getSensorsMatchingNeeds;
+exports.getNeedsMatchingSensors = getNeedsMatchingSensors;
 exports.checkNeedsConsistency = checkNeedsConsistency;
+exports.getNeedsByName = getNeedsByName;
