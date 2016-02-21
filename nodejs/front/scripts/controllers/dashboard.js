@@ -28,7 +28,7 @@ if (localStorage.getItem("dashboardTitle") !== null) {
 
 if (beginDate === '' || endDate == '') {
     beginDate = '2015-06-21 8:00:11';
-    endDate = '2015-09-21 18:00:11';
+    endDate = '2015-08-21 18:00:11';
 }
 
 
@@ -39,7 +39,7 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
         console.log('line or column widget');
         //TODO:probleme si les callbacks sont pas dans l'ordre que j'imagine là...
         watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data});
-        waitForFirstWidgetDrawing(firstWidgetData, sensor, index);
+        waitForFirstWidgetDrawing(sensor, index);
     }
     else if (theNeeds[index].graphType == 'boolean') {
         //then i'm in AC or window !
@@ -48,7 +48,7 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
     }
     else if (theNeeds[index].graphType == 'pieChart') {
         watchingArray[index].dataSC.push({"name": "Open", "y": data.data[0].open});
-        watchingArray[index].dataSC.push(doorPercentage[1] = {"name": "Close", "y": data.data[1].close});
+        watchingArray[index].dataSC.push({"name": "Close", "y": data.data[1].close});
         goDrawPie(sensor, index);
     }
     else if (theNeeds[index].graphType == 'mix') {
@@ -60,13 +60,14 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
         //problem : we want ONLY the open result. the name we can use the one we have it's ok
         //not sure we really need the split list for a mix... the open though i guess i needed
         watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data[0].open});
-
+        //TODO: wait for other drawings !
     }
-    else if (theNeeds[index].graphType == 'scatter') {
+    else if (theNeeds[index].graphType == 'scatterplot') {
         //this is what happens to the data we get from a split, for a scatterplot
         //as far as we know, the only times we want a scatter is to see open or closed doors
         watchingArray[index].dataSC.push({"name": "open", color: 'rgba(119, 152, 191, .5)', "data": data.data[0].open});
         watchingArray[index].dataSC.push({"name": "close", color: 'rgba(223, 83, 83, .5)', "data": data.data[1].close});
+        goDrawScatterPlot(index); //For now at least, it seems that a scatter plot only has one data, so that's that.
     }
 };
 
@@ -85,9 +86,7 @@ var finishedLoading = function () {
 
 var firstWCode;
 //An array of as many arrays as we have widgets.
-var waitForFirstWidgetDrawing = function (dataSC, sensor, index) {
-    console.log('********************');
-    console.log(watchingArray[index]);
+var waitForFirstWidgetDrawing = function (sensor, index) {
     if (watchingArray[index].counter.length < theNeeds[index].sensors.length) {
         watchingArray[index].counter.push(sensor);
     }//TODO: pour le moment, on push des sensors à la place des yaxes : dans le cas de winter ça va plus être possible...
@@ -100,6 +99,15 @@ var waitForFirstWidgetDrawing = function (dataSC, sensor, index) {
                 finishedLoading();
             }, errorOccurred);
     }
+};
+
+var goDrawScatterPlot = function(index) {
+        generate.widgetV2("Title not defined", "scatter", "",existingPositions[index],
+            "watchingArray[index].dataSC", function (data) {
+            console.log(data);
+            eval(data); //TODO:is this the right place for eval ?
+            finishedLoading();
+        }, errorOccurred);
 };
 
 var boolCode;
@@ -118,8 +126,6 @@ var goDrawPie = function (sensor, index) {
     }, errorOccurred);
 };
 
-var firstWidgetData = [];
-
 var layoutChosen = function (layoutName, layoutAnswer) {
     //layout insertion
     var div = document.getElementById('dashboard');
@@ -136,13 +142,13 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                 aNeed.additionnal = '';
 
                 if (aNeed.graphType == 'line' || aNeed.graphType == 'column' || aNeed.graphType == 'mix'
-                    || aNeed.graphType == 'pieChart' || aNeed.graphType == 'scatter') {
+                    || aNeed.graphType == 'pieChart' || aNeed.graphType == 'scatterplot') {
                     aNeed.scRoute = '/data';
                 }
                 if (aNeed.graphType == 'column') {
                     aNeed.withParam = true;
                 }
-                if (aNeed.graphType == 'mix' || aNeed.graphType == 'scatter') {
+                if (aNeed.graphType == 'mix' || aNeed.graphType == 'scatterplot') {
                     aNeed.additionnal = '/splitlist';
                     aNeed.withParam = true;
                 }
