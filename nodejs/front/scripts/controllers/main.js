@@ -54,8 +54,8 @@ var addTableRow = function (index) {
     $("#add-rows").append('<div class="well col-md-10" id="'
         + index
         + '" style="min-height: 80px;"></div>'
-        + '<div class="col-md-2"> <br/>'
-        + '<div class="btn btn-default" onclick="deleteWidgetContent(' + index + ')"><span class="glyphicon glyphicon-trash">'
+        + '<div class="col-md-2" id="deleteWidget'+index+'"> <br/>'
+        + '<div class="btn btn-default" onclick="removeAWidget(' + index + ')"><span class="glyphicon glyphicon-trash">'
         + '</span></div></div>');
 
     updateDisableBox();
@@ -120,11 +120,15 @@ var addAWidget = function () {
 };
 
 /////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
-var removeAWidget = function () {
+var removeAWidget = function (widgetId) {
     var $addRowsDiv = $("#add-rows").find(" > div");
     var domSize = $addRowsDiv.length;
+    $('#' + widgetId).remove();
+    $('#deleteWidget' + widgetId).remove();
 
-    if (domSize > 3) { //means I have at least 2 widget boxes : so we can delete one indeed
+    console.log(this);
+    console.log($(this));
+   /* if (domSize > 3) { //means I have at least 2 widget boxes : so we can delete one indeed
         if (parseInt(+selectedBox + 1) === (domSize / 3)) { //It was the last box that was selected
             selectedBox--;
             $addRowsDiv.slice(-2).remove();
@@ -135,10 +139,12 @@ var removeAWidget = function () {
         allTheNeeds.splice(-1, 1);
         maxOfWidgets -= 1;
     }
+    */
 };
 
 /*
  This functions empties a widget box, making it back to its original state
+ Not used right now
  */
 var deleteWidgetContent = function (widgetId) {
     allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
