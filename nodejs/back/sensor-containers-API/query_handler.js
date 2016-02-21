@@ -66,7 +66,7 @@ function getSensorInformation(name, date, callback) {
  */
 function getSensorsFromQuery(queries) {
     var sensorsArray = [];
-
+    //console.log(queries);
     for(var query in queries) {
         var queryResult = [];
         var smartCampusSensors = sensors.getSmartCampusSensors();
