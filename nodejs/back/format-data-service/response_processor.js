@@ -67,8 +67,7 @@ function handleState(state, sensorInfoJson, i) {
     if(state) {
         if(sensorInfoJson.values[i].value == 'ON') {
             sensorPerTime.push(100);
-        }
-        if(sensorInfoJson.values[i].value == 'OPEN') {
+        } else if(sensorInfoJson.values[i].value == 'OPEN') {
             sensorPerTime.push(1);
         }
         else {
@@ -281,3 +280,5 @@ exports.splitInformation = splitInformation;
 exports.highChartFormatTransformation = highChartFormatTransformation;
 
 exports.concatenateResponse = concatenateResponse;
+
+exports.handleState = handleState;
