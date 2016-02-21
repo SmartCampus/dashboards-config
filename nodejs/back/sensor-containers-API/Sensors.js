@@ -282,7 +282,7 @@ function initSensors(data) {
             sensorList["NOISE_SPARKS_CORRIDOR"] = sensor;
             containers[iterator].getDirectSensors().push(sensor.toJson());
         } else if(containers[iterator].getName() == "Office 443") {
-            var sensor = new Sensor("HEATING_443", "Heat in office", undefined, "Heat in office", "temperature");
+            var sensor = new Sensor("HEATING_443", "Heat in office", undefined, "Heat in office", "temperature", "TEMP");
             sensorList["HEATING_443"] = sensor;
             containers[iterator].getDirectSensors().push(sensor.toJson());
         }
@@ -290,7 +290,7 @@ function initSensors(data) {
 
     for(var i in sensorList) {
         if(sensorList[i].unit === "number") {
-            categories.NUMBER.getSensors().push(sensorList[i]);
+            categories.STATE.getSensors().push(sensorList[i]);
         } else if(sensorList[i].unit === "temperature") {
             categories.TEMP.getSensors().push(sensorList[i]);
         } else if(sensorList[i].unit === "lux") {
@@ -386,13 +386,13 @@ function upgradeSensorsInformation(sensors) {
 function initCategories() {
     var temperatureSensors = new SensorCategory("TEMP", [], ["TEMP", "AC"]);
     var lightSensors = new SensorCategory("LIGHT", [], ["LIGHT"]);
-    var numberSensors = new SensorCategory("NUMBER", [], ["NUMBER"]);
+    var numberSensors = new SensorCategory("STATE", [], ["STATE"]);
     var energySensors = new SensorCategory("ENERGY", [], ["ENERGY"]);
     var soundSensors = new SensorCategory("SOUND", [], ["SOUND"]);
 
     categories.LIGHT = lightSensors;
     categories.TEMP = temperatureSensors;
-    categories.NUMBER = numberSensors;
+    categories.STATE = numberSensors;
     categories.ENERGY = energySensors;
     categories.SOUND = soundSensors;
 }
