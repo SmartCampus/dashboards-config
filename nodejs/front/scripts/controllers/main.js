@@ -51,7 +51,12 @@ function initWindowsData() {
  * For each, we also add a "delete" button, to remove all it contains if the user made a mistake
  */
 var addTableRow = function (index) {
-    $("#add-rows").append('<div class="well col-md-10" id="'
+
+    $("#add-rows").append('' +
+        '<form class="form-inline text-left" id="widgetNameForm'+index+'" style="padding-bottom: 0.5em">'+
+        '<input class="form-control" id="widgetTitle'+index+'" placeholder="Your widget\'s name"> '+
+        '</form>'+
+        '<div class="well col-md-10" id="'
         + index
         + '" style="min-height: 80px;"></div>'
         + '<div class="col-md-2" id="deleteWidget'+index+'"> <br/>'
@@ -125,7 +130,7 @@ var removeAWidget = function (widgetId) {
     var domSize = $addRowsDiv.length;
     $('#' + widgetId).remove();
     $('#deleteWidget' + widgetId).remove();
-
+    $('#widgetNameForm'+widgetId).remove();
     console.log(this);
     console.log($(this));
 };
@@ -372,11 +377,10 @@ var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableI
 var declareNeeds = function () {
     allTheNeeds.forEach(function (oneNeed, index) {
         oneNeed.sensors.forEach(function (sensor) {
-            console.log('for ', sensor.name);
-            console.log($("#select" + sensor.name + " option:selected", "#" + index).text());
             if ($("#select" + sensor.name + " option:selected", "#" + index).text() != 'raw') {
                 sensor.percent = true;
             }
+            oneNeed.title = $("#widgetTitle"+index).val();
         });
         //We only ask the composition server if what was asked is possible enough
         expression.need(oneNeed, function (answer) {
@@ -398,7 +402,6 @@ var declareNeeds = function () {
 
 var setDashboardName = function () {
     localStorage.setItem("dashboardTitle", $("#dashboardName").val());
-
     return true;
 };
 

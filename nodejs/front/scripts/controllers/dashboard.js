@@ -91,7 +91,7 @@ var waitForFirstWidgetDrawing = function (sensor, index) {
         watchingArray[index].counter.push(sensor);
     }//TODO: pour le moment, on push des sensors à la place des yaxes : dans le cas de winter ça va plus être possible...
     if (watchingArray[index].counter.length == theNeeds[index].sensors.length) {
-        generate.widgetV2("Title not defined", theNeeds[index].graphType,
+        generate.widgetV2(theNeeds[index].title, theNeeds[index].graphType,
             watchingArray[index].counter
             , existingPositions[index], "watchingArray[index].dataSC", function (data) {
                 firstWCode = data;
@@ -102,7 +102,7 @@ var waitForFirstWidgetDrawing = function (sensor, index) {
 };
 
 var goDrawScatterPlot = function(index) {
-        generate.widgetV2("Title not defined", "scatter", "",existingPositions[index],
+        generate.widgetV2(theNeeds[index].title, "scatter", "",existingPositions[index],
             "watchingArray[index].dataSC", function (data) {
             console.log(data);
             eval(data); //TODO:is this the right place for eval ?
