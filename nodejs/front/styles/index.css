@@ -23,11 +23,12 @@
 
 
 #add-rows div span {
-    display: block;
+    display: inline;
 }
 
 .tinySelectGroup {
     font-size: 9px;
+    margin-left: 5px;
 }
 
 

@@ -304,6 +304,8 @@ function dropIt(event, ui) {
                         needSpan.css('cursor', 'default');
                         needSpan.html(draggableId);
                         needSpan.appendTo($(self));
+                        br = $(document.createElement('br'));
+                        br.appendTo(needSpan);
                         allTheNeeds[droppableId].needs.push(draggableId);
                         $("#generateButton").removeAttr("disabled");
                     })
@@ -353,7 +355,7 @@ function dropIt(event, ui) {
 //This method creates a percent button and appends it to a specific sensorname
 var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableId) {
 
-    var formGroup = $(document.createElement("div"));
+    var formGroup = $(document.createElement("span"));
     formGroup.attr('class', 'input-group input-group-xs');
 
     var selectList = $(document.createElement("select"));
@@ -367,6 +369,8 @@ var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableI
     optionPercent.appendTo(selectList);
     selectList.appendTo(formGroup);
     formGroup.appendTo($("#" + widgetBoxId + " #" + draggableName));
+    br = $(document.createElement('br'));
+    br.appendTo(formGroup);
 };
 
 
