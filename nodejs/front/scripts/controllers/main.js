@@ -128,18 +128,6 @@ var removeAWidget = function (widgetId) {
 
     console.log(this);
     console.log($(this));
-   /* if (domSize > 3) { //means I have at least 2 widget boxes : so we can delete one indeed
-        if (parseInt(+selectedBox + 1) === (domSize / 3)) { //It was the last box that was selected
-            selectedBox--;
-            $addRowsDiv.slice(-2).remove();
-            updateDisableBox();
-        } else { //it's not the last box that was selected
-            $addRowsDiv.slice(-2).remove();
-        }
-        allTheNeeds.splice(-1, 1);
-        maxOfWidgets -= 1;
-    }
-    */
 };
 
 /*
@@ -217,6 +205,9 @@ function navigation() {
                 });
             }
         }
+    }
+    else {
+        $addCaptors.append("<div>No sensor is available here. </div>");
     }
 
     updateNavigation();
