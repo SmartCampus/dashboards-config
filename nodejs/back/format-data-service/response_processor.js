@@ -106,8 +106,8 @@ function splitInformation(response, res) {
  * then splitted in two list in the following format :
  * {data : [{open : []}, {close : [[1000, 0]]}]}
  *
- * @param tempPerTime
- * @returns {{data: Array}}
+ * @param       {json}              tempPerTime
+ * @returns     {{data: Array}}
  */
 function splittedInformation(tempPerTime) {
     var openList = [];
