@@ -30,3 +30,22 @@ describe("#handleState()", function() {
        });
     });
 });
+
+describe("#splittedInformation()", function() {
+
+    context("with only one OPEN", function() {
+        it("should be transformed in a 1 in the first list", function() {
+            var input = { values : [{value : 'OPEN', date : 1}]};
+            var response = processor.splittedInformation(input, [], []);
+            assert.deepEqual(response, {data : [{open : [[1000, 1]]}, {close : []}]});
+        });
+    });
+
+    context("with only on CLOSE", function() {
+        it("should be transformed in a 0 in the second list", function() {
+            var input = { values : [{value : 'CLOSE', date : 1}]};
+            var response = processor.splittedInformation(input, [], []);
+            assert.deepEqual(response, {data : [{open : []}, {close : [[1000, 0]]}]});
+        });
+    });
+});
