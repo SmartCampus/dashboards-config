@@ -20,6 +20,9 @@ var surroundingWidget12Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATION
 	surroundingWidget34Needs = [NEEDS.PROPORTION],
 	surroundingWidget56Needs = [NEEDS.OVERTIME, NEEDS.PATTERN];
 
+var winterWidget12Needs = [NEEDS.SEE_STATUS],
+	winterWidget3Needs = [NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.RELATIONSHIPS];
+
 describe("needs", function () {
 
 	describe("#checkNeedsConsistency()", function () {
@@ -51,6 +54,17 @@ describe("needs", function () {
 
 			it("widget 56 needs should be a consistent need set", function () {
 				assert(needs.checkNeedsConsistency(surroundingWidget56Needs));
+			});
+		});
+
+		describe("winter dashboard", function () {
+
+			it("widget 12 needs should be a consistent need set", function () {
+				assert(needs.checkNeedsConsistency(winterWidget12Needs));
+			});
+
+			it("widget 3 needs should be a consistent need set", function () {
+				assert(needs.checkNeedsConsistency(winterWidget3Needs));
 			});
 		});
 
@@ -146,7 +160,7 @@ describe("needs", function () {
 
 		describe("surrounding dashboard", function () {
 
-			it("it should return only STATE and SOUND categories", function (done) {
+			it("it should return STATE and SOUND categories", function (done) {
 				var categories = [SENSOR_CATEGORIES.STATE, SENSOR_CATEGORIES.SOUND];
 
 				needs.getSensorsMatchingNeeds(surroundingWidget12Needs, function (err, results) {
@@ -154,7 +168,7 @@ describe("needs", function () {
 						logger.error(err);
 						throw err;
 					}
-					assert.equal(categories.length, results.length);
+					assert(categories.length <= results.length);
 					categories.forEach(function (category) {
 						assert(results.find(function predicate(result) {
 							return result.set == category;
@@ -202,6 +216,55 @@ describe("needs", function () {
 					done();
 				});
 			});
+		});
+
+		describe("winter dashboard", function () {
+
+			it.skip("should return TEMP and LIGHT categories", function (done) {
+				var categories = [SENSOR_CATEGORIES.TEMP, SENSOR_CATEGORIES.LIGHT];
+
+				needs.getSensorsMatchingNeeds(surroundingWidget12Needs, function (err, results) {
+					if(err) {
+						logger.error(err);
+						throw err;
+					}
+					assert(categories.length <= results.length);
+					categories.forEach(function (category) {
+						assert(results.find(function predicate(result) {
+							return result.set == category;
+						}));
+					});
+					results.forEach(function (result) {
+						assert(Array.isArray(result.sensors));
+					});
+					logger.debug(results);
+					done();
+				});
+			});
+
+			it("should return TEMP and STATE categories", function (done) {
+				var categories = [SENSOR_CATEGORIES.TEMP, SENSOR_CATEGORIES.STATE];
+
+				needs.getSensorsMatchingNeeds(winterWidget3Needs, function (err, results) {
+					if(err) {
+						logger.error(err);
+						throw err;
+					}
+					assert(categories.length <= results.length);
+					categories.forEach(function (category) {
+						assert(results.find(function predicate(result) {
+							return result.set == category;
+						}));
+					});
+					results.forEach(function (result) {
+						assert(Array.isArray(result.sensors));
+					});
+					logger.debug(results);
+					done();
+				});
+			});
+
+			// TODO only?
 		});
 
 		// TODO other dashboards

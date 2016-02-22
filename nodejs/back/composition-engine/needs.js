@@ -53,7 +53,7 @@ class Need {
 var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
 	SEE_STATUS = new Need("See status", [STATE]),
 	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
-	RELATIONSHIPS = new Need("Relationships", [SOUND, STATE]),
+	RELATIONSHIPS = new Need("Relationships", [TEMP, SOUND, STATE]),
 	HIERARCHY = new Need("Hierarchy", []),
 	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
 	SUMMARIZE = new Need("Summarize", []),

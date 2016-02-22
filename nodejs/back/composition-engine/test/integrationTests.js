@@ -107,7 +107,7 @@ describe("composition engine", function () {
 				surroundingWidget34Needs = { needs: [NEEDS.PROPORTION.name] },
 				surroundingWidget56Needs = { needs: [NEEDS.OVERTIME.name, NEEDS.PATTERN.name] };
 
-			it("it should return only STATE and SOUND categories", function (done) {
+			it("it should return STATE and SOUND categories", function (done) {
 				var categories = [SENSOR_CATEGORIES.STATE, SENSOR_CATEGORIES.SOUND];
 
 				request(app)
@@ -117,7 +117,7 @@ describe("composition engine", function () {
 					.expect(function (response) {
 						var results = response.body;
 
-						assert.equal(categories.length, results.length);
+						assert(categories.length <= results.length);
 						categories.forEach(function (category) {
 							assert(results.find(function predicate(result) {
 								return result.set == category;
