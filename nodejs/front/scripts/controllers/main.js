@@ -17,6 +17,8 @@ var selectedBox = 0;
 var allTheNeeds = [];
 var sensorsBox = [];
 
+var startDate, endDate;
+
 /**
  * Get all buildings sensors et placements
  */
@@ -87,9 +89,10 @@ function updateDisableBox() {
     });
 };
 
+
 // change box
 $("#add-rows").click(function (event) {
-    
+
     if(event.target.id.length > 2){
         selectedBox = $(event.target).parent().attr('id');
     }else{
@@ -460,3 +463,24 @@ $(window).konami({
         $tetris.blockrain();
     }
 });
+
+$('#beginTime1')
+    .datetimepicker({
+        format: 'YYYY-MM-DD HH:mm'
+    });
+
+
+
+$('#endTime1')
+    .datetimepicker({
+        format: 'YYYY-MM-DD HH:mm'
+    });
+
+
+var validDates = function () {
+    $('#myModal').modal('hide');
+    console.log("myModal");
+}
+
+//console.log($('#beginTime1').data('date'));
+//console.log($('#endTime1').data('date'));
