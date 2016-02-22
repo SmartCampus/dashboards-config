@@ -20,7 +20,7 @@ var surroundingWidget12Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATION
 	surroundingWidget34Needs = [NEEDS.PROPORTION],
 	surroundingWidget56Needs = [NEEDS.OVERTIME, NEEDS.PATTERN];
 
-var winterWidget12Needs = [NEEDS.SEE_STATUS],
+var winterWidget1Needs = [NEEDS.SEE_STATUS],
 	winterWidget3Needs = [NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.RELATIONSHIPS];
 
 describe("needs", function () {
@@ -60,7 +60,7 @@ describe("needs", function () {
 		describe("winter dashboard", function () {
 
 			it("widget 12 needs should be a consistent need set", function () {
-				assert(needs.checkNeedsConsistency(winterWidget12Needs));
+				assert(needs.checkNeedsConsistency(winterWidget1Needs));
 			});
 
 			it("widget 3 needs should be a consistent need set", function () {
@@ -220,24 +220,18 @@ describe("needs", function () {
 
 		describe("winter dashboard", function () {
 
-			it.skip("should return TEMP and LIGHT categories", function (done) {
-				var categories = [SENSOR_CATEGORIES.TEMP, SENSOR_CATEGORIES.LIGHT];
+			it("should return only STATE category", function (done) {
+				needs.getSensorsMatchingNeeds(winterWidget1Needs, function (err, results) {
+					var actual;
 
-				needs.getSensorsMatchingNeeds(surroundingWidget12Needs, function (err, results) {
 					if(err) {
 						logger.error(err);
 						throw err;
 					}
-					assert(categories.length <= results.length);
-					categories.forEach(function (category) {
-						assert(results.find(function predicate(result) {
-							return result.set == category;
-						}));
-					});
-					results.forEach(function (result) {
-						assert(Array.isArray(result.sensors));
-					});
-					logger.debug(results);
+					assert.equal(1, results.length);
+					assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
+					assert(Array.isArray(results[0].sensors));
+					logger.debug(results[0].sensors);
 					done();
 				});
 			});
