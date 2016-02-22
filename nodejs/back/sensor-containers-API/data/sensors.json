@@ -1,11 +1,10 @@
 {
-  "TEMP_443V" : {"name" : "TEMP_443V", "displayName": "Temperature in Office", "booleanTitle" : "undefined" , "description": "Inside Temperature", "unit" : "temperature", "category" : "TEMP"},
-  "TEMP_442V" : {"name" : "TEMP_442V", "displayName": "Temperature in office", "booleanTitle" : "undefined" , "description": "Temperature in office", "unit" : "temperature", "category" : "TEMP"},
+  "TEMP_442V" : {"name" : "TEMP_442V", "displayName": "Temperature in Office", "booleanTitle" : "undefined" , "description": "Temperature in office", "unit" : "temperature", "category" : "TEMP"},
   "TEMP_443V" : {"name" : "TEMP_443V", "displayName": "Temperature in office", "booleanTitle" : "undefined" , "description": "Temperature in office", "unit" : "temperature", "category" : "TEMP"},
+  "TEMP_444V" : {"name" : "TEMP_444V", "displayName": "Temperature in office", "booleanTitle" : "undefined" , "description": "Temperature in office", "unit" : "temperature", "category" : "TEMP"},
   "TEMP_CAMPUS" : {"name" : "TEMP_CAMPUS", "displayName": "Outside Temperature", "booleanTitle" : "undefined" , "description": "Outside Temperature", "unit" : "temperature", "category" : "TEMP"},
   "HEATING_443" : {"name" : "HEATING_443", "displayName": "Heat in office", "booleanTitle" : "undefined" , "description": "Heat in office", "unit" : "temperature", "category" : "TEMP"},
   "AC_443" : {"name" : "AC_443", "displayName": "Temperature in AC", "booleanTitle" : "undefined" , "description": "Temperature in AC in office 443", "unit" : "temperature", "category" : "TEMP"},
-
 
   "WINDOW443STATE" : {"name" : "WINDOW443STATE", "displayName": "State of the window", "booleanTitle" : "Window" , "description": "Times the window got opened", "unit" : "number", "category" : "STATE"},
   "AC_443STATE" : {"name" : "AC_443STATE", "displayName": "State of the AC", "booleanTitle" : "AC" , "description": "Time AC is on", "unit" : "number", "category" : "STATE"},
@@ -17,6 +16,7 @@
   "MW_energy" : {"name" : "MW_energy", "displayName": "Microwave energy", "booleanTitle" : "undefined" , "description": "MicroWave energy", "unit" : "watt", "category" : "ENERGY"},
   "Coffee_energy" : {"name" : "Coffee_energy", "displayName": "Coffee energy", "booleanTitle" : "undefined" , "description": "Coffee energy", "unit" : "watt", "category" : "ENERGY"},
 
+  "LIGHT_445" : {"name" : "LIGHT_445", "displayName": "Light in office", "booleanTitle" : "undefined" , "description": "Light in office", "unit" : "lux", "category" : "LIGHT"},
   "LIGHT_444" : {"name" : "LIGHT_444", "displayName": "Light in office", "booleanTitle" : "undefined" , "description": "Light in office", "unit" : "lux", "category" : "LIGHT"},
   "LIGHT_443" : {"name" : "LIGHT_443", "displayName": "Light in office", "booleanTitle" : "undefined" , "description": "Light in office", "unit" : "lux", "category" : "LIGHT"},
   "LIGHT_442" : {"name" : "LIGHT_442", "displayName": "Light in office", "booleanTitle" : "undefined" , "description": "Light in office", "unit" : "lux", "category" : "LIGHT"},
