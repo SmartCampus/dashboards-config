@@ -78,7 +78,7 @@ function snapshotOneSensor(sensorName) {
         });
 
         res.on("end", function() {
-            fs.writeFile("./data/snapshot-smartCampus/snapshot/sensor" + sensorName + "data.json", stringData, function(err) {
+            fs.writeFile("./data/snapshot-smartCampus/snapshot/sensor-" + sensorName + "-data.json", stringData, function(err) {
                 if(err) {
                     console.log(err);
                 }
