@@ -33,8 +33,6 @@ if (beginDate === '' || endDate == '') {
 
 
 var sensorDataRetrievingSuccess = function (data, sensor, index) {
-    //this works only if they are regular widgets.
-    //if i want the boolean to work the same way...
     if (theNeeds[index].graphType == 'line' || theNeeds[index].graphType == 'column') {
         console.log('line or column widget');
         //TODO:probleme si les callbacks sont pas dans l'ordre que j'imagine là...
@@ -42,8 +40,6 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
         waitForFirstWidgetDrawing(sensor, index);
     }
     else if (theNeeds[index].graphType == 'boolean') {
-        //then i'm in AC or window !
-        console.log('boolean widget !');
         goDrawBoolean(data, sensor, index);
     }
     else if (theNeeds[index].graphType == 'pieChart') {
