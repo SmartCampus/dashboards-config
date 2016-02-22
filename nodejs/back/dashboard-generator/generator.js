@@ -36,16 +36,17 @@ function generateBoolean(config, res) {
  * @param  {Function}   callback    function to call with the resulting generated code
  */
 function generateGraph(config, callback) {
-    console.log("------------------------ Config Before---------------------------------------------")
+/*    console.log("------------------------ Config Before---------------------------------------------")
     console.log(config)
     console.log("---------------------------------------------------------------------")
-
+*/
     readTemplateFile("graph.mustache", function (template) {
         //config = require(__dirname + "/template/graph.json");
         config = analyseGraphConfig(config);
-        console.log("-------------------------- Config After ------------------------------------")
+ /*       console.log("-------------------------- Config After ------------------------------------")
         console.log(config);
         console.log("---------------------------------------------------------------------")
+        */
         // console.log("" + Mustache.render(template, config));
         callback(Mustache.render(template, config));
     });
