@@ -437,6 +437,9 @@ var declareNeeds = function () {
             if (index == allTheNeeds.length - 1) {
                 console.log('we got everything !');
                 localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
+                localStorage.setItem("startDate", startDate);
+                localStorage.setItem("endDate", endDate);
+
                 //Once we got everything
                 $("#dashboardNameForm").show();
                 $("#generateButton").hide();
@@ -478,9 +481,19 @@ $('#endTime1')
 
 
 var validDates = function () {
-    $('#myModal').modal('hide');
-    console.log("myModal");
-}
+    $(".myerror").empty();
 
-//console.log($('#beginTime1').data('date'));
-//console.log($('#endTime1').data('date'));
+    if(!$('#beginTime1').data('date') || !$('#endTime1').data('date')){
+        $('.myerror').show(0).delay(2000).hide(0);
+        $('.myerror').append('<p class=\'theerror\'>Please complet all fields !</p>');
+        return;
+    }else if($('#beginTime1').data('date') > $('#endTime1').data('date')){
+        $('.myerror').show(0).delay(2000).hide(0);
+        $('.myerror').append('<p class=\'theerror\'>Begin date must be older that end one !</p>');
+        return;
+    }else{
+        $('#myModal').modal('hide');
+        startDate = $('#beginTime1').data('date');
+        endDate = $('#endTime1').data('date');
+    }
+};

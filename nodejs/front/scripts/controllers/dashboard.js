@@ -20,6 +20,8 @@ var errorOccurred = function () {
 
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
 var theNeeds = JSON.parse(localStorage.getItem("widgetsDescription"));
+beginDate = localStorage.getItem("startDate");
+endDate = localStorage.getItem("endDate");
 localStorage.removeItem("widgetsDescription");
 if (theNeeds === null) {errorOccurred()}
 if (localStorage.getItem("dashboardTitle") !== null) {
