@@ -83,8 +83,10 @@ var NEEDS = {
 /**
  * Utility function that looks up the NEEDS namespace in order to find need instances.
  * 
- * @param  [string] needStrings 	string array containing the needs name to look for
- * @return [Need]					an array containing the matched Need class instances
+ * @param  [string]	needStrings 	string array containing the needs name to look for
+ * @return [Need]					an array containing the matched Need class instances,
+ * 										if there's no match for only one case, returns an
+ *										empty array
  */
 function getNeedsByName(needStrings) {
 	var needs = [], need;
@@ -95,6 +97,9 @@ function getNeedsByName(needStrings) {
 			return need.name === needStrings[i];
 		})) {
 			needs.push(need);
+		}
+		else {
+			return [];
 		}
 	}
 	return needs;

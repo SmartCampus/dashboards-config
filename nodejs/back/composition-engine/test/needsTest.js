@@ -80,6 +80,11 @@ describe("needs", function () {
 
 	describe("#getNeedsByName()", function () {
 
+		it("should return an empty array", function () {
+			assert.deepEqual(needs.getNeedsByName(["Comprison", "Overtime"]), []);
+			assert.deepEqual(needs.getNeedsByName([]), []);
+		});
+
 		describe("summer dashboard", function () {
 
 			it("should return summerWidget1Needs", function () {
