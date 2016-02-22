@@ -26,16 +26,6 @@ router.get("/sensors", function(req, res) {
 });
 
 /**
- * This route allow the user to ask all the child with the given containerId. Which means all the geographic child.
- */
-router.get("/container/:containerId/child", function(req, res) {
-    var sensor = req.params.containerId;
-    queryHandler.getContainerChild(sensor, function(jsonResponse) {
-        putValueInResponse(res, jsonResponse)
-    });
-});
-
-/**
  * This route allow the user to have all the information about the sensor with the givenId for the date given in the
  * the query param.
  */
@@ -59,20 +49,6 @@ router.get("/sensor/:sensorId/data/last", function(req, res) {
     queryHandler.getSensorLastInformation(sensorId, function(jsonResponse) {
         putValueInResponse(res,jsonResponse);
     });
-});
-
-/**
- * This route allow the user to have all the information about a Sensor with the given name
- */
-router.get("/sensor/:sensorName/fullInformation", function(req, res){
-    var sensorName = req.params.sensorName;
-    if(sensorName === "all") {
-        res.send(sensorData.sensorList);
-    } else if(sensorData.sensorList[sensorName] !== undefined) {
-        res.send(sensorData.sensorList[sensorName]);
-    } else {
-        res.sendStatus(404);
-    }
 });
 
 

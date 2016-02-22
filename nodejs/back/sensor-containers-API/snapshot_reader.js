@@ -50,7 +50,13 @@ function getSensorData(name, date) {
     return response;
 };
 
-
+/**
+ * This function will read the file sensor-SensorName-data.json and return the last chronological data
+ * in the file.
+ *
+ * @param   {string}            name of the sensor
+ * @returns {{values: json}}    Json with the last data : format : {"values" : []}
+ */
 function getSensorLastInformation(name) {
     var allSensorData = JSON.parse(fs.readFileSync(sensorsFile + "sensor-" + name + "-data.json"));
     var response = {"values" : []};
