@@ -50,9 +50,19 @@ function getSensorData(name, date) {
     return response;
 };
 
+
+function getSensorLastInformation(name) {
+    var allSensorData = JSON.parse(fs.readFileSync(sensorsFile + "sensor-" + name + "-data.json"));
+    var response = {"values" : []};
+    response.values.push(allSensorData.values[allSensorData.values.length - 1]);
+    return response;
+};
+
+
 /**
  *  List of all the exports.
  */
 
 exports.getSensorData = getSensorData;
 exports.getAllSensors = getAllSensors;
+exports.getSensorLastInformation = getSensorLastInformation;

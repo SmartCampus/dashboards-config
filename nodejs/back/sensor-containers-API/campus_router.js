@@ -60,9 +60,11 @@ router.get("/sensor/:sensorId/data", function(req, res) {
  */
 router.get("/sensor/:sensorId/data/last", function(req, res) {
    var sensorId = req.params.sensorId;
-    queryHandler.getSensorLastInformation(sensorId, function(jsonResponse) {
+/*    queryHandler.getSensorLastInformation(sensorId, function(jsonResponse) {
         putValueInResponse(res,jsonResponse);
-    });
+    });*/
+    var response = snapshotReader.getSensorLastInformation(sensorId);
+    res.send(response);
 });
 
 /**
