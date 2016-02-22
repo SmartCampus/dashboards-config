@@ -24,7 +24,6 @@ router.get("/sensors", function(req, res) {
     }
 });
 
-
 /**
  * This route allow the user to ask all the child with the given containerId. Which means all the geographic child.
  */
