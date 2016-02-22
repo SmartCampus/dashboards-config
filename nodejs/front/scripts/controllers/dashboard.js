@@ -6,10 +6,9 @@
 var existingPositions = [];
 var beginDate='';
 var endDate = '';
-var watchingArray = [{"dataSC": [], "counter": []}, {"dataSC": [], "counter": []}, {
-    "dataSC": [],
-    "counter": []
-}, {"dataSC": [], "counter": []}];
+var watchingArray = [{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},
+    {"dataSC": [], "counter": []},{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},
+    {"dataSC": [], "counter": []},{"dataSC": [], "counter": []}];
 
 ////////////////////////////// Generic function to fire in case of server error ///////////////////////////////////////
 var errorOccurred = function () {
@@ -27,8 +26,8 @@ if (localStorage.getItem("dashboardTitle") !== null) {
 } //else we just don't write any title
 
 if (beginDate === '' || endDate == '') {
-    beginDate = '2015-06-21 8:00:11';
-    endDate = '2015-08-21 18:00:11';
+    beginDate = '2015-08-21 8:00:11';
+    endDate = '2015-10-21 18:00:11';
 }
 
 
@@ -39,7 +38,7 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
         console.log('line or column widget');
         //TODO:probleme si les callbacks sont pas dans l'ordre que j'imagine là...
         watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data});
-        waitForFirstWidgetDrawing(sensor, index);
+        waitForOtherSensorsToDraw(sensor, index);
     }
     else if (theNeeds[index].graphType == 'boolean') {
         //then i'm in AC or window !
@@ -60,10 +59,14 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
             //in case it's a mix, here is what we want to do with the other result
             //problem : we want ONLY the open result. the name we can use the one we have it's ok
             //not sure we really need the split list for a mix... the open though i guess i needed
-            watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data});
+
+            watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data[0].open});
+
+            //watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data});
+        console.log('in callback from data mix graph');
+        console.log(watchingArray[index].dataSC);
         }
-        waitForFirstWidgetDrawing(sensor, index);
-        //TODO: wait for other drawings !
+        waitForOtherSensorsToDraw(sensor, index);
     }
     else if (theNeeds[index].graphType == 'scatterplot') {
         //this is what happens to the data we get from a split, for a scatterplot
@@ -89,22 +92,18 @@ var finishedLoading = function () {
 
 var firstWCode;
 //An array of as many arrays as we have widgets.
-var waitForFirstWidgetDrawing = function (sensor, index) {
+var waitForOtherSensorsToDraw = function (sensor, index) {
     if (watchingArray[index].counter.length < theNeeds[index].sensors.length) {
+        console.log('for ', index, ' i havent found everything yet');
         watchingArray[index].counter.push(sensor);
     }//TODO: pour le moment, on push des sensors à la place des yaxes : dans le cas de winter ça va plus être possible...
     if (watchingArray[index].counter.length == theNeeds[index].sensors.length) {
-        /*
-         generate.widgetV2("Loudness in function of the door", "",
-         [
-         { "type": "decibel", "title": "loudness" },
-         { "type": "number", "title": "Nb of times the door got opened" }
-         ]
-         , "c1", "noiseDoor", function(data) {
-         */
+        console.log('for ', index, 'i have everything');
         if (theNeeds[index].graphType == "mix") {
+            console.log('the graph type is mix, im deleting that');
             theNeeds[index].graphType = "";
-        }//TODO: test ça
+        }
+        console.log(watchingArray[index].dataSC);
         generate.widgetV2(theNeeds[index].title, theNeeds[index].graphType,
             watchingArray[index].counter
             , existingPositions[index], "watchingArray[index].dataSC", function (data) {
@@ -126,7 +125,7 @@ var goDrawScatterPlot = function(index) {
 
 var boolCode;
 var goDrawBoolean = function (data, sensor, index) {
-    generate.widgetBoolean(existingPositions[index], "data", sensor.booleanTitle, function (result) {
+    generate.widgetBoolean(existingPositions[index], "data", theNeeds[index].title, function (result) {
         boolCode = result;
         eval(boolCode);
         finishedLoading();
@@ -134,7 +133,7 @@ var goDrawBoolean = function (data, sensor, index) {
 };
 
 var goDrawPie = function (sensor, index) {
-    generate.widgetPie(existingPositions[index], sensor.booleanTitle, "watchingArray[index].dataSC", function (data) {
+    generate.widgetPie(existingPositions[index], theNeeds[index].title, "watchingArray[index].dataSC", function (data) {
         eval(data);
         finishedLoading();
     }, errorOccurred);
@@ -146,7 +145,6 @@ var layoutChosen = function (layoutName, layoutAnswer) {
 
     //After getting the layout generated, the same server has to give us the list of the div ids it created.
     layouts.widgetsIds(layoutName, function (widgetsArray) {
-        console.log(widgetsArray);
         existingPositions = widgetsArray;
         div.insertAdjacentHTML('afterbegin', layoutAnswer);
 
@@ -154,7 +152,6 @@ var layoutChosen = function (layoutName, layoutAnswer) {
             if (aNeed.sensors.length > 0) { //we only do that if you asked for some sensors !
                 //Besoin de connaître le type de graphe pour savoir la route exacte que je vais demander à SC.
                 aNeed.additionnal = '';
-
                 if (aNeed.graphType == 'line' || aNeed.graphType == 'column' || aNeed.graphType == 'mix'
                     || aNeed.graphType == 'pieChart' || aNeed.graphType == 'scatterplot') {
                     aNeed.scRoute = '/data';
@@ -171,10 +168,7 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                 }
                 //Maintenant que je sais ça, pour chaque sensor : je récup les infos manquantes, & j'appelle les données.
                 aNeed.sensors.forEach(function (sensor) {
-                    if (sensor.name == "NOISE_SPARKS_CORRIDOR") {
-                        //The other elements of a mix graph will require splitdata and all, but not him...
-                        retrieveData.askForSeries(sensor.name + aNeed.scRoute, beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
-                    }
+
                     if (sensor.percent) {
                         console.log('hé tas dit percent');
                         sensor.unit = 'percent';
@@ -182,8 +176,11 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                     }
                     //The service could provide me with the info I will lack ! eg. everything i just gathered...
                     //then we have to ask for series with a param !!!!
-
-                    if (aNeed.withParam) {
+                    if (sensor.name == "NOISE_SPARKS_CORRIDOR") {
+                        //The other elements of a mix graph will require splitdata and all, but not him...
+                        retrieveData.askForSeries(sensor.name + aNeed.scRoute, beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
+                    }
+                    else if (aNeed.withParam) {
                         retrieveData.askForSeriesWithParam(sensor.name + aNeed.scRoute + aNeed.additionnal, aNeed.withParam.toString(), beginDate, endDate, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
                     }
                     else if (aNeed.graphType == 'boolean') {
