@@ -21,6 +21,7 @@ var surroundingWidget12Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATION
 	surroundingWidget56Needs = [NEEDS.OVERTIME, NEEDS.PATTERN];
 
 var winterWidget1Needs = [NEEDS.SEE_STATUS],
+	winterWidget2Needs = [NEEDS.OVERTIME],
 	winterWidget3Needs = [NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.RELATIONSHIPS];
 
 describe("needs", function () {
@@ -59,8 +60,12 @@ describe("needs", function () {
 
 		describe("winter dashboard", function () {
 
-			it("widget 12 needs should be a consistent need set", function () {
+			it("widget 1 needs should be a consistent need set", function () {
 				assert(needs.checkNeedsConsistency(winterWidget1Needs));
+			});
+
+			it("widget 2 needs should be a consistent need set", function () {
+				assert(needs.checkNeedsConsistency(winterWidget2Needs));
 			});
 
 			it("widget 3 needs should be a consistent need set", function () {
@@ -102,6 +107,21 @@ describe("needs", function () {
 
 			it("should return surroundingWidget56Needs", function () {
 				assert.deepEqual(surroundingWidget56Needs, needs.getNeedsByName(["Overtime", "Pattern"]));
+			});
+		});
+
+		describe("winter dashboard", function () {
+
+			it("should return winterWidget1Needs", function () {
+				assert.deepEqual(winterWidget1Needs, needs.getNeedsByName(["See status"]));
+			});
+
+			it("should return winterWidget2Needs", function () {
+				assert.deepEqual(winterWidget2Needs, needs.getNeedsByName(["Overtime"]));
+			});
+
+			it("should return winterWidget3Needs", function () {
+				assert.deepEqual(winterWidget3Needs, needs.getNeedsByName(["Overtime", "Comparison", "Relationships"]));
 			});
 		});
 
@@ -232,6 +252,25 @@ describe("needs", function () {
 					assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
 					assert(Array.isArray(results[0].sensors));
 					logger.debug(results[0].sensors);
+					done();
+				});
+			});
+
+			it("should return LIGHT category", function (done) {
+				needs.getSensorsMatchingNeeds(winterWidget2Needs, function (err, results) {
+					var actual;
+
+					if(err) {
+						logger.error(err);
+						throw err;
+					}
+					assert(1 <= results.length);
+					actual = results.find(function predicate(result) {
+						return result.set == SENSOR_CATEGORIES.LIGHT;
+					});
+					assert(actual);
+					assert(Array.isArray(actual.sensors));
+					logger.debug(actual.sensors);
 					done();
 				});
 			});

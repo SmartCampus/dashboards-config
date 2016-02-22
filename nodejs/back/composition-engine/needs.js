@@ -76,7 +76,8 @@ var NEEDS = {
 	HIERARCHY: HIERARCHY,
 	PROPORTION: PROPORTION,
 	SUMMARIZE: SUMMARIZE,
-	PATTERN: PATTERN
+	PATTERN: PATTERN,
+	ALL: [COMPARISON, SEE_STATUS, OVERTIME, RELATIONSHIPS, HIERARCHY, PROPORTION, SUMMARIZE, PATTERN]
 }
 
 /**
@@ -86,13 +87,14 @@ var NEEDS = {
  * @return [Need]					an array containing the matched Need class instances
  */
 function getNeedsByName(needStrings) {
-	var needs = [];
+	var needs = [], need;
 
-	for (var need in NEEDS) {
-		if (needStrings.find(function (str) {
-			return str == NEEDS[need].name;
+	for (var i in needStrings) {
+		if (NEEDS.ALL.find(function (current) {
+			need = current;
+			return need.name === needStrings[i];
 		})) {
-			needs.push(NEEDS[need]);
+			needs.push(need);
 		}
 	}
 	return needs;
@@ -264,8 +266,8 @@ function findCategoriesInArray(array, categories) {
 function mergeNeedsFromCategories(categories) {
 	var needs = [], need;
 
-	for (var property in NEEDS) {
-		need = NEEDS[property];
+	for (var i in NEEDS.ALL) {
+		need = NEEDS.ALL[i];
 		if (!findElementInArray(needs, need)) {
 			if (findCategoriesInArray(need.sensorCategories, categories)) {
 				needs.push(need);
