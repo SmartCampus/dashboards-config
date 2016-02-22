@@ -2,11 +2,11 @@ var sensors; //This array contains all the sensors we have
 
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 //2 versions bc easier for now, even if not really useful...
-var needsOrigin = [{name: "Comparison"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
-var needsSimpleOrigin = ["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+var needsOrigin = [{name: "Comparison"}, {name: "Pattern"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
+var needsSimpleOrigin = ["Comparison", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 
-var needs = [[{name: "Comparison"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
-var needsSimple = [["Comparison", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
+var needs = [[{name: "Comparison"},  {name: "Pattern"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
+var needsSimple = [["Comparison", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
 
 
 $("#generateButton").attr("disabled", "disabled"); //The generate button starts by being disabled
@@ -51,11 +51,16 @@ function initWindowsData() {
  * For each, we also add a "delete" button, to remove all it contains if the user made a mistake
  */
 var addTableRow = function (index) {
-    $("#add-rows").append('<div class="well col-md-10" id="'
+
+    $("#add-rows").append('' +
+        '<form class="form-inline text-left" id="widgetNameForm'+index+'" style="padding-bottom: 0.5em">'+
+        '<input class="form-control" id="widgetTitle'+index+'" placeholder="Your widget\'s name"> '+
+        '</form>'+
+        '<div class="well col-md-10" id="'
         + index
         + '" style="min-height: 80px;"></div>'
-        + '<div class="col-md-2"> <br/>'
-        + '<div class="btn btn-default" onclick="deleteWidgetContent(' + index + ')"><span class="glyphicon glyphicon-trash">'
+        + '<div class="col-md-2" id="deleteWidget'+index+'"> <br/>'
+        + '<div class="btn btn-default" onclick="removeAWidget(' + index + ')"><span class="glyphicon glyphicon-trash">'
         + '</span></div></div>');
 
     updateDisableBox();
@@ -120,25 +125,19 @@ var addAWidget = function () {
 };
 
 /////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
-var removeAWidget = function () {
+var removeAWidget = function (widgetId) {
     var $addRowsDiv = $("#add-rows").find(" > div");
     var domSize = $addRowsDiv.length;
-
-    if (domSize > 3) { //means I have at least 2 widget boxes : so we can delete one indeed
-        if (parseInt(+selectedBox + 1) === (domSize / 3)) { //It was the last box that was selected
-            selectedBox--;
-            $addRowsDiv.slice(-2).remove();
-            updateDisableBox();
-        } else { //it's not the last box that was selected
-            $addRowsDiv.slice(-2).remove();
-        }
-        allTheNeeds.splice(-1, 1);
-        maxOfWidgets -= 1;
-    }
+    $('#' + widgetId).remove();
+    $('#deleteWidget' + widgetId).remove();
+    $('#widgetNameForm'+widgetId).remove();
+    console.log(this);
+    console.log($(this));
 };
 
 /*
  This functions empties a widget box, making it back to its original state
+ Not used right now
  */
 var deleteWidgetContent = function (widgetId) {
     allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
@@ -211,6 +210,9 @@ function navigation() {
                 });
             }
         }
+    }
+    else {
+        $addCaptors.append("<div>No sensor is available here. </div>");
     }
 
     updateNavigation();
@@ -298,6 +300,8 @@ function dropIt(event, ui) {
                         needSpan.css('cursor', 'default');
                         needSpan.html(draggableId);
                         needSpan.appendTo($(self));
+                        br = $(document.createElement('br'));
+                        br.appendTo(needSpan);
                         allTheNeeds[droppableId].needs.push(draggableId);
                         $("#generateButton").removeAttr("disabled");
                     })
@@ -346,34 +350,25 @@ function dropIt(event, ui) {
 ////////////////////////////////////// Percent button on sensors  //////////////////////////////////////////////////////
 //This method creates a percent button and appends it to a specific sensorname
 var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableId) {
-    var togglePercent = $(document.createElement("button"));        // Create a <button> element
-    togglePercent.attr('onclick', 'setColor(event, "' + draggableName + '", "' + droppableId + '", "#20C6D7")');
-    togglePercent.attr('class', 'btn btn-default btn-xs');
-    togglePercent.attr('data-count', '1');
-    togglePercent.html("%");          // Append the text to <button>
 
-    togglePercent.appendTo($("#" + widgetBoxId + " #" + draggableName));
+    var formGroup = $(document.createElement("span"));
+    formGroup.attr('class', 'input-group input-group-xs');
+
+    var selectList = $(document.createElement("select"));
+    selectList.attr('class', 'input-small tinySelectGroup');
+    selectList.attr('id', 'select'+draggableName);
+    var optionRaw = $(document.createElement("option"));
+    optionRaw.html("raw");
+    optionRaw.appendTo(selectList);
+    var optionPercent = $(document.createElement("option"));
+    optionPercent.html("%");
+    optionPercent.appendTo(selectList);
+    selectList.appendTo(formGroup);
+    formGroup.appendTo($("#" + widgetBoxId + " #" + draggableName));
+    br = $(document.createElement('br'));
+    br.appendTo(formGroup);
 };
 
-var setColor = function (event, btnName, widgetIndex, color) {
-    var target = event.target,
-        count = +target.dataset.count;
-
-    allTheNeeds[widgetIndex].sensors.forEach(function (sensor) {
-        if (sensor.name == btnName) {
-            sensor.percent = count;
-        }
-    });
-
-    if (count === 1) { //= wasn't selected before
-        target.style.backgroundColor = color;
-        target.dataset.count = 0;
-    } else {
-        target.style.backgroundColor = '#FFFFFF';
-        target.dataset.count = 1;
-    }
-
-};
 
 
 /*******************************
@@ -381,6 +376,12 @@ var setColor = function (event, btnName, widgetIndex, color) {
  ******************************/
 var declareNeeds = function () {
     allTheNeeds.forEach(function (oneNeed, index) {
+        oneNeed.sensors.forEach(function (sensor) {
+            if ($("#select" + sensor.name + " option:selected", "#" + index).text() != 'raw') {
+                sensor.percent = true;
+            }
+            oneNeed.title = $("#widgetTitle"+index).val();
+        });
         //We only ask the composition server if what was asked is possible enough
         expression.need(oneNeed, function (answer) {
             oneNeed.graphType = answer;
@@ -401,7 +402,6 @@ var declareNeeds = function () {
 
 var setDashboardName = function () {
     localStorage.setItem("dashboardTitle", $("#dashboardName").val());
-
     return true;
 };
 

@@ -12,8 +12,13 @@ var NEEDS = needs.NEEDS,
 
 var summerWidget1Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME],
 	summerWidget2Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION],
-	summerWidget34Needs = [NEEDS.SEE_STATUS],
-	unconsistentNeeds = [NEEDS.COMPARISON, NEEDS.RELATIONSHIPS, NEEDS.SUMMARIZE];
+	summerWidget34Needs = [NEEDS.SEE_STATUS];
+
+var unconsistentNeeds = [NEEDS.COMPARISON, NEEDS.RELATIONSHIPS, NEEDS.SUMMARIZE];
+
+var surroundingWidget12Needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS],
+	surroundingWidget34Needs = [NEEDS.PROPORTION],
+	surroundingWidget56Needs = [NEEDS.OVERTIME, NEEDS.PATTERN];
 
 describe("needs", function () {
 
@@ -21,16 +26,31 @@ describe("needs", function () {
 
 		describe("summer dashboard", function () {
 
-			it("should be a consistent need set", function () {
+			it("widget 1 needs should be a consistent need set", function () {
 				assert(needs.checkNeedsConsistency(summerWidget1Needs));
 			});
 
-			it("should be a consistent need set", function () {
+			it("widget 2 needs should be a consistent need set", function () {
 				assert(needs.checkNeedsConsistency(summerWidget2Needs));
 			});
 
-			it("should be a consistent need set", function () {
+			it("widget 34 needs should be a consistent need set", function () {
 				assert(needs.checkNeedsConsistency(summerWidget34Needs));
+			});
+		});
+
+		describe("surrounding dashboard", function () {
+
+			it("widget 12 needs should be a consistent need set", function () {
+				assert(needs.checkNeedsConsistency(surroundingWidget12Needs));
+			});
+
+			it("widget 34 needs should be a consistent need set", function () {
+				assert(needs.checkNeedsConsistency(surroundingWidget34Needs));
+			});
+
+			it("widget 56 needs should be a consistent need set", function () {
+				assert(needs.checkNeedsConsistency(surroundingWidget56Needs));
 			});
 		});
 
@@ -53,6 +73,21 @@ describe("needs", function () {
 
 			it("should return summerWidget34Needs", function () {
 				assert.deepEqual(summerWidget34Needs, needs.getNeedsByName(["See status"]));
+			});
+		});
+
+		describe("surrounding dashboard", function () {
+
+			it("should return surroundingWidget12Needs", function () {
+				assert.deepEqual(surroundingWidget12Needs, needs.getNeedsByName(["Comparison", "Overtime", "Relationships"]));
+			});
+
+			it("should return surroundingWidget34Needs", function () {
+				assert.deepEqual(surroundingWidget34Needs, needs.getNeedsByName(["Proportion"]));
+			});
+
+			it("should return surroundingWidget56Needs", function () {
+				assert.deepEqual(surroundingWidget56Needs, needs.getNeedsByName(["Overtime", "Pattern"]));
 			});
 		});
 
@@ -94,14 +129,14 @@ describe("needs", function () {
 				});
 			});
 
-			it("should return NUMBER category", function (done) {
+			it("should return only STATE category", function (done) {
 				needs.getSensorsMatchingNeeds(summerWidget34Needs, function (err, results) {
 					if(err) {
 						logger.error(err);
 						throw err;
 					}
 					assert.equal(1, results.length);
-					assert.equal(SENSOR_CATEGORIES.NUMBER, results[0].set);
+					assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
 					assert(Array.isArray(results[0].sensors));
 					logger.debug(results[0].sensors);
 					done();
@@ -109,7 +144,67 @@ describe("needs", function () {
 			});
 		});
 
-		// TODO other dashboards?
+		describe("surrounding dashboard", function () {
+
+			it("it should return only STATE and SOUND categories", function (done) {
+				var categories = [SENSOR_CATEGORIES.STATE, SENSOR_CATEGORIES.SOUND];
+
+				needs.getSensorsMatchingNeeds(surroundingWidget12Needs, function (err, results) {
+					if(err) {
+						logger.error(err);
+						throw err;
+					}
+					assert.equal(categories.length, results.length);
+					categories.forEach(function (category) {
+						assert(results.find(function predicate(result) {
+							return result.set == category;
+						}));
+					});
+					results.forEach(function (result) {
+						assert(Array.isArray(result.sensors));
+					});
+					logger.debug(results);
+					done();
+				});
+			});
+
+			it("should return STATE category", function (done) {
+				needs.getSensorsMatchingNeeds(surroundingWidget34Needs, function (err, results) {
+					var actual;
+
+					if(err) {
+						logger.error(err);
+						throw err;
+					}
+					assert(1 <= results.length);
+					actual = results.find(function predicate(result) {
+						return result.set == SENSOR_CATEGORIES.STATE;
+					});
+					assert(actual);
+					assert(Array.isArray(actual.sensors));
+					logger.debug(actual.sensors);
+					done();
+				});
+			});
+
+			it("should return only STATE category", function (done) {
+				needs.getSensorsMatchingNeeds(surroundingWidget56Needs, function (err, results) {
+					var actual;
+
+					if(err) {
+						logger.error(err);
+						throw err;
+					}
+					assert.equal(1, results.length);
+					assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
+					assert(Array.isArray(results[0].sensors));
+					logger.debug(results[0].sensors);
+					done();
+				});
+			});
+		});
+
+		// TODO other dashboards
 	});
 
 	describe("#getNeedsMatchingSensors", function () {
@@ -129,6 +224,9 @@ describe("needs", function () {
 							return result.name === expected.name;
 						}));
 					});
+					results.forEach(function (result) {
+						logger.debug(result.name);
+					});
 					done();
 				}
 			});
@@ -138,8 +236,8 @@ describe("needs", function () {
 
 			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
 				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
-				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.NUMBER },
-				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.NUMBER };
+				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.STATE },
+				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
 
 			it("should return Comparison and Overtime needs", function (done) {
 				async.parallel([
@@ -169,15 +267,13 @@ describe("needs", function () {
 				async.parallel([
 					function (callback) {
 						testGetNeedsMatchingSensors([ac443State],
-							[NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION], false,
-							function () {
+							[NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION], false, function () {
 							callback(null);
 						});
 					},
 					function (callback) {
 						testGetNeedsMatchingSensors([window443State],
-							[NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION], false,
-							function () {
+							[NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.PROPORTION], false, function () {
 							callback(null);
 						});
 					}
@@ -202,6 +298,70 @@ describe("needs", function () {
 					function (callback) {
 						testGetNeedsMatchingSensors([window443State], [NEEDS.SEE_STATUS],
 							false, function () {
+							callback(null);
+						});
+					}
+				], function join (err, results) {
+					done();
+				});
+			});
+		});
+
+		describe("surrounding dashboard", function () {
+
+			var noiseSparksCorridor = { name: "NOISE_SPARKS_CORRIDOR", category: SENSOR_CATEGORIES.SOUND },
+				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.STATE },
+				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
+
+			it("should return Comparison, Overtime and Relationships needs", function (done) {
+				var needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS];
+
+				async.parallel([
+					function (callback) {
+						testGetNeedsMatchingSensors([noiseSparksCorridor, door443State], needs, false,
+							function () {
+							callback(null);
+						});
+					},
+					function (callback) {
+						testGetNeedsMatchingSensors([noiseSparksCorridor, window443State], needs, false,
+							function () {
+							callback(null);
+						});
+					}
+				], function join (err, results) {
+					done();
+				});
+			});
+
+			it("should return Proportion need", function (done) {
+				async.parallel([
+					function (callback) {
+						testGetNeedsMatchingSensors([door443State], [NEEDS.PROPORTION], false, function () {
+							callback(null);
+						});
+					},
+					function (callback) {
+						testGetNeedsMatchingSensors([window443State], [NEEDS.PROPORTION], false, function () {
+							callback(null);
+						});
+					}
+				], function join (err, results) {
+					done();
+				});
+			});
+
+			it("should return Overtime and Pattern needs", function (done) {
+				var needs = [NEEDS.OVERTIME, NEEDS.PATTERN];
+
+				async.parallel([
+					function (callback) {
+						testGetNeedsMatchingSensors([door443State], needs, false, function () {
+							callback(null);
+						});
+					},
+					function (callback) {
+						testGetNeedsMatchingSensors([window443State], needs, false, function () {
 							callback(null);
 						});
 					}

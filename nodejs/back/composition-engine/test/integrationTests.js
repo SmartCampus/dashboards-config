@@ -83,7 +83,7 @@ describe("composition engine", function () {
 				});
 			});
 
-			it("should return NUMBER category", function (done) {
+			it("should return only STATE category", function (done) {
 				request(app)
 					.post(needSetPath)
 					.send(summerWidget34Needs)
@@ -92,7 +92,74 @@ describe("composition engine", function () {
 						var results = response.body;
 
 						assert.equal(1, results.length);
-						assert.equal(SENSOR_CATEGORIES.NUMBER, results[0].set);
+						assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
+						assert(Array.isArray(results[0].sensors));
+						logger.debug(results[0].sensors);
+					})
+					.end(done);
+			});
+		});
+
+		describe("surrounding dashboard", function () {
+
+			var surroundingWidget12Needs = { needs: [NEEDS.COMPARISON.name, NEEDS.OVERTIME.name,
+					NEEDS.RELATIONSHIPS.name] },
+				surroundingWidget34Needs = { needs: [NEEDS.PROPORTION.name] },
+				surroundingWidget56Needs = { needs: [NEEDS.OVERTIME.name, NEEDS.PATTERN.name] };
+
+			it("it should return only STATE and SOUND categories", function (done) {
+				var categories = [SENSOR_CATEGORIES.STATE, SENSOR_CATEGORIES.SOUND];
+
+				request(app)
+					.post(needSetPath)
+					.send(surroundingWidget12Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body;
+
+						assert.equal(categories.length, results.length);
+						categories.forEach(function (category) {
+							assert(results.find(function predicate(result) {
+								return result.set == category;
+							}));
+						});
+						results.forEach(function (result) {
+							assert(Array.isArray(result.sensors));
+						});
+						logger.debug(results);
+					})
+					.end(done);
+			});
+
+			it("should return STATE category", function (done) {
+				request(app)
+					.post(needSetPath)
+					.send(surroundingWidget56Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body, actual;
+
+						assert(1 <= results.length);
+						actual = results.find(function predicate(result) {
+							return result.set == SENSOR_CATEGORIES.STATE;
+						});
+						assert(actual);
+						assert(Array.isArray(actual.sensors));
+						logger.debug(actual.sensors);
+					})
+					.end(done);
+			});
+
+			it("should return only STATE category", function (done) {
+				request(app)
+					.post(needSetPath)
+					.send(surroundingWidget56Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body;
+
+						assert.equal(1, results.length);
+						assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
 						assert(Array.isArray(results[0].sensors));
 						logger.debug(results[0].sensors);
 					})
@@ -119,6 +186,9 @@ describe("composition engine", function () {
 							return result.name === expected.name;
 						}));
 					});
+					results.forEach(function (result) {
+						logger.debug(result.name);
+					});
 				})
 				.end(callback);
 		}
@@ -127,8 +197,8 @@ describe("composition engine", function () {
 
 			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
 				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
-				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.NUMBER },
-				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.NUMBER };
+				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.STATE },
+				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
 
 			it("should get Comparison and Overtime needs", function (done) {
 				var requestsBodies = [temp443V, tempCampus];
@@ -179,6 +249,67 @@ describe("composition engine", function () {
 				
 				async.each(requestsBodies, function iterator (item, callback) {
 					testPostSensorSet({ sensors: [item] }, [NEEDS.SEE_STATUS], function () {
+						callback(null);
+					});
+				}, function join (err) {
+					if (err) {
+						logger.error(err);
+						throw err;
+					}
+					done();
+				});
+			});
+
+			// TODO error cases
+		});
+
+		describe("surrounding dashboard", function () {
+
+			var noiseSparksCorridor = { name: "NOISE_SPARKS_CORRIDOR", category: SENSOR_CATEGORIES.SOUND },
+				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.STATE },
+				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
+
+			it("should get Comparison Overtime and Relationship needs", function (done) {
+				var needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS],
+					requestsBodies = [[noiseSparksCorridor, door443State],
+									  [noiseSparksCorridor, window443State]];
+				
+				async.each(requestsBodies, function iterator (item, callback) {
+					testPostSensorSet({ sensors: item }, needs, function () {
+						callback(null);
+					});
+				}, function join (err) {
+					if (err) {
+						logger.error(err);
+						assert(!err);
+						throw err;
+					}
+					done();
+				});
+			});
+
+			it("should return Proportion need", function (done) {
+				var requestsBodies = [[door443State], [window443State]];
+				
+				async.each(requestsBodies, function iterator (item, callback) {
+					testPostSensorSet({ sensors: item }, [NEEDS.PROPORTION], function () {
+						callback(null);
+					});
+				}, function join (err) {
+					if (err) {
+						logger.error(err);
+						throw err;
+					}
+					done();
+				});
+			});
+
+			it("should return Overtime and Pattern needs", function (done) {
+				var needs = [NEEDS.OVERTIME, NEEDS.PATTERN],
+					requestsBodies = [[door443State], [window443State]];
+				
+				async.each(requestsBodies, function iterator (item, callback) {
+					testPostSensorSet({ sensors: item }, needs, function () {
 						callback(null);
 					});
 				}, function join (err) {
