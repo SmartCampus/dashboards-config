@@ -89,10 +89,12 @@ function updateDisableBox() {
 
 // change box
 $("#add-rows").click(function (event) {
-
-    console.log(selectedBox+" "+sensorsBox.length);
-
-    selectedBox = event.target.id;
+    
+    if(event.target.id.length > 2){
+        selectedBox = $(event.target).parent().attr('id');
+    }else{
+        selectedBox = event.target.id;
+    }
 
     $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
