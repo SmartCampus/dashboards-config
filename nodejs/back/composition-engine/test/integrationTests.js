@@ -335,7 +335,7 @@ describe("composition engine", function () {
 				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.STATE },
 				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
 
-			it("should get Comparison Overtime and Relationship needs", function (done) {
+			it("should get Comparison, Overtime and Relationship needs", function (done) {
 				var needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS],
 					requestsBodies = [[noiseSparksCorridor, door443State],
 									  [noiseSparksCorridor, window443State]];
@@ -383,6 +383,37 @@ describe("composition engine", function () {
 						logger.error(err);
 						throw err;
 					}
+					done();
+				});
+			});
+
+			// TODO error cases
+		});
+
+		describe("winter dashboard", function () {
+
+			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
+				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
+				light444 = { name: "LIGHT_444", category: SENSOR_CATEGORIES.LIGHT },
+				heating443 = { name: "HEATING_443", category: SENSOR_CATEGORIES.STATE };
+
+			it("should return See Status need", function (done) {
+				testPostSensorSet({ sensors: [heating443] }, [NEEDS.SEE_STATUS], function () {
+					done();
+				});
+			});
+
+			it("should return Overtime need", function (done) {
+				testPostSensorSet({ sensors: [light444] }, [NEEDS.OVERTIME], function () {
+					done();
+				});
+			});
+
+			it("should get Overtime, Comparison and Relationship needs", function (done) {
+				var needs = [NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.RELATIONSHIPS];
+				
+				testPostSensorSet({ sensors: [temp443V, tempCampus, heating443] },
+								  needs, function () {
 					done();
 				});
 			});
