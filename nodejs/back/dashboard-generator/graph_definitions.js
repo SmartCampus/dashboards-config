@@ -79,12 +79,18 @@ function getYAxisType(type) {
 }
 
 function copyYAxisTypeProperties(type, target) {
+	console.log("----------------- In copyYAxisTypeProperties -----------------------------------------------")
+	console.log(type);
+	console.log("------------------ In copyYAxisTypeProperties ---------------------------------------------")
+
 	if (type.minValue != undefined) target.minValue = type.minValue;
 	else target.minValue = "undefined";
 	if (type.maxValue != undefined) target.maxValue = type.maxValue;
 	else target.maxValue = "undefined";
 	if (type.unit) target.unit = type.unit;
 	if (type.plotLine) target.plotLine = type.plotLine;
+//	console.log("Viztype : " + type.vizType);
+//	console.log("Unit : " + type.unit);
 	target.vizType = type.vizType;
 }
 

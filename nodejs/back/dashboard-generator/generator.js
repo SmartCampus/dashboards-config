@@ -87,6 +87,10 @@ function analyseGraphConfig(config) {
         var serie = {};
         yAxisType = graphDefinitions.getYAxisType(yAxes[i].unit);
         if (yAxisType) {
+            console.log("--------------------- Before call --------------------------");
+            console.log(yAxisType);
+            console.log("--------------------- Before call --------------------------");
+
             graphDefinitions.copyYAxisTypeProperties(yAxisType, yAxes[i]);
             yAxes[i].index = i;
             yAxes[i].approxType = yAxisType.approxType;

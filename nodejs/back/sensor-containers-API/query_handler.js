@@ -2,7 +2,7 @@
  * @author Quentin Cornevin.
  */
 var sensors = require('./Sensors.js'),
-        requester = require('./request_smartcampus');
+    requester = require('./request_smartcampus');
 
 /**
  * This method will first call the {@link getSensorsFromQuery} to have a list with the a list of sensor for every
@@ -14,7 +14,6 @@ var sensors = require('./Sensors.js'),
 function handleQuery(queries, callback) {
     var sensorsArray = getSensorsFromQuery(queries);
     var result = checkArrays(sensorsArray);
-    //res.send(result);
     callback(result);
 }
 

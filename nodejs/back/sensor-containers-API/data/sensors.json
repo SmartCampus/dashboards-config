@@ -13,7 +13,6 @@
   "Window_Coffee" : {"name" : "Window_Coffee", "displayName": "State of the window", "booleanTitle" : "Window" , "description": "State of the window", "unit" : "number", "category" : "STATE"},
   "HEATING_443" : {"name" : "HEATING_443", "displayName": "Heat in office", "booleanTitle" : "Heat" , "description": "State of heat in office", "unit" : "number", "category" : "STATE"},
 
-
   "MW_energy" : {"name" : "MW_energy", "displayName": "Microwave energy", "booleanTitle" : "undefined" , "description": "MicroWave energy", "unit" : "watt", "category" : "ENERGY"},
   "Coffee_energy" : {"name" : "Coffee_energy", "displayName": "Coffee energy", "booleanTitle" : "undefined" , "description": "Coffee energy", "unit" : "watt", "category" : "ENERGY"},
 
