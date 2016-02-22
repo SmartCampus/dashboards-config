@@ -51,7 +51,7 @@ class Need {
 // Needs and NEEDS namespace initialization
 
 var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
-	SEE_STATUS = new Need("See status", [STATE]),
+	SEE_STATUS = new Need("See Status", [STATE]),
 	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
 	RELATIONSHIPS = new Need("Relationships", [TEMP, SOUND, STATE]),
 	HIERARCHY = new Need("Hierarchy", []),

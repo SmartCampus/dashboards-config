@@ -91,7 +91,7 @@ describe("needs", function () {
 			});
 
 			it("should return summerWidget34Needs", function () {
-				assert.deepEqual(summerWidget34Needs, needs.getNeedsByName(["See status"]));
+				assert.deepEqual(summerWidget34Needs, needs.getNeedsByName(["See Status"]));
 			});
 		});
 
@@ -113,7 +113,7 @@ describe("needs", function () {
 		describe("winter dashboard", function () {
 
 			it("should return winterWidget1Needs", function () {
-				assert.deepEqual(winterWidget1Needs, needs.getNeedsByName(["See status"]));
+				assert.deepEqual(winterWidget1Needs, needs.getNeedsByName(["See Status"]));
 			});
 
 			it("should return winterWidget2Needs", function () {
@@ -462,6 +462,34 @@ describe("needs", function () {
 						});
 					}
 				], function join (err, results) {
+					done();
+				});
+			});
+		});
+
+		describe("winter dashboard", function () {
+
+			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
+				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
+				light444 = { name: "LIGHT_444", category: SENSOR_CATEGORIES.LIGHT },
+				heating443 = { name: "HEATING_443", category: SENSOR_CATEGORIES.STATE };
+
+			it("should return See Status need", function (done) {
+				testGetNeedsMatchingSensors([heating443], [NEEDS.SEE_STATUS], false, function () {
+					done();
+				});
+			});
+
+			it("should return Overtime need", function (done) {
+				testGetNeedsMatchingSensors([light444], [NEEDS.OVERTIME], false, function () {
+					done();
+				});
+			});
+
+			it("should return Overtime, Comparison and Relationships needs", function (done) {
+				var needs = [NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.RELATIONSHIPS];
+
+				testGetNeedsMatchingSensors([heating443, temp443V, tempCampus], needs, false, function () {
 					done();
 				});
 			});
