@@ -37,7 +37,7 @@ router.post("/needSet", function (req, res) {
                     res.status(400);
                 }
                 else {
-                    logger.debug(error);
+                    logger.error(error);
                     res.status(500);
                 }
                 res.send(error);
@@ -52,9 +52,14 @@ router.post("/needSet", function (req, res) {
 router.post("/sensorSet", function (req, res) {
     needs.getNeedsMatchingSensors(req.body.sensors, function (error, result) {
         if (error) {
-            logger.debug(error);
-            // TODO check err and return status
-            res.send(error.message);
+            if (error.invalidCategories) {
+                res.status(400);
+            }
+            else {
+                logger.error(error);
+                res.status(500);
+            }
+            res.send(error);
         }
         else {
             var toSend = [];
