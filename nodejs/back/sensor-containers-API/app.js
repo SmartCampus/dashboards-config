@@ -1,5 +1,6 @@
 var express = require("express"),
 	campusRouter = require("./campus_router"),
+	oldCampusRouter = require("./old_campus_router"),
 	sensors = require("./Sensors"),
 	app = express();
 
@@ -22,6 +23,7 @@ app.use(function (req, res, next) {
 });
 
 app.use("/", campusRouter);
+app.use("/old", oldCampusRouter);
 
 /**
  * This function initialize the system with all the different category of sensor sets.
