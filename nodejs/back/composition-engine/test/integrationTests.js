@@ -166,6 +166,72 @@ describe("composition engine", function () {
 					.end(done);
 			});
 		});
+
+		describe("winter dashboard", function () {
+
+			var winterWidget1Needs = { needs: [NEEDS.SEE_STATUS.name] },
+				winterWidget2Needs = { needs: [NEEDS.OVERTIME.name] },
+				winterWidget3Needs = { needs: [NEEDS.OVERTIME.name, NEEDS.COMPARISON.name, NEEDS.RELATIONSHIPS.name] };
+
+			it("should return only STATE category", function (done) {
+				request(app)
+					.post(needSetPath)
+					.send(winterWidget1Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body;
+
+						assert.equal(1, results.length);
+						assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
+						assert(Array.isArray(results[0].sensors));
+						logger.debug(results[0].sensors);
+					})
+					.end(done);
+			});
+
+			it("should return LIGHT category", function (done) {
+				request(app)
+					.post(needSetPath)
+					.send(winterWidget2Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body, actual;
+
+						assert(1 <= results.length);
+						actual = results.find(function predicate(result) {
+							return result.set == SENSOR_CATEGORIES.LIGHT;
+						});
+						assert(actual);
+						assert(Array.isArray(actual.sensors));
+						logger.debug(actual.sensors);
+					})
+					.end(done);
+			});
+
+			it("it should return STATE and TEMP categories", function (done) {
+				var categories = [SENSOR_CATEGORIES.STATE, SENSOR_CATEGORIES.TEMP];
+
+				request(app)
+					.post(needSetPath)
+					.send(winterWidget3Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body;
+
+						assert(categories.length <= results.length);
+						categories.forEach(function (category) {
+							assert(results.find(function predicate(result) {
+								return result.set == category;
+							}));
+						});
+						results.forEach(function (result) {
+							assert(Array.isArray(result.sensors));
+						});
+						logger.debug(results);
+					})
+					.end(done);
+			});
+		});
 	});
 
 	describe("POST sensorSet", function () {
