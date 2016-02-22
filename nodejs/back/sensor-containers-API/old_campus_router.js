@@ -46,20 +46,16 @@ router.get("/sensor/:sensorId/data", function(req, res) {
         date = req.query.date;
     }
 
-    var response = snapshotReader.getSensorData(sensorId, date);
-
-    if(response) {
-        res.send(response);
-    } else {
-        res.sendStatus(404);
-    }
+     queryHandler.getSensorInformation(sensorId, date, function(jsonResponse) {
+        putValueInResponse(res,jsonResponse);
+     });
 });
 
 /**
  * This rouute allow the user to have the last data registered by the given sensor.
  */
 router.get("/sensor/:sensorId/data/last", function(req, res) {
-   var sensorId = req.params.sensorId;
+    var sensorId = req.params.sensorId;
     queryHandler.getSensorLastInformation(sensorId, function(jsonResponse) {
         putValueInResponse(res,jsonResponse);
     });

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Smartcampus : the map !
+    </title>
+    <!-- Jquery library -->
+    <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <!-- Pour bootstrap -->
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Bibliothèque D3.js -->
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+    <!-- Les trucs d'Etienne-->
+    <script type="text/javascript" src="http://smartcampus.github.io/plan-visualizer/handling-svg-biblio.js"></script>
+    <link rel="stylesheet" href="http://smartcampus.github.io/plan-visualizer/handling-svg-biblio.css">
+
+</head>
+<body>
+
+<div class="container" style="margin : 30px">
+    <div class="col-md-2">
+        <h3>Légende :</h3>
+        <ul>
+            <li class="list-group-item"><img alt="door icon" src="/assets/images/sensorIcons/door.png"
+                                             class="img-responsive"/>Door sensor
+            </li>
+            <li class="list-group-item"><img alt="window icon" src="/assets/images/sensorIcons/window.png"
+                                             class="img-responsive"/>Window sensor
+            </li>
+            <li class="list-group-item"><img alt="light icon" src="/assets/images/sensorIcons/light.png"
+                                             class="img-responsive"/>Light sensor
+            </li>
+            <li class="list-group-item"><img alt="temperature icon" src="/assets/images/sensorIcons/temperature.png"
+                                             class="img-responsive"/>Temperature sensor
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-10">
+        <h3>Plan</h3>
+        <div id="fullFloorMap"></div>
+
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/scripts/controllers/map.js"></script>
+
+</html>
