@@ -1,7 +1,8 @@
 var express = require("express"),
     queryHandler = require('./query_handler.js'),
     sensorData = require('./Sensors.js'),
-    router = express.Router();
+    router = express.Router(),
+    snapshotReader = require("./snapshot_reader");
 
 
 /**
@@ -40,13 +41,18 @@ router.get("/container/:containerId/child", function(req, res) {
  */
 router.get("/sensor/:sensorId/data", function(req, res) {
     var sensorId = req.params.sensorId;
-    var date = "";
+    var date;
     if(req.query.date !== undefined) {
         date = req.query.date;
     }
-    queryHandler.getSensorInformation(sensorId, date, function(jsonResponse) {
-        putValueInResponse(res,jsonResponse);
-    });
+
+    var response = snapshotReader.getSensorData(sensorId, date);
+
+    if(response) {
+        res.send(response);
+    } else {
+        res.sendStatus(404);
+    }
 });
 
 /**
