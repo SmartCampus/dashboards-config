@@ -37,3 +37,16 @@ body {
     background:url("../assets/images/R2D2.jpg") no-repeat fixed center;
     /*background:url("../assets/images/51953.jpg") no-repeat fixed center;*/
 }
+
+.myerror {
+    background-color: #ff6666;
+    padding: 10px;
+    border-radius: 25px;
+    display : none;
+}
+
+.theerror {
+    text-align: center;
+    color : white;
+    font-weight: bold;
+}

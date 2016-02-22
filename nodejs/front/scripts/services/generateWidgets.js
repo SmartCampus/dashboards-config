@@ -47,6 +47,17 @@ var generate = (function () {
                 });
         },
         widgetV2: function (graphTitle, graphType, yAxesArray, graphName, seriesName, successCB, errorCB) {
+            console.log(JSON.stringify({
+                job : 'generateGraph',
+                config :
+                {
+                    graphType: graphType,
+                    yAxes : yAxesArray,
+                    graphName:graphName,
+                    graphTitle:graphTitle,
+                    seriesArrayName : seriesName
+                }
+            }));
             $.post(genServer+widgetGen, {
                     job : 'generateGraph',
                     config :

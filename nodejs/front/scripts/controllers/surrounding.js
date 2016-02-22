@@ -109,7 +109,7 @@ retrieveData.askForSeries('WINDOW443STATE/data/percent', beginDate, endDate, suc
  */
 
 var doorGraphStateInTime = function() {
-    generate.widgetV2("Door status over time", "scatter", "", "g1", "doorState", function(data) {
+    generate.widgetV2("Door status over time", "scatter", doorState, "g1", "doorState", function(data) {
         eval(data);
     }, errorOccurred);
 
@@ -118,7 +118,7 @@ var doorGraphStateInTime = function() {
 
 
 var windowGraphStateInTime = function() {
-    generate.widgetV2("Window status over time", "scatter", "", "g2", "windowState", function(data) {
+    generate.widgetV2("Window status over time", "scatter", windowState, "g2", "windowState", function(data) {
         eval(data);
     }, errorOccurred);
     finishedLoading();
@@ -131,20 +131,102 @@ var windowGraphStateInTime = function() {
  */
 
 var noiseAccordingDoorState = function() {
+    $('#c1').highcharts('StockChart', {
+
+        // titre
+        title: {
+            text: 'Intensité sonore par rapport à la porte'
+        },
+
+        yAxis: [
+            { // Primary yAxis
+                min: 0,
+
+                title: {
+                    text: 'Nb of times the door got opened',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+
+                labels: {
+                    format: '{value}',
+                    style: {
+                        color: Highcharts.getOptions().colors[1]
+                    }
+                },
+
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                },
+
+                opposite: false
+            },
+            { // Secondary yAxis
+
+                title: {
+                    text: 'intensité sonore',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+
+                // Affichage seuil
+                plotLines: [{
+                    value: 45,
+                    color: 'red',
+                    dashStyle: 'shortdash', //pointillé
+                    width: 2,
+                    label: {
+                        text: 'Seuil du bruit'
+                    }
+                }],
+
+                labels: {
+                    format: '{value} db',
+                    style: {
+                        color: Highcharts.getOptions().colors[0]
+                    }
+                },
+
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                },
+
+                allowDecimals: false,
+                opposite: true
+            }],
+
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+
+        series: [ noiseDoor[0], noiseDoor[1]]
+    });
+
+
+
     //ici, on ne donne pas de type au moteur de génération = graphe mixte !
-    generate.widgetV2("Loudness in function of the door", "",
+    /*generate.widgetV2("Loudness in function of the door", "",
         [
             { "type": "decibel", "title": "loudness" },
             { "type": "number", "title": "Nb of times the door got opened" }
         ]
         , "c1", "noiseDoor", function(data) {
         eval(data);
-    }, errorOccurred);
+    }, errorOccurred);*/
     finishedLoading();
 };
 
 
 var noiseAccordingWindowState = function() {
+
+
 
     generate.widgetV2("Loudness in function of the door", "",
         [

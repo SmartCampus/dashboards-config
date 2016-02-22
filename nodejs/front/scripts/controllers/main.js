@@ -2,11 +2,11 @@ var sensors; //This array contains all the sensors we have
 
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 //2 versions bc easier for now, even if not really useful...
-var needsOrigin = [{name: "Comparison"}, {name: "Pattern"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
-var needsSimpleOrigin = ["Comparison", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+var needsOrigin = [{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
+var needsSimpleOrigin = ["Comparison", "Map", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 
-var needs = [[{name: "Comparison"}, {name: "Pattern"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
-var needsSimple = [["Comparison", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
+var needs = [[{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
+var needsSimple = [["Comparison", "Map", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
 
 
 $("#generateButton").attr("disabled", "disabled"); //The generate button starts by being disabled
@@ -16,6 +16,8 @@ var navbar = [];
 var selectedBox = 0;
 var allTheNeeds = [];
 var sensorsBox = [];
+
+var startDate, endDate;
 
 /**
  * Get all buildings sensors et placements
@@ -87,9 +89,10 @@ function updateDisableBox() {
     });
 };
 
+
 // change box
 $("#add-rows").click(function (event) {
-    
+
     if(event.target.id.length > 2){
         selectedBox = $(event.target).parent().attr('id');
     }else{
@@ -434,6 +437,9 @@ var declareNeeds = function () {
             if (index == allTheNeeds.length - 1) {
                 console.log('we got everything !');
                 localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
+                localStorage.setItem("startDate", startDate);
+                localStorage.setItem("endDate", endDate);
+
                 //Once we got everything
                 $("#dashboardNameForm").show();
                 $("#generateButton").hide();
@@ -460,3 +466,34 @@ $(window).konami({
         $tetris.blockrain();
     }
 });
+
+$('#beginTime1')
+    .datetimepicker({
+        format: 'YYYY-MM-DD HH:mm'
+    });
+
+
+
+$('#endTime1')
+    .datetimepicker({
+        format: 'YYYY-MM-DD HH:mm'
+    });
+
+
+var validDates = function () {
+    $(".myerror").empty();
+
+    if(!$('#beginTime1').data('date') || !$('#endTime1').data('date')){
+        $('.myerror').show(0).delay(2000).hide(0);
+        $('.myerror').append('<p class=\'theerror\'>Please complet all fields !</p>');
+        return;
+    }else if($('#beginTime1').data('date') > $('#endTime1').data('date')){
+        $('.myerror').show(0).delay(2000).hide(0);
+        $('.myerror').append('<p class=\'theerror\'>Begin date must be older that end one !</p>');
+        return;
+    }else{
+        $('#myModal').modal('hide');
+        startDate = $('#beginTime1').data('date');
+        endDate = $('#endTime1').data('date');
+    }
+};
