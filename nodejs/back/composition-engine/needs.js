@@ -1,5 +1,9 @@
 /**
  * @author Marc Karassev
+ *
+ * This module defines domain concepts such as the different sensor categories and needs that
+ * can be expressed by a user. It encapsulates the complexity of matching sensors to needs
+ * and needs to sensors.
  */
 
 "use strict";
@@ -9,21 +13,26 @@ var async = require("async"),
 	requestSmartcampus = require("./request_smartcampus");
 
 // Sensor categories
+// TODO get it from the sensor container API?
 
 var TEMP = "TEMP",
 	LIGHT = "LIGHT",
 	ENERGY = "ENERGY",
-	NUMBER = "NUMBER";
+	STATE = "STATE",
+	SOUND = "SOUND";
 
 var SENSOR_CATEGORIES = {
 	TEMP: TEMP,
 	LIGHT: LIGHT,
 	ENERGY: ENERGY,
-	NUMBER: NUMBER
+	STATE: STATE,
+	SOUND: SOUND
 }
 
-// Visualization needs
-
+/**
+ * Visualization needs, a need has three properties. It has a name that should be unique,
+ * a set of compatible sensor categories and a set of compatible needs.
+ */
 class Need {
 	
 	constructor (name, sensorCategories) {
@@ -39,21 +48,25 @@ class Need {
 	set compatibleNeeds(compatibleNeeds) { this._compatibileNeeds = compatibleNeeds; }
 }
 
-var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, NUMBER]),
-	SEE_STATUS = new Need("See status", [NUMBER]),
-	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, NUMBER]),
-	RELATIONSHIPS = new Need("Relationships", []),
-	HIERARCHY = new Need("Hierarchy", []),
-	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, NUMBER]),
-	SUMMARIZE = new Need("Summarize", []);
+// Needs and NEEDS namespace initialization
 
-COMPARISON.compatibleNeeds = [OVERTIME, PROPORTION];
+var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
+	SEE_STATUS = new Need("See status", [STATE]),
+	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
+	RELATIONSHIPS = new Need("Relationships", [SOUND, STATE]),
+	HIERARCHY = new Need("Hierarchy", []),
+	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
+	SUMMARIZE = new Need("Summarize", []),
+	PATTERN = new Need("Pattern", [STATE]);
+
+COMPARISON.compatibleNeeds = [OVERTIME, PROPORTION, RELATIONSHIPS];
 SEE_STATUS.compatibleNeeds = [];
-OVERTIME.compatibleNeeds = [COMPARISON, PROPORTION];
-RELATIONSHIPS.compatibleNeeds = [];
+OVERTIME.compatibleNeeds = [COMPARISON, PROPORTION, RELATIONSHIPS, PATTERN];
+RELATIONSHIPS.compatibleNeeds = [COMPARISON, OVERTIME];
 HIERARCHY.compatibleNeeds = [];
 PROPORTION.compatibleNeeds = [COMPARISON, OVERTIME];
-SUMMARIZE.compatibleNeeds = [];
+SUMMARIZE.compatibleNeeds = [],
+PATTERN.compatibleNeeds = [OVERTIME];
 
 var NEEDS = {
 	COMPARISON: COMPARISON,
@@ -62,9 +75,16 @@ var NEEDS = {
 	RELATIONSHIPS: RELATIONSHIPS,
 	HIERARCHY: HIERARCHY,
 	PROPORTION: PROPORTION,
-	SUMMARIZE: SUMMARIZE
+	SUMMARIZE: SUMMARIZE,
+	PATTERN: PATTERN
 }
 
+/**
+ * Utility function that looks up the NEEDS namespace in order to find need instances.
+ * 
+ * @param  [string] needStrings 	string array containing the needs name to look for
+ * @return [Need]					an array containing the matched Need class instances
+ */
 function getNeedsByName(needStrings) {
 	var needs = [];
 
@@ -78,6 +98,14 @@ function getNeedsByName(needStrings) {
 	return needs;
 }
 
+/**
+ * Gets the whole compatible sensors with the given need array.
+ * 
+ * @param  [Need]		needs 		the array of needs in relation with the sensors 
+ * 									have to be retrieved
+ * @param  Function 	callback	the callback to call with err dans results parameters
+ * 									if no error, results is a sensor objects array
+ */
 function getSensorsMatchingNeeds(needs, callback) {
 	var sensors = [], sensorCategories;
 
@@ -88,7 +116,7 @@ function getSensorsMatchingNeeds(needs, callback) {
 		callback(err, null);
 	}
 	else {
-		sensorCategories = mergeCategories(needs);
+		sensorCategories = intersectCategories(needs);
 		logger.debug("categories:", sensorCategories);
 		async.map(sensorCategories, function (category, callback) {
 			requestSmartcampus.getSensorsByCategory(category, function (err, results) {
@@ -112,14 +140,22 @@ function getSensorsMatchingNeeds(needs, callback) {
 	}
 }
 
-function mergeCategories(needs) {
+/**
+ * Intersects the categories contained by the given need array.
+ * complexity: O(n²)
+ * 
+ * @param  [Need]	needs 	the array containing the needs containing the categories
+ * 							to intersect
+ * @return [string]			an array of resulting categories
+ */
+function intersectCategories(needs) {
 	var categories = [], need, category;
 
 	for (var i = needs.length - 1; i >= 0; i--) {
 		need = needs[i];
 		for (var j = need.sensorCategories.length - 1; j >= 0; j--) {
 			category = need.sensorCategories[j];
-			if (categories.indexOf(category) == -1) {
+			if (categories.indexOf(category) == -1 && needsContainsCategory(needs, category)) {
 				categories.push(category);
 			}
 		}
@@ -127,6 +163,34 @@ function mergeCategories(needs) {
 	return categories;
 }
 
+/**
+ * Tests if all the needs in the given array have the given category in their categories.
+ * complexity: O(n)
+ * 
+ * @param  [Need]	needs 		the need array to check
+ * @param  string 	category 	the category to look for
+ * @return boolean				true if the category is contained by all needs,
+ * 								fale otherwise
+ */
+function needsContainsCategory(needs, category) {
+	for (var i in needs) {
+		if (!needs[i].sensorCategories.find(function predicate(element) {
+			return element === category;
+		})) {
+			return false;
+		}
+	}
+	return true;
+}
+
+/**
+ * Tests whether a need set is consistent meaning that all needs contained by the given
+ * set are compatible with each other.
+ * 
+ * @param  [Need]	needs 	an array of needs to check mutual compatibility
+ * @return boolean       	true if all the given needs are compatible among each other,
+ *                          false otherwise
+ */
 function checkNeedsConsistency(needs) {
 	var need;
 
@@ -144,16 +208,43 @@ function checkNeedsConsistency(needs) {
 	return true;
 }
 
+/**
+ * Gets the whole compatible needs with the given sensor array.
+ * 
+ * @param  [JSON]		sensor 		the array of sensors in relation with the related needs 
+ * 									have to be retrieved, a sensor should at least have a
+ * 									"category" property with a value matching one of those
+ * 									defined above
+ * @param  Function 	callback	the callback to call with err dans results parameters
+ * 									if no error, results is a need objects array
+ */
 function getNeedsMatchingSensors(sensors, callback) {
 	callback(null, mergeNeedsFromCategories(getCategoriesFromSensors(sensors)));
 }
 
+/**
+ * Tests strictly (===) if the given element is contained in the given array.
+ * 
+ * @param  Array 	array	the array to look up
+ * @param  			element the element to look for
+ * @return boolean 			true if the element is contained in the array,
+ * 							false otherwise
+ */
 function findElementInArray(array, element) {
 	return array.find(function (el) {
 		return el === element;
 	});
 }
 
+/**
+ * Tests strictly (===) if the given categories are all contained in the given array.
+ * 
+ * @param  Array 	array     	the array to look up
+ * @param  [string] categories 	the categories array containing the sensor categories
+ *                              to look for
+ * @return boolean            	true if all the categories are contained in the array,
+ *                              false otherwise
+ */
 function findCategoriesInArray(array, categories) {
 	for (var i = categories.length - 1; i >= 0; i--) {
 		if (!findElementInArray(array, categories[i])) {
@@ -163,6 +254,13 @@ function findCategoriesInArray(array, categories) {
 	return true;
 }
 
+/**
+ * Finds all needs that are compatible with all the given categories.
+ * 
+ * @param  [string]	categories 	the categories array containing the sensor categories
+ *                              to look for
+ * @return [Need]	            an array of matching Need class instances
+ */
 function mergeNeedsFromCategories(categories) {
 	var needs = [], need;
 
@@ -177,21 +275,31 @@ function mergeNeedsFromCategories(categories) {
 	return needs;
 }
 
+/**
+ * Gets all the categories of the given sensors.
+ * 
+ * @param  [JSON]	sensors 	the array of sensors in relation with the related categories 
+ * 									have to be extracted, a sensor should at least have a
+ * 									"category" property with a value matching one of those
+ * 									defined above
+ * @return [string]				an array of sensor categories as defined above
+ */
 function getCategoriesFromSensors(sensors) {
 	var sensor, categories = [], category;
 
 	for (var i = sensors.length - 1; i >= 0; i--) {
-		category = sensors[i].unit;
-		//TODO: quick fix pour que categories & unit arrêtent de poser pb
-		if (category === "temperature") {
-			category = TEMP;
-		} else if (category === "watt") {
-			category = ENERGY;
-		} else if (category === "number") {
-			category = NUMBER;
-		} else if (category === "lux") {
-			category = LIGHT;
-		}
+		category = sensors[i].category;
+		// TODO: quick fix pour que categories & unit arrêtent de poser pb
+		// category = sensors[i].unit;
+		// if (category === "temperature") {
+		// 	category = TEMP;
+		// } else if (category === "watt") {
+		// 	category = ENERGY;
+		// } else if (category === "number") {
+		// 	category = STATE;
+		// } else if (category === "lux") {
+		// 	category = LIGHT;
+		// }
 		if (!findElementInArray(categories, category)) {
 			categories.push(category);
 		}

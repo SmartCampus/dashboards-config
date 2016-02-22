@@ -9,7 +9,7 @@
 }
 
 .well.col-md-10.ui-droppable.myActiveDroppable {
-    background: rgba(112, 215, 0, 0.17);
+    background: rgba(2, 102, 200, 0.34);
 }
 
 .needInList {
@@ -23,8 +23,14 @@
 
 
 #add-rows div span {
-    display: block;
+    display: inline;
 }
+
+.tinySelectGroup {
+    font-size: 9px;
+    margin-left: 5px;
+}
+
 
 body {
     /*background:url("../assets/images/4400.jpg") no-repeat fixed center; */
