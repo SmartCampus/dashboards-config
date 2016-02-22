@@ -132,6 +132,14 @@ describe("needs", function () {
 
 	describe("#getSensorsMatchingNeeds()", function () {
 
+		it("should produce an unconsistent need set error", function () {
+			needs.getSensorsMatchingNeeds(unconsistentNeeds, function (err, results) {
+				assert(err);
+				assert(err.unconsistentNeedSet);
+				assert(!results);
+			});
+		});
+
 		describe("summer dashboard", function () {
 
 			it("should return all sensor categories", function (done) {
