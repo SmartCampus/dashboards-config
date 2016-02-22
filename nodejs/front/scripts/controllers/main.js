@@ -5,7 +5,7 @@ var sensors; //This array contains all the sensors we have
 var needsOrigin = [{name: "Comparison"}, {name: "Pattern"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
 var needsSimpleOrigin = ["Comparison", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 
-var needs = [[{name: "Comparison"},  {name: "Pattern"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
+var needs = [[{name: "Comparison"}, {name: "Pattern"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
 var needsSimple = [["Comparison", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
 
 
@@ -14,6 +14,7 @@ var maxOfWidgets = 1; //this determines how many boxes are drawn in the center o
 
 var navbar = [];
 var selectedBox = 0;
+var allTheNeeds = [];
 
 /**
  * Get all buildings sensors et placements
@@ -24,8 +25,6 @@ $.get(mainServer + "container/Root/child")
         initWindowsData();
     });
 
-
-var allTheNeeds = [];
 /***********************************
  ******* Init window data *********
  * This method fills the 3 panels of the page : the needs, the widget boxes, and the sensors.
@@ -53,13 +52,13 @@ function initWindowsData() {
 var addTableRow = function (index) {
 
     $("#add-rows").append('' +
-        '<form class="form-inline text-left" id="widgetNameForm'+index+'" style="padding-bottom: 0.5em">'+
-        '<input class="form-control" id="widgetTitle'+index+'" placeholder="Your widget\'s name"> '+
-        '</form>'+
+        '<form class="form-inline text-left" id="widgetNameForm' + index + '" style="padding-bottom: 0.5em">' +
+        '<input class="form-control" id="widgetTitle' + index + '" placeholder="Your widget\'s name"> ' +
+        '</form>' +
         '<div class="well col-md-10" id="'
         + index
         + '" style="min-height: 80px;"></div>'
-        + '<div class="col-md-2" id="deleteWidget'+index+'"> <br/>'
+        + '<div class="col-md-2" id="deleteWidget' + index + '"> <br/>'
         + '<div class="btn btn-default" onclick="removeAWidget(' + index + ')"><span class="glyphicon glyphicon-trash">'
         + '</span></div></div>');
 
@@ -67,7 +66,6 @@ var addTableRow = function (index) {
 };
 
 function updateDisableBox() {
-
     $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
         if (id == selectedBox) {
@@ -84,7 +82,7 @@ function updateDisableBox() {
             $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });
-}
+};
 
 $("#add-rows").click(function (event) {
     selectedBox = event.target.id;
@@ -130,9 +128,7 @@ var removeAWidget = function (widgetId) {
     var domSize = $addRowsDiv.length;
     $('#' + widgetId).remove();
     $('#deleteWidget' + widgetId).remove();
-    $('#widgetNameForm'+widgetId).remove();
-    console.log(this);
-    console.log($(this));
+    $('#widgetNameForm' + widgetId).remove();
 };
 
 /*
@@ -153,13 +149,13 @@ function addNeeds(boxIndex) {
 
     for (var i = 0; i < needs[boxIndex].length; i++) {
         $addNeed.append(
-            "<div class=\"needInList\"><span style=\"cursor : grab;\" class=\"draggable\" id=\"" + needs[boxIndex][i].name + "\">" + needs[boxIndex][i].name + "</span></div>"
+            "<div class=\"needInList\"><span style=\"cursor : pointer;\" class=\"draggable\" id=\"" + needs[boxIndex][i].name + "\">" + needs[boxIndex][i].name + "</span></div>"
         );
 
         $(".draggable").draggable({
             //This defines what the user is actually dragging around
             helper: function (event) {
-                return $("<div style='cursor: grabbing' id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
+                return $("<div style='cursor: pointer' id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
             },
             revert: "invalid"
 
@@ -199,12 +195,12 @@ function navigation() {
             if (position.directSensor[i] != null) {
                 $addCaptors.append(
                     "<div class=\"row sensorInList\"><span class=\"draggable\" id=\""
-                    + position.directSensor[i].name + "\" style=\"cursor : grab;\">"
+                    + position.directSensor[i].name + "\" style=\"cursor : pointer;\">"
                     + position.directSensor[i].displayName + "</span></div>"
                 );
                 $(".draggable").draggable({
                     helper: function (event) {
-                        return $("<div style='cursor: grabbing'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
+                        return $("<div style='cursor: pointer'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
                     },
                     revert: "invalid"
                 });
@@ -256,6 +252,25 @@ $(document).on('click', '.node', function (el) {
     navigation();
 });
 
+/**
+ * Go to a path of captors
+ * @param myPath
+ */
+function goTo(myPath) {
+    previous = [];
+
+    for(var i = 0; i < myPath.length; i++) {
+        previous.push(position);
+        for(var j = 0; j < buildings.length; j++){
+            if(buildings[j].name == myPath[i]){
+                position = buildings[j];
+                buildings = position.childContainer;
+            }
+        }
+    }
+   // navbar.push(position.name);
+}
+
 //The composition starts as empty. Max is as many as the widget number.
 
 
@@ -269,6 +284,7 @@ function dropIt(event, ui) {
     var aTemporaryArrayOfNeeds = [];
     var draggableId = ui.draggable.attr("id");
     var droppableId = $(self).attr("id");
+    console.log(draggableId +" - "+droppableId+ " : "+position.name);
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
     if ($.inArray(draggableId, needsSimple[droppableId]) > -1) {
@@ -287,24 +303,23 @@ function dropIt(event, ui) {
                 $.post(mainServer + 'sensors/common/hierarchical', {
                     "sensors": tmpSensorList
                 }).done(function (data) {
-                        //Resetting all the sensors data we have to get the new one
-                        buildings.splice(0, buildings.length);
-                        navbar.splice(0, navbar.length);
+                    //Resetting all the sensors data we have to get the new one
+                    buildings.splice(0, buildings.length);
 
-                        position = data;
-                        buildings = data.childContainer;
-                        navbar.push(position.name);
-                        navigation();
-                        var needSpan = $(document.createElement('span'));
-                        needSpan.attr("id", draggableId);
-                        needSpan.css('cursor', 'default');
-                        needSpan.html(draggableId);
-                        needSpan.appendTo($(self));
-                        br = $(document.createElement('br'));
-                        br.appendTo(needSpan);
-                        allTheNeeds[droppableId].needs.push(draggableId);
-                        $("#generateButton").removeAttr("disabled");
-                    })
+                    position = data;
+                    buildings = data.childContainer;
+                    goTo(navbar);
+                    navigation();
+                    var needSpan = $(document.createElement('span'));
+                    needSpan.attr("id", draggableId);
+                    needSpan.css('cursor', 'default');
+                    needSpan.html(draggableId);
+                    needSpan.appendTo($(self));
+                    br = $(document.createElement('br'));
+                    br.appendTo(needSpan);
+                    allTheNeeds[droppableId].needs.push(draggableId);
+                    $("#generateButton").removeAttr("disabled");
+                })
                     .fail(function (data) {
                         console.log(data);
                     });
@@ -356,7 +371,7 @@ var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableI
 
     var selectList = $(document.createElement("select"));
     selectList.attr('class', 'input-small tinySelectGroup');
-    selectList.attr('id', 'select'+draggableName);
+    selectList.attr('id', 'select' + draggableName);
     var optionRaw = $(document.createElement("option"));
     optionRaw.html("raw");
     optionRaw.appendTo(selectList);
@@ -370,7 +385,6 @@ var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableI
 };
 
 
-
 /*******************************
  **** JSON Of composition ******
  ******************************/
@@ -380,7 +394,7 @@ var declareNeeds = function () {
             if ($("#select" + sensor.name + " option:selected", "#" + index).text() != 'raw') {
                 sensor.percent = true;
             }
-            oneNeed.title = $("#widgetTitle"+index).val();
+            oneNeed.title = $("#widgetTitle" + index).val();
         });
         //We only ask the composition server if what was asked is possible enough
         expression.need(oneNeed, function (answer) {
