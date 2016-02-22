@@ -43,6 +43,7 @@ function initWindowsData() {
     navbar.push(position.name);
     addNeeds(0);
     navigation();
+
     sensorsBox.push(sensors);
 }
 
@@ -88,9 +89,10 @@ function updateDisableBox() {
 
 // change box
 $("#add-rows").click(function (event) {
-    selectedBox = event.target.id;
 
-    console.log(sensorsBox.length);
+    console.log(selectedBox+" "+sensorsBox.length);
+
+    selectedBox = event.target.id;
 
     $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
@@ -103,6 +105,11 @@ $("#add-rows").click(function (event) {
                     disabled: false,
                     activeClass: "myActiveDroppable"
                 });
+            position = sensorsBox[selectedBox];
+            buildings = position.childContainer;
+            goTo(navbar);
+
+            navigation();
         } else {
             $(this).css("border-color", "black");
             $("#" + id).droppable({drop: dropIt, disabled: true});
@@ -110,10 +117,6 @@ $("#add-rows").click(function (event) {
     });
 
 
-    position = sensorsBox[selectedBox];
-    buildings = position.childContainer;
-    goTo(navbar);
-    navigation();
 
 });
 
@@ -124,7 +127,10 @@ $("#add-rows").click(function (event) {
  * For now, when we add a line, the other boxes become unavailable !
  */
 var addAWidget = function () {
-    sensorsBox.push(sensors);
+    $.get(mainServer + "container/Root/child")
+        .done(function (data) {
+            sensorsBox.push(data);
+        });
 
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
 
@@ -143,7 +149,16 @@ var removeAWidget = function (widgetId) {
     $('#' + widgetId).remove();
     $('#deleteWidget' + widgetId).remove();
     $('#widgetNameForm' + widgetId).remove();
-    maxOfWidgets -= 1;
+    //maxOfWidgets -= 1;
+    sensorsBox[widgetId] = null;
+
+    /* TODO :  Auto select an other box
+    for(var i = 0; i < sensorsBox.length; i++) {
+        if(sensorsBox[i] != null) {
+
+        }
+    }**/
+
 };
 
 /*
@@ -319,9 +334,9 @@ function dropIt(event, ui) {
                 }).done(function (data) {
                     //Resetting all the sensors data we have to get the new one
                     buildings.splice(0, buildings.length);
-                    sensorsBox[selectedBox] = data;
                     position = data;
                     buildings = data.childContainer;
+                    sensorsBox[selectedBox] = data;
                     goTo(navbar);
                     navigation();
                     var needSpan = $(document.createElement('span'));
