@@ -3,7 +3,6 @@
   "TEMP_443V" : {"name" : "TEMP_443V", "displayName": "Temperature in office", "booleanTitle" : "undefined" , "description": "Temperature in office", "unit" : "temperature", "category" : "TEMP"},
   "TEMP_444V" : {"name" : "TEMP_444V", "displayName": "Temperature in office", "booleanTitle" : "undefined" , "description": "Temperature in office", "unit" : "temperature", "category" : "TEMP"},
   "TEMP_CAMPUS" : {"name" : "TEMP_CAMPUS", "displayName": "Outside Temperature", "booleanTitle" : "undefined" , "description": "Outside Temperature", "unit" : "temperature", "category" : "TEMP"},
-  "HEATING_443" : {"name" : "HEATING_443", "displayName": "Heat in office", "booleanTitle" : "undefined" , "description": "Heat in office", "unit" : "temperature", "category" : "TEMP"},
   "AC_443" : {"name" : "AC_443", "displayName": "Temperature in AC", "booleanTitle" : "undefined" , "description": "Temperature in AC in office 443", "unit" : "temperature", "category" : "TEMP"},
 
   "WINDOW443STATE" : {"name" : "WINDOW443STATE", "displayName": "State of the window", "booleanTitle" : "Window" , "description": "Times the window got opened", "unit" : "number", "category" : "STATE"},
@@ -12,6 +11,8 @@
   "DOOR443STATE" : {"name" : "DOOR443STATE", "displayName": "State of the Door", "booleanTitle" : "Door" , "description": "Times the door got opened", "unit" : "number", "category" : "STATE"},
   "Window_Modalis" : {"name" : "Window_Modalis", "displayName": "State of the window", "booleanTitle" : "Window" , "description": "State of the window", "unit" : "number", "category" : "STATE"},
   "Window_Coffee" : {"name" : "Window_Coffee", "displayName": "State of the window", "booleanTitle" : "Window" , "description": "State of the window", "unit" : "number", "category" : "STATE"},
+  "HEATING_443" : {"name" : "HEATING_443", "displayName": "Heat in office", "booleanTitle" : "Heat" , "description": "State of heat in office", "unit" : "number", "category" : "STATE"},
+
 
   "MW_energy" : {"name" : "MW_energy", "displayName": "Microwave energy", "booleanTitle" : "undefined" , "description": "MicroWave energy", "unit" : "watt", "category" : "ENERGY"},
   "Coffee_energy" : {"name" : "Coffee_energy", "displayName": "Coffee energy", "booleanTitle" : "undefined" , "description": "Coffee energy", "unit" : "watt", "category" : "ENERGY"},
