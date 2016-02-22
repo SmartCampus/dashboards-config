@@ -37,12 +37,15 @@ describe("composition engine", function () {
 				.end(callback);
 		}
 
-		it ("should respond with a 400 flag with an inconsistent need set", function (done) {
+		it("should respond with a 400 flag with an inconsistent need set", function (done) {
 			request(app)
 				.post(needSetPath)
 				.send(unconsistentNeeds)
 				.expect(400)
-				// TODO error message
+				.expect(function (response) {
+					assert(response.body.unconsistentNeedSet);
+					// TODO error message
+				})
 				.end(done);
 		});
 

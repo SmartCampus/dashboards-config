@@ -26,14 +26,14 @@ router.post("/needSet", function (req, res) {
 	needs.getSensorsMatchingNeeds(needs.getNeedsByName(req.body.needs),
         function (error, result) {
 		if (error) {
-			logger.debug(error);
             if (error.unconsistentNeedSet) {
                 res.status(400);
             }
             else {
+                logger.debug(error);
 			    res.status(500);
             }
-            res.send(error.message);
+            res.send(error);
 		}
 		else {
 			res.status(200).send(result);
