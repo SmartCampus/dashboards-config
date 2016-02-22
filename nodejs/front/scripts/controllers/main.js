@@ -4,10 +4,10 @@ var sensors; //This array contains all the sensors we have
 //2 versions bc easier for now, even if not really useful...
 
 var needsOrigin = [{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See Status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
-var needsSimpleOrigin = ["Comparison", "Map", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+var needsSimpleOrigin = ["Comparison", "Map", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 
 var needs = [[{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See Status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
-var needsSimple = [["Comparison", "Map", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
+var needsSimple = [["Comparison", "Map", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
 
 
 $("#generateButton").attr("disabled", "disabled"); //The generate button starts by being disabled

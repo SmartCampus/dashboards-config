@@ -28,4 +28,4 @@ target/
 
 
 ## SmartCampus snapshot ##
-nodejs/back/sensor-containers-API/data/snapshot-smartCampus/snapshot
+snapshot/*.json
