@@ -23,22 +23,30 @@ router.post("/expressNeed", function(req,res) {
 });
 
 router.post("/needSet", function (req, res) {
-	needs.getSensorsMatchingNeeds(needs.getNeedsByName(req.body.needs),
-        function (error, result) {
-		if (error) {
-            if (error.unconsistentNeedSet) {
-                res.status(400);
+    var needArray = needs.getNeedsByName(req.body.needs);
+
+    if (needArray.length == 0) {
+        res.status(400).send({
+            incorrectNeeds: "at least one need is incorrect or there's no needs"
+        });
+    }
+    else {
+        needs.getSensorsMatchingNeeds(needArray, function (error, result) {
+            if (error) {
+                if (error.unconsistentNeedSet) {
+                    res.status(400);
+                }
+                else {
+                    logger.debug(error);
+                    res.status(500);
+                }
+                res.send(error);
             }
             else {
-                logger.debug(error);
-			    res.status(500);
+                res.status(200).send(result);
             }
-            res.send(error);
-		}
-		else {
-			res.status(200).send(result);
-		}
-	});
+        });
+    }
 });
 
 router.post("/sensorSet", function (req, res) {

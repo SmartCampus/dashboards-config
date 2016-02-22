@@ -44,7 +44,18 @@ describe("composition engine", function () {
 				.expect(400)
 				.expect(function (response) {
 					assert(response.body.unconsistentNeedSet);
-					// TODO error message
+				})
+				.end(done);
+		});
+
+		it("should respond with a 400 flag while sending a nonexistent need", function (done) {
+			request(app)
+				.post(needSetPath)
+				.send(["Comprison", "Overtime"])
+				.expect(400)
+				.expect(function (response) {
+					logger.debug(response.body);
+					assert(response.body.incorrectNeeds);
 				})
 				.end(done);
 		});
