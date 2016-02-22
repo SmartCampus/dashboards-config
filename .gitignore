@@ -28,4 +28,4 @@ target/
 
 
 ## SmartCampus snapshot ##
-snapshot/*.json
+snapshot/**.json
