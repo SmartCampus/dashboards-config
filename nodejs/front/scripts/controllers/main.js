@@ -15,6 +15,7 @@ var maxOfWidgets = 1; //this determines how many boxes are drawn in the center o
 var navbar = [];
 var selectedBox = 0;
 var allTheNeeds = [];
+var sensorsBox = [];
 
 /**
  * Get all buildings sensors et placements
@@ -42,6 +43,7 @@ function initWindowsData() {
     navbar.push(position.name);
     addNeeds(0);
     navigation();
+    sensorsBox.push(sensors);
 }
 
 
@@ -84,8 +86,11 @@ function updateDisableBox() {
     });
 };
 
+// change box
 $("#add-rows").click(function (event) {
     selectedBox = event.target.id;
+
+    console.log(sensorsBox.length);
 
     $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
@@ -103,6 +108,13 @@ $("#add-rows").click(function (event) {
             $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });
+
+
+    position = sensorsBox[selectedBox];
+    buildings = position.childContainer;
+    goTo(navbar);
+    navigation();
+
 });
 
 
@@ -112,6 +124,8 @@ $("#add-rows").click(function (event) {
  * For now, when we add a line, the other boxes become unavailable !
  */
 var addAWidget = function () {
+    sensorsBox.push(sensors);
+
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
 
     needs[maxOfWidgets] = needsOrigin;
@@ -129,6 +143,7 @@ var removeAWidget = function (widgetId) {
     $('#' + widgetId).remove();
     $('#deleteWidget' + widgetId).remove();
     $('#widgetNameForm' + widgetId).remove();
+    maxOfWidgets -= 1;
 };
 
 /*
@@ -268,7 +283,6 @@ function goTo(myPath) {
             }
         }
     }
-   // navbar.push(position.name);
 }
 
 //The composition starts as empty. Max is as many as the widget number.
@@ -284,7 +298,7 @@ function dropIt(event, ui) {
     var aTemporaryArrayOfNeeds = [];
     var draggableId = ui.draggable.attr("id");
     var droppableId = $(self).attr("id");
-    console.log(draggableId +" - "+droppableId+ " : "+position.name);
+
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
     if ($.inArray(draggableId, needsSimple[droppableId]) > -1) {
@@ -305,7 +319,7 @@ function dropIt(event, ui) {
                 }).done(function (data) {
                     //Resetting all the sensors data we have to get the new one
                     buildings.splice(0, buildings.length);
-
+                    sensorsBox[selectedBox] = data;
                     position = data;
                     buildings = data.childContainer;
                     goTo(navbar);
