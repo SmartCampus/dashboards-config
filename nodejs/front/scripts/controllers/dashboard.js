@@ -130,7 +130,7 @@ var goDrawBoolean = function (data, sensor, index) {
     var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
     $thisWidget.find(".glyphicon").show();
     generate.widgetBoolean(existingPositions[index], "data", allWidgets[index].title, function (result) {
-        $thisWidget.hide();
+        $("#"+existingPositions[index]).empty();
         eval(result);
         finishedLoading();
     }, errorOccurred);
