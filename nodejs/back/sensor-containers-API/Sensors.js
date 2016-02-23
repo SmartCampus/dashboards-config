@@ -1,5 +1,6 @@
 "use strict";
 var requesterSC = require("./request_smartcampus"),
+    snapshotReader = require('./snapshot_reader.js'),
     fs = require("fs"),
     sensorsJson = JSON.parse(fs.readFileSync("./data/sensors.json", "utf8"));
 
@@ -235,6 +236,12 @@ function getContainers() {
  * the containers.
  */
 function initSystem() {
+    var sensors = JSON.stringify(snapshotReader.getAllSensors());
+    initSensors(sensors);
+}
+
+
+function initSystemWithSmartCampus() {
     requesterSC.getAllSensors(function(res) {
         var stringData = "";
 
@@ -247,6 +254,8 @@ function initSystem() {
         });
     });
 }
+
+
 
 /**
  *  This function read the JSON Object return by the SmartCampus API and initialize the categories and the containers.
