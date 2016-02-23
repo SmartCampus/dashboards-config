@@ -2,7 +2,7 @@
 var requesterSC = require("./request_smartcampus"),
     snapshotReader = require('./snapshot_reader.js'),
     fs = require("fs"),
-    sensorsJson = JSON.parse(fs.readFileSync("./data/sensors.json", "utf8"));
+    sensorsJson = JSON.parse(fs.readFileSync(__dirname + "/data/sensors.json", "utf8"));
 
 class Sensor {
     constructor(name, displayName, booleanTitle, description, unit, category) {

@@ -6,7 +6,7 @@
  */
 var fs = require("fs"),
     moment = require("moment")
-    sensorsFile = "./data/snapshot-smartCampus/snapshot/";
+    sensorsFile = __dirname + "/data/snapshot-smartCampus/snapshot/";
 
 /**
  * This function read the sensors.json file and then retrieve all the sensor.
