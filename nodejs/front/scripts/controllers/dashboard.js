@@ -101,7 +101,6 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
     if (watchingArray[index].dataSC.length == allWidgets[index].sensors.length) {
         var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
         $thisWidget.find(".glyphicon").show();
-      //  $(document.createElement('span')).attr("class", "glyphicon glyphicon-ok").appendTo($("#loadingNeed"+index));
         if (allWidgets[index].graphType == "mix") {
             allWidgets[index].graphType = "";
         }
