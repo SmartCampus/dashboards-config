@@ -156,6 +156,7 @@ var removeAWidget = function (widgetId) {
     $('#widgetNameForm' + widgetId).remove();
     //maxOfWidgets -= 1;
     sensorsBox[widgetId] = null;
+    allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
 
     /* TODO :  Auto select an other box
     for(var i = 0; i < sensorsBox.length; i++) {
@@ -304,8 +305,6 @@ function goTo(myPath) {
         }
     }
 }
-
-//The composition starts as empty. Max is as many as the widget number.
 
 
 /************************

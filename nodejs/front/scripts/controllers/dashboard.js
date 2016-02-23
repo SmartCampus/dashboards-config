@@ -34,8 +34,8 @@ if (beginDate === '' || endDate == '') {
 
 
 var sensorDataRetrievingSuccess = function (data, sensor, index) {
-    //this works only if they are regular widgets.
-    //if i want the boolean to work the same way...
+    $("#loadingSensor"+sensor.name+index).html("Data for \""+sensor.displayName +"\" for the widget \""+allTheNeeds[index].title+"\" is successfully retrieved ! ");
+
     if (theNeeds[index].graphType == 'line' || theNeeds[index].graphType == 'column') {
         console.log('line or column widget');
         //TODO:probleme si les callbacks sont pas dans l'ordre que j'imagine là...
@@ -100,6 +100,7 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         watchingArray[index].counter.push(sensor);
     }//TODO: pour le moment, on push des sensors à la place des yaxes : dans le cas de winter ça va plus être possible...
     if (watchingArray[index].counter.length == theNeeds[index].sensors.length) {
+        $("#loadingNeed"+index).html(" Starting the widget \""+allTheNeeds[index].title+"\" graph generation... ");
         console.log('for ', index, 'i have everything');
         if (theNeeds[index].graphType == "mix") {
             console.log('the graph type is mix, im deleting that');
@@ -109,6 +110,8 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         generate.widgetV2(theNeeds[index].title, theNeeds[index].graphType,
             watchingArray[index].counter
             , existingPositions[index], "watchingArray[index].dataSC", function (data) {
+                $("#loadingNeed"+index).html("The widget \""+allTheNeeds[index].title+"\" graph is generated ! ");
+
                 firstWCode = data;
                 eval(firstWCode); //TODO:is this the right place for eval ?
                 finishedLoading();
@@ -143,14 +146,33 @@ var goDrawPie = function (sensor, index) {
 
 var layoutChosen = function (layoutName, layoutAnswer) {
     //layout insertion
+
+    var loadingLayoutDiv = $(document.createElement('div'));
+    loadingLayoutDiv.attr("id", "loadingLayout");
+    loadingLayoutDiv.html("The layout is being generated...");
+    loadingLayoutDiv.appendTo($("#loadingImg"));
+
     var div = document.getElementById('dashboard');
 
     //After getting the layout generated, the same server has to give us the list of the div ids it created.
     layouts.widgetsIds(layoutName, function (widgetsArray) {
+
+        loadingLayoutDiv.html("The layout is generated !");
+
         existingPositions = widgetsArray;
         div.insertAdjacentHTML('afterbegin', layoutAnswer);
+        var loadingDataGeneral = $(document.createElement('div'));
+        loadingDataGeneral.attr("id", "loadingDataGeneral");
+        loadingDataGeneral.appendTo($("#loadingImg"));
+        loadingDataGeneral.html("The data you requested is being loaded...");
+
 
         theNeeds.forEach(function (aNeed, index) {
+            var loadingANeed = $(document.createElement('div'));
+            loadingANeed.attr("id", "loadingNeed"+index);
+            loadingANeed.appendTo($("#loadingImg"));
+            loadingANeed.html("The widget called \""+aNeed.title+"\" is being loaded...");
+
             if (aNeed.sensors.length > 0) { //we only do that if you asked for some sensors !
                 //Besoin de connaître le type de graphe pour savoir la route exacte que je vais demander à SC.
                 aNeed.additionnal = '';
@@ -170,7 +192,10 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                 }
                 //Maintenant que je sais ça, pour chaque sensor : je récup les infos manquantes, & j'appelle les données.
                 aNeed.sensors.forEach(function (sensor) {
-
+                    var loadingASensor = $(document.createElement('div'));
+                    loadingASensor.attr("id", "loadingSensor"+sensor.name+aNeed.index);
+                    loadingASensor.appendTo($("#loadingImg"));
+                    loadingASensor.html("The sensor called \""+sensor.displayName +"\" for the widget \""+aNeed.title+"\" is loading...");
                     if (sensor.percent) {
                         console.log('hé tas dit percent');
                         sensor.unit = 'percent';
