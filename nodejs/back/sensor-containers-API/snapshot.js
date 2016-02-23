@@ -89,6 +89,15 @@ function snapshotOneSensor(sensorName) {
     })
 }
 
+function snapShotSound(callback){
+    var url = SMARTCAMPUS_HOST + SENSORS_PATH + "/NOISE_SPARKS_CORRIDOR/data?date=2016-01-01 00:00:00/2016-02-23 10:00:00";
+    http.get(url, function (res) {
+        callback(res);
+    })
+        .on('error', function (e) {
+            error(e, "getSensorData");
+        });
+}
 
 
 
@@ -97,4 +106,22 @@ function snapshotOneSensor(sensorName) {
     for(let i in snapShottedSensors) {
         snapshotOneSensor(snapShottedSensors[i]);
     }
+
+    snapShotSound(function(res) {
+        var stringData = "";
+
+        res.on("data", function(chunck) {
+            stringData += chunck;
+        });
+
+        res.on("end", function() {
+            fs.writeFile("./data/snapshot-smartCampus/snapshot/sensor-NOISE_SPARKS_CORRIDOR-data.json", stringData, function(err) {
+                if(err) {
+                    console.log(err);
+                }
+
+                console.log("File sensors saved !");
+            });
+        });
+    });
 })();

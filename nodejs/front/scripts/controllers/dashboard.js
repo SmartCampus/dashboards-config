@@ -17,8 +17,13 @@ var errorOccurred = function () {
     document.getElementById("dashboard").className = "hidden";
 };
 
+var loadingGif = $(document.createElement('img'));
+loadingGif.attr("src", "/assets/images/loading.gif");
+var okGlyph = $(document.createElement('span'));
+okGlyph.attr("class", "glyphicon glyphicon-ok");
+
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
-var theNeeds = JSON.parse(localStorage.getItem("widgetsDescription"));
+var allWidgets = JSON.parse(localStorage.getItem("widgetsDescription"));
 beginDate = localStorage.getItem("startDate");
 endDate = localStorage.getItem("endDate");
 
@@ -84,7 +89,7 @@ var finishedLoading = function () {
 var waitForOtherSensorsToDraw = function (sensor, index) {
 
     if (watchingArray[index].dataSC.length <= allWidgets[index].sensors.length) {
-        $("#loadingNeed"+index).html(" Starting the widget \""+theNeeds[index].title+"\" graph generation... ");
+        $("#loadingNeed"+index).html(" Starting the widget \""+allWidgets[index].title+"\" graph generation... ");
 
         console.log('unit of current : ', sensor.unit);
 
@@ -115,7 +120,7 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         generate.widgetV2(allWidgets[index].title, allWidgets[index].graphType,
             watchingArray[index].counter
             , existingPositions[index], "watchingArray[index].dataSC", function (data) {
-                $("#loadingNeed"+index).html("The widget \""+theNeeds[index].title+"\" graph is generated ! ");
+                $("#loadingNeed"+index).html("The widget \""+allWidgets[index].title+"\" graph is generated ! ");
 
                 eval(data);
                 finishedLoading();
