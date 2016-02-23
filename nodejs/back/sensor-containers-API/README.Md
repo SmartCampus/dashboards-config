@@ -50,3 +50,7 @@ You will receive the building, we all the office which contain some sensors. In 
 in the building. You can have example of all the hierarchical information we implemented in the folder :
 
     $ data/interface-documentation/hierarchical-information
+
+You can read enhanced infomrmation about a sensor on the route : /sensor/sensorName/fullInformation
+If you use the route : /sensor/sensorName/data the information will be send in the same format as the information send
+directly by smartCampus
