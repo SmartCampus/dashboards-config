@@ -37,12 +37,25 @@ describe("composition engine", function () {
 				.end(callback);
 		}
 
-		it ("should respond with a 400 flag with an inconsistent need set", function (done) {
+		it("should respond with a 400 flag with an inconsistent need set", function (done) {
 			request(app)
 				.post(needSetPath)
 				.send(unconsistentNeeds)
 				.expect(400)
-				// TODO error message
+				.expect(function (response) {
+					assert(response.body.unconsistentNeedSet);
+				})
+				.end(done);
+		});
+
+		it("should respond with a 400 flag while sending a nonexistent need", function (done) {
+			request(app)
+				.post(needSetPath)
+				.send(["Comprison", "Overtime"])
+				.expect(400)
+				.expect(function (response) {
+					assert(response.body.incorrectNeeds);
+				})
 				.end(done);
 		});
 
@@ -107,7 +120,7 @@ describe("composition engine", function () {
 				surroundingWidget34Needs = { needs: [NEEDS.PROPORTION.name] },
 				surroundingWidget56Needs = { needs: [NEEDS.OVERTIME.name, NEEDS.PATTERN.name] };
 
-			it("it should return only STATE and SOUND categories", function (done) {
+			it("it should return STATE and SOUND categories", function (done) {
 				var categories = [SENSOR_CATEGORIES.STATE, SENSOR_CATEGORIES.SOUND];
 
 				request(app)
@@ -117,7 +130,7 @@ describe("composition engine", function () {
 					.expect(function (response) {
 						var results = response.body;
 
-						assert.equal(categories.length, results.length);
+						assert(categories.length <= results.length);
 						categories.forEach(function (category) {
 							assert(results.find(function predicate(result) {
 								return result.set == category;
@@ -166,6 +179,72 @@ describe("composition engine", function () {
 					.end(done);
 			});
 		});
+
+		describe("winter dashboard", function () {
+
+			var winterWidget1Needs = { needs: [NEEDS.SEE_STATUS.name] },
+				winterWidget2Needs = { needs: [NEEDS.OVERTIME.name] },
+				winterWidget3Needs = { needs: [NEEDS.OVERTIME.name, NEEDS.COMPARISON.name, NEEDS.RELATIONSHIPS.name] };
+
+			it("should return only STATE category", function (done) {
+				request(app)
+					.post(needSetPath)
+					.send(winterWidget1Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body;
+
+						assert.equal(1, results.length);
+						assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
+						assert(Array.isArray(results[0].sensors));
+						logger.debug(results[0].sensors);
+					})
+					.end(done);
+			});
+
+			it("should return LIGHT category", function (done) {
+				request(app)
+					.post(needSetPath)
+					.send(winterWidget2Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body, actual;
+
+						assert(1 <= results.length);
+						actual = results.find(function predicate(result) {
+							return result.set == SENSOR_CATEGORIES.LIGHT;
+						});
+						assert(actual);
+						assert(Array.isArray(actual.sensors));
+						logger.debug(actual.sensors);
+					})
+					.end(done);
+			});
+
+			it("it should return STATE and TEMP categories", function (done) {
+				var categories = [SENSOR_CATEGORIES.STATE, SENSOR_CATEGORIES.TEMP];
+
+				request(app)
+					.post(needSetPath)
+					.send(winterWidget3Needs)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body;
+
+						assert(categories.length <= results.length);
+						categories.forEach(function (category) {
+							assert(results.find(function predicate(result) {
+								return result.set == category;
+							}));
+						});
+						results.forEach(function (result) {
+							assert(Array.isArray(result.sensors));
+						});
+						logger.debug(results);
+					})
+					.end(done);
+			});
+		});
 	});
 
 	describe("POST sensorSet", function () {
@@ -192,6 +271,17 @@ describe("composition engine", function () {
 				})
 				.end(callback);
 		}
+
+		it("should respond with a 400 flag while sending sensors with invalid categories", function (done) {
+			request(app)
+				.post(sensorSetPath)
+				.send({ sensors: [{ category: "this is not a sensor category" }] })
+				.expect(400)
+				.expect(function (response) {
+					assert(response.body.invalidCategories);
+				})
+				.end(done);
+		});
 
 		describe("summer dashboard", function () {
 
@@ -269,7 +359,7 @@ describe("composition engine", function () {
 				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.STATE },
 				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
 
-			it("should get Comparison Overtime and Relationship needs", function (done) {
+			it("should get Comparison, Overtime and Relationship needs", function (done) {
 				var needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS],
 					requestsBodies = [[noiseSparksCorridor, door443State],
 									  [noiseSparksCorridor, window443State]];
@@ -317,6 +407,37 @@ describe("composition engine", function () {
 						logger.error(err);
 						throw err;
 					}
+					done();
+				});
+			});
+
+			// TODO error cases
+		});
+
+		describe("winter dashboard", function () {
+
+			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
+				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
+				light444 = { name: "LIGHT_444", category: SENSOR_CATEGORIES.LIGHT },
+				heating443 = { name: "HEATING_443", category: SENSOR_CATEGORIES.STATE };
+
+			it("should return See Status need", function (done) {
+				testPostSensorSet({ sensors: [heating443] }, [NEEDS.SEE_STATUS], function () {
+					done();
+				});
+			});
+
+			it("should return Overtime need", function (done) {
+				testPostSensorSet({ sensors: [light444] }, [NEEDS.OVERTIME], function () {
+					done();
+				});
+			});
+
+			it("should get Overtime, Comparison and Relationship needs", function (done) {
+				var needs = [NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.RELATIONSHIPS];
+				
+				testPostSensorSet({ sensors: [temp443V, tempCampus, heating443] },
+								  needs, function () {
 					done();
 				});
 			});

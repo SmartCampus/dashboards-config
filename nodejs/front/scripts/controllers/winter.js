@@ -87,7 +87,7 @@ retrieveData.askForSeries('TEMP_CAMPUS/data', beginDate, endDate,
     , errorOccurred);
 
 
-retrieveData.askForSeriesWithParam('AC_443STATE/data/reverse', "true", beginDate, endDate,
+retrieveData.askForSeriesWithParam('HEATING_443/data', "true", beginDate, endDate,
     function (data) {
         thirdSuccessInTemp(data, updateCallback);
     }
