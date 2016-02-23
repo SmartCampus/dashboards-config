@@ -4,18 +4,11 @@
 
 //Ca, ça va pas du tout. Ca fait que ca dépend de comment t'as rempli tes boites, et c'tout !
 var existingPositions = [];
-<<<<<<< HEAD
 
 var watchingArray = [{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},
     {"dataSC": [], "counter": []},{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},
     {"dataSC": [], "counter": []},{"dataSC": [], "counter": []}];
-=======
-var beginDate = '';
-var endDate = '';
-var watchingArray = [{"dataSC": [], "counter": []}, {"dataSC": [], "counter": []}, {"dataSC": [], "counter": []},
-    {"dataSC": [], "counter": []}, {"dataSC": [], "counter": []}, {"dataSC": [], "counter": []},
-    {"dataSC": [], "counter": []}, {"dataSC": [], "counter": []}];
->>>>>>> getSensorsByNeeds
+
 
 ////////////////////////////// Generic function to fire in case of server error ///////////////////////////////////////
 var errorOccurred = function () {
@@ -30,13 +23,10 @@ var okGlyph = $(document.createElement('span'));
 okGlyph.attr("class", "glyphicon glyphicon-ok");
 
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
-<<<<<<< HEAD
 var theNeeds = JSON.parse(localStorage.getItem("widgetsDescription"));
 beginDate = localStorage.getItem("startDate");
 endDate = localStorage.getItem("endDate");
-=======
-var allWidgets = JSON.parse(localStorage.getItem("widgetsDescription"));
->>>>>>> getSensorsByNeeds
+
 localStorage.removeItem("widgetsDescription");
 if (allWidgets === null) {
     errorOccurred()
@@ -45,29 +35,15 @@ if (localStorage.getItem("dashboardTitle") !== null) {
     $("#theGeneralTitle").html(localStorage.getItem("dashboardTitle"));
 } //else we just don't write any title
 
-<<<<<<< HEAD
 if (beginDate == 'undefined' || endDate == 'undefined') {
     beginDate = '2015-08-21 8:00:11';
     endDate = '2015-10-21 18:00:11';
-=======
-if (beginDate === '' || endDate == '') {
-//    beginDate = '2015-07-21 8:00:11';
-//    endDate = '2015-09-21 18:00:11';
-    beginDate = '2015-12-21 8:00:11';
-    endDate = '2016-01-21 18:00:11';
->>>>>>> getSensorsByNeeds
 }
 
 
 var sensorDataRetrievingSuccess = function (data, sensor, index) {
-<<<<<<< HEAD
     $("#loadingSensor"+sensor.name+index).html("Data for \""+sensor.displayName +"\" for the widget \""+theNeeds[index].title+"\" is successfully retrieved ! ");
 
-    if (theNeeds[index].graphType == 'line' || theNeeds[index].graphType == 'column') {
-        console.log('line or column widget');
-        //TODO:probleme si les callbacks sont pas dans l'ordre que j'imagine là...
-        watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data});
-=======
     if (allWidgets[index].graphType == 'line' || allWidgets[index].graphType == 'column' || allWidgets[index].graphType == 'mix') {
         if (sensor.unit == "decibel") {
             watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data, "yAxis": 1});
@@ -77,7 +53,6 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
         else {
             watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data});
         }
->>>>>>> getSensorsByNeeds
         waitForOtherSensorsToDraw(sensor, index);
     }
     else if (allWidgets[index].graphType == 'boolean') {
@@ -112,15 +87,10 @@ var finishedLoading = function () {
 
 //An array of as many arrays as we have widgets.
 var waitForOtherSensorsToDraw = function (sensor, index) {
-<<<<<<< HEAD
-    if (watchingArray[index].counter.length < theNeeds[index].sensors.length) {
-        console.log('for ', index, ' i havent found everything yet');
-        watchingArray[index].counter.push(sensor);
-    }//TODO: pour le moment, on push des sensors à la place des yaxes : dans le cas de winter ça va plus être possible...
-    if (watchingArray[index].counter.length == theNeeds[index].sensors.length) {
-        $("#loadingNeed"+index).html(" Starting the widget \""+theNeeds[index].title+"\" graph generation... ");
-=======
+
     if (watchingArray[index].dataSC.length <= allWidgets[index].sensors.length) {
+        $("#loadingNeed"+index).html(" Starting the widget \""+theNeeds[index].title+"\" graph generation... ");
+
         console.log('unit of current : ', sensor.unit);
 
         if (watchingArray[index].counter.length > 0 && watchingArray[index].counter[0].unit == sensor.unit) {
@@ -142,7 +112,6 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         console.log('nb of y axes : ', watchingArray[index].counter.length);
     }
     if (watchingArray[index].dataSC.length == allWidgets[index].sensors.length) {
->>>>>>> getSensorsByNeeds
         console.log('for ', index, 'i have everything');
         if (allWidgets[index].graphType == "mix") {
             allWidgets[index].graphType = "";
@@ -151,14 +120,9 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         generate.widgetV2(allWidgets[index].title, allWidgets[index].graphType,
             watchingArray[index].counter
             , existingPositions[index], "watchingArray[index].dataSC", function (data) {
-<<<<<<< HEAD
                 $("#loadingNeed"+index).html("The widget \""+theNeeds[index].title+"\" graph is generated ! ");
 
-                firstWCode = data;
-                eval(firstWCode); //TODO:is this the right place for eval ?
-=======
                 eval(data);
->>>>>>> getSensorsByNeeds
                 finishedLoading();
             }, errorOccurred);
     }
@@ -208,30 +172,17 @@ var layoutChosen = function (layoutName, layoutAnswer) {
         loadingDataGeneral.appendTo($("#loadingImg"));
         loadingDataGeneral.html("The data you requested is being loaded...");
 
-
-<<<<<<< HEAD
-        theNeeds.forEach(function (aNeed, index) {
-            var loadingANeed = $(document.createElement('div'));
-            loadingANeed.attr("id", "loadingNeed"+index);
-            loadingANeed.appendTo($("#loadingImg"));
-            loadingANeed.html("The widget called \""+aNeed.title+"\" is being loaded...");
-
-            if (aNeed.sensors.length > 0) { //we only do that if you asked for some sensors !
-                //Besoin de connaître le type de graphe pour savoir la route exacte que je vais demander à SC.
-                aNeed.additionnal = '';
-                if (aNeed.graphType == 'line' || aNeed.graphType == 'column' || aNeed.graphType == 'mix'
-                    || aNeed.graphType == 'pieChart' || aNeed.graphType == 'scatterplot') {
-                    aNeed.scRoute = '/data';
-                }
-                if (aNeed.graphType == 'column') {
-                    aNeed.withParam = true;
-=======
         allWidgets.forEach(function (widget, index) {
             if (widget.sensors.length > 0) { //we only do that if you asked for some sensors !
+            
+                var loadingANeed = $(document.createElement('div'));
+                loadingANeed.attr("id", "loadingNeed"+index);
+                loadingANeed.appendTo($("#loadingImg"));
+                loadingANeed.html("The widget called \""+aNeed.title+"\" is being loaded...");
+
                 widget.additionnal = '';
                 if (widget.graphType == 'column' || widget.graphType == 'scatterplot') {
                     widget.withParam = true;
->>>>>>> getSensorsByNeeds
                 }
                 if (widget.graphType == 'scatterplot') {
                     widget.additionnal = '/splitlist';
@@ -240,16 +191,14 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                     widget.additionnal = '/percent';
                 }
                 //Maintenant que je sais ça, pour chaque sensor : je récup les infos manquantes, & j'appelle les données.
-<<<<<<< HEAD
-                aNeed.sensors.forEach(function (sensor) {
+
+                widget.sensors.forEach(function (sensor) {
                     var loadingASensor = $(document.createElement('div'));
                     loadingASensor.attr("id", "loadingSensor"+sensor.name+index);
                     loadingASensor.appendTo($("#loadingImg"));
                     loadingASensor.html("The sensor called \""+sensor.displayName +"\" for the widget \""+aNeed.title+"\" is loading...");
-=======
-                widget.sensors.forEach(function (sensor) {
+
                     widget.withParam = false;
->>>>>>> getSensorsByNeeds
                     if (sensor.percent) {
                         sensor.unit = 'percent';
                         sensor.description = '% of ' + sensor.description;
