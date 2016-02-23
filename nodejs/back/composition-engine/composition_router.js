@@ -49,27 +49,43 @@ router.post("/needSet", function (req, res) {
     }
 });
 
+function checkSensors(sensors) {
+    for (var i in sensors) {
+        if (!sensors[i].category) {
+            return false;
+        }
+    }
+    return true;
+}
+
 router.post("/sensorSet", function (req, res) {
-    needs.getNeedsMatchingSensors(req.body.sensors, function (error, result) {
-        if (error) {
-            if (error.invalidCategories) {
-                res.status(400);
+    var sensors = req.body.sensors;
+
+    if (!sensors || !Array.isArray(sensors) || !checkSensors(sensors)) {
+        res.status(400).send({ invalidJson: true });
+    }
+    else {
+        needs.getNeedsMatchingSensors(sensors, function (error, result) {
+            if (error) {
+                if (error.invalidCategories) {
+                    res.status(400);
+                }
+                else {
+                    logger.error(error);
+                    res.status(500);
+                }
+                res.send(error);
             }
             else {
-                logger.error(error);
-                res.status(500);
-            }
-            res.send(error);
-        }
-        else {
-            var toSend = [];
+                var toSend = [];
 
-            result.forEach(function (need) {
-                toSend.push({ name: need.name });
-            });
-            res.status(200).send(toSend);
-        }
-    });
+                result.forEach(function (need) {
+                    toSend.push({ name: need.name });
+                });
+                res.status(200).send(toSend);
+            }
+        });
+    }
 });
 
 // Exports
