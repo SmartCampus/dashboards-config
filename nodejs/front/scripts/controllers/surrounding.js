@@ -109,7 +109,7 @@ retrieveData.askForSeries('WINDOW443STATE/data/percent', beginDate, endDate, suc
  */
 
 var doorGraphStateInTime = function() {
-    generate.widgetV2("Door status over time", "scatter", doorState, "g1", "doorState", function(data) {
+    generate.widget("Door status over time", "scatter", doorState, "g1", "doorState", function(data) {
         eval(data);
     }, errorOccurred);
 
@@ -118,7 +118,7 @@ var doorGraphStateInTime = function() {
 
 
 var windowGraphStateInTime = function() {
-    generate.widgetV2("Window status over time", "scatter", windowState, "g2", "windowState", function(data) {
+    generate.widget("Window status over time", "scatter", windowState, "g2", "windowState", function(data) {
         eval(data);
     }, errorOccurred);
     finishedLoading();
@@ -212,7 +212,7 @@ var noiseAccordingDoorState = function() {
 
 
     //ici, on ne donne pas de type au moteur de génération = graphe mixte !
-    /*generate.widgetV2("Loudness in function of the door", "",
+    /*generate.widget("Loudness in function of the door", "",
         [
             { "type": "decibel", "title": "loudness" },
             { "type": "number", "title": "Nb of times the door got opened" }
@@ -228,7 +228,7 @@ var noiseAccordingWindowState = function() {
 
 
 
-    generate.widgetV2("Loudness in function of the door", "",
+    generate.widget("Loudness in function of the door", "",
         [
             { "type": "decibel", "title": "loudness" },
             { "type": "number", "title": "Nb of times the window got opened" }
