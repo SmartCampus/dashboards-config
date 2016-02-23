@@ -37,6 +37,26 @@ describe("composition engine", function () {
 				.end(callback);
 		}
 
+		it("should respond with a 400 flag while not sending an array of string", function (done) {
+			request(app)
+				.post(needSetPath)
+				.send("This is not an array")
+				.expect(400)
+				.expect(function (response) {
+					assert(response.body.incorrectNeeds);
+				})
+				.end(function () {
+					request(app)
+						.post(needSetPath)
+						.send([0, 1, 2, 3])
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.incorrectNeeds);
+						})
+						.end(done);
+				});
+		});
+
 		it("should respond with a 400 flag with an inconsistent need set", function (done) {
 			request(app)
 				.post(needSetPath)

@@ -155,9 +155,9 @@ var removeAWidget = function (widgetId) {
     $('#' + widgetId).remove();
     $('#deleteWidget' + widgetId).remove();
     $('#widgetNameForm' + widgetId).remove();
-    //maxOfWidgets -= 1;
+    maxOfWidgets -= 1;
     sensorsBox[widgetId] = null;
-    allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
+    allTheNeeds.splice(widgetId, 1);
 
     /* TODO :  Auto select an other box
     for(var i = 0; i < sensorsBox.length; i++) {
@@ -186,13 +186,13 @@ function addNeeds(boxIndex) {
 
     for (var i = 0; i < needs[boxIndex].length; i++) {
         $addNeed.append(
-            "<div class=\"needInList\"><span style=\"cursor : pointer;\" class=\"draggable\" id=\"" + needs[boxIndex][i].name + "\">" + needs[boxIndex][i].name + "</span></div>"
+            "<div class=\"needInList\"><span style=\"cursor : grab;\" class=\"draggable\" id=\"" + needs[boxIndex][i].name + "\">" + needs[boxIndex][i].name + "</span></div>"
         );
 
         $(".draggable").draggable({
             //This defines what the user is actually dragging around
             helper: function (event) {
-                return $("<div style='cursor: pointer' id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
+                return $("<div style='cursor: grabbing' id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
             },
             revert: "invalid"
 
@@ -232,12 +232,12 @@ function navigation() {
             if (position.directSensor[i] != null) {
                 $addCaptors.append(
                     "<div class=\"row sensorInList\"><span class=\"draggable\" id=\""
-                    + position.directSensor[i].name + "\" style=\"cursor : pointer;\">"
+                    + position.directSensor[i].name + "\" style=\"cursor : grab;\">"
                     + position.directSensor[i].displayName + "</span></div>"
                 );
                 $(".draggable").draggable({
                     helper: function (event) {
-                        return $("<div style='cursor: pointer'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
+                        return $("<div style='cursor: grabbing'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
                     },
                     revert: "invalid"
                 });

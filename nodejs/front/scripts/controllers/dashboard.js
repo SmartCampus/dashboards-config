@@ -101,7 +101,6 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
     if (watchingArray[index].dataSC.length == allWidgets[index].sensors.length) {
         var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
         $thisWidget.find(".glyphicon").show();
-      //  $(document.createElement('span')).attr("class", "glyphicon glyphicon-ok").appendTo($("#loadingNeed"+index));
         if (allWidgets[index].graphType == "mix") {
             allWidgets[index].graphType = "";
         }
@@ -109,6 +108,7 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         generate.widget(allWidgets[index].title, allWidgets[index].graphType,
             watchingArray[index].counter
             , existingPositions[index], "watchingArray[index].dataSC", function (data) {
+                $thisWidget.hide();
                 eval(data);
                 finishedLoading();
             }, errorOccurred);
@@ -120,7 +120,7 @@ var goDrawScatterPlot = function (index) {
     $thisWidget.find(".glyphicon").show();
     generate.widget(allWidgets[index].title, "scatter", "", existingPositions[index],
         "watchingArray[index].dataSC", function (data) {
-            $("#loadingNeed"+index).hide();
+            $thisWidget.hide();
             eval(data);
             finishedLoading();
         }, errorOccurred);
@@ -130,6 +130,7 @@ var goDrawBoolean = function (data, sensor, index) {
     var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
     $thisWidget.find(".glyphicon").show();
     generate.widgetBoolean(existingPositions[index], "data", allWidgets[index].title, function (result) {
+        $thisWidget.hide();
         eval(result);
         finishedLoading();
     }, errorOccurred);
@@ -139,6 +140,7 @@ var goDrawPie = function (sensor, index) {
     var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
     $thisWidget.find(".glyphicon").show();
     generate.widgetPie(existingPositions[index], allWidgets[index].title, "watchingArray[index].dataSC", function (data) {
+        $thisWidget.hide();
         eval(data);
         finishedLoading();
     }, errorOccurred);

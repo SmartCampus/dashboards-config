@@ -38,7 +38,7 @@ describe("needs", function () {
 		}
 
 		it("should produce an invalidCategories error", function (done) {
-			needs.getNeedsMatchingSensors({ category: "not a category" }, function (err, results) {
+			needs.getNeedsMatchingSensors([{ category: "not a category" }], function (err, results) {
 				assert(err);
 				assert(err.invalidCategories);
 				assert(!results);
