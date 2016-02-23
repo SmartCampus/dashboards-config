@@ -28,6 +28,8 @@ if (localStorage.getItem("dashboardTitle") !== null) {
 } //else we just don't write any title
 
 if (beginDate === '' || endDate == '') {
+//    beginDate = '2015-07-21 8:00:11';
+//    endDate = '2015-09-21 18:00:11';
     beginDate = '2015-12-21 8:00:11';
     endDate = '2016-01-21 18:00:11';
 }
@@ -77,12 +79,27 @@ var finishedLoading = function () {
 
 //An array of as many arrays as we have widgets.
 var waitForOtherSensorsToDraw = function (sensor, index) {
-    if (watchingArray[index].dataSC.length < allWidgets[index].sensors.length) {
-        //we must put the sensor here ONLY if the unit is different from all the others !
-        if ((watchingArray[index].counter.length >= 1 && sensor.unit != watchingArray[index].counter[0].unit) || watchingArray[index].counter.length == 0)
-            watchingArray[index].counter.push(sensor);
+    if (watchingArray[index].dataSC.length <= allWidgets[index].sensors.length) {
+        console.log('unit of current : ', sensor.unit);
+
+        if (watchingArray[index].counter.length > 0 && watchingArray[index].counter[0].unit == sensor.unit) {
+            console.log('unit of 0 : ', watchingArray[index].counter[0].unit);
+            watchingArray[index].counter[0].amount += 1;
+        }
+        else if (watchingArray[index].counter.length > 1 && watchingArray[index].counter[1].unit == sensor.unit) {
+            console.log('unit of 1 : ', watchingArray[index].counter[1].unit);
+            watchingArray[index].counter[1].amount += 1;
+        }
+        else {
+            console.log('we push a ', sensor.unit);
+            watchingArray[index].counter.push({
+                "unit": sensor.unit,
+                "title": sensor.unit,
+                "amount": 1
+            });
+        }
+        console.log('nb of y axes : ', watchingArray[index].counter.length);
     }
-    //TODO: pour le moment, on push des sensors à la place des yaxes : dans le cas de winter ça va plus être possible...
     if (watchingArray[index].dataSC.length == allWidgets[index].sensors.length) {
         console.log('for ', index, 'i have everything');
         if (allWidgets[index].graphType == "mix") {
@@ -147,6 +164,7 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                     if (sensor.percent) {
                         sensor.unit = 'percent';
                         sensor.description = '% of ' + sensor.description;
+                        widget.withParam = true;
                     }
                     //Je veux splitlist dans le cas d'une porte ou d'une fenêtre : ce sera sans doute dans le cas de
                     // n'importe quelle porte ou fenêtre, en fait -> il me faudrait bien un kind là...
