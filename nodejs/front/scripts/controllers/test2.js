@@ -144,24 +144,12 @@ $(function () {
 
 $(function() {
     $( "#sortable1, #sortable2" ).sortable({
-        connectWith: ".connectedSortable"
+        connectWith: ".connectedSortable",
+        handle: 'h1',
+        cursor: 'move',
+        scroll: false,
+        placeholder: 'placeholder',
+        forcePlaceholderSize: true,
+        tolerance: 'pointer'
     }).disableSelection();
 });
-
-function dragStart(ev) {
-    ev.dataTransfer
-        .setData("ID",ev.target.getAttribute('id'));
-    ev.target.classList.add('dragging');
-}
-
-function dragOver(ev) {
-    ev.target.classList.remove('dragging');
-    return false;
-}
-
-
-function dragDrop(ev) {
-    var idelt = ev.dataTransfer.getData("ID");
-    ev.target
-        .appendChild(document.getElementById(idelt));
-}
