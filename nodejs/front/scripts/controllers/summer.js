@@ -65,7 +65,7 @@ var plotines =
     }]
 };
 
-generate.widgetV2("Temperatures comparison", "line", [{type:"temperature", "title": "Temperature (°C)"}], "c1", "temperaturesArray", function(data) {
+generate.widget("Temperatures comparison", "line", [{type:"temperature", "title": "Temperature (°C)"}], "c1", "temperaturesArray", function(data) {
     console.log(data);
     lineChartData = data;
     waitForEverybody();
@@ -98,9 +98,9 @@ successForAcCount = function (data) {
 retrieveData.askForSeriesWithParam('AC_443STATE/data', 'true', beginDate, endDate, successForAcCount, errorOccurred);
 
 retrieveData.askForSeriesWithParam('WINDOW443STATE/data', 'true', beginDate, endDate, successForWindowCount, errorOccurred);
-//generate.widgetV2("line", [{type:"temperature", "title": "Temperature (°C)"}], "c1", "temperatureArray", function(data) {
+//generate.widget("line", [{type:"temperature", "title": "Temperature (°C)"}], "c1", "temperatureArray", function(data) {
 
-generate.widgetV2("Window openings vs. AC use", "column",  [{"type":"number","title":"Nb of times the window got opened"},{"type":"percent","title":"% of time AC is on"}]
+generate.widget("Window openings vs. AC use", "column",  [{"type":"number","title":"Nb of times the window got opened"},{"type":"percent","title":"% of time AC is on"}]
     , "c2", "countingArray", function(data) {
      //   console.log(data);
     barChartData = data;

@@ -324,7 +324,7 @@ function dropIt(event, ui) {
     if ($.inArray(draggableId, needsSimple[droppableId]) > -1) {
         if (!($.inArray(draggableId, allTheNeeds[droppableId].needs) > -1)) {
             allTheNeeds[droppableId].needs.forEach(function (aNeed) {
-                aTemporaryArrayOfNeeds.push(aNeed.name);
+                aTemporaryArrayOfNeeds.push(aNeed);
             });
             aTemporaryArrayOfNeeds.push(draggableId);
             expression.needList(aTemporaryArrayOfNeeds, function (answer) {
@@ -435,7 +435,6 @@ var declareNeeds = function () {
             oneNeed.graphType = answer;
             //Better than cookie bc same behaviour throughout browsers.
             if (index == allTheNeeds.length - 1) {
-                console.log('we got everything !');
                 localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
                 localStorage.setItem("startDate", startDate);
                 localStorage.setItem("endDate", endDate);
