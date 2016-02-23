@@ -4,8 +4,7 @@
 
 //Ca, ça va pas du tout. Ca fait que ca dépend de comment t'as rempli tes boites, et c'tout !
 var existingPositions = [];
-var beginDate='';
-var endDate = '';
+
 var watchingArray = [{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},
     {"dataSC": [], "counter": []},{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},
     {"dataSC": [], "counter": []},{"dataSC": [], "counter": []}];
@@ -27,14 +26,14 @@ if (localStorage.getItem("dashboardTitle") !== null) {
     $("#theGeneralTitle").html(localStorage.getItem("dashboardTitle"));
 } //else we just don't write any title
 
-if (beginDate === '' || endDate == '') {
+if (beginDate == 'undefined' || endDate == 'undefined') {
     beginDate = '2015-08-21 8:00:11';
     endDate = '2015-10-21 18:00:11';
 }
 
 
 var sensorDataRetrievingSuccess = function (data, sensor, index) {
-    $("#loadingSensor"+sensor.name+index).html("Data for \""+sensor.displayName +"\" for the widget \""+allTheNeeds[index].title+"\" is successfully retrieved ! ");
+    $("#loadingSensor"+sensor.name+index).html("Data for \""+sensor.displayName +"\" for the widget \""+theNeeds[index].title+"\" is successfully retrieved ! ");
 
     if (theNeeds[index].graphType == 'line' || theNeeds[index].graphType == 'column') {
         console.log('line or column widget');
@@ -100,7 +99,7 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         watchingArray[index].counter.push(sensor);
     }//TODO: pour le moment, on push des sensors à la place des yaxes : dans le cas de winter ça va plus être possible...
     if (watchingArray[index].counter.length == theNeeds[index].sensors.length) {
-        $("#loadingNeed"+index).html(" Starting the widget \""+allTheNeeds[index].title+"\" graph generation... ");
+        $("#loadingNeed"+index).html(" Starting the widget \""+theNeeds[index].title+"\" graph generation... ");
         console.log('for ', index, 'i have everything');
         if (theNeeds[index].graphType == "mix") {
             console.log('the graph type is mix, im deleting that');
@@ -110,7 +109,7 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         generate.widgetV2(theNeeds[index].title, theNeeds[index].graphType,
             watchingArray[index].counter
             , existingPositions[index], "watchingArray[index].dataSC", function (data) {
-                $("#loadingNeed"+index).html("The widget \""+allTheNeeds[index].title+"\" graph is generated ! ");
+                $("#loadingNeed"+index).html("The widget \""+theNeeds[index].title+"\" graph is generated ! ");
 
                 firstWCode = data;
                 eval(firstWCode); //TODO:is this the right place for eval ?
@@ -193,7 +192,7 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                 //Maintenant que je sais ça, pour chaque sensor : je récup les infos manquantes, & j'appelle les données.
                 aNeed.sensors.forEach(function (sensor) {
                     var loadingASensor = $(document.createElement('div'));
-                    loadingASensor.attr("id", "loadingSensor"+sensor.name+aNeed.index);
+                    loadingASensor.attr("id", "loadingSensor"+sensor.name+index);
                     loadingASensor.appendTo($("#loadingImg"));
                     loadingASensor.html("The sensor called \""+sensor.displayName +"\" for the widget \""+aNeed.title+"\" is loading...");
                     if (sensor.percent) {
