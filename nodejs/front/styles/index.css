@@ -50,3 +50,9 @@ body {
     color : white;
     font-weight: bold;
 }
+
+.affix {
+    width: 30%;
+    position: fixed;
+    top : 10%
+}
