@@ -23,6 +23,7 @@ function getSensorsByCategory(category, callback) {
 		});
 	}).on("error", function (error) {
 		logger.error(error);
+		error.whileReachingSmartCampus = true;
 		callback(error, null);
 	});
 }

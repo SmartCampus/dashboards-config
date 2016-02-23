@@ -51,9 +51,9 @@ class Need {
 // Needs and NEEDS namespace initialization
 
 var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
-	SEE_STATUS = new Need("See status", [STATE]),
+	SEE_STATUS = new Need("See Status", [STATE]),
 	OVERTIME = new Need("Overtime", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
-	RELATIONSHIPS = new Need("Relationships", [SOUND, STATE]),
+	RELATIONSHIPS = new Need("Relationships", [TEMP, SOUND, STATE]),
 	HIERARCHY = new Need("Hierarchy", []),
 	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
 	SUMMARIZE = new Need("Summarize", []),
@@ -76,23 +76,30 @@ var NEEDS = {
 	HIERARCHY: HIERARCHY,
 	PROPORTION: PROPORTION,
 	SUMMARIZE: SUMMARIZE,
-	PATTERN: PATTERN
+	PATTERN: PATTERN,
+	ALL: [COMPARISON, SEE_STATUS, OVERTIME, RELATIONSHIPS, HIERARCHY, PROPORTION, SUMMARIZE, PATTERN]
 }
 
 /**
  * Utility function that looks up the NEEDS namespace in order to find need instances.
  * 
- * @param  [string] needStrings 	string array containing the needs name to look for
- * @return [Need]					an array containing the matched Need class instances
+ * @param  [string]	needStrings 	string array containing the needs name to look for
+ * @return [Need]					an array containing the matched Need class instances,
+ * 										if there's no match for only one case, returns an
+ *										empty array
  */
 function getNeedsByName(needStrings) {
-	var needs = [];
+	var needs = [], need;
 
-	for (var need in NEEDS) {
-		if (needStrings.find(function (str) {
-			return str == NEEDS[need].name;
+	for (var i in needStrings) {
+		if (NEEDS.ALL.find(function (current) {
+			need = current;
+			return need.name.toLowerCase() === needStrings[i].toLowerCase();
 		})) {
-			needs.push(NEEDS[need]);
+			needs.push(need);
+		}
+		else {
+			return [];
 		}
 	}
 	return needs;
@@ -103,8 +110,9 @@ function getNeedsByName(needStrings) {
  * 
  * @param  [Need]		needs 		the array of needs in relation with the sensors 
  * 									have to be retrieved
- * @param  Function 	callback	the callback to call with err dans results parameters
- * 									if no error, results is a sensor objects array
+ * @param  Function 	callback	the callback to call with err dans results parameters,
+ * 									if no error results is a sensor objects array
+ * 									error unconsistentNeedSet might be set
  */
 function getSensorsMatchingNeeds(needs, callback) {
 	var sensors = [], sensorCategories;
@@ -215,11 +223,22 @@ function checkNeedsConsistency(needs) {
  * 									have to be retrieved, a sensor should at least have a
  * 									"category" property with a value matching one of those
  * 									defined above
- * @param  Function 	callback	the callback to call with err dans results parameters
- * 									if no error, results is a need objects array
+ * @param  Function 	callback	the callback to call with err dans results parameters,
+ * 									if no error results is a need objects array
+ * 									error invalidCategories might be set
  */
 function getNeedsMatchingSensors(sensors, callback) {
-	callback(null, mergeNeedsFromCategories(getCategoriesFromSensors(sensors)));
+	var categories = getCategoriesFromSensors(sensors);
+
+	if (categories.length == 0) {
+		var err = new Error("invalid categories");
+
+		err.invalidCategories = true;
+		callback(err, null);
+	}
+	else {
+		callback(null, mergeNeedsFromCategories(categories));
+	}
 }
 
 /**
@@ -264,8 +283,8 @@ function findCategoriesInArray(array, categories) {
 function mergeNeedsFromCategories(categories) {
 	var needs = [], need;
 
-	for (var property in NEEDS) {
-		need = NEEDS[property];
+	for (var i in NEEDS.ALL) {
+		need = NEEDS.ALL[i];
 		if (!findElementInArray(needs, need)) {
 			if (findCategoriesInArray(need.sensorCategories, categories)) {
 				needs.push(need);
@@ -282,24 +301,17 @@ function mergeNeedsFromCategories(categories) {
  * 									have to be extracted, a sensor should at least have a
  * 									"category" property with a value matching one of those
  * 									defined above
- * @return [string]				an array of sensor categories as defined above
+ * @return [string]				an array of sensor categories as defined above, returns an
+ *									empty array if there's no match for only one case
  */
 function getCategoriesFromSensors(sensors) {
 	var sensor, categories = [], category;
 
 	for (var i = sensors.length - 1; i >= 0; i--) {
-		category = sensors[i].category;
-		// TODO: quick fix pour que categories & unit arrêtent de poser pb
-		// category = sensors[i].unit;
-		// if (category === "temperature") {
-		// 	category = TEMP;
-		// } else if (category === "watt") {
-		// 	category = ENERGY;
-		// } else if (category === "number") {
-		// 	category = STATE;
-		// } else if (category === "lux") {
-		// 	category = LIGHT;
-		// }
+		category = sensors[i].category.toUpperCase();
+		if (!SENSOR_CATEGORIES[category]) {
+			return [];
+		}
 		if (!findElementInArray(categories, category)) {
 			categories.push(category);
 		}

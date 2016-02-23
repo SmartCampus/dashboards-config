@@ -83,7 +83,7 @@ function analyseGraphConfig(config) {
     var series = [];
     var counter = 0;
 
-    for (var i in yAxes) {
+    for (var i = 0 ; i < yAxes.length ; i++) {
         var serie = {};
         yAxisType = graphDefinitions.getYAxisType(yAxes[i].unit);
         if (yAxisType) {
@@ -100,10 +100,12 @@ function analyseGraphConfig(config) {
 
             if(yAxes[i].amount == 1 || typeof(yAxes[i].amount) == 'undefined') {
                 console.log('yAxes amount is 1. ');
-                serie.serieIndex = i;
+                serie.serieIndex = counter; //TODO: va pas parce que je prend l'index de l'axe : MAIS si j'avais un duo avant,
+                //l'index c'est 1 mais dans mon tableau de données c'est 2 :(
                 serie.yAxisIndex = i;
                 serie.approxType = yAxisType.approxType;
                 graphDefinitions.copyYAxisTypeProperties(yAxisType, serie);
+                counter++;
 
                 series.push(serie);
                 if (i < yAxes.length - 1) {
@@ -116,7 +118,7 @@ function analyseGraphConfig(config) {
                     console.log('looping through one of my amount');
                     console.log(i, '+', j);
                     serie.serieIndex = parseInt(i) + parseInt(j);
-                    serie.yAxisIndex = i;//PB: on utilise ça pour l'index du tableau et pour l'index de l'axe y !
+                    serie.yAxisIndex = i;
                     serie.approxType = yAxisType.approxType;
                     graphDefinitions.copyYAxisTypeProperties(yAxisType, serie);
 
