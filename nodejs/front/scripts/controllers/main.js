@@ -155,9 +155,9 @@ var removeAWidget = function (widgetId) {
     $('#' + widgetId).remove();
     $('#deleteWidget' + widgetId).remove();
     $('#widgetNameForm' + widgetId).remove();
-    //maxOfWidgets -= 1;
+    maxOfWidgets -= 1;
     sensorsBox[widgetId] = null;
-    allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
+    allTheNeeds.splice(widgetId, 1);
 
     /* TODO :  Auto select an other box
     for(var i = 0; i < sensorsBox.length; i++) {
