@@ -46,7 +46,7 @@ var generate = (function () {
                     errorCB();
                 });
         },
-        widgetV2: function (graphTitle, graphType, yAxesArray, graphName, seriesName, successCB, errorCB) {
+        widget: function (graphTitle, graphType, yAxesArray, graphName, seriesName, successCB, errorCB) {
             console.log(JSON.stringify({
                 job : 'generateGraph',
                 config :
