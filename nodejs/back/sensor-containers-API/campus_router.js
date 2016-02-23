@@ -17,11 +17,12 @@ router.get("/sensors", function(req, res) {
             putValueInResponse(res, jsonResponse);
         });
     } else {
+        res.status(400);
         res.send("Sorry please enter a container in the query parameters." +
-            "Here is the list of all the valid containers" +
+            "Here is the list of all the valid containers " +
             "CampusSophiaTech - TempliersOuest - 4thfloor - Coffeecorner - Sousrepartiteur - Modaliscorridor" +
             "Office445 - Office443 - Office444 - TEMP - LIGHT - STATE- ENERGY - VirtualSensors. Exemple of valid request " +
-            "/sensors?container1=Office443")
+            "/sensors?container1=Office443");
     }
 });
 
