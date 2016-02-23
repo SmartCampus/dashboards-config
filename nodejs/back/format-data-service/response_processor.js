@@ -174,14 +174,14 @@ function persentFormat(tempPerTime, begin, end) {
         if(i == 0) {
             if(tempPerTime.values[i].value === "OPEN") {
                 lastOn = tempPerTime.values[i].date;
-            } else {
+            } else if (tempPerTime.values[i].value === "CLOSED") {
                 lastOn = begin;
                 totalTimeOpen += (tempPerTime.values[i].date - begin);
             }
         } else {
             if (tempPerTime.values[i].value === "OPEN") {
                 lastOn = tempPerTime.values[i].date;
-            } else if (tempPerTime.values[i].value === "CLOSE") {
+            } else if (tempPerTime.values[i].value === "CLOSED") {
                 totalTimeOpen += (tempPerTime.values[i].date - lastOn);
             }
         }

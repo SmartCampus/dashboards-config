@@ -55,7 +55,7 @@ describe("#persentFormat()", function(){
    context("with One OPEN and one CLOSE", function() {
       it("should return 50% open and 50% close in two list", function() {
          var input =  { values : [ {value : "OPEN", date : 1}, {value : "CLOSE", date: 2}]};
-         var response = processor.persentFormat(input, 0, 2);
+         var response = processor.persentFormat(input, 1452166657, 1454933992);
          assert.deepEqual(response, {data : [{open : 50}, {close : 50}]});
       });
    });
