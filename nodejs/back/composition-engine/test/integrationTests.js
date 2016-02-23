@@ -44,7 +44,17 @@ describe("composition engine", function () {
 				.expect(400)
 				.expect(function (response) {
 					assert(response.body.unconsistentNeedSet);
-					// TODO error message
+				})
+				.end(done);
+		});
+
+		it("should respond with a 400 flag while sending a nonexistent need", function (done) {
+			request(app)
+				.post(needSetPath)
+				.send(["Comprison", "Overtime"])
+				.expect(400)
+				.expect(function (response) {
+					assert(response.body.incorrectNeeds);
 				})
 				.end(done);
 		});
@@ -261,6 +271,17 @@ describe("composition engine", function () {
 				})
 				.end(callback);
 		}
+
+		it("should respond with a 400 flag while sending sensors with invalid categories", function (done) {
+			request(app)
+				.post(sensorSetPath)
+				.send({ sensors: [{ category: "this is not a sensor category" }] })
+				.expect(400)
+				.expect(function (response) {
+					assert(response.body.invalidCategories);
+				})
+				.end(done);
+		});
 
 		describe("summer dashboard", function () {
 

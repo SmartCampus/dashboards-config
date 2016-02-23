@@ -83,8 +83,10 @@ var NEEDS = {
 /**
  * Utility function that looks up the NEEDS namespace in order to find need instances.
  * 
- * @param  [string] needStrings 	string array containing the needs name to look for
- * @return [Need]					an array containing the matched Need class instances
+ * @param  [string]	needStrings 	string array containing the needs name to look for
+ * @return [Need]					an array containing the matched Need class instances,
+ * 										if there's no match for only one case, returns an
+ *										empty array
  */
 function getNeedsByName(needStrings) {
 	var needs = [], need;
@@ -96,6 +98,9 @@ function getNeedsByName(needStrings) {
 		})) {
 			needs.push(need);
 		}
+		else {
+			return [];
+		}
 	}
 	return needs;
 }
@@ -105,8 +110,9 @@ function getNeedsByName(needStrings) {
  * 
  * @param  [Need]		needs 		the array of needs in relation with the sensors 
  * 									have to be retrieved
- * @param  Function 	callback	the callback to call with err dans results parameters
- * 									if no error, results is a sensor objects array
+ * @param  Function 	callback	the callback to call with err dans results parameters,
+ * 									if no error results is a sensor objects array
+ * 									error unconsistentNeedSet might be set
  */
 function getSensorsMatchingNeeds(needs, callback) {
 	var sensors = [], sensorCategories;
@@ -217,11 +223,22 @@ function checkNeedsConsistency(needs) {
  * 									have to be retrieved, a sensor should at least have a
  * 									"category" property with a value matching one of those
  * 									defined above
- * @param  Function 	callback	the callback to call with err dans results parameters
- * 									if no error, results is a need objects array
+ * @param  Function 	callback	the callback to call with err dans results parameters,
+ * 									if no error results is a need objects array
+ * 									error invalidCategories might be set
  */
 function getNeedsMatchingSensors(sensors, callback) {
-	callback(null, mergeNeedsFromCategories(getCategoriesFromSensors(sensors)));
+	var categories = getCategoriesFromSensors(sensors);
+
+	if (categories.length == 0) {
+		var err = new Error("invalid categories");
+
+		err.invalidCategories = true;
+		callback(err, null);
+	}
+	else {
+		callback(null, mergeNeedsFromCategories(categories));
+	}
 }
 
 /**
@@ -284,24 +301,17 @@ function mergeNeedsFromCategories(categories) {
  * 									have to be extracted, a sensor should at least have a
  * 									"category" property with a value matching one of those
  * 									defined above
- * @return [string]				an array of sensor categories as defined above
+ * @return [string]				an array of sensor categories as defined above, returns an
+ *									empty array if there's no match for only one case
  */
 function getCategoriesFromSensors(sensors) {
 	var sensor, categories = [], category;
 
 	for (var i = sensors.length - 1; i >= 0; i--) {
 		category = sensors[i].category;
-		// TODO: quick fix pour que categories & unit arrêtent de poser pb
-		// category = sensors[i].unit;
-		// if (category === "temperature") {
-		// 	category = TEMP;
-		// } else if (category === "watt") {
-		// 	category = ENERGY;
-		// } else if (category === "number") {
-		// 	category = STATE;
-		// } else if (category === "lux") {
-		// 	category = LIGHT;
-		// }
+		if (!SENSOR_CATEGORIES[category]) {
+			return [];
+		}
 		if (!findElementInArray(categories, category)) {
 			categories.push(category);
 		}

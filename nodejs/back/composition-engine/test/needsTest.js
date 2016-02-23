@@ -80,6 +80,11 @@ describe("needs", function () {
 
 	describe("#getNeedsByName()", function () {
 
+		it("should return an empty array", function () {
+			assert.deepEqual(needs.getNeedsByName(["Comprison", "Overtime"]), []);
+			assert.deepEqual(needs.getNeedsByName([]), []);
+		});
+
 		describe("summer dashboard", function () {
 
 			it("should return summerWidget1Needs", function () {
@@ -335,6 +340,15 @@ describe("needs", function () {
 				}
 			});
 		}
+
+		it("should produce an invalidCategories error", function (done) {
+			needs.getNeedsMatchingSensors({ category: "not a category" }, function (err, results) {
+				assert(err);
+				assert(err.invalidCategories);
+				assert(!results);
+				done();
+			});
+		});
 
 		describe("summer dashboard", function () {
 
