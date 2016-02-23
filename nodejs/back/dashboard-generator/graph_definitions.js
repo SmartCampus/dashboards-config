@@ -27,7 +27,7 @@ class YAxisType {
 }
 
 var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average", ""),
-	NUMBER = new YAxisType("number", 0, undefined, " ", undefined, "sum", "column"),
+	NUMBER = new YAxisType("number", 0, undefined, " ", undefined, "sum", "column"), //TODO: ici, j'aimerais avoir un average aussi. mais du coup, quid de noise ? A voir quand j'aurai les données :'(
 	TEMPERATURE = new YAxisType("temperature", undefined, undefined, " °C ",
 		{
 			value: 0,
