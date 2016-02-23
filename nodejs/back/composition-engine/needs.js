@@ -94,7 +94,7 @@ function getNeedsByName(needStrings) {
 	for (var i in needStrings) {
 		if (NEEDS.ALL.find(function (current) {
 			need = current;
-			return need.name === needStrings[i];
+			return need.name.toLowerCase() === needStrings[i].toLowerCase();
 		})) {
 			needs.push(need);
 		}
@@ -308,7 +308,7 @@ function getCategoriesFromSensors(sensors) {
 	var sensor, categories = [], category;
 
 	for (var i = sensors.length - 1; i >= 0; i--) {
-		category = sensors[i].category;
+		category = sensors[i].category.toUpperCase();
 		if (!SENSOR_CATEGORIES[category]) {
 			return [];
 		}

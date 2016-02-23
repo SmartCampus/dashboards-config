@@ -85,6 +85,10 @@ describe("needs", function () {
 			assert.deepEqual(needs.getNeedsByName([]), []);
 		});
 
+		it("should return Comparison and Overtime needs", function () {
+			assert.deepEqual(needs.getNeedsByName(["cOmpARIson", "OVERTIME"]), [NEEDS.COMPARISON, NEEDS.OVERTIME]);
+		});
+
 		describe("summer dashboard", function () {
 
 			it("should return summerWidget1Needs", function () {
@@ -352,7 +356,7 @@ describe("needs", function () {
 
 		describe("summer dashboard", function () {
 
-			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
+			var temp443V = { name: "TEMP_443V", category: "temp" },
 				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
 				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.STATE },
 				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
