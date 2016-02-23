@@ -25,7 +25,3 @@ bower_components
 ## Unwanted maven files ##
 target/
 .mvn
-
-
-## SmartCampus snapshot ##
-nodejs/back/sensor-containers-API/data/snapshot-smartCampus/snapshot

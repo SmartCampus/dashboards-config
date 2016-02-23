@@ -2,11 +2,12 @@ var sensors; //This array contains all the sensors we have
 
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 //2 versions bc easier for now, even if not really useful...
-var needsOrigin = [{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
-var needsSimpleOrigin = ["Comparison", "Map", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 
-var needs = [[{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
-var needsSimple = [["Comparison", "Map", "Pattern", "See status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
+var needsOrigin = [{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See Status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
+var needsSimpleOrigin = ["Comparison", "Map", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+
+var needs = [[{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See Status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
+var needsSimple = [["Comparison", "Map", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
 
 
 $("#generateButton").attr("disabled", "disabled"); //The generate button starts by being disabled
@@ -156,6 +157,7 @@ var removeAWidget = function (widgetId) {
     $('#widgetNameForm' + widgetId).remove();
     //maxOfWidgets -= 1;
     sensorsBox[widgetId] = null;
+    allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
 
     /* TODO :  Auto select an other box
     for(var i = 0; i < sensorsBox.length; i++) {
@@ -304,8 +306,6 @@ function goTo(myPath) {
         }
     }
 }
-
-//The composition starts as empty. Max is as many as the widget number.
 
 
 /************************
