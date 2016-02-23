@@ -90,7 +90,7 @@ var NEEDS = {
  */
 function getNeedsByName(needStrings) {
 	var needs = [], need;
-
+	
 	for (var i in needStrings) {
 		if (NEEDS.ALL.find(function (current) {
 			need = current;
