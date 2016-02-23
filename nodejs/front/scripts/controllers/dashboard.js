@@ -17,10 +17,7 @@ var errorOccurred = function () {
     document.getElementById("dashboard").className = "hidden";
 };
 
-var loadingGif = $(document.createElement('img'));
-loadingGif.attr("src", "/assets/images/loading.gif");
-var okGlyph = $(document.createElement('span'));
-okGlyph.attr("class", "glyphicon glyphicon-ok");
+
 
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
 var allWidgets = JSON.parse(localStorage.getItem("widgetsDescription"));
@@ -42,7 +39,8 @@ if (beginDate == 'undefined' || endDate == 'undefined') {
 
 
 var sensorDataRetrievingSuccess = function (data, sensor, index) {
-    $("#loadingSensor"+sensor.name+index).html("Data for \""+sensor.displayName +"\" for the widget \""+theNeeds[index].title+"\" is successfully retrieved ! ");
+    var thisSensor = $("#loadingSensor"+sensor.name+index).find(".loadingImg").hide();
+    $(document.createElement('span')).attr("class", "glyphicon glyphicon-ok").appendTo(thisSensor);
 
     if (allWidgets[index].graphType == 'line' || allWidgets[index].graphType == 'column' || allWidgets[index].graphType == 'mix') {
         if (sensor.unit == "decibel") {
@@ -72,9 +70,6 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
     }
 };
 
-
-//TODO: demander à l'utilisateur les dates qu'il veut
-
 var allLoaded = 0;
 var finishedLoading = function () {
     if (allLoaded < allWidgets.length - 1) {
@@ -89,39 +84,31 @@ var finishedLoading = function () {
 var waitForOtherSensorsToDraw = function (sensor, index) {
 
     if (watchingArray[index].dataSC.length <= allWidgets[index].sensors.length) {
-        $("#loadingNeed"+index).html(" Starting the widget \""+allWidgets[index].title+"\" graph generation... ");
-
-        console.log('unit of current : ', sensor.unit);
-
         if (watchingArray[index].counter.length > 0 && watchingArray[index].counter[0].unit == sensor.unit) {
-            console.log('unit of 0 : ', watchingArray[index].counter[0].unit);
             watchingArray[index].counter[0].amount += 1;
         }
         else if (watchingArray[index].counter.length > 1 && watchingArray[index].counter[1].unit == sensor.unit) {
-            console.log('unit of 1 : ', watchingArray[index].counter[1].unit);
             watchingArray[index].counter[1].amount += 1;
         }
         else {
-            console.log('we push a ', sensor.unit);
             watchingArray[index].counter.push({
                 "unit": sensor.unit,
                 "title": sensor.unit,
                 "amount": 1
             });
         }
-        console.log('nb of y axes : ', watchingArray[index].counter.length);
     }
     if (watchingArray[index].dataSC.length == allWidgets[index].sensors.length) {
-        console.log('for ', index, 'i have everything');
+        var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
+        $thisWidget.find(".glyphicon").show();
         if (allWidgets[index].graphType == "mix") {
             allWidgets[index].graphType = "";
         }
         console.log(watchingArray[index].dataSC);
-        generate.widgetV2(allWidgets[index].title, allWidgets[index].graphType,
+        generate.widget(allWidgets[index].title, allWidgets[index].graphType,
             watchingArray[index].counter
             , existingPositions[index], "watchingArray[index].dataSC", function (data) {
-                $("#loadingNeed"+index).html("The widget \""+allWidgets[index].title+"\" graph is generated ! ");
-
+                $thisWidget.hide();
                 eval(data);
                 finishedLoading();
             }, errorOccurred);
@@ -129,22 +116,31 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
 };
 
 var goDrawScatterPlot = function (index) {
-    generate.widgetV2(allWidgets[index].title, "scatter", "", existingPositions[index],
+    var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
+    $thisWidget.find(".glyphicon").show();
+    generate.widget(allWidgets[index].title, "scatter", "", existingPositions[index],
         "watchingArray[index].dataSC", function (data) {
+            $thisWidget.hide();
             eval(data);
             finishedLoading();
         }, errorOccurred);
 };
 
 var goDrawBoolean = function (data, sensor, index) {
+    var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
+    $thisWidget.find(".glyphicon").show();
     generate.widgetBoolean(existingPositions[index], "data", allWidgets[index].title, function (result) {
+        $("#"+existingPositions[index]).empty();
         eval(result);
         finishedLoading();
     }, errorOccurred);
 };
 
 var goDrawPie = function (sensor, index) {
+    var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
+    $thisWidget.find(".glyphicon").show();
     generate.widgetPie(existingPositions[index], allWidgets[index].title, "watchingArray[index].dataSC", function (data) {
+        $thisWidget.hide();
         eval(data);
         finishedLoading();
     }, errorOccurred);
@@ -155,7 +151,9 @@ var layoutChosen = function (layoutName, layoutAnswer) {
 
     var loadingLayoutDiv = $(document.createElement('div'));
     loadingLayoutDiv.attr("id", "loadingLayout");
-    loadingLayoutDiv.html("The layout is being generated...");
+    loadingLayoutDiv.html("Layout generation ");
+    $(document.createElement('img')).attr("src", "/assets/images/loading.gif").attr("class", "loadingImg").appendTo(loadingLayoutDiv);
+
     loadingLayoutDiv.appendTo($("#loadingImg"));
 
     var div = document.getElementById('dashboard');
@@ -163,22 +161,21 @@ var layoutChosen = function (layoutName, layoutAnswer) {
     //After getting the layout generated, the same server has to give us the list of the div ids it created.
     layouts.widgetsIds(layoutName, function (widgetsArray) {
 
-        loadingLayoutDiv.html("The layout is generated !");
+        loadingLayoutDiv.find(".loadingImg").hide();
+        $(document.createElement('span')).attr("class", "glyphicon glyphicon-ok").appendTo(loadingLayoutDiv);
 
         existingPositions = widgetsArray;
         div.insertAdjacentHTML('afterbegin', layoutAnswer);
-        var loadingDataGeneral = $(document.createElement('div'));
-        loadingDataGeneral.attr("id", "loadingDataGeneral");
-        loadingDataGeneral.appendTo($("#loadingImg"));
-        loadingDataGeneral.html("The data you requested is being loaded...");
 
         allWidgets.forEach(function (widget, index) {
             if (widget.sensors.length > 0) { //we only do that if you asked for some sensors !
             
                 var loadingANeed = $(document.createElement('div'));
                 loadingANeed.attr("id", "loadingNeed"+index);
-                loadingANeed.appendTo($("#loadingImg"));
-                loadingANeed.html("The widget called \""+aNeed.title+"\" is being loaded...");
+                loadingANeed.appendTo($("#"+existingPositions[index]));
+                loadingANeed.html("The widget \""+widget.title+"\"");
+                $(document.createElement('img')).attr("src", "/assets/images/loading.gif").attr("class", "loadingImg").appendTo(loadingANeed);
+                $(document.createElement('span')).attr("class", "glyphicon glyphicon-ok").appendTo(loadingANeed).hide();
 
                 widget.additionnal = '';
                 if (widget.graphType == 'column' || widget.graphType == 'scatterplot') {
@@ -195,8 +192,10 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                 widget.sensors.forEach(function (sensor) {
                     var loadingASensor = $(document.createElement('div'));
                     loadingASensor.attr("id", "loadingSensor"+sensor.name+index);
-                    loadingASensor.appendTo($("#loadingImg"));
-                    loadingASensor.html("The sensor called \""+sensor.displayName +"\" for the widget \""+aNeed.title+"\" is loading...");
+                    loadingASensor.appendTo($("#loadingNeed"+index));
+                    loadingASensor.html("The sensor \""+sensor.displayName +"\"");
+                    $(document.createElement('img')).attr("src", "/assets/images/loading.gif").attr("class", "loadingImg").appendTo(loadingASensor);
+
 
                     widget.withParam = false;
                     if (sensor.percent) {

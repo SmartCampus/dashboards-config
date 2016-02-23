@@ -307,7 +307,7 @@ function mergeNeedsFromCategories(categories) {
 function getCategoriesFromSensors(sensors) {
 	var sensor, categories = [], category;
 
-	for (var i = sensors.length - 1; i >= 0; i--) {
+	for (var i in sensors) {
 		category = sensors[i].category.toUpperCase();
 		if (!SENSOR_CATEGORIES[category]) {
 			return [];

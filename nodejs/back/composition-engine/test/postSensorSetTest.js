@@ -38,12 +38,72 @@ describe("composition engine", function () {
 				.end(callback);
 		}
 
+		it("should respond with a 400 flag while sending invalid sensors", function (done) {
+			async.parallel([
+				function (callback) {
+					request(app)
+						.post(sensorSetPath)
+						.send("This is not the expected JSON.")
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.invalidJson);
+						})
+						.end(callback);
+				},
+				function (callback) {
+					request(app)
+						.post(sensorSetPath)
+						.send({ sensres: []})
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.invalidJson);
+						})
+						.end(callback);
+				},
+				function (callback) {	
+					request(app)
+						.post(sensorSetPath)
+						.send({ sensors: "This is not an array."})
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.invalidJson);
+						})
+						.end(callback);
+				},
+				function (callback) {
+					request(app)
+						.post(sensorSetPath)
+						.send({ sensors: [ "This is not a sensor.", "This isn't a sensor either."]})
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.invalidJson);
+						})
+						.end(callback);
+				},
+				function (callback) {
+					request(app)
+						.post(sensorSetPath)
+						.send({ sensors: [{ catgries: "" }]})
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.invalidJson);
+						})
+						.end(callback);
+				}
+			], function join (err, results) {
+				logger.debug(err);
+				assert(!err);
+				done();
+			});
+		});
+
 		it("should respond with a 400 flag while sending sensors with invalid categories", function (done) {
 			request(app)
 				.post(sensorSetPath)
 				.send({ sensors: [{ category: "this is not a sensor category" }] })
 				.expect(400)
 				.expect(function (response) {
+					logger.debug(response.body);
 					assert(response.body.invalidCategories);
 				})
 				.end(done);

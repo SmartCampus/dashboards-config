@@ -95,7 +95,7 @@ retrieveData.askForSeriesWithParam('HEATING_443/data', "true", beginDate, endDat
 
 var drawLineChart = function () {
     //The y axes must be declared in the same order as how they are used in the data array
-    generate.widgetV2("Heating status in comparison to inside and outside temperatures", "",
+    generate.widget("Heating status in comparison to inside and outside temperatures", "",
         [{
             unit: "state",
             "title": "Heating status",
@@ -204,7 +204,7 @@ var successInLight = function (data) {
 var drawLineChartForLight = function () {
     var lightInArray = [];
     lightInArray.push(lightData);
-    generate.widgetV2("Brightness level evolution", "line", [{
+    generate.widget("Brightness level evolution", "line", [{
         unit: "lux",
         "title": "Brightness level",
         "amount": 1
