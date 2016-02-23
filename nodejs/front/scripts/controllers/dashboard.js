@@ -16,6 +16,11 @@ var errorOccurred = function () {
     document.getElementById("dashboard").className = "hidden";
 };
 
+var loadingGif = $(document.createElement('img'));
+loadingGif.attr("src", "/assets/images/loading.gif");
+var okGlyph = $(document.createElement('span'));
+okGlyph.attr("class", "glyphicon glyphicon-ok");
+
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
 var theNeeds = JSON.parse(localStorage.getItem("widgetsDescription"));
 beginDate = localStorage.getItem("startDate");
