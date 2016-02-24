@@ -228,7 +228,7 @@ function navigation() {
     var $addCaptors = $("#add-captors").empty();
 
 
-    $addCaptors.append("<div class=\"row\"><h2>" + position.name + "</h2></div>");
+    $addCaptors.append("<div><h2>" + position.name + "</h2></div>");
     var i;
     for (i = 0; i < buildings.length; i++) {
         $addCaptors.append(
@@ -238,11 +238,12 @@ function navigation() {
 
     if (position.directSensor != null && typeof(position.directSensor) !== 'undefined' && position.directSensor != [null]) {
         for (i = 0; i < position.directSensor.length; i++) {
+            var a = "postit"+((i % 4) +1);
             if (position.directSensor[i] != null) {
                 $addCaptors.append(
-                    "<div class=\"row\"><span class=\"draggable\" id=\""
-                    + position.directSensor[i].name + "\" style=\"cursor : grab;\">"
-                    + position.directSensor[i].displayName + "</span></div>"
+                    "<div class=\"draggable col-md-6\" id=\""
+                    + position.directSensor[i].name + "\" style=\"cursor : grab;\"><div class=\""+a+"\"><p>"
+                    + position.directSensor[i].displayName + "</p></div></div>"
                 );
                 $(".draggable").draggable({
                     helper: function (event) {
