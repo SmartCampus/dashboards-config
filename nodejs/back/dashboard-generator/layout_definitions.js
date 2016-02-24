@@ -60,10 +60,62 @@ var LAYOUT_WIDGET_WIDTHS = {
 	}
 };
 
+var dragnDropLayout = {
+	halfNHalf : {
+		"row" : [
+			{"divId" : "sortable1" , "divWidth" : "col-md-6 connectedSortable", "widgets" : [
+					{"widgetId" : "left1"},
+					{"widgetId" : "left2"}
+				]
+			},
+			{"divId" : "sortable2" , "divWidth" : "col-md-6 connectedSortable", "widgets" : [
+					{"widgetId" : "right1"},
+					{"widgetId" : "right2"}
+				]
+			}
+		]
+	},
+	threeThirds : {
+		"row" : [
+			{"divId" : "sortable1" , "divWidth" : "col-md-4 connectedSortable", "widgets" : [
+					{"widgetId" : "left1"},
+					{"widgetId" : "left2"}
+				]
+			},
+			{"divId" : "sortable2" , "divWidth" : "col-md-4 connectedSortable", "widgets" : [
+					{"widgetId" : "center1"},
+					{"widgetId" : "center2"}
+				]
+			},
+			{"divId" : "sortable3" , "divWidth" : "col-md-4 connectedSortable", "widgets" : [
+					{"widgetId" : "right1"},
+					{"widgetId" : "right2"}
+				]
+			}
+		]
+	},
+	oneThirdTwoThirds : {
+		"row" : [
+			{"divId" : "sortable1" , "divWidth" : "col-md-4 connectedSortable", "widgets" : [
+					{"widgetId" : "left1"},
+					{"widgetId" : "left2"}
+				]
+			},
+			{"divId" : "sortable2" , "divWidth" : "col-md-8 connectedSortable", "widgets" : [
+					{"widgetId" : "right1"},
+					{"widgetId" : "right2"}
+				]
+			}
+		]
+	}
+};
+
+
 function getLayoutWidgetWidth(layout) {
 	for (var property in LAYOUT_WIDGET_WIDTHS) {
 		if (property == layout) {
-			return LAYOUT_WIDGET_WIDTHS[property];
+		//	return LAYOUT_WIDGET_WIDTHS[property];
+			return dragnDropLayout[property];
 		}
 	}
 }

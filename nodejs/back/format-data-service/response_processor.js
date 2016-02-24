@@ -284,9 +284,7 @@ function sortHierarchicalSensor(sensors, hierarchicalSensors, callback) {
         for(var iterator in container.directSensor) {
             if(sensors.indexOf(container.directSensor[iterator].name) === -1) {
                 delete container.directSensor[iterator]
-                console.log("Before : " + container.amountOfSensors);
                 container.amountOfSensors--;
-                console.log("After : " + container.amountOfSensors)
             }
         }
 
@@ -296,7 +294,7 @@ function sortHierarchicalSensor(sensors, hierarchicalSensors, callback) {
             }
         }
     }
-    console.log(hierarchicalSensors)
+    console.log(JSON.stringify(hierarchicalSensors));
     callback(hierarchicalSensors);
 }
 

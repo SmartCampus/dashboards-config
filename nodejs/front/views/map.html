@@ -9,6 +9,8 @@
     <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
     <!-- Pour bootstrap -->
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/styles/dashboard.css">
+
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <!-- Bibliothèque D3.js -->
     <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
@@ -18,29 +20,33 @@
 
 </head>
 <body>
-
-<div class="container" style="margin : 30px">
-    <div class="col-md-2">
-        <h3>Légende :</h3>
-        <ul>
-            <li class="list-group-item"><img alt="door icon" src="/assets/images/sensorIcons/door.png"
-                                             class="img-responsive"/>Door sensor
-            </li>
-            <li class="list-group-item"><img alt="window icon" src="/assets/images/sensorIcons/window.png"
-                                             class="img-responsive"/>Window sensor
-            </li>
-            <li class="list-group-item"><img alt="light icon" src="/assets/images/sensorIcons/light.png"
-                                             class="img-responsive"/>Light sensor
-            </li>
-            <li class="list-group-item"><img alt="temperature icon" src="/assets/images/sensorIcons/temperature.png"
-                                             class="img-responsive"/>Temperature sensor
-            </li>
-        </ul>
+<div id="left2" class="col-md-6">
+    <div id="fullFloorMap"></div>
+    <h3>Caption :</h3>
+    <div class="col-md-4">
+        <img class="sensorIcon" src="/assets/images/sensorIcons/door.png"/>Door sensor
     </div>
-    <div class="col-md-10">
-        <h3>Plan</h3>
-        <div id="fullFloorMap"></div>
-
+    <div class="col-md-4">
+        <img class="sensorIcon" src="/assets/images/sensorIcons/sound.png"/>Sound sensor
+    </div>
+    <div class="col-md-4">
+        <img class="sensorIcon" src="/assets/images/sensorIcons/ac.png"/>AC sensor
+    </div>
+    <div class="col-md-4">
+        <img class="sensorIcon" src="/assets/images/sensorIcons/heating.png"/>Heating sensor
+    </div>
+    <div class="col-md-4">
+        <img class="sensorIcon" src="/assets/images/sensorIcons/energy.png"/>Energy sensor
+    </div>
+    <div class="col-md-4">
+        <img class="sensorIcon" src="/assets/images/sensorIcons/window.png"/>Window sensor
+    </div>
+    <div class="col-md-4">
+        <img class="sensorIcon" src="/assets/images/sensorIcons/light.png"/>Light sensor
+    </div>
+    <div class="col-md-4">
+        <img class="sensorIcon" src="/assets/images/sensorIcons/temperature.png"/>Temperature
+        sensor
     </div>
 </div>
 </body>
