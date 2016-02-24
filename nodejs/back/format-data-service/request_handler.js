@@ -19,7 +19,9 @@ function requestSensors(queries, response) {
     }
 
     requester.getSensors(stringQuery, function(res) {
-    processor.concatenateResponse(response,res);
+        processor.concatenateResponse(function(value) {
+            response.send(value);
+        },res);
     });
 }
 
