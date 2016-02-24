@@ -167,29 +167,35 @@ function persentFormat(tempPerTime, begin, end) {
     var responseInGoodFormat = {"data": []};
     var totalTimeOpen = 0;
     var totalTime = end - begin;
-
-
-
     var lastOn = 0;
     for(var i in tempPerTime.values) {
-        if(i == 1) {
-            if(tempPerTime.values[i].value == "OPEN") {
+        console.log(tempPerTime.values[i]);
+        console.log(i);
+        if(i == 0) {
+            if(tempPerTime.values[i].value === "OPEN") {
                 lastOn = tempPerTime.values[i].date;
-            } else {
+            } else if (tempPerTime.values[i].value === "CLOSED") {
                 lastOn = begin;
                 totalTimeOpen += (tempPerTime.values[i].date - begin);
             }
-        }
-        if(tempPerTime.values[i].value == "OPEN") {
-            lastOn = tempPerTime.values[i].date;
-        } else if(tempPerTime.values[i].value == "OPEN") {
-            totalTimeOpen += (tempPerTime.values[i].date - lastOn);
+        } else {
+            if (tempPerTime.values[i].value === "OPEN") {
+                lastOn = tempPerTime.values[i].date;
+            } else if (tempPerTime.values[i].value === "CLOSED") {
+                totalTimeOpen += (tempPerTime.values[i].date - lastOn);
+            }
         }
     }
+    console.log("Total time " + totalTime)
+    console.log("Total time open : " + totalTimeOpen)
     var percent = totalTimeOpen/totalTime;
+
+    console.log("Percent : " + percent)
+
     responseInGoodFormat.data.push({"open" : percent*100});
     responseInGoodFormat.data.push({"close": (1 - percent)*100});
 
+    return responseInGoodFormat;
 }
 
 /**
@@ -306,3 +312,5 @@ exports.concatenateResponse = concatenateResponse;
 exports.handleState = handleState;
 
 exports.splittedInformation = splittedInformation;
+
+exports.persentFormat = persentFormat;

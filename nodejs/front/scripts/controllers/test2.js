@@ -145,11 +145,21 @@ $(function () {
 $(function() {
     $( "#sortable1, #sortable2" ).sortable({
         connectWith: ".connectedSortable",
-        handle: 'h1',
-        cursor: 'move',
-        scroll: false,
-        placeholder: 'placeholder',
-        forcePlaceholderSize: true,
-        tolerance: 'pointer'
+        handle: 'h3',
+        cursor: 'move'
     }).disableSelection();
+});
+
+
+$('#sortable1, #sortable2').droppable({
+    drop: function(event, ui)
+    {
+        function timeout() {
+            $(window).resize();
+            console.log("coucou");
+        }
+        window.setTimeout(function() {
+            $(window).resize();
+        },100);
+    }
 });

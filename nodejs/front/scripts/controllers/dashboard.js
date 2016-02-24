@@ -39,8 +39,9 @@ if (beginDate == 'undefined' || endDate == 'undefined') {
 
 
 var sensorDataRetrievingSuccess = function (data, sensor, index) {
-    var thisSensor = $("#loadingSensor"+sensor.name+index).find(".loadingImg").hide();
-    $(document.createElement('span')).attr("class", "glyphicon glyphicon-ok").appendTo(thisSensor);
+    var $thisSensor = $("#loadingSensor"+sensor.name+index);
+    $thisSensor.find(".loadingImg").hide();
+    $(document.createElement('span')).attr("class", "glyphicon glyphicon-ok").appendTo($thisSensor);
 
     if (allWidgets[index].graphType == 'line' || allWidgets[index].graphType == 'column' || allWidgets[index].graphType == 'mix') {
         if (sensor.unit == "decibel") {
@@ -99,9 +100,9 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         }
     }
     if (watchingArray[index].dataSC.length == allWidgets[index].sensors.length) {
-        var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
+        var $thisWidget = $("#loadingNeed"+index);
+        $thisWidget.find(".loadingImg").hide();
         $thisWidget.find(".glyphicon").show();
-      //  $(document.createElement('span')).attr("class", "glyphicon glyphicon-ok").appendTo($("#loadingNeed"+index));
         if (allWidgets[index].graphType == "mix") {
             allWidgets[index].graphType = "";
         }
@@ -109,6 +110,7 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         generate.widget(allWidgets[index].title, allWidgets[index].graphType,
             watchingArray[index].counter
             , existingPositions[index], "watchingArray[index].dataSC", function (data) {
+                $thisWidget.hide();
                 eval(data);
                 finishedLoading();
             }, errorOccurred);
@@ -116,29 +118,36 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
 };
 
 var goDrawScatterPlot = function (index) {
-    var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
+    var $thisWidget = $("#loadingNeed"+index);
+    $thisWidget.find(".loadingImg").hide();
     $thisWidget.find(".glyphicon").show();
     generate.widget(allWidgets[index].title, "scatter", "", existingPositions[index],
         "watchingArray[index].dataSC", function (data) {
-            $("#loadingNeed"+index).hide();
+            $thisWidget.hide();
             eval(data);
             finishedLoading();
         }, errorOccurred);
 };
 
 var goDrawBoolean = function (data, sensor, index) {
-    var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
+    console.log('drawing boolean for ', sensor.name);
+    var $thisWidget = $("#loadingNeed"+index);
+    $thisWidget.find(".loadingImg").hide();
     $thisWidget.find(".glyphicon").show();
     generate.widgetBoolean(existingPositions[index], "data", allWidgets[index].title, function (result) {
+        $("#"+existingPositions[index]).empty();
         eval(result);
         finishedLoading();
     }, errorOccurred);
 };
 
 var goDrawPie = function (sensor, index) {
-    var $thisWidget = $("#loadingNeed"+index).find(".loadingImg").hide();
+    console.log('drawing pie for ', sensor.name);
+    var $thisWidget = $("#loadingNeed"+index);
+    $thisWidget.find(".loadingImg").hide();
     $thisWidget.find(".glyphicon").show();
     generate.widgetPie(existingPositions[index], allWidgets[index].title, "watchingArray[index].dataSC", function (data) {
+        $thisWidget.hide();
         eval(data);
         finishedLoading();
     }, errorOccurred);
@@ -182,9 +191,6 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                 if (widget.graphType == 'scatterplot') {
                     widget.additionnal = '/splitlist';
                 }
-                if (widget.graphType == 'pieChart') {
-                    widget.additionnal = '/percent';
-                }
                 //Maintenant que je sais ça, pour chaque sensor : je récup les infos manquantes, & j'appelle les données.
 
                 widget.sensors.forEach(function (sensor) {
@@ -195,22 +201,30 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                     $(document.createElement('img')).attr("src", "/assets/images/loading.gif").attr("class", "loadingImg").appendTo(loadingASensor);
 
 
-                    widget.withParam = false;
-                    if (sensor.percent) {
-                        sensor.unit = 'percent';
-                        sensor.description = '% of ' + sensor.description;
-                        widget.withParam = true;
-                    }
+                    widget.withParam = false; //TODO: this cant work :'(
+
                     //Je veux splitlist dans le cas d'une porte ou d'une fenêtre : ce sera sans doute dans le cas de
                     // n'importe quelle porte ou fenêtre, en fait -> il me faudrait bien un kind là...
                     //Je ne peux pas dire quand j'ai STATE, parce que heating par exemple, c'est un state aussi
                     //et je veux param mais pas state
                     //pourquoi pas true quand j'ai un state ?
-                    if (sensor.name == "DOOR443STATE" || sensor.name == "WINDOW443STATE") {
+                    if ((sensor.name == "DOOR443STATE" && widget.graphType != 'pieChart') || (sensor.name == "WINDOW443STATE" &&  widget.graphType != 'pieChart')) {
                         widget.additionnal = '/splitlist';
                         widget.withParam = true;
                     }
                     else if (sensor.name == "HEATING_443") {
+                        widget.withParam = true;
+                        widget.additionnal = '';
+                    }
+                    else if (widget.graphType == 'pieChart') {
+                        widget.additionnal = '/percent';
+                    }
+                    else {
+                        widget.additionnal = '';
+                    }
+                    if (sensor.percent) {
+                        sensor.unit = 'percent';
+                        sensor.description = '% of ' + sensor.description;
                         widget.withParam = true;
                     }
                     if (widget.graphType == 'boolean') {

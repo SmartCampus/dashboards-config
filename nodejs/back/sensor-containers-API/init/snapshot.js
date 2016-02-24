@@ -90,7 +90,7 @@ function snapshotOneSensor(sensorName) {
 }
 
 function snapShotSound(callback){
-    var url = SMARTCAMPUS_HOST + SENSORS_PATH + "/NOISE_SPARKS_CORRIDOR/data?date=2016-01-01 00:00:00/2016-02-23 10:00:00";
+    var url = SMARTCAMPUS_HOST + SENSORS_PATH + "/NOISE_SPARKS_CORRIDOR/data?date=2016-01-01 00:00:00/2016-02-10 10:00:00";
     http.get(url, function (res) {
         callback(res);
     })

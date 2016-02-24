@@ -3,11 +3,10 @@ var sensors; //This array contains all the sensors we have
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 //2 versions bc easier for now, even if not really useful...
 
-var needsOrigin = [{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See Status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
-var needsSimpleOrigin = ["Comparison", "Map", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+var needsOrigin = [{name: "Comparison", "image":"comparisons.png"}, {name: "Location", "image":"location.png"}, {name: "Pattern", "image":"patterns.png"}, {name: "See Status", "image":"reference_tool.png"}, {name: "Overtime", "image":"data_over_time.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Hierarchy", "image":"hierarchy.png"}, {name: "Proportion", "image":"proportions.png"}, {name: "Range", "image":"range.png"}];
+var needsSimpleOrigin = ["Comparison", "Location", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 
-var needs = [[{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See Status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
-var needsSimple = [["Comparison", "Map", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
+var needs = [];
 
 
 $("#generateButton").attr("disabled", "disabled"); //The generate button starts by being disabled
@@ -76,6 +75,7 @@ function updateDisableBox() {
         var id = $(this).attr('id');
         if (id == selectedBox) {
             $(this).css("border-color", "#0266C8");
+            $(this).css("border-width", "3px");
             $("#" + id).droppable(
                 {
                     drop: dropIt,
@@ -85,6 +85,7 @@ function updateDisableBox() {
             );
         } else {
             $(this).css("border-color", "black");
+            $(this).css("border-width", "1px");
             $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });
@@ -105,6 +106,7 @@ $("#add-rows").click(function (event) {
         if (id === selectedBox) {
             addNeeds(selectedBox);
             $(this).css("border-color", "#0266C8");
+            $(this).css("border-width", "3px");
             $("#" + id).droppable(
                 {
                     drop: dropIt,
@@ -118,6 +120,7 @@ $("#add-rows").click(function (event) {
             navigation();
         } else {
             $(this).css("border-color", "black");
+            $(this).css("border-width", "1px");
             $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });
@@ -141,8 +144,10 @@ var addAWidget = function () {
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
 
     needs[maxOfWidgets] = needsOrigin;
-    needsSimple[maxOfWidgets] = needsSimpleOrigin;
     addTableRow(maxOfWidgets);
+
+    $("#generateButton").attr("disabled", "disabled");
+    $("#dashboardNameForm").hide();
 
     maxOfWidgets += 1;
 
@@ -155,10 +160,11 @@ var removeAWidget = function (widgetId) {
     $('#' + widgetId).remove();
     $('#deleteWidget' + widgetId).remove();
     $('#widgetNameForm' + widgetId).remove();
-    //maxOfWidgets -= 1;
+    maxOfWidgets -= 1;
     sensorsBox[widgetId] = null;
-    allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
-
+    allTheNeeds.splice(widgetId, 1);
+    $("#generateButton").removeAttr("disabled");
+    $("#dashboardNameForm").hide();
     /* TODO :  Auto select an other box
     for(var i = 0; i < sensorsBox.length; i++) {
         if(sensorsBox[i] != null) {
@@ -182,20 +188,24 @@ var deleteWidgetContent = function (widgetId) {
  * This function fills the visulization needs panel, and set its elements to being draggable elements
  */
 function addNeeds(boxIndex) {
-    var $addNeed = $("#add-need").empty();
-
+    var $addIntent = $("#add-need").empty();
+    needs[boxIndex] = [];
+    needs[boxIndex] = needsOrigin;
     for (var i = 0; i < needs[boxIndex].length; i++) {
-        $addNeed.append(
-            "<div class=\"needInList\"><span style=\"cursor : pointer;\" class=\"draggable\" id=\"" + needs[boxIndex][i].name + "\">" + needs[boxIndex][i].name + "</span></div>"
+        $addIntent.append(
+            '<div id="' + needs[boxIndex][i].name + '" style="cursor:grab;" class="draggable col-md-6">' +
+            '<img src="/assets/images/intentions/'+needs[boxIndex][i].image+'"/>' +
+            '<div style="margin-bottom:1em;">' + needs[boxIndex][i].name  + '</div>'+
+            '</img></div>'
         );
 
         $(".draggable").draggable({
             //This defines what the user is actually dragging around
             helper: function (event) {
-                return $("<div style='cursor: pointer' id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
+                return $('<div style="cursor: grabbing" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
             },
-            revert: "invalid"
-
+            revert: "invalid",
+            cursorAt: { top: 0, left: 0 }
         });
     }
 }
@@ -223,8 +233,8 @@ function navigation() {
     var i;
     for (i = 0; i < buildings.length; i++) {
         $addCaptors.append(
-            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a></div>"
-        );
+            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:red;\">42</span></div>"
+    );
     }
 
     if (position.directSensor != null && typeof(position.directSensor) !== 'undefined' && position.directSensor != [null]) {
@@ -232,12 +242,12 @@ function navigation() {
             if (position.directSensor[i] != null) {
                 $addCaptors.append(
                     "<div class=\"row sensorInList\"><span class=\"draggable\" id=\""
-                    + position.directSensor[i].name + "\" style=\"cursor : pointer;\">"
+                    + position.directSensor[i].name + "\" style=\"cursor : grab;\">"
                     + position.directSensor[i].displayName + "</span></div>"
                 );
                 $(".draggable").draggable({
                     helper: function (event) {
-                        return $("<div style='cursor: pointer'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
+                        return $("<div style='cursor: grabbing'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
                     },
                     revert: "invalid"
                 });
@@ -318,10 +328,10 @@ function dropIt(event, ui) {
     var aTemporaryArrayOfNeeds = [];
     var draggableId = ui.draggable.attr("id");
     var droppableId = $(self).attr("id");
-
+    console.log(draggableId);
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
-    if ($.inArray(draggableId, needsSimple[droppableId]) > -1) {
+    if ($.inArray(draggableId, needsSimpleOrigin) > -1) {
         if (!($.inArray(draggableId, allTheNeeds[droppableId].needs) > -1)) {
             allTheNeeds[droppableId].needs.forEach(function (aNeed) {
                 aTemporaryArrayOfNeeds.push(aNeed);
@@ -470,8 +480,6 @@ $('#beginTime1')
     .datetimepicker({
         format: 'YYYY-MM-DD HH:mm'
     });
-
-
 
 $('#endTime1')
     .datetimepicker({
