@@ -3,8 +3,8 @@ var sensors; //This array contains all the sensors we have
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 //2 versions bc easier for now, even if not really useful...
 
-var needsOrigin = [{name: "Comparison", "image":"comparisons.png"}, {name: "Map", "image":"location.png"}, {name: "Pattern", "image":"patterns.png"}, {name: "See Status", "image":"reference_tool.png"}, {name: "Overtime", "image":"data_over_time.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Hierarchy", "image":"hierarchy.png"}, {name: "Proportion", "image":"proportions.png"}, {name: "Range", "image":"range.png"}];
-var needsSimpleOrigin = ["Comparison", "Map", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+var needsOrigin = [{name: "Comparison", "image":"comparisons.png"}, {name: "Location", "image":"location.png"}, {name: "Pattern", "image":"patterns.png"}, {name: "See Status", "image":"reference_tool.png"}, {name: "Overtime", "image":"data_over_time.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Hierarchy", "image":"hierarchy.png"}, {name: "Proportion", "image":"proportions.png"}, {name: "Range", "image":"range.png"}];
+var needsSimpleOrigin = ["Comparison", "Location", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 
 var needs = [];
 
@@ -195,7 +195,7 @@ function addNeeds(boxIndex) {
         $addIntent.append(
             '<div id="' + needs[boxIndex][i].name + '" style="cursor:grab;" class="draggable col-md-6">' +
             '<img src="/assets/images/intentions/'+needs[boxIndex][i].image+'"/>' +
-            '<div>' + needs[boxIndex][i].name  + '</div>'+
+            '<div style="margin-bottom:1em;">' + needs[boxIndex][i].name  + '</div>'+
             '</img></div>'
         );
 
@@ -204,8 +204,8 @@ function addNeeds(boxIndex) {
             helper: function (event) {
                 return $('<div style="cursor: grabbing" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
             },
-            revert: "invalid"
-
+            revert: "invalid",
+            cursorAt: { top: 0, left: 0 }
         });
     }
 }
@@ -328,10 +328,10 @@ function dropIt(event, ui) {
     var aTemporaryArrayOfNeeds = [];
     var draggableId = ui.draggable.attr("id");
     var droppableId = $(self).attr("id");
-
+    console.log(draggableId);
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
-    if ($.inArray(draggableId, needsSimpleOrigin[droppableId]) > -1) {
+    if ($.inArray(draggableId, needsSimpleOrigin) > -1) {
         if (!($.inArray(draggableId, allTheNeeds[droppableId].needs) > -1)) {
             allTheNeeds[droppableId].needs.forEach(function (aNeed) {
                 aTemporaryArrayOfNeeds.push(aNeed);
