@@ -22,6 +22,7 @@ var errorOccurred = function () {
 
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
 var allWidgets = JSON.parse(localStorage.getItem("widgetsDescription"));
+console.log(allWidgets);
 beginDate = localStorage.getItem("startDate");
 endDate = localStorage.getItem("endDate");
 
@@ -70,9 +71,10 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
         watchingArray[index].dataSC.push({"name": "close", color: 'rgba(223, 83, 83, .5)', "data": data.data[1].close});
         goDrawScatterPlot(index);
     }
-    else if (allWidgets[index].graphType == 'location') {
-        console.log(sensor.name, ' value is ', data.data);
-        watchingArray[index].sensors.push({id:sensor.name, bat:"Templiers Ouest", salle:sensor.salle, value:data.data, kind: sensor.kind})
+    else if (allWidgets[index].graphType == 'map') {
+        console.log(sensor.name, ' value is ', data.data[1]);
+        watchingArray[index].dataSC.push(data.data);
+        watchingArray[index].sensors.push({id:sensor.name, bat:"Templiers Ouest", salle:sensor.salle, value:data.data[1], kind: sensor.kind})
         waitForOtherSensorsToDraw(sensor, index);
     }
     else {
@@ -115,8 +117,8 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         if (allWidgets[index].graphType == "mix") {
             allWidgets[index].graphType = "";
         }
-        if (allWidgets[index].graphType == 'location') {
-            console.log('all widgets for location graph are found !! :) :) :)');
+        if (allWidgets[index].graphType == 'map') {
+            console.log('all widgets for map graph are found !! :) :) :)');
             generate.mapWidget(allWidgets[index].title, watchingArray[index], existingPositions[index], existingPositions[index]+"map", function(data) {
                 var $thePosition = $("#"+existingPositions[index]);
                 $thePosition.insertAdjacentHTML('afterbegin', '<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>'+
@@ -271,7 +273,7 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                         sensor.description = '% of ' + sensor.description;
                         widget.withParam = true;
                     }
-                    if (widget.graphType == 'boolean' || widget.graphType == 'location') {
+                    if (widget.graphType == 'boolean' || widget.graphType == 'map') {
                         retrieveData.askForStateNow(sensor.name, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
                     }
                     else if (widget.withParam) {
