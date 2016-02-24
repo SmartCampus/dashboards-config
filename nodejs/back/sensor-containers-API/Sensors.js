@@ -5,13 +5,14 @@ var requesterSC = require("./request_smartcampus"),
     sensorsJson = JSON.parse(fs.readFileSync(__dirname + "/data/sensors.json", "utf8"));
 
 class Sensor {
-    constructor(name, displayName, booleanTitle, description, unit, category) {
+    constructor(name, displayName, booleanTitle, description, unit, category, kind) {
         this._name = name;
         this._description = description;
         this._unit = unit;
         this._displayName = displayName;
         this._booleanTitle = booleanTitle;
         this._category = category;
+        this._kind = kind;
     }
 
     get unit() {
@@ -38,6 +39,10 @@ class Sensor {
         return this._category;
     }
 
+    get kind() {
+        return this._kind;
+    }
+
     toJson() {
         return {
             name : this._name,
@@ -45,7 +50,8 @@ class Sensor {
             unit : this._unit,
             displayName : this._displayName,
             booleanTitle : this._booleanTitle,
-            category : this._category
+            category : this._category,
+            kind : this._kind
         }
     }
 }
@@ -120,6 +126,25 @@ class SensorContainer extends SensorSet {
         super(name, [], filters);
         this.childContainer = childContainer;
         this.directSensor = sensors;
+        this.amountOfSensors = this.directSensor.length;
+    }
+
+    test3(child) {
+        for(var i in child.getChild()) {
+            this.amountOfSensors += this.amountOfSensors +  child.getChild()[i].getAmountOfSensors();
+
+        }
+        this.childContainer.push(child);
+    }
+
+
+    test2(sensor) {
+        this.directSensor.push(sensor);
+        this.amountOfSensors += this.amountOfSensors + 1;
+    }
+
+    test() {
+        this.amountOfSensors += this.amountOfSensors + 1;
     }
 
     /**
@@ -175,6 +200,22 @@ class SensorContainer extends SensorSet {
      */
     getName() {
         return this.name;
+    }
+
+    /**
+     * This function return the number representing the amount of sensor for the given container
+     *
+     * @returns {*}
+     */
+    getAmountOfSensors() {
+        var amount = this.directSensor.length;
+
+        for (var child in this.childContainer) {
+            var childAmount = this.childContainer[child].getAmountOfSensors();
+            amount += childAmount;
+        }
+
+        return amount;
     }
 
     /**
@@ -266,12 +307,38 @@ function initSystemWithSmartCampus() {
  */
 function initSensors(data) {
     initCategories();
-    initContainers();
+ //   initContainers();
 
     var json = JSON.parse(data);
     upgradeSensorsInformation(json);
 
     var jsonContainers = json._items;
+
+    var campus = new SensorContainer("Campus SophiaTech", ["CAMPUS"], [], []);
+    var templierWest = new SensorContainer("Templiers Ouest", [], [], []);
+    var fourthFloor = new SensorContainer("4th floor", ["SPARKS"] ,[], []);
+    var coffeeCorner = new SensorContainer("Coffee corner", ["COFFEE", "CAFE"], [], []);
+    var sousRepartiteur = new SensorContainer("Sous repartiteur", ["MW"] , [], []);
+    var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis"], [], []);
+    var office445 = new SensorContainer("Office 445", ["445"], [], []);
+    var office443 = new SensorContainer("Office 443", ["443"], [], []);
+    var office444 = new SensorContainer("Office 444", ["444"], [""], []);
+    // TODO : Solution très sale mais pour les capteurs virtuels y a juste aucune norme !!!
+    var virtualSensors = new SensorContainer("Virtual Sensors", ["2V", "NUMBER", "3V", "TEMP_CAMPUS"], [], []);
+    var root = new SensorContainer("Root", [], [], []);
+
+    /** Add the containers in the array of containers **/
+    containers.push(root);
+    containers.push(campus);
+    containers.push(templierWest);
+    containers.push(fourthFloor);
+    containers.push(coffeeCorner);
+    containers.push(sousRepartiteur);
+    containers.push(modalisCorridor);
+    containers.push(office445);
+    containers.push(office443);
+    containers.push(office444);
+    containers.push(virtualSensors);
 
 
     for(var i in jsonContainers) {
@@ -280,11 +347,33 @@ function initSensors(data) {
                 var filter = new RegExp(containers[iterator].getFilters()[filters], "i");
                 var name = jsonContainers[i].name;
                 if(filter.test(jsonContainers[i].name) && (sensorList[name] !== undefined) ) {
-                    containers[iterator].getDirectSensors().push(sensorList[name]);
+                 //   containers[iterator].getDirectSensors().push(sensorList[name]);
+                  //  containers[iterator].test();
+                    containers[iterator].test2(sensorList[name]);
                 }
             }
         }
     }
+
+
+    /** Set the child of every container **/
+    root.getChild().push(campus);
+
+    campus.getChild().push(templierWest);
+
+    templierWest.getChild().push(fourthFloor);
+
+    fourthFloor.getChild().push(coffeeCorner);
+    fourthFloor.getChild().push(sousRepartiteur);
+    fourthFloor.getChild().push(modalisCorridor);
+
+    modalisCorridor.getChild().push(office445);
+    modalisCorridor.getChild().push(office444);
+    modalisCorridor.getChild().push(office443);
+
+
+
+
 
     for(var i in sensorList) {
         if(sensorList[i].unit === "number") {
@@ -323,7 +412,7 @@ function upgradeSensorsInformation(sensors) {
         var mySensor = sensorsJson[sensorName];
         var sensor = undefined;
         if(typeof mySensor !== "undefined") {
-            sensor = new Sensor(mySensor.name, mySensor.displayName, mySensor.booleanTitle, mySensor.description ,mySensor.unit , mySensor.category);
+            sensor = new Sensor(mySensor.name, mySensor.displayName, mySensor.booleanTitle, mySensor.description ,mySensor.unit , mySensor.category, mySensor.kind);
         }
 
         if(typeof sensor !== "undefined") {;
