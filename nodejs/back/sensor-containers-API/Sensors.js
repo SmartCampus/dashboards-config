@@ -227,6 +227,17 @@ class SensorContainer extends SensorSet {
     getFilters() {
         return this.filters;
     }
+
+    toJSON() {
+        var json = {
+            name : this.name,
+            sensors : this.sensors,
+            childContainer : this.childContainer,
+            directSensor : this.directSensor,
+            amountOfSensors : this.getAmountOfSensors()
+        }
+        return json;
+    }
 }
 
 
