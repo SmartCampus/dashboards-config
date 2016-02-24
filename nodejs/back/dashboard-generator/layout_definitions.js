@@ -63,12 +63,12 @@ var LAYOUT_WIDGET_WIDTHS = {
 var dragnDropLayout = {
 	halfNHalf : {
 		"row" : [
-			{"divId" : "sortable1" , "divWidth" : "col-md-6 connectedSortable", "widgets" : [
+			{ "divWidth" : "col-md-6 sortable", "widgets" : [
 					{"widgetId" : "left1"},
 					{"widgetId" : "left2"}
 				]
 			},
-			{"divId" : "sortable2" , "divWidth" : "col-md-6 connectedSortable", "widgets" : [
+			{"divWidth" : "col-md-6 sortable", "widgets" : [
 					{"widgetId" : "right1"},
 					{"widgetId" : "right2"}
 				]
@@ -77,17 +77,17 @@ var dragnDropLayout = {
 	},
 	threeThirds : {
 		"row" : [
-			{"divId" : "sortable1" , "divWidth" : "col-md-4 connectedSortable", "widgets" : [
+			{"divWidth" : "col-md-4 sortable", "widgets" : [
 					{"widgetId" : "left1"},
 					{"widgetId" : "left2"}
 				]
 			},
-			{"divId" : "sortable2" , "divWidth" : "col-md-4 connectedSortable", "widgets" : [
+			{"divWidth" : "col-md-4 sortable", "widgets" : [
 					{"widgetId" : "center1"},
 					{"widgetId" : "center2"}
 				]
 			},
-			{"divId" : "sortable3" , "divWidth" : "col-md-4 connectedSortable", "widgets" : [
+			{"divWidth" : "col-md-4 sortable", "widgets" : [
 					{"widgetId" : "right1"},
 					{"widgetId" : "right2"}
 				]
@@ -96,12 +96,12 @@ var dragnDropLayout = {
 	},
 	oneThirdTwoThirds : {
 		"row" : [
-			{"divId" : "sortable1" , "divWidth" : "col-md-4 connectedSortable", "widgets" : [
+			{"divWidth" : "col-md-4 sortable", "widgets" : [
 					{"widgetId" : "left1"},
 					{"widgetId" : "left2"}
 				]
 			},
-			{"divId" : "sortable2" , "divWidth" : "col-md-8 connectedSortable", "widgets" : [
+			{"divWidth" : "col-md-8 sortable", "widgets" : [
 					{"widgetId" : "right1"},
 					{"widgetId" : "right2"}
 				]
