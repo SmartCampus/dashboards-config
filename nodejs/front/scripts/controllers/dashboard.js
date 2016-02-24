@@ -18,27 +18,6 @@ var errorOccurred = function () {
     document.getElementById("dashboard").className = "hidden";
 };
 
-$(function() {
-    $( "#sortable1, #sortable2" ).sortable({
-        connectWith: ".connectedSortable",
-        handle: 'h3',
-        cursor: 'move'
-    }).disableSelection();
-});
-
-
-$('#sortable1, #sortable2').droppable({
-    drop: function(event, ui)
-    {
-        function timeout() {
-            $(window).resize();
-            console.log("coucou");
-        }
-        window.setTimeout(function() {
-            $(window).resize();
-        },100);
-    }
-});
 
 
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
@@ -106,6 +85,7 @@ var finishedLoading = function () {
     }
     else {
         document.getElementById("loadingImg").className = "hidden";
+        a();
     }
 };
 
@@ -199,6 +179,7 @@ var layoutChosen = function (layoutName, layoutAnswer) {
         existingPositions = widgetsArray;
         div.insertAdjacentHTML('afterbegin', layoutAnswer);
 
+        console.log("layoutAnswer "+layoutAnswer);
         allWidgets.forEach(function (widget, index) {
             if (widget.sensors.length > 0) { //we only do that if you asked for some sensors !
             
@@ -262,3 +243,28 @@ var layoutChosen = function (layoutName, layoutAnswer) {
     }, errorOccurred);
 
 };
+
+var a = function () {
+    $(function() {
+        console.log("SALAH");
+        $( "#sortable1, #sortable2" ).sortable({
+            connectWith: ".connectedSortable",
+            handle: 'h3',
+            cursor: 'move',
+            
+        }).disableSelection();
+    });
+
+    $('#sortable1, #sortable2').droppable({
+        drop: function(event, ui)
+        {
+            function timeout() {
+                $(window).resize();
+            }
+            window.setTimeout(function() {
+                $(window).resize();
+            },100);
+        }
+    });
+
+}
