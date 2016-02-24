@@ -13,7 +13,7 @@
 }
 
 .needInList {
-    text-shadow: 2px 2px 8px #66ff66;
+    text-shadow: 2px 2px 8px #0266C8;
     padding: 20px 0 0 0;
     text-align : center;
 }
@@ -54,5 +54,5 @@ body {
 .affix {
     width: 30%;
     position: fixed;
-    top : 10%
+    top : 2%
 }
