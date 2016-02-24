@@ -17,6 +17,27 @@ var errorOccurred = function () {
     document.getElementById("dashboard").className = "hidden";
 };
 
+$(function() {
+    $( "#sortable1, #sortable2" ).sortable({
+        connectWith: ".connectedSortable",
+        handle: 'h3',
+        cursor: 'move'
+    }).disableSelection();
+});
+
+
+$('#sortable1, #sortable2').droppable({
+    drop: function(event, ui)
+    {
+        function timeout() {
+            $(window).resize();
+            console.log("coucou");
+        }
+        window.setTimeout(function() {
+            $(window).resize();
+        },100);
+    }
+});
 
 
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
