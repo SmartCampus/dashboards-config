@@ -28,7 +28,7 @@ var overviewNeeds = [NEEDS.LOCATION];
 
 describe("needs", function () {
 
-	describe.only("#checkNeedsConsistency()", function () {
+	describe("#checkNeedsConsistency()", function () {
 
 		describe("summer dashboard", function () {
 
@@ -148,6 +148,13 @@ describe("needs", function () {
 
 			it("should return winterWidget3Needs", function () {
 				assert.deepEqual(winterWidget3Needs, needs.getNeedsByName(["Overtime", "Comparison", "Relationships"]));
+			});
+		});
+
+		describe("overview dashboard", function () {
+
+			it("should return overviewNeeds", function () {
+				assert.deepEqual(needs.getNeedsByName(["Location"]), overviewNeeds);
 			});
 		});
 
