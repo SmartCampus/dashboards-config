@@ -46,7 +46,7 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
     if (allWidgets[index].graphType == 'line' || allWidgets[index].graphType == 'column' || allWidgets[index].graphType == 'mix') {
         if (sensor.unit == "decibel") {
             watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data, "yAxis": 1});
-        } else if (sensor.kind == "DOOR" || sensor.kind == "WINDOW") {
+        } else if (sensor.kind == "door" || sensor.kind == "window") {
             watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data[0].open});
         }
         else {
@@ -200,15 +200,9 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                     loadingASensor.html("The sensor \""+sensor.displayName +"\"");
                     $(document.createElement('img')).attr("src", "/assets/images/loading.gif").attr("class", "loadingImg").appendTo(loadingASensor);
 
+                    widget.withParam = false; //weird, but seems to work
 
-                    widget.withParam = false; //TODO: this cant work :'(
-
-                    //Je veux splitlist dans le cas d'une porte ou d'une fenêtre : ce sera sans doute dans le cas de
-                    // n'importe quelle porte ou fenêtre, en fait -> il me faudrait bien un kind là...
-                    //Je ne peux pas dire quand j'ai STATE, parce que heating par exemple, c'est un state aussi
-                    //et je veux param mais pas state
-                    //pourquoi pas true quand j'ai un state ?
-                    if ((sensor.kind == "WINDOW" && widget.graphType != 'pieChart') || (sensor.kind == "DOOR" &&  widget.graphType != 'pieChart')) {
+                    if ((sensor.kind == "window" && widget.graphType != 'pieChart') || (sensor.kind == "door" &&  widget.graphType != 'pieChart')) {
                         widget.additionnal = '/splitlist';
                         widget.withParam = true;
                     }
@@ -227,7 +221,7 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                         sensor.description = '% of ' + sensor.description;
                         widget.withParam = true;
                     }
-                    if (widget.graphType == 'boolean') {
+                    if (widget.graphType == 'boolean' || widget.graphType == 'location') {
                         retrieveData.askForStateNow(sensor.name, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
                     }
                     else if (widget.withParam) {
