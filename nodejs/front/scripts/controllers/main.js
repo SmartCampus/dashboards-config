@@ -219,7 +219,7 @@ function navigation() {
     var $addCaptors = $("#add-captors").empty();
 
 
-    $addCaptors.append("<div class=\"row\"><h3>" + position.name + "</h3></div>");
+    $addCaptors.append("<div class=\"row\"><h2>" + position.name + "</h2></div>");
     var i;
     for (i = 0; i < buildings.length; i++) {
         $addCaptors.append(
@@ -231,7 +231,7 @@ function navigation() {
         for (i = 0; i < position.directSensor.length; i++) {
             if (position.directSensor[i] != null) {
                 $addCaptors.append(
-                    "<div class=\"row sensorInList\"><span class=\"draggable\" id=\""
+                    "<div class=\"row\"><span class=\"draggable\" id=\""
                     + position.directSensor[i].name + "\" style=\"cursor : grab;\">"
                     + position.directSensor[i].displayName + "</span></div>"
                 );
