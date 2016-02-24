@@ -24,6 +24,8 @@ var winterWidget1Needs = [NEEDS.SEE_STATUS],
 	winterWidget2Needs = [NEEDS.OVERTIME],
 	winterWidget3Needs = [NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.RELATIONSHIPS];
 
+var overviewNeeds = [NEEDS.LOCATION];
+
 describe("needs", function () {
 
 	describe("#getSensorsMatchingNeeds()", function () {
@@ -206,6 +208,28 @@ describe("needs", function () {
 			// TODO only?
 		});
 
-		// TODO other dashboards
+		describe("overview dashboard", function () {
+			var categories = SENSOR_CATEGORIES.ALL;
+
+			it("should return all sensor categories", function (done) {
+				needs.getSensorsMatchingNeeds(overviewNeeds, function (err, results) {
+					if (err) {
+						logger.error(err);
+						throw err;
+					}
+					assert(categories.length === results.length);
+					categories.forEach(function (category) {
+						assert(results.find(function predicate(result) {
+							return result.set == category;
+						}));
+					});
+					results.forEach(function (result) {
+						assert(Array.isArray(result.sensors));
+					});
+					logger.debug(results);
+					done();
+				});
+			});
+		});
 	});
 });

@@ -267,5 +267,34 @@ describe("composition engine", function () {
 					.end(done);
 			});
 		});
+
+		describe("overview dashboard", function () {
+
+			var overviewNeeds = { needs: [NEEDS.LOCATION.name] };
+
+			it("should return all sensor categories", function (done) {
+				var categories = SENSOR_CATEGORIES.ALL;
+
+				request(app)
+					.post(needSetPath)
+					.send(overviewNeeds)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body;
+
+						assert(categories.length === results.length);
+						categories.forEach(function (category) {
+							assert(results.find(function predicate(result) {
+								return result.set == category;
+							}));
+						});
+						results.forEach(function (result) {
+							assert(Array.isArray(result.sensors));
+						});
+						logger.debug(results);
+					})
+					.end(done);
+			});
+		});
 	});
 });
