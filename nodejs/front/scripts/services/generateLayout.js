@@ -6,12 +6,15 @@ var layouts = (function () {
     return { //exposed to public
         newLayout: function(layoutName, successCB, errorCB) {
             console.log('you want ', layoutName);
+            var widgets = JSON.parse(localStorage.getItem("widgetsDescription"));
             $.post(genServer+widgetGen,
                 {
                     job : "generateLayout",
                     config :
                     {
-                        layoutType: layoutName
+                        layoutType: layoutName,
+                        widgets: widgets
+
                     }
                 })
                 .done(function (data) {

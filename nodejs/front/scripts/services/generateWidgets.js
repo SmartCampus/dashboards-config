@@ -3,7 +3,10 @@
  */
 var generate = (function () {
     return { //exposed to public
-        widgetBoolean: function(position, idWanted, name, successCB, errorCB) {
+        mapWidget: function(theTitle, sensorsArrayObj, position, mapDivId, successCB, errorCB) {
+            successCB();
+    },
+    widgetBoolean: function(position, idWanted, name, successCB, errorCB) {
             $.post(genServer+widgetGen,
                 {
                     job : "generateBoolean",
@@ -47,17 +50,6 @@ var generate = (function () {
                 });
         },
         widget: function (graphTitle, graphType, yAxesArray, graphName, seriesName, successCB, errorCB) {
-            console.log(JSON.stringify({
-                job : 'generateGraph',
-                config :
-                {
-                    graphType: graphType,
-                    yAxes : yAxesArray,
-                    graphName:graphName,
-                    graphTitle:graphTitle,
-                    seriesArrayName : seriesName
-                }
-            }));
             $.post(genServer+widgetGen, {
                     job : 'generateGraph',
                     config :

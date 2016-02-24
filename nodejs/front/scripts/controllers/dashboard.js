@@ -22,6 +22,7 @@ var errorOccurred = function () {
 
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
 var allWidgets = JSON.parse(localStorage.getItem("widgetsDescription"));
+console.log(allWidgets);
 beginDate = localStorage.getItem("startDate");
 endDate = localStorage.getItem("endDate");
 
@@ -70,8 +71,11 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
         watchingArray[index].dataSC.push({"name": "close", color: 'rgba(223, 83, 83, .5)', "data": data.data[1].close});
         goDrawScatterPlot(index);
     }
-    else if (allWidgets[index].graphType == 'location') {
-        watchingArray[index].sensors.push({id:sensor.name, salle:sensor.salle, status:data.data, kind: sensor.kind})
+    else if (allWidgets[index].graphType == 'map') {
+        console.log(sensor.name, ' value is ', data.data[1]);
+        watchingArray[index].dataSC.push(data.data);
+        watchingArray[index].sensors.push({id:sensor.name, bat:"Templiers Ouest", salle:sensor.salle, value:data.data[1], kind: sensor.kind})
+        waitForOtherSensorsToDraw(sensor, index);
     }
     else {
         alert("Sorry, I didn't quite get the kind of widget I'm supposed to draw");
@@ -107,20 +111,62 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         }
     }
     if (watchingArray[index].dataSC.length == allWidgets[index].sensors.length) {
-        var $thisWidget = $("#loadingNeed"+index);
+        var $thisWidget = $("#loadingNeed" + index);
         $thisWidget.find(".loadingImg").hide();
         $thisWidget.find(".glyphicon").show();
         if (allWidgets[index].graphType == "mix") {
             allWidgets[index].graphType = "";
         }
-        console.log(watchingArray[index].dataSC);
-        generate.widget(allWidgets[index].title, allWidgets[index].graphType,
-            watchingArray[index].counter
-            , existingPositions[index], "watchingArray[index].dataSC", function (data) {
-                $thisWidget.hide();
-                eval(data);
+        if (allWidgets[index].graphType == 'map') {
+            console.log('all widgets for map graph are found !! :) :) :)');
+            generate.mapWidget(allWidgets[index].title, watchingArray[index], existingPositions[index], existingPositions[index]+"map", function(data) {
+                var $thePosition = $("#"+existingPositions[index]);
+                $thePosition.insertAdjacentHTML('afterbegin', '<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>'+
+                    '<script type="text/javascript" src="http://smartcampus.github.io/plan-visualizer/handling-svg-biblio.js"></script>'+
+                    '<link rel="stylesheet" href="http://smartcampus.github.io/plan-visualizer/handling-svg-biblio.css">');
+
+                var loadingLayoutDiv = $(document.createElement("div"));
+                loadingLayoutDiv.attr("id", existingPositions[index]+"map");
+                loadingLayoutDiv.appendTo($thePosition);
+                loadingLayoutDiv.after(' <h3>Caption :</h3>'+
+                    '<div class="col-md-4">'+
+                    '<img class="sensorIcon" src="/assets/images/sensorIcons/door.png"/>Door sensor'+
+                '</div>'+
+                '<div class="col-md-4">'+
+                    '<img class="sensorIcon" src="/assets/images/sensorIcons/sound.png"/>Sound sensor'+
+                '</div>'+
+                '<div class="col-md-4">'+
+                    '<img class="sensorIcon" src="/assets/images/sensorIcons/ac.png"/>AC sensor'+
+                '</div>'+
+                '<div class="col-md-4">'+
+                    '<img class="sensorIcon" src="/assets/images/sensorIcons/heating.png"/>Heating sensor'+
+                '</div>'+
+                '<div class="col-md-4">'+
+                    '<img class="sensorIcon" src="/assets/images/sensorIcons/energy.png"/>Energy sensor'+
+                '</div>'+
+                '<div class="col-md-4">'+
+                    '<img class="sensorIcon" src="/assets/images/sensorIcons/window.png"/>Window sensor'+
+                '</div>'+
+                '<div class="col-md-4">'+
+                    '<img class="sensorIcon" src="/assets/images/sensorIcons/light.png"/>Light sensor'+
+                '</div>'+
+                '<div class="col-md-4">'+
+                    '<img class="sensorIcon" src="/assets/images/sensorIcons/temperature.png"/>Temperature sensor'+
+                '</div>');
+                //              eval(data);
+                
                 finishedLoading();
             }, errorOccurred);
+        }
+        else {
+            generate.widget(allWidgets[index].title, allWidgets[index].graphType,
+                watchingArray[index].counter
+                , existingPositions[index], "watchingArray[index].dataSC", function (data) {
+                    $thisWidget.hide();
+                    eval(data);
+                    finishedLoading();
+                }, errorOccurred);
+        }
     }
 };
 
@@ -227,7 +273,7 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                         sensor.description = '% of ' + sensor.description;
                         widget.withParam = true;
                     }
-                    if (widget.graphType == 'boolean' || widget.graphType == 'location') {
+                    if (widget.graphType == 'boolean' || widget.graphType == 'map') {
                         retrieveData.askForStateNow(sensor.name, sensorDataRetrievingSuccess, errorOccurred, sensor, index);
                     }
                     else if (widget.withParam) {

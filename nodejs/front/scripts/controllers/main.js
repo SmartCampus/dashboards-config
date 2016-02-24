@@ -232,18 +232,21 @@ function navigation() {
     var i;
     for (i = 0; i < buildings.length; i++) {
         $addCaptors.append(
-            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:red;\">"+ buildings[i].amountOfSensors+"</span></div>"
+            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:#4781ff;\">"+ buildings[i].amountOfSensors+"</span></div>"
     );
     }
 
     if (position.directSensor != null && typeof(position.directSensor) !== 'undefined' && position.directSensor != [null]) {
         for (i = 0; i < position.directSensor.length; i++) {
-            var a = "postit"+((i % 4) +1);
+          //  var a = "postit"+((i % 4) +1);
+            console.log(i);
             if (position.directSensor[i] != null) {
+                console.log(position.directSensor[i]);
+                console.log(position.directSensor[i].displayName);
                 $addCaptors.append(
-                    "<div class=\"draggable col-md-6\" id=\""
-                    + position.directSensor[i].name + "\" style=\"cursor : grab;\"><div class=\""+a+"\"><p>"
-                    + position.directSensor[i].displayName + "</p></div></div>"
+                    //"<div><span class='draggable text-center'>"+position.directSensor[i].displayName + "</span></div>"
+                    "<div><span class='draggable text-center' id='"+ position.directSensor[i].name +"' style='cursor : grab;'> "
+                    + position.directSensor[i].displayName + "</span></div>"
                 );
                 $(".draggable").draggable({
                     helper: function (event) {
@@ -255,7 +258,7 @@ function navigation() {
         }
     }
     else {
-        $addCaptors.append("<div>No sensor is available here. </div>");
+        $addCaptors.append("<div>There isn't any compatible sensor here. </div>");
     }
 
     updateNavigation();
