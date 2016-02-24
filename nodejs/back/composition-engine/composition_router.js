@@ -1,5 +1,5 @@
 /**
- * @author Quentin Cornevin, Marc Karassev
+ * @author Marc Karassev, Quentin Cornevin
  */
 
 var router = require("express").Router(),
@@ -7,6 +7,19 @@ var router = require("express").Router(),
     needs = require("./needs"),
     logger = require("./logger");
 
+/**
+ * Handles POST requests on /expressNeed path. Returns matching widget types
+ * to given visualization needs.
+ *
+ * @param [string]  req.body    Expects the request body to be set to a JSON array
+ *                                  of strings representing needs.
+ *                              Available needs: "Comparison", "Overtime",
+ *                                  "Proportion", "See Status", "Relationships",
+ *                                  "Hierarchy", "Summarize" and "Pattern".
+ * @return string   res.body    Answers with a widget type name. Existing widget types:
+ *                                  line, column, mix, pieChart, boolean and scatterplot
+ *                              Might send 422 status codes in case of unprocessable inputs.
+ */
 router.post("/expressNeed", function(req,res) {
     var body = req.body;
     if(body == undefined || body.needs == undefined) {
@@ -22,6 +35,25 @@ router.post("/expressNeed", function(req,res) {
     }
 });
 
+/**
+ * Handles POST requests on /needSet path. Returns matching sensor categories
+ * to given visualization needs.
+ *
+ * @param [string]  req.body    Expects the request body to be set to a JSON array
+ *                                  of strings representing needs.
+ *                              Available needs: "Comparison", "Overtime",
+ *                                  "Proportion", "See Status", "Relationships",
+ *                                  "Hierarchy", "Summarize" and "Pattern".
+ * @return [JSON]   res.body    Answers with an array of sensor sets (categories)
+ *                                  matching the given needs. Sensor set format:
+ *                                      {
+ *                                          "set": "category_name",
+ *                                          "sensors": [{sensor object}]
+ *                                      }
+ *                                  sensor objects are defined in the sensor container API;
+ *                              Might send 400 status codes in case of incorrect needs or
+ *                                  incompatible needs.
+ */
 router.post("/needSet", function (req, res) {
     var needArray = needs.getNeedsByName(req.body.needs);
 
@@ -58,6 +90,21 @@ function checkSensors(sensors) {
     return true;
 }
 
+/**
+ * Handles POST requests on /sensorSet path. Returns matching needs to  the given
+ * sensors.
+ *
+ * @param [string]  req.body    Expects the request body to be set to a JSON array
+ *                                  of sensor objetcs. Sensor objects are defined
+ *                                  in the sensor container API.
+ * @return [JSON]   res.body    Answers with an array of strings representing needs
+ *                                  matching the given sensors.
+ *                              Available needs: "Comparison", "Overtime",
+ *                                  "Proportion", "See Status", "Relationships",
+ *                                  "Hierarchy", "Summarize" and "Pattern".
+ *                              Might send 400 status codes in case of invalid sensors
+ *                                  or invalid sensors categories.
+ */
 router.post("/sensorSet", function (req, res) {
     var sensors = req.body.sensors;
 
