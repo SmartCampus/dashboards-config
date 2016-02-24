@@ -188,18 +188,20 @@ var deleteWidgetContent = function (widgetId) {
  * This function fills the visulization needs panel, and set its elements to being draggable elements
  */
 function addNeeds(boxIndex) {
-    var $addNeed = $("#add-need").empty();
+    var $addIntent = $("#add-need").empty();
     needs[boxIndex] = [];
     needs[boxIndex] = needsOrigin;
     for (var i = 0; i < needs[boxIndex].length; i++) {
-        $addNeed.append(
-            "<div class=\"needInList\"><span style=\"cursor : grab;\" class=\"draggable\" id=\"" + needs[boxIndex][i].name + "\">" + needs[boxIndex][i].name + "</span></div>"
+        $addIntent.append(
+            '<div class="needInList"><span style="cursor : grab;" class="draggable" id="' + needs[boxIndex][i].name + '">' + needs[boxIndex][i].name + '</span>' +
+            '<img src="/assets/images/intentions/comparisons.svg">' +
+            '</div>'
         );
 
         $(".draggable").draggable({
             //This defines what the user is actually dragging around
             helper: function (event) {
-                return $("<div style='cursor: grabbing' id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
+                return $('<div style="cursor: grabbing" id="' + event.target.id + '">' + event.target.innerHTML + '</div>');
             },
             revert: "invalid"
 
