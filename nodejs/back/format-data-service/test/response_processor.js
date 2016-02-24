@@ -52,11 +52,39 @@ describe("#splittedInformation()", function() {
 
 
 describe("#persentFormat()", function(){
-   context("with One OPEN and one CLOSE", function() {
+   context("with One OPEN and one CLOSED", function() {
       it("should return 50% open and 50% close in two list", function() {
          var input =  { values : [ {value : "OPEN", date : 1}, {value : "CLOSED", date: 2}]};
          var response = processor.persentFormat(input, 0, 2);
          assert.deepEqual(response, {data : [{open : 50}, {close : 50}]});
       });
    });
+
+    context("with Only one OPEN", function() {
+        it("should return 100% open", function() {
+            var input =  { values : [ {value : "OPEN", date : 1}]};
+            var response = processor.persentFormat(input, 1, 2);
+            assert.deepEqual(response, {data : [{open : 100}, {close : 0}]});
+        });
+    })
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

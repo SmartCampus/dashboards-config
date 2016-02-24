@@ -168,9 +168,18 @@ function persentFormat(tempPerTime, begin, end) {
     var totalTimeOpen = 0;
     var totalTime = end - begin;
     var lastOn = 0;
+
+    if(tempPerTime.values.length == 1) {
+        if(tempPerTime.values[0].value === "OPEN") {
+            responseInGoodFormat.data.push({"open" : 100});
+            responseInGoodFormat.data.push({"close" : 0});
+        } else {
+            responseInGoodFormat.data.push({"open" : 0});
+            responseInGoodFormat.data.push({"close" : 100});
+        }
+        return responseInGoodFormat;
+    }
     for(var i in tempPerTime.values) {
-        console.log(tempPerTime.values[i]);
-        console.log(i);
         if(i == 0) {
             if(tempPerTime.values[i].value === "OPEN") {
                 lastOn = tempPerTime.values[i].date;
@@ -186,11 +195,7 @@ function persentFormat(tempPerTime, begin, end) {
             }
         }
     }
-    console.log("Total time " + totalTime)
-    console.log("Total time open : " + totalTimeOpen)
     var percent = totalTimeOpen/totalTime;
-
-    console.log("Percent : " + percent)
 
     responseInGoodFormat.data.push({"open" : percent*100});
     responseInGoodFormat.data.push({"close": (1 - percent)*100});
@@ -279,6 +284,9 @@ function sortHierarchicalSensor(sensors, hierarchicalSensors, callback) {
         for(var iterator in container.directSensor) {
             if(sensors.indexOf(container.directSensor[iterator].name) === -1) {
                 delete container.directSensor[iterator]
+                console.log("Before : " + container.amountOfSensors);
+                container.amountOfSensors--;
+                console.log("After : " + container.amountOfSensors)
             }
         }
 
@@ -288,6 +296,7 @@ function sortHierarchicalSensor(sensors, hierarchicalSensors, callback) {
             }
         }
     }
+    console.log(hierarchicalSensors)
     callback(hierarchicalSensors);
 }
 
