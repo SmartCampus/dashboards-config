@@ -45,7 +45,6 @@ function initWindowsData() {
     navbar.push(position.name);
     addNeeds(0);
     navigation();
-
     sensorsBox.push(sensors);
 }
 
@@ -233,7 +232,7 @@ function navigation() {
     var i;
     for (i = 0; i < buildings.length; i++) {
         $addCaptors.append(
-            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:red;\">42</span></div>"
+            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:red;\">"+ buildings[i].amountOfSensors+"</span></div>"
     );
     }
 
