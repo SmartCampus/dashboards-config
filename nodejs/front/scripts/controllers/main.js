@@ -6,8 +6,7 @@ var sensors; //This array contains all the sensors we have
 var needsOrigin = [{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See Status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
 var needsSimpleOrigin = ["Comparison", "Map", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 
-var needs = [[{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See Status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}]];
-var needsSimple = [["Comparison", "Map", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"]];
+var needs = [];
 
 
 $("#generateButton").attr("disabled", "disabled"); //The generate button starts by being disabled
@@ -76,6 +75,7 @@ function updateDisableBox() {
         var id = $(this).attr('id');
         if (id == selectedBox) {
             $(this).css("border-color", "#0266C8");
+            $(this).css("border-width", "3px");
             $("#" + id).droppable(
                 {
                     drop: dropIt,
@@ -85,6 +85,7 @@ function updateDisableBox() {
             );
         } else {
             $(this).css("border-color", "black");
+            $(this).css("border-width", "1px");
             $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });
@@ -105,6 +106,7 @@ $("#add-rows").click(function (event) {
         if (id === selectedBox) {
             addNeeds(selectedBox);
             $(this).css("border-color", "#0266C8");
+            $(this).css("border-width", "3px");
             $("#" + id).droppable(
                 {
                     drop: dropIt,
@@ -118,6 +120,7 @@ $("#add-rows").click(function (event) {
             navigation();
         } else {
             $(this).css("border-color", "black");
+            $(this).css("border-width", "1px");
             $("#" + id).droppable({drop: dropIt, disabled: true});
         }
     });
@@ -141,8 +144,10 @@ var addAWidget = function () {
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
 
     needs[maxOfWidgets] = needsOrigin;
-    needsSimple[maxOfWidgets] = needsSimpleOrigin;
     addTableRow(maxOfWidgets);
+
+    $("#generateButton").attr("disabled", "disabled");
+    $("#dashboardNameForm").hide();
 
     maxOfWidgets += 1;
 
@@ -158,7 +163,8 @@ var removeAWidget = function (widgetId) {
     maxOfWidgets -= 1;
     sensorsBox[widgetId] = null;
     allTheNeeds.splice(widgetId, 1);
-
+    $("#generateButton").removeAttr("disabled");
+    $("#dashboardNameForm").hide();
     /* TODO :  Auto select an other box
     for(var i = 0; i < sensorsBox.length; i++) {
         if(sensorsBox[i] != null) {
@@ -183,7 +189,8 @@ var deleteWidgetContent = function (widgetId) {
  */
 function addNeeds(boxIndex) {
     var $addNeed = $("#add-need").empty();
-
+    needs[boxIndex] = [];
+    needs[boxIndex] = needsOrigin;
     for (var i = 0; i < needs[boxIndex].length; i++) {
         $addNeed.append(
             "<div class=\"needInList\"><span style=\"cursor : grab;\" class=\"draggable\" id=\"" + needs[boxIndex][i].name + "\">" + needs[boxIndex][i].name + "</span></div>"
@@ -321,7 +328,7 @@ function dropIt(event, ui) {
 
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
-    if ($.inArray(draggableId, needsSimple[droppableId]) > -1) {
+    if ($.inArray(draggableId, needsSimpleOrigin[droppableId]) > -1) {
         if (!($.inArray(draggableId, allTheNeeds[droppableId].needs) > -1)) {
             allTheNeeds[droppableId].needs.forEach(function (aNeed) {
                 aTemporaryArrayOfNeeds.push(aNeed);
