@@ -168,6 +168,10 @@ function persentFormat(tempPerTime, begin, end) {
     var totalTimeOpen = 0;
     var totalTime = end - begin;
     var lastOn = 0;
+
+    if(tempPerTime.values.length == 0) {
+
+    }
     for(var i in tempPerTime.values) {
         console.log(tempPerTime.values[i]);
         console.log(i);
