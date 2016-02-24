@@ -223,8 +223,8 @@ function navigation() {
     var i;
     for (i = 0; i < buildings.length; i++) {
         $addCaptors.append(
-            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a></div>"
-        );
+            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:red;\">42</span></div>"
+    );
     }
 
     if (position.directSensor != null && typeof(position.directSensor) !== 'undefined' && position.directSensor != [null]) {
@@ -470,8 +470,6 @@ $('#beginTime1')
     .datetimepicker({
         format: 'YYYY-MM-DD HH:mm'
     });
-
-
 
 $('#endTime1')
     .datetimepicker({
