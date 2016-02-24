@@ -7,7 +7,7 @@ var http = require("http"),
     SMARTCAMPUS_HOST = "http://smartcampus.unice.fr",
     SENSORS_PATH = "/sensors",
     fs = require("fs"),
-    snapShottedSensors = JSON.parse(fs.readFileSync("../data/snapshot-SmartCampus/interesting-sensors.json", "utf-8"));
+    snapShottedSensors = JSON.parse(fs.readFileSync(__dirname + "../data/snapshot-SmartCampus/interesting-sensors.json", "utf-8"));
 
 
 
