@@ -64,7 +64,7 @@ describe("#persentFormat()", function(){
         it("should return 100% open", function() {
             var input =  { values : [ {value : "OPEN", date : 1}]};
             var response = processor.persentFormat(input, 1, 2);
-            assert.deepEqual(response, {data : [{open : 100}]});
+            assert.deepEqual(response, {data : [{open : 100}, {close : 0}]});
         });
     })
 });

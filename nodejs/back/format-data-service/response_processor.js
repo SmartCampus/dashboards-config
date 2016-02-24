@@ -169,8 +169,15 @@ function persentFormat(tempPerTime, begin, end) {
     var totalTime = end - begin;
     var lastOn = 0;
 
-    if(tempPerTime.values.length == 0) {
-
+    if(tempPerTime.values.length == 1) {
+        if(tempPerTime.values[0].value === "OPEN") {
+            responseInGoodFormat.data.push({"open" : 100});
+            responseInGoodFormat.data.push({"close" : 0});
+        } else {
+            responseInGoodFormat.data.push({"open" : 0});
+            responseInGoodFormat.data.push({"close" : 100});
+        }
+        return responseInGoodFormat;
     }
     for(var i in tempPerTime.values) {
         console.log(tempPerTime.values[i]);
