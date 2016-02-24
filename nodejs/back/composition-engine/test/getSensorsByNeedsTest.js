@@ -45,11 +45,13 @@ describe("needs", function () {
 							logger.error(err);
 							throw err;
 						}
-						assert.equal(Object.keys(SENSOR_CATEGORIES).length, results.length);
+						assert.equal(Object.keys(SENSOR_CATEGORIES).length - 1, results.length);
 						for (var category in SENSOR_CATEGORIES) {
-							assert(results.find(function predicate(element, index, array) {
-								return element.set === category;
-							}));
+							if (category != "ALL") {
+								assert(results.find(function predicate(element, index, array) {
+									return element.set === category;
+								}));
+							}
 						}
 						for (var i = results.length - 1; i >= 0; i--) {
 							assert(Array.isArray(results[i].sensors));

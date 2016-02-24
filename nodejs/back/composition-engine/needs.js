@@ -26,7 +26,8 @@ var SENSOR_CATEGORIES = {
 	LIGHT: LIGHT,
 	ENERGY: ENERGY,
 	STATE: STATE,
-	SOUND: SOUND
+	SOUND: SOUND,
+	ALL: [TEMP, LIGHT, ENERGY, STATE, SOUND]
 }
 
 /**
@@ -58,7 +59,7 @@ var COMPARISON = new Need("Comparison", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
 	PROPORTION = new Need("Proportion", [TEMP, LIGHT, ENERGY, STATE, SOUND]),
 	SUMMARIZE = new Need("Summarize", []),
 	PATTERN = new Need("Pattern", [STATE]),
-	LOCATION = new Need("Location", []);
+	LOCATION = new Need("Location", SENSOR_CATEGORIES.ALL);
 
 COMPARISON.compatibleNeeds = [OVERTIME, PROPORTION, RELATIONSHIPS];
 SEE_STATUS.compatibleNeeds = [];
