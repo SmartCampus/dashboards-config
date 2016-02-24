@@ -35,7 +35,7 @@ function jobsRouter(message, res) {
                     res.send(err);
                 }
                 else {
-
+                    console.log(data);
                     res.send(data);
                 }
             });
