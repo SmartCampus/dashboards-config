@@ -111,7 +111,13 @@ function getNeedsByName(needStrings) {
  * @param  [Need]		needs 		the array of needs in relation with the sensors 
  * 									have to be retrieved
  * @param  Function 	callback	the callback to call with err dans results parameters,
- * 									if no error results is a sensor objects array
+ * 									if no error, results is a sensor set array, a sensor
+ *									set look like this way:
+ * 										{
+ * 											"set": "set_name",
+ * 											"sensors": [{sensor object}]
+ * 										}
+ * 									sensors object are defined in the sensor container API;
  * 									error unconsistentNeedSet might be set
  */
 function getSensorsMatchingNeeds(needs, callback) {
