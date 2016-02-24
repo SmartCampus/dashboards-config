@@ -10,6 +10,17 @@ var assert = require("assert"),
 var NEEDS = needs.NEEDS,
 	SENSOR_CATEGORIES = needs.SENSOR_CATEGORIES;
 
+var temp443V = { name: "TEMP_443V", category: "temp" },
+	tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
+	ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.STATE },
+	window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE },
+	noiseSparksCorridor = { name: "NOISE_SPARKS_CORRIDOR", category: SENSOR_CATEGORIES.SOUND },
+	door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.STATE },
+	light444 = { name: "LIGHT_444", category: SENSOR_CATEGORIES.LIGHT },
+	heating443 = { name: "HEATING_443", category: SENSOR_CATEGORIES.STATE },
+	allSensors = [temp443V, tempCampus, ac443State, window443State, noiseSparksCorridor,
+		door443State, light444, heating443];
+
 describe("needs", function () {
 
 	describe("#getNeedsMatchingSensors", function () {
@@ -47,11 +58,6 @@ describe("needs", function () {
 		});
 
 		describe("summer dashboard", function () {
-
-			var temp443V = { name: "TEMP_443V", category: "temp" },
-				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
-				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.STATE },
-				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
 
 			it("should return Comparison and Overtime needs", function (done) {
 				async.parallel([
@@ -123,10 +129,6 @@ describe("needs", function () {
 
 		describe("surrounding dashboard", function () {
 
-			var noiseSparksCorridor = { name: "NOISE_SPARKS_CORRIDOR", category: SENSOR_CATEGORIES.SOUND },
-				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.STATE },
-				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
-
 			it("should return Comparison, Overtime and Relationships needs", function (done) {
 				var needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS];
 
@@ -187,11 +189,6 @@ describe("needs", function () {
 
 		describe("winter dashboard", function () {
 
-			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
-				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
-				light444 = { name: "LIGHT_444", category: SENSOR_CATEGORIES.LIGHT },
-				heating443 = { name: "HEATING_443", category: SENSOR_CATEGORIES.STATE };
-
 			it("should return See Status need", function (done) {
 				testGetNeedsMatchingSensors([heating443], [NEEDS.SEE_STATUS], false, function () {
 					done();
@@ -208,6 +205,15 @@ describe("needs", function () {
 				var needs = [NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.RELATIONSHIPS];
 
 				testGetNeedsMatchingSensors([heating443, temp443V, tempCampus], needs, false, function () {
+					done();
+				});
+			});
+		});
+
+		describe("overiew dashboard", function () {
+
+			it("should return Location need", function (done) {
+				testGetNeedsMatchingSensors(allSensors, [NEEDS.LOCATION], false, function () {
 					done();
 				});
 			});

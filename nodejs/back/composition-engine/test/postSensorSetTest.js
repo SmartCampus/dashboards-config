@@ -11,6 +11,17 @@ var request = require("supertest"),
 var NEEDS = require("../needs").NEEDS,
 	SENSOR_CATEGORIES = require("../needs").SENSOR_CATEGORIES;
 
+var temp443V = { name: "TEMP_443V", category: "temp" },
+	tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
+	ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.STATE },
+	window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE },
+	noiseSparksCorridor = { name: "NOISE_SPARKS_CORRIDOR", category: SENSOR_CATEGORIES.SOUND },
+	door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.STATE },
+	light444 = { name: "LIGHT_444", category: SENSOR_CATEGORIES.LIGHT },
+	heating443 = { name: "HEATING_443", category: SENSOR_CATEGORIES.STATE },
+	allSensors = [temp443V, tempCampus, ac443State, window443State, noiseSparksCorridor,
+					door443State, light444, heating443];
+
 describe("composition engine", function () {
 
 	describe("POST sensorSet", function () {
@@ -111,11 +122,6 @@ describe("composition engine", function () {
 
 		describe("summer dashboard", function () {
 
-			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
-				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
-				ac443State = { name: "AC_443STATE", category: SENSOR_CATEGORIES.STATE },
-				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
-
 			it("should get Comparison and Overtime needs", function (done) {
 				var requestsBodies = [temp443V, tempCampus];
 				
@@ -175,15 +181,9 @@ describe("composition engine", function () {
 					done();
 				});
 			});
-
-			// TODO error cases
 		});
 
 		describe("surrounding dashboard", function () {
-
-			var noiseSparksCorridor = { name: "NOISE_SPARKS_CORRIDOR", category: SENSOR_CATEGORIES.SOUND },
-				door443State = { name: "DOOR443STATE", category: SENSOR_CATEGORIES.STATE },
-				window443State = { name: "WINDOW443STATE", category: SENSOR_CATEGORIES.STATE };
 
 			it("should get Comparison, Overtime and Relationship needs", function (done) {
 				var needs = [NEEDS.COMPARISON, NEEDS.OVERTIME, NEEDS.RELATIONSHIPS],
@@ -236,16 +236,9 @@ describe("composition engine", function () {
 					done();
 				});
 			});
-
-			// TODO error cases
 		});
 
 		describe("winter dashboard", function () {
-
-			var temp443V = { name: "TEMP_443V", category: SENSOR_CATEGORIES.TEMP },
-				tempCampus = { name: "TEMP_CAMPUS", category: SENSOR_CATEGORIES.TEMP },
-				light444 = { name: "LIGHT_444", category: SENSOR_CATEGORIES.LIGHT },
-				heating443 = { name: "HEATING_443", category: SENSOR_CATEGORIES.STATE };
 
 			it("should return See Status need", function (done) {
 				testPostSensorSet({ sensors: [heating443] }, [NEEDS.SEE_STATUS], function () {
@@ -260,15 +253,22 @@ describe("composition engine", function () {
 			});
 
 			it("should get Overtime, Comparison and Relationship needs", function (done) {
-				var needs = [NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.RELATIONSHIPS];
+				var needs = [NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.RELATIONSHIPS],
+					sensors = [temp443V, tempCampus, heating443];
 				
-				testPostSensorSet({ sensors: [temp443V, tempCampus, heating443] },
-								  needs, function () {
+				testPostSensorSet({ sensors: sensors }, needs, function () {
 					done();
 				});
 			});
+		});
 
-			// TODO error cases
+		describe("overview dashboard", function () {
+
+			it("should get Location need", function (done) {
+				testPostSensorSet({ sensors: allSensors }, [NEEDS.LOCATION], function () {
+					done();
+				});
+			});
 		});
 	});
 });

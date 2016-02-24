@@ -24,6 +24,8 @@ var winterWidget1Needs = [NEEDS.SEE_STATUS],
 	winterWidget2Needs = [NEEDS.OVERTIME],
 	winterWidget3Needs = [NEEDS.OVERTIME, NEEDS.COMPARISON, NEEDS.RELATIONSHIPS];
 
+var overviewNeeds = [NEEDS.LOCATION];
+
 describe("needs", function () {
 
 	describe("#checkNeedsConsistency()", function () {
@@ -73,8 +75,23 @@ describe("needs", function () {
 			});
 		});
 
+		describe("overview dashboard", function () {
+
+			it("overview needs should be a consistent need set", function () {
+				assert(needs.checkNeedsConsistency(overviewNeeds));
+			});
+		})
+
 		it("should not be a consistent need set", function () {
 			assert(!needs.checkNeedsConsistency(unconsistentNeeds));
+		});
+
+		it("should not be a consistent need set when another need is composed with Location", function () {
+			for (var property in NEEDS) {
+				if (!(property === "LOCATION" || property === "ALL")) {
+					assert(!needs.checkNeedsConsistency([NEEDS.LOCATION, NEEDS[property]]));
+				}
+			}
 		});
 	});
 
@@ -131,6 +148,13 @@ describe("needs", function () {
 
 			it("should return winterWidget3Needs", function () {
 				assert.deepEqual(winterWidget3Needs, needs.getNeedsByName(["Overtime", "Comparison", "Relationships"]));
+			});
+		});
+
+		describe("overview dashboard", function () {
+
+			it("should return overviewNeeds", function () {
+				assert.deepEqual(needs.getNeedsByName(["Location"]), overviewNeeds);
 			});
 		});
 

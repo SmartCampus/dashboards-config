@@ -7,7 +7,7 @@ var http = require("http"),
     SMARTCAMPUS_HOST = "http://smartcampus.unice.fr",
     SENSORS_PATH = "/sensors",
     fs = require("fs"),
-    snapShottedSensors = JSON.parse(fs.readFileSync(__dirname + "/../data/snapshot-smartCampus/interesting-sensors.json", "utf-8"));
+    snapShottedSensors = JSON.parse(fs.readFileSync(__dirname + "/data/snapshot-smartCampus/interesting-sensors.json", "utf-8"));
 
 
 
@@ -58,7 +58,7 @@ function snapShotAllSensors() {
         });
 
         res.on("end", function() {
-            fs.writeFile("../data/snapshot-smartCampus/snapshot/sensors.json", stringData, function(err) {
+            fs.writeFile(__dirname + "/data/snapshot-smartCampus/snapshot/sensors.json", stringData, function(err) {
                 if(err) {
                     console.log(err);
                 }
@@ -78,7 +78,7 @@ function snapshotOneSensor(sensorName) {
         });
 
         res.on("end", function() {
-            fs.writeFile("../data/snapshot-smartCampus/snapshot/sensor-" + sensorName + "-data.json", stringData, function(err) {
+            fs.writeFile(__dirname + "/data/snapshot-smartCampus/snapshot/sensor-" + sensorName + "-data.json", stringData, function(err) {
                 if(err) {
                     console.log(err);
                 }
@@ -115,7 +115,7 @@ function snapShotSound(callback){
         });
 
         res.on("end", function() {
-            fs.writeFile("../data/snapshot-smartCampus/snapshot/sensor-NOISE_SPARKS_CORRIDOR-data.json", stringData, function(err) {
+            fs.writeFile(__dirname + "/data/snapshot-smartCampus/snapshot/sensor-NOISE_SPARKS_CORRIDOR-data.json", stringData, function(err) {
                 if(err) {
                     console.log(err);
                 }
