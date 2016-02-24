@@ -328,7 +328,6 @@ function dropIt(event, ui) {
     var aTemporaryArrayOfNeeds = [];
     var draggableId = ui.draggable.attr("id");
     var droppableId = $(self).attr("id");
-    console.log(draggableId);
     //This is if we talk about a visualization need
     //It must exist, and it mustn't already be in the widget
     if ($.inArray(draggableId, needsSimpleOrigin) > -1) {
@@ -387,8 +386,10 @@ function dropIt(event, ui) {
                     temporarySensorsList.push(enhancedSensor);
 
                     expression.sensorList(temporarySensorsList, function (answer) {
+                        enhancedSensor["salle"] = (position.name).replace(/ /g,"_");
                         needs[droppableId] = answer;
                         addNeeds(droppableId);
+                        console.log(enhancedSensor);
                         //Here, we add a new sensor to the widget.
                         var needSpan = $(document.createElement('span'));
                         needSpan.attr("id", draggableId);
@@ -416,15 +417,18 @@ var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableI
     var selectList = $(document.createElement("select"));
     selectList.attr('class', 'input-small tinySelectGroup');
     selectList.attr('id', 'select' + draggableName);
+
     var optionRaw = $(document.createElement("option"));
     optionRaw.html("raw");
     optionRaw.appendTo(selectList);
+
     var optionPercent = $(document.createElement("option"));
     optionPercent.html("%");
     optionPercent.appendTo(selectList);
+
     selectList.appendTo(formGroup);
     formGroup.appendTo($("#" + widgetBoxId + " #" + draggableName));
-    br = $(document.createElement('br'));
+    var br = $(document.createElement('br'));
     br.appendTo(formGroup);
 };
 

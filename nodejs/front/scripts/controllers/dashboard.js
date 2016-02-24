@@ -46,7 +46,7 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
     if (allWidgets[index].graphType == 'line' || allWidgets[index].graphType == 'column' || allWidgets[index].graphType == 'mix') {
         if (sensor.unit == "decibel") {
             watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data, "yAxis": 1});
-        } else if (sensor.name == "DOOR443STATE" || sensor.name == "WINDOW443STATE") { //oops c'est sale
+        } else if (sensor.kind == "DOOR" || sensor.kind == "WINDOW") {
             watchingArray[index].dataSC.push({"name": sensor.description, "data": data.data[0].open});
         }
         else {
@@ -208,7 +208,7 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                     //Je ne peux pas dire quand j'ai STATE, parce que heating par exemple, c'est un state aussi
                     //et je veux param mais pas state
                     //pourquoi pas true quand j'ai un state ?
-                    if ((sensor.name == "DOOR443STATE" && widget.graphType != 'pieChart') || (sensor.name == "WINDOW443STATE" &&  widget.graphType != 'pieChart')) {
+                    if ((sensor.kind == "WINDOW" && widget.graphType != 'pieChart') || (sensor.kind == "DOOR" &&  widget.graphType != 'pieChart')) {
                         widget.additionnal = '/splitlist';
                         widget.withParam = true;
                     }
