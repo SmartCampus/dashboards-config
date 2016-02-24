@@ -56,3 +56,29 @@ body {
     position: fixed;
     top : 2%
 }
+
+
+/* Note styles */
+
+
+
+.postit1,.postit2,.postit3,.postit4 {
+    position:relative;
+    padding: 15px;
+    -webkit-box-shadow: 0 8px 10px -7px #999;
+    -moz-box-shadow: 0 8px 10px -7px #999;
+    box-shadow: 0 8px 10px -7px #999;
+    -webkit-border-bottom-right-radius: 60px 10px;
+    -moz-border-radius-bottomright: 60px 10px;
+    border-bottom-right-radius: 60px 10px;
+    margin-bottom: 10px;
+}
+
+.postit1 {background: #fefabc;}
+.postit1 p {border-top-color: #dbd581;}
+.postit2 {background: #FDD7DB;}
+.postit2 p {border-top-color: #E6A1A8;}
+.postit3 {background: #EAF763;}
+.postit3 p {border-top-color: #72A201;}
+.postit4 {background: #B9EAF6;}
+.postit4 p {border-top-color: #6DB4C4;}
