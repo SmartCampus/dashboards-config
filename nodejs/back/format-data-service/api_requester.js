@@ -100,8 +100,12 @@ function getEnhancedSensorsData(sensorName, callback) {
         });
 
         res.on("end", function() {
-            var json = JSON.parse(stringData);
-            callback(json, null);
+            try {
+                var json = JSON.parse(stringData);
+                callback(json, null);
+            } catch(e) {
+                callback(null, e);
+            }
         });
 
     })
