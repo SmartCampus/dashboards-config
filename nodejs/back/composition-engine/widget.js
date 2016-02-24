@@ -51,6 +51,7 @@ allWidgets.push(new Widget("pieChart", ["Proportion"]));
 allWidgets.push(new Widget("boolean", ["See Status"]));
 allWidgets.push(new Widget("scatterplot", ["Overtime", "Pattern"]));
 allWidgets.push(new Widget("line", ["Overtime"]));
+allWidgets.push(new Widget("map", ["Location"]));
 
 
 
