@@ -6,6 +6,8 @@ The following needs are implemented: `"Comparison"`, `"Overtime"`, `"Proportion"
 
 Existing widget type names: `"line"`, `"column"`, `"mix"`, `"pieChart"`, `"boolean"` and `"scatterplot"`.
 
+Domain reference: http://datavizcatalogue.com/
+
 Evaluation: https://docs.google.com/document/d/1BCv7G4Lhh80qvGd66ChQFr6Q3Vc5ot1lKM6WLGShIpM/pub
 
 ## API
