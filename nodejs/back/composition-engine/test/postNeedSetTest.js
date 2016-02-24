@@ -96,11 +96,13 @@ describe("composition engine", function () {
 							var results = response.body;
 
 							logger.debug(results);
-							assert.equal(Object.keys(SENSOR_CATEGORIES).length, results.length);
+							assert.equal(Object.keys(SENSOR_CATEGORIES).length - 1, results.length);
 							for (var category in SENSOR_CATEGORIES) {
-								assert(results.find(function predicate(element, index, array) {
-									return element.set === category;
-								}));
+								if (category != "ALL") {
+									assert(results.find(function predicate(element, index, array) {
+										return element.set === category;
+									}));
+								}
 							}
 							for (var i = results.length - 1; i >= 0; i--) {
 								assert(Array.isArray(results[i].sensors));
@@ -252,6 +254,35 @@ describe("composition engine", function () {
 						var results = response.body;
 
 						assert(categories.length <= results.length);
+						categories.forEach(function (category) {
+							assert(results.find(function predicate(result) {
+								return result.set == category;
+							}));
+						});
+						results.forEach(function (result) {
+							assert(Array.isArray(result.sensors));
+						});
+						logger.debug(results);
+					})
+					.end(done);
+			});
+		});
+
+		describe("overview dashboard", function () {
+
+			var overviewNeeds = { needs: [NEEDS.LOCATION.name] };
+
+			it("should return all sensor categories", function (done) {
+				var categories = SENSOR_CATEGORIES.ALL;
+
+				request(app)
+					.post(needSetPath)
+					.send(overviewNeeds)
+					.expect(200)
+					.expect(function (response) {
+						var results = response.body;
+
+						assert(categories.length === results.length);
 						categories.forEach(function (category) {
 							assert(results.find(function predicate(result) {
 								return result.set == category;
