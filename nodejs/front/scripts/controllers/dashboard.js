@@ -2,12 +2,13 @@
  * Created by Garance on 05/01/2016.
  */
 
-//Ca, ça va pas du tout. Ca fait que ca dépend de comment t'as rempli tes boites, et c'tout !
 var existingPositions = [];
+var glyphiconOk = "glyphicon glyphicon-ok";
 
-var watchingArray = [{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},
-    {"dataSC": [], "counter": []},{"dataSC": [], "counter": []},{"dataSC": [], "counter": []},
-    {"dataSC": [], "counter": []},{"dataSC": [], "counter": []}];
+var watchingArray = [{"dataSC": [], "counter": [], "sensors":[]},{"dataSC": [], "counter": [], "sensors":[]},
+    {"dataSC": [], "counter": [], "sensors":[]}, {"dataSC": [], "counter": [], "sensors":[]},
+    {"dataSC": [], "counter": [], "sensors":[]},{"dataSC": [], "counter": [], "sensors":[]},
+    {"dataSC": [], "counter": [], "sensors":[]},{"dataSC": [], "counter": [], "sensors":[]}];
 
 
 ////////////////////////////// Generic function to fire in case of server error ///////////////////////////////////////
@@ -37,11 +38,11 @@ if (beginDate == 'undefined' || endDate == 'undefined') {
     endDate = '2015-10-21 18:00:11';
 }
 
-
+///////////////////////////// Success callback for data retrieving, for any kind of sensor ////////////////////////////
 var sensorDataRetrievingSuccess = function (data, sensor, index) {
     var $thisSensor = $("#loadingSensor"+sensor.name+index);
     $thisSensor.find(".loadingImg").hide();
-    $(document.createElement('span')).attr("class", "glyphicon glyphicon-ok").appendTo($thisSensor);
+    $(document.createElement('span')).attr("class", glyphiconOk).appendTo($thisSensor);
 
     if (allWidgets[index].graphType == 'line' || allWidgets[index].graphType == 'column' || allWidgets[index].graphType == 'mix') {
         if (sensor.unit == "decibel") {
@@ -69,6 +70,12 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
         watchingArray[index].dataSC.push({"name": "close", color: 'rgba(223, 83, 83, .5)', "data": data.data[1].close});
         goDrawScatterPlot(index);
     }
+    else if (allWidgets[index].graphType == 'location') {
+        watchingArray[index].sensors.push({id:sensor.name, salle:sensor.salle, status:data.data, kind: sensor.kind})
+    }
+    else {
+        alert("Sorry, I didn't quite get the kind of widget I'm supposed to draw");
+    }
 };
 
 var allLoaded = 0;
@@ -81,7 +88,6 @@ var finishedLoading = function () {
     }
 };
 
-//An array of as many arrays as we have widgets.
 var waitForOtherSensorsToDraw = function (sensor, index) {
 
     if (watchingArray[index].dataSC.length <= allWidgets[index].sensors.length) {
@@ -130,7 +136,6 @@ var goDrawScatterPlot = function (index) {
 };
 
 var goDrawBoolean = function (data, sensor, index) {
-    console.log('drawing boolean for ', sensor.name);
     var $thisWidget = $("#loadingNeed"+index);
     $thisWidget.find(".loadingImg").hide();
     $thisWidget.find(".glyphicon").show();
@@ -142,7 +147,6 @@ var goDrawBoolean = function (data, sensor, index) {
 };
 
 var goDrawPie = function (sensor, index) {
-    console.log('drawing pie for ', sensor.name);
     var $thisWidget = $("#loadingNeed"+index);
     $thisWidget.find(".loadingImg").hide();
     $thisWidget.find(".glyphicon").show();
@@ -169,7 +173,7 @@ var layoutChosen = function (layoutName, layoutAnswer) {
     layouts.widgetsIds(layoutName, function (widgetsArray) {
 
         loadingLayoutDiv.find(".loadingImg").hide();
-        $(document.createElement('span')).attr("class", "glyphicon glyphicon-ok").appendTo(loadingLayoutDiv);
+        $(document.createElement('span')).attr("class", glyphiconOk).appendTo(loadingLayoutDiv);
 
         existingPositions = widgetsArray;
         div.insertAdjacentHTML('afterbegin', layoutAnswer);
@@ -182,7 +186,7 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                 loadingANeed.appendTo($("#"+existingPositions[index]));
                 loadingANeed.html("The widget \""+widget.title+"\"");
                 $(document.createElement('img')).attr("src", "/assets/images/loading.gif").attr("class", "loadingImg").appendTo(loadingANeed);
-                $(document.createElement('span')).attr("class", "glyphicon glyphicon-ok").appendTo(loadingANeed).hide();
+                $(document.createElement('span')).attr("class", glyphiconOk).appendTo(loadingANeed).hide();
 
                 widget.additionnal = '';
                 if (widget.graphType == 'column' || widget.graphType == 'scatterplot') {
