@@ -3,7 +3,7 @@ var sensors; //This array contains all the sensors we have
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 //2 versions bc easier for now, even if not really useful...
 
-var needsOrigin = [{name: "Comparison"}, {name: "Map"}, {name: "Pattern"}, {name: "See Status"}, {name: "Overtime"}, {name: "Relationships"}, {name: "Hierarchy"}, {name: "Proportion"}, {name: "Summarize"}];
+var needsOrigin = [{name: "Comparison", "image":"comparisons.png"}, {name: "Map", "image":"location.png"}, {name: "Pattern", "image":"patterns.png"}, {name: "See Status", "image":"reference_tool.png"}, {name: "Overtime", "image":"data_over_time.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Hierarchy", "image":"hierarchy.png"}, {name: "Proportion", "image":"proportions.png"}, {name: "Range", "image":"range.png"}];
 var needsSimpleOrigin = ["Comparison", "Map", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 
 var needs = [];
@@ -193,15 +193,16 @@ function addNeeds(boxIndex) {
     needs[boxIndex] = needsOrigin;
     for (var i = 0; i < needs[boxIndex].length; i++) {
         $addIntent.append(
-            '<div class="needInList"><span style="cursor : grab;" class="draggable" id="' + needs[boxIndex][i].name + '">' + needs[boxIndex][i].name + '</span>' +
-            '<img src="/assets/images/intentions/comparisons.svg">' +
-            '</div>'
+            '<div id="' + needs[boxIndex][i].name + '" style="cursor:grab;" class="draggable col-md-6">' +
+            '<img src="/assets/images/intentions/'+needs[boxIndex][i].image+'"/>' +
+            '<div>' + needs[boxIndex][i].name  + '</div>'+
+            '</img></div>'
         );
 
         $(".draggable").draggable({
             //This defines what the user is actually dragging around
             helper: function (event) {
-                return $('<div style="cursor: grabbing" id="' + event.target.id + '">' + event.target.innerHTML + '</div>');
+                return $('<div style="cursor: grabbing" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
             },
             revert: "invalid"
 
