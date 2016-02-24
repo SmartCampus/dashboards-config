@@ -246,16 +246,14 @@ var layoutChosen = function (layoutName, layoutAnswer) {
 
 var a = function () {
     $(function() {
-        console.log("SALAH");
-        $( "#sortable1, #sortable2" ).sortable({
-            connectWith: ".connectedSortable",
+        $( '.sortable' ).sortable({
+            connectWith: ".sortable",
             handle: 'h3',
-            cursor: 'move',
-            
+            cursor: 'move'
         }).disableSelection();
     });
 
-    $('#sortable1, #sortable2').droppable({
+    $( '.sortable' ).droppable({
         drop: function(event, ui)
         {
             function timeout() {
@@ -267,4 +265,4 @@ var a = function () {
         }
     });
 
-}
+};
