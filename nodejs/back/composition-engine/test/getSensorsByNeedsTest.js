@@ -45,7 +45,7 @@ describe("needs", function () {
 		describe("summer dashboard", function () {
 
 			it("should return all sensor categories", function (done) {
-				async.each([summerWidget1Needs, summerWidget2Needs], function iterator (item, callback) {
+				async.each([summerWidget1Needs, summerWidget2Needs, summerWidget34Needs], function iterator (item, callback) {
 					needs.getSensorsMatchingNeeds(item, function (err, results) {
 						if(err) {
 							logger.error(err);
@@ -71,20 +71,6 @@ describe("needs", function () {
 						logger.error(err);
 						throw err;
 					}
-					done();
-				});
-			});
-
-			it("should return only STATE category", function (done) {
-				needs.getSensorsMatchingNeeds(summerWidget34Needs, function (err, results) {
-					if(err) {
-						logger.error(err);
-						throw err;
-					}
-					assert.equal(1, results.length);
-					assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
-					assert(Array.isArray(results[0].sensors));
-					logger.debug(results[0].sensors);
 					done();
 				});
 			});
@@ -152,7 +138,7 @@ describe("needs", function () {
 
 		describe("winter dashboard", function () {
 
-			it("should return only STATE category", function (done) {
+			it("should return all sensor categories", function (done) {
 				needs.getSensorsMatchingNeeds(winterWidget1Needs, function (err, results) {
 					var actual;
 
@@ -160,10 +146,18 @@ describe("needs", function () {
 						logger.error(err);
 						throw err;
 					}
-					assert.equal(1, results.length);
-					assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
-					assert(Array.isArray(results[0].sensors));
-					logger.debug(results[0].sensors);
+					assert.equal(Object.keys(SENSOR_CATEGORIES).length - 1, results.length);
+					for (var category in SENSOR_CATEGORIES) {
+						if (category != "ALL") {
+							assert(results.find(function predicate(element, index, array) {
+								return element.set === category;
+							}));
+						}
+					}
+					for (var i = results.length - 1; i >= 0; i--) {
+						assert(Array.isArray(results[i].sensors));
+					};
+					logger.debug(results);
 					done();
 				});
 			});

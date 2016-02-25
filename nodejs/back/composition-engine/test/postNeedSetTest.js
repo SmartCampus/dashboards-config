@@ -87,7 +87,8 @@ describe("composition engine", function () {
 				summerWidget34Needs = { needs: [NEEDS.SEE_STATUS.name] };
 
 			it("should return all sensor categories", function (done) {
-				async.each([summerWidget1Needs, summerWidget2Needs], function iterator (item, callback) {
+				async.each([summerWidget1Needs, summerWidget2Needs, summerWidget34Needs],
+						function iterator (item, callback) {
 					request(app)
 						.post(needSetPath)
 						.send(item)
@@ -116,22 +117,6 @@ describe("composition engine", function () {
 					}
 					done();
 				});
-			});
-
-			it("should return only STATE category", function (done) {
-				request(app)
-					.post(needSetPath)
-					.send(summerWidget34Needs)
-					.expect(200)
-					.expect(function (response) {
-						var results = response.body;
-
-						assert.equal(1, results.length);
-						assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
-						assert(Array.isArray(results[0].sensors));
-						logger.debug(results[0].sensors);
-					})
-					.end(done);
 			});
 		});
 
@@ -208,7 +193,7 @@ describe("composition engine", function () {
 				winterWidget2Needs = { needs: [NEEDS.OVERTIME.name] },
 				winterWidget3Needs = { needs: [NEEDS.OVERTIME.name, NEEDS.COMPARISON.name, NEEDS.RELATIONSHIPS.name] };
 
-			it("should return only STATE category", function (done) {
+			it("should return all sensor categories", function (done) {
 				request(app)
 					.post(needSetPath)
 					.send(winterWidget1Needs)
@@ -216,10 +201,18 @@ describe("composition engine", function () {
 					.expect(function (response) {
 						var results = response.body;
 
-						assert.equal(1, results.length);
-						assert.equal(SENSOR_CATEGORIES.STATE, results[0].set);
-						assert(Array.isArray(results[0].sensors));
-						logger.debug(results[0].sensors);
+						logger.debug(results);
+						assert.equal(Object.keys(SENSOR_CATEGORIES).length - 1, results.length);
+						for (var category in SENSOR_CATEGORIES) {
+							if (category != "ALL") {
+								assert(results.find(function predicate(element, index, array) {
+									return element.set === category;
+								}));
+							}
+						}
+						for (var i = results.length - 1; i >= 0; i--) {
+							assert(Array.isArray(results[i].sensors));
+						};
 					})
 					.end(done);
 			});
