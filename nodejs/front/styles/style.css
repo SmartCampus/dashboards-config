@@ -13,3 +13,86 @@
 .widgetTitle {
     text-align: center;
 }
+
+
+body {
+    background: #eee;
+}
+
+div {
+    display: block
+}
+
+.apc_inner_item {
+    padding: 10px;
+    margin: 5px 0;
+    position: relative
+}
+
+.apc_column {
+    *zoom: 1;
+    position: relative;
+    min-height: 10px
+}
+
+.apc_column:after {
+    content: "";
+    display: table;
+    clear: both
+}
+
+.apc_column .apc_column--content {
+    min-height: 100vh;
+    padding: 10px;
+}
+
+.apc_column .apc_column--add .apc_addContent {
+    display: block;
+    padding: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: #666;
+    background: #eee;
+    font-size: 16px
+}
+
+.apc_drop-placeholder-big,
+.apc_drop-placeholder,
+.apc_drop-placeholder-blocked {
+    background: #ccc;
+    border: 1px dotted #aaa;
+    float: left
+}
+
+.apc_drop-placeholder-blocked {
+    float: none;
+    padding: 10px
+}
+
+.apc_drop-placeholder-big {
+    width: 780px !important;
+    margin: 0 10px;
+    *zoom: 1;
+    float: none
+}
+
+.theWidget {
+    border-top-right-radius: 12px;
+    border-top-left-radius: 12px;
+    background: #FFFFFF;
+}
+
+.widgetTitle {
+    text-align : center;
+    background: #096AA3;
+    min-height: 60px;
+    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.widgetTitle > h3 {
+    text-align : center;
+    font-family: 'Work Sans';
+    color : white;
+}
+

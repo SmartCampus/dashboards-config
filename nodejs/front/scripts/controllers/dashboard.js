@@ -257,22 +257,34 @@ var layoutChosen = function (layoutName, layoutAnswer) {
 };
 
 var a = function () {
-        $( '.sortable' ).sortable({
-            connectWith: ".sortable",
-            handle: 'h3',
-            cursor: 'move'
-        }).disableSelection();
 
-    $( '.sortable' ).droppable({
+    $('.apc_column--content').droppable({
         drop: function(event, ui)
         {
             function timeout() {
                 $(window).resize();
+                console.log("coucou");
             }
             window.setTimeout(function() {
                 $(window).resize();
             },100);
         }
     });
+
+
+    $(".apc_column--content").sortable({
+        placeholder: 'apc_drop-placeholder-blocked',
+        forcePlaceholderSize: true,
+        items: '.apc_inner_item',
+        handle : '.widgetTitle',
+        connectWith: ".apc_column--content",
+        tolerance: "pointer",
+        dropOnEmpty: true,
+        distance: 0.5,
+        stop: function(event, ui) {
+            // that.droppedItem(ui.item, ui.item.index());
+        }
+    });
+
 
 };
