@@ -19,7 +19,7 @@ router.get("/sensors", function(req, res) {
     } else {
         res.send("Sorry please enter a container in the query parameters." +
             "Here is the list of all the valid containers" +
-            "CampusSophiaTech - TempliersOuest - 4thfloor - Coffeecorner - Sousrepartiteur - Modaliscorridor" +
+            "CampusSophiaTech - TempliersOuest - Fourthfloor - Coffeecorner - Sousrepartiteur - Modaliscorridor" +
             "Office445 - Office443 - Office444 - TEMP - LIGHT - STATE- ENERGY - VirtualSensors. Exemple of valid request " +
             "/sensors?container1=Office443")
     }

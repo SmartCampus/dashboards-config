@@ -5,7 +5,7 @@ var sensors; //This array contains all the sensors we have
 
 var needsOrigin = [{name: "Comparison", "image":"comparisons.png"}, {name: "Location", "image":"location.png"}, {name: "Pattern", "image":"patterns.png"}, {name: "See Status", "image":"reference_tool.png"}, {name: "Overtime", "image":"data_over_time.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Hierarchy", "image":"hierarchy.png"}, {name: "Proportion", "image":"proportions.png"}, {name: "Range", "image":"range.png"}];
 var needsSimpleOrigin = ["Comparison", "Location", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
-
+var hierarchyRoute = "container/CampusSophiaTech/child";
 var needs = [];
 
 
@@ -22,7 +22,7 @@ var startDate, endDate;
 /**
  * Get all buildings sensors et placements
  */
-$.get(mainServer + "container/Root/child")
+$.get(mainServer + "container/CampusSophiaTech/child")
     .done(function (data) {
         sensors = data;
         initWindowsData();
@@ -135,7 +135,7 @@ $("#add-rows").click(function (event) {
  * For now, when we add a line, the other boxes become unavailable !
  */
 var addAWidget = function () {
-    $.get(mainServer + "container/Root/child")
+    $.get(mainServer + "container/CampusSophiaTech/child")
         .done(function (data) {
             sensorsBox.push(data);
         });
@@ -192,7 +192,7 @@ function addNeeds(boxIndex) {
     needs[boxIndex] = needsOrigin;
     for (var i = 0; i < needs[boxIndex].length; i++) {
         $addIntent.append(
-            '<div id="' + needs[boxIndex][i].name + '" style="cursor:grab;" class="draggable col-md-6">' +
+            '<div id="' + needs[boxIndex][i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;" class="draggable col-md-6">' +
             '<img src="/assets/images/intentions/'+needs[boxIndex][i].image+'"/>' +
             '<div style="margin-bottom:1em;">' + needs[boxIndex][i].name  + '</div>'+
             '</img></div>'
@@ -201,10 +201,10 @@ function addNeeds(boxIndex) {
         $(".draggable").draggable({
             //This defines what the user is actually dragging around
             helper: function (event) {
-                return $('<div style="cursor: grabbing" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
+                return $('<div style="-webkit-grabbing; cursor:-moz-grabbing;" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
             },
             revert: "invalid",
-            cursorAt: { top: 0, left: 0 }
+            cursorAt: { bottom: 7, left: 25 }
         });
     }
 }
@@ -232,30 +232,31 @@ function navigation() {
     var i;
     for (i = 0; i < buildings.length; i++) {
         $addCaptors.append(
-            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:red;\">"+ buildings[i].amountOfSensors+"</span></div>"
+            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:#4781ff;\">"+ buildings[i].amountOfSensors+"</span></div>"
     );
     }
 
     if (position.directSensor != null && typeof(position.directSensor) !== 'undefined' && position.directSensor != [null]) {
         for (i = 0; i < position.directSensor.length; i++) {
-            var a = "postit"+((i % 4) +1);
+          //  var a = "postit"+((i % 4) +1);
             if (position.directSensor[i] != null) {
                 $addCaptors.append(
-                    "<div class=\"draggable col-md-6\" id=\""
-                    + position.directSensor[i].name + "\" style=\"cursor : grab;\"><div class=\""+a+"\"><p>"
-                    + position.directSensor[i].displayName + "</p></div></div>"
+                    //"<div><span class='draggable text-center'>"+position.directSensor[i].displayName + "</span></div>"
+                    "<div><span class='draggable text-center' id='"+ position.directSensor[i].name +"' style='cursor: -webkit-grab; cursor:-moz-grab;;'> "
+                    + position.directSensor[i].displayName + "</span></div>"
                 );
                 $(".draggable").draggable({
                     helper: function (event) {
-                        return $("<div style='cursor: grabbing'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
+                        return $("<div style='-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
                     },
-                    revert: "invalid"
+                    revert: "invalid",
+                    cursorAt: { bottom: 7, left: 25 }
                 });
             }
         }
     }
     else {
-        $addCaptors.append("<div>No sensor is available here. </div>");
+        $addCaptors.append("<div>There isn't any compatible sensor here. </div>");
     }
 
     updateNavigation();
@@ -456,6 +457,8 @@ var declareNeeds = function () {
                 //Once we got everything
                 $("#dashboardNameForm").show();
                 $("#generateButton").hide();
+                $("#dateButton").hide();
+
             }
         }, function () {
             $("#generateButton").attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...

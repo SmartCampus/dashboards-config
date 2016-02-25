@@ -327,7 +327,7 @@ function initSensors(data) {
 
     var campus = new SensorContainer("Campus SophiaTech", ["CAMPUS"], [], []);
     var templierWest = new SensorContainer("Templiers Ouest", [], [], []);
-    var fourthFloor = new SensorContainer("4th floor", ["SPARKS"] ,[], []);
+    var fourthFloor = new SensorContainer("Fourth floor", ["SPARKS"] ,[], []);
     var coffeeCorner = new SensorContainer("Coffee corner", ["COFFEE", "CAFE"], [], []);
     var sousRepartiteur = new SensorContainer("Sous repartiteur", ["MW"] , [], []);
     var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis"], [], []);
@@ -460,7 +460,7 @@ function initContainers() {
     /** Create all the containers needed **/
     var campus = new SensorContainer("Campus SophiaTech", ["CAMPUS"], [], []);
     var templierWest = new SensorContainer("Templiers Ouest", [], [], []);
-    var fourthFloor = new SensorContainer("4th floor", ["SPARKS"] ,[], []);
+    var fourthFloor = new SensorContainer("Fourth floor", ["SPARKS"] ,[], []);
     var coffeeCorner = new SensorContainer("Coffee corner", ["COFFEE", "CAFE"], [], []);
     var sousRepartiteur = new SensorContainer("Sous repartiteur", ["MW"] , [], []);
     var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis"], [], []);

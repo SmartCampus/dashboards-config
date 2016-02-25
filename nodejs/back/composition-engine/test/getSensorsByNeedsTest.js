@@ -26,6 +26,10 @@ var winterWidget1Needs = [NEEDS.SEE_STATUS],
 
 var overviewNeeds = [NEEDS.LOCATION];
 
+var allSensors = require("../../sensor-containers-API/data/sensors.json");
+
+logger.info(Object.keys(allSensors));
+
 describe("needs", function () {
 
 	describe("#getSensorsMatchingNeeds()", function () {

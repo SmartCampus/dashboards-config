@@ -39,6 +39,18 @@ function jobsRouter(message, res) {
                 }
             });
             break;
+        case "generateMap":
+            generator.generateMap(message.config, function (err, data) {
+                if (err) {
+                    console.log(err);
+                    res.send(err);
+                }
+                else {
+                    console.log(data);
+                    res.send(data);
+                }
+            });
+            break;
         default:
             res.send("Bad job");
     }

@@ -17,6 +17,10 @@
     <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
 
     <script src="/bower_components/highstock/highstock.js"></script>
+
+    <script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>
+    <script type="text/javascript" src="http://smartcampus.github.io/plan-visualizer/handling-svg-biblio.js"></script>
+    <link rel="stylesheet" href="http://smartcampus.github.io/plan-visualizer/handling-svg-biblio.css">
     <!-- <script src="/bower_components/highstock/modules/exporting.js"></script>
     Only useful if we want to let people print or save the db as an image-->
     <script type="text/javascript">
@@ -56,13 +60,13 @@
                 <p>Click on the layout you want for your app !</p>
                 <p>For now, we choose for you how the widgets will be displayed considering the layout.</p>
             <div class="row">
-                <a class="col-xs-12 col-md-4 " onclick="layouts.newLayout('halfNHalf', layoutChosen, errorOccurred)" data-dismiss="modal">
+                <a class="col-xs-12 col-md-4 " onclick="layouts.newLayout('halfNHalf', allWidgets, layoutChosen, errorOccurred)" data-dismiss="modal">
                     <img class="well layoutImg" src="/assets/images/layouts/halfNhalf.png"/>
                 </a>
-                <a class="col-xs-12 col-md-4" onclick="layouts.newLayout('oneThirdTwoThirds', layoutChosen, errorOccurred)" data-dismiss="modal">
+                <a class="col-xs-12 col-md-4" onclick="layouts.newLayout('oneThirdTwoThirds', allWidgets, layoutChosen, errorOccurred)" data-dismiss="modal">
                     <img class="well layoutImg" src="/assets/images/layouts/oneThirdTwoThirds.png"/>
                 </a>
-                <a class="col-xs-12 col-md-4" onclick="layouts.newLayout('threeThirds', layoutChosen, errorOccurred)" data-dismiss="modal">
+                <a class="col-xs-12 col-md-4" onclick="layouts.newLayout('threeThirds', allWidgets, layoutChosen, errorOccurred)" data-dismiss="modal">
                     <img class="well layoutImg" src="/assets/images/layouts/threeThirds.png"/>
                 </a>
             </div>

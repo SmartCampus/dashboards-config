@@ -4,14 +4,16 @@
 
 var layouts = (function () {
     return { //exposed to public
-        newLayout: function(layoutName, successCB, errorCB) {
+        newLayout: function(layoutName, widgetsArray, successCB, errorCB) {
             console.log('you want ', layoutName);
             $.post(genServer+widgetGen,
                 {
                     job : "generateLayout",
                     config :
                     {
-                        layoutType: layoutName
+                        layoutType: layoutName,
+                        widgets: widgetsArray
+
                     }
                 })
                 .done(function (data) {

@@ -3,7 +3,28 @@
  */
 var generate = (function () {
     return { //exposed to public
-        widgetBoolean: function(position, idWanted, name, successCB, errorCB) {
+        mapWidget: function(theTitle, nameOfTheDataArray, position, successCB, errorCB) {
+            $.post(genServer+widgetGen,
+                {
+                    job : "generateMap",
+                    config :
+                    {
+                        graphName:position,
+                        graphTitle:theTitle,
+                        seriesArrayName:nameOfTheDataArray
+                    }
+                })
+                .done(function (data) {
+                    console.log('request done !');
+                    // console.log(data);
+                    successCB(data);
+                })
+                .fail(function (data) {
+                    console.log('error in post gen');
+                    errorCB();
+                });
+    },
+    widgetBoolean: function(position, idWanted, name, successCB, errorCB) {
             $.post(genServer+widgetGen,
                 {
                     job : "generateBoolean",
@@ -30,7 +51,6 @@ var generate = (function () {
                     job : "generatePie",
                     config :
                     {
-
                         graphName:graphName,
                         graphTitle:graphTitle,
                         seriesArrayName:arrayName
@@ -47,17 +67,6 @@ var generate = (function () {
                 });
         },
         widget: function (graphTitle, graphType, yAxesArray, graphName, seriesName, successCB, errorCB) {
-            console.log(JSON.stringify({
-                job : 'generateGraph',
-                config :
-                {
-                    graphType: graphType,
-                    yAxes : yAxesArray,
-                    graphName:graphName,
-                    graphTitle:graphTitle,
-                    seriesArrayName : seriesName
-                }
-            }));
             $.post(genServer+widgetGen, {
                     job : 'generateGraph',
                     config :
