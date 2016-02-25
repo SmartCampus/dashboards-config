@@ -196,6 +196,13 @@ function readTemplateFile(templateFile, callback) {
     });
 }
 
+function generateMap(config, callback) {
+    console.log(config);
+    readTemplateFile("map.mustache", function (template) {
+        callback(null, Mustache.render(template, config));
+    });
+}
+
 // Exports
 
 exports.generateBoolean = generateBoolean;
@@ -205,3 +212,5 @@ exports.generateGraph = generateGraph;
 exports.generatePie = generatePie;
 
 exports.generateLayout = generateLayout;
+
+exports.generateMap = generateMap;
