@@ -162,9 +162,9 @@ var removeAWidget = function (widgetId) {
     $('#widgetNameForm' + widgetId).remove();
     maxOfWidgets -= 1;
   //  sensorsBox[widgetId] = null;
-    sensorsBox[widgetId].splice(widgetId, 1);
+    sensorsBox.splice(widgetId, 1);
     allTheNeeds.splice(widgetId, 1);
-    needs[widgetId].splice(widgetId, 1);
+    needs.splice(widgetId, 1);
 
     $("#generateButton").removeAttr("disabled");
     $("#dashboardNameForm").hide();
