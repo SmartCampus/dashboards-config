@@ -73,7 +73,7 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
     }
     else if (allWidgets[index].graphType == 'map') {
         watchingArray[index].dataSC.push(data.data);
-        watchingArray[index].mapData.sensors.push({id:sensor.name, bat:"Templiers Ouest", salle:sensor.salle, value:data.data[1], kind: sensor.kind});
+        watchingArray[index].mapData.sensors.push({id:sensor.name, bat:"Templiers Ouest", salle:sensor.salle, value:data.data[1]+" "+sensor.unit, kind: sensor.kind});
         console.log(watchingArray[index].mapData);
         waitForOtherSensorsToDraw(sensor, index);
     }
