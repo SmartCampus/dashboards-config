@@ -239,10 +239,9 @@ function navigation() {
     if (position.directSensor != null && typeof(position.directSensor) !== 'undefined' && position.directSensor != [null]) {
         for (i = 0; i < position.directSensor.length; i++) {
           //  var a = "postit"+((i % 4) +1);
-            console.log(i);
             if (position.directSensor[i] != null) {
-                console.log(position.directSensor[i]);
-                console.log(position.directSensor[i].displayName);
+                console.log('the sensor : ', position.directSensor[i]);
+                console.log('its display name : ', position.directSensor[i].displayName);
                 $addCaptors.append(
                     //"<div><span class='draggable text-center'>"+position.directSensor[i].displayName + "</span></div>"
                     "<div><span class='draggable text-center' id='"+ position.directSensor[i].name +"' style='cursor : grab;'> "
@@ -459,6 +458,8 @@ var declareNeeds = function () {
                 //Once we got everything
                 $("#dashboardNameForm").show();
                 $("#generateButton").hide();
+                $("#dateButton").hide();
+
             }
         }, function () {
             $("#generateButton").attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...

@@ -5,10 +5,10 @@
 var existingPositions = [];
 var glyphiconOk = "glyphicon glyphicon-ok";
 
-var watchingArray = [{"dataSC": [], "counter": [], "sensors":[]},{"dataSC": [], "counter": [], "sensors":[]},
-    {"dataSC": [], "counter": [], "sensors":[]}, {"dataSC": [], "counter": [], "sensors":[]},
-    {"dataSC": [], "counter": [], "sensors":[]},{"dataSC": [], "counter": [], "sensors":[]},
-    {"dataSC": [], "counter": [], "sensors":[]},{"dataSC": [], "counter": [], "sensors":[]}];
+var watchingArray = [{"dataSC": [], "counter": [], "mapData":{"sensors":[]}},{"dataSC": [], "counter": [], "mapData":{"sensors":[]}},
+    {"dataSC": [], "counter": [], "mapData":{"sensors":[]}}, {"dataSC": [], "counter": [], "mapData":{"sensors":[]}},
+    {"dataSC": [], "counter": [], "mapData":{"sensors":[]}},{"dataSC": [], "counter": [], "mapData":{"sensors":[]}},
+    {"dataSC": [], "counter": [], "mapData":{"sensors":[]}},{"dataSC": [], "counter": [], "mapData":{"sensors":[]}}];
 
 
 ////////////////////////////// Generic function to fire in case of server error ///////////////////////////////////////
@@ -72,9 +72,8 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
         goDrawScatterPlot(index);
     }
     else if (allWidgets[index].graphType == 'map') {
-        console.log(sensor.name, ' value is ', data.data[1]);
         watchingArray[index].dataSC.push(data.data);
-        watchingArray[index].sensors.push({id:sensor.name, bat:"Templiers Ouest", salle:sensor.salle, value:data.data[1], kind: sensor.kind})
+        watchingArray[index].mapData.sensors.push({id:sensor.name, bat:"Templiers Ouest", salle:sensor.salle, value:data.data[1], kind: sensor.kind})
         waitForOtherSensorsToDraw(sensor, index);
     }
     else {
@@ -118,17 +117,14 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
             allWidgets[index].graphType = "";
         }
         if (allWidgets[index].graphType == 'map') {
-            console.log('all widgets for map graph are found !! :) :) :)');
             generate.mapWidget(allWidgets[index].title, watchingArray[index], existingPositions[index], existingPositions[index]+"map", function(data) {
-                var $thePosition = $("#"+existingPositions[index]);
-                $thePosition.insertAdjacentHTML('afterbegin', '<script type="text/javascript" src="http://mbostock.github.com/d3/d3.js"></script>'+
-                    '<script type="text/javascript" src="http://smartcampus.github.io/plan-visualizer/handling-svg-biblio.js"></script>'+
-                    '<link rel="stylesheet" href="http://smartcampus.github.io/plan-visualizer/handling-svg-biblio.css">');
 
-                var loadingLayoutDiv = $(document.createElement("div"));
-                loadingLayoutDiv.attr("id", existingPositions[index]+"map");
-                loadingLayoutDiv.appendTo($thePosition);
-                loadingLayoutDiv.after(' <h3>Caption :</h3>'+
+
+                var $thePosition = $("#"+existingPositions[index]);
+                var mapSVGDiv = $(document.createElement("div"));
+                mapSVGDiv.attr("id", existingPositions[index]+"map");
+                mapSVGDiv.appendTo($thePosition);
+                mapSVGDiv.after(' <h3>Caption :</h3>'+
                     '<div class="col-md-4">'+
                     '<img class="sensorIcon" src="/assets/images/sensorIcons/door.png"/>Door sensor'+
                 '</div>'+
@@ -153,8 +149,22 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
                 '<div class="col-md-4">'+
                     '<img class="sensorIcon" src="/assets/images/sensorIcons/temperature.png"/>Temperature sensor'+
                 '</div>');
+                console.log(watchingArray[index].mapData);
+                console.log(JSON.stringify(watchingArray[index].mapData));
+                load_svg("/assets/plan_T1_4e.svg", existingPositions[index]+"map", watchingArray[index].mapData, put_sensors, {
+                    "door": "/assets/images/sensorIcons/door.png",
+                    "window": "/assets/images/sensorIcons/window.png",
+                    "light": "/assets/images/sensorIcons/light.png",
+                    "temp": "/assets/images/sensorIcons/temperature.png",
+                    "heating": "/assets/images/sensorIcons/heating.png",
+                    "ac": "/assets/images/sensorIcons/ac.png",
+                    "energy": "/assets/images/sensorIcons/energy.png",
+                    "sound": "/assets/images/sensorIcons/sound.png"
+                });
+
+
                 //              eval(data);
-                
+                $thisWidget.hide();
                 finishedLoading();
             }, errorOccurred);
         }
@@ -258,7 +268,7 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                         widget.additionnal = '/splitlist';
                         widget.withParam = true;
                     }
-                    else if (sensor.name == "HEATING_443") {
+                    else if (sensor.kind == "heating") {
                         widget.withParam = true;
                         widget.additionnal = '';
                     }
