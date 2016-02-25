@@ -299,13 +299,11 @@ var layoutChosen = function (layoutName, layoutAnswer) {
 };
 
 var a = function () {
-    $(function() {
         $( '.sortable' ).sortable({
             connectWith: ".sortable",
             handle: 'h3',
             cursor: 'move'
         }).disableSelection();
-    });
 
     $( '.sortable' ).droppable({
         drop: function(event, ui)
