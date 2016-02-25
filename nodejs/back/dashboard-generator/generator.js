@@ -8,10 +8,17 @@ var Mustache = require("mustache"),
     layoutDefinitions = require("./layout_definitions");
 
 function generateBoolean(config, res) {
-    readTemplateFile("BooleanWidget.mustache", function (template) {
-        var rendered = Mustache.render(template, config);
-        res.send(rendered);
-    });
+    if(config.category === "STATE") {
+        readTemplateFile("BooleanWidget.mustache", function (template) {
+            var rendered = Mustache.render(template, config);
+            res.send(rendered);
+        });
+    } else {
+        readTemplateFile("lastValueWidget.mustache", function (template) {
+            var rendered = Mustache.render(template, config);
+            res.send(rendered);
+        });
+    }
 }
 
 /**

@@ -1,11 +1,6 @@
 var position = document.createElement("img");
 document.getElementById('{{position}}').appendChild(position);
 
-var title = document.createElement("H1")
-var t = document.createTextNode("{{boolName}}");
-    title.appendChild(t);
-    document.getElementById('{{position}}').appendChild(title);
-
 if ({{id}}.data[1] == 0) {
 position.src = '/assets/images/no.png';
 }
