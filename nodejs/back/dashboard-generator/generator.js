@@ -8,7 +8,7 @@ var Mustache = require("mustache"),
     layoutDefinitions = require("./layout_definitions");
 
 function generateBoolean(config, res) {
-    if(config.category === "STATE") {
+    if(config.category !== "STATE") {
         readTemplateFile("BooleanWidget.mustache", function (template) {
             var rendered = Mustache.render(template, config);
             res.send(rendered);
