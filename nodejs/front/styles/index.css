@@ -56,31 +56,3 @@ body {
     position: fixed;
     top : 2%;
 }
-
-
-.sortable {
-    padding: 50px;
-    text-align: center;
-}
-
-.sortable > [class*='col-']:before {
-    background: #e3e3e3;
-    bottom: 0;
-    content: " ";
-    left: 0;
-    position: absolute;
-    width: 1px;
-    top: 0;
-}
-.sortable > [class*='col-']:first-child:before {
-    display: none;
-}
-
-
-@import url(https://fonts.googleapis.com/css?family=Work+Sans:400,300,200,100);
-
-.caard-block {
-    text-align : center;
-    font-family: 'Work Sans';
-    color : #096AA3;
-}
