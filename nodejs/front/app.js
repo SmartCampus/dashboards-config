@@ -12,6 +12,8 @@ app.use("/bower_components",
 
 app.use("/libs/blockrain",
 	express.static(__dirname + "/libs/blockrain"));
+app.use("/libs/dragIcon",
+	express.static(__dirname + "/libs/dragIcon"));
 
 //404 not found
 app.get('/*', function (req, res) {
