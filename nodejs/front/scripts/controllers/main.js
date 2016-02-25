@@ -372,9 +372,9 @@ function dropIt(event, ui) {
                     });
             }, function (error) {
                 if (error.status === 400) {
-                    alert(error.responseText);
+                    console.log(error.responseText);
+                    alert("Sorry, if you put this intent into to widget, we cannot find any compatible sensor. ");
                 }
-                console.log('IT\'S IMPOSSIBRRRRUUUUU');
             });
         }
     }
