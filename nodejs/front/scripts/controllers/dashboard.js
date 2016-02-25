@@ -152,19 +152,11 @@ var goDrawBoolean = function (data, sensor, index) {
     var $thisWidget = $("#loadingNeed"+index);
     $thisWidget.find(".loadingImg").hide();
     $thisWidget.find(".glyphicon").show();
-    if (sensor.category == 'STATE') {
-        generate.widgetBoolean(existingPositions[index], "data", allWidgets[index].title, function (result) {
+        generate.widgetBoolean(existingPositions[index], "data", sensor.category, function (result) {
             $("#"+existingPositions[index]).empty();
             eval(result);
             finishedLoading();
         }, errorOccurred);
-    }
-    else {
-        $("#"+existingPositions[index]).empty();
-
-        $("#"+existingPositions[index]).html(sensor.displayName+'" : '+data.data+' '+sensor.unit);
-    }
-
 };
 
 var goDrawPie = function (sensor, index) {
