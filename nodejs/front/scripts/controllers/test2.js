@@ -143,15 +143,15 @@ $(function () {
 });
 
 $(function() {
-    $( "#sortable1, #sortable2" ).sortable({
-        connectWith: ".connectedSortable",
+    $( ".sortable").sortable({
+        connectWith: ".sortable",
         handle: 'h3',
         cursor: 'move'
-    }).disableSelection();
+    })
 });
 
 
-$('#sortable1, #sortable2').droppable({
+$('.sortable').droppable({
     drop: function(event, ui)
     {
         function timeout() {
