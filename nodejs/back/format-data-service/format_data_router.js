@@ -100,7 +100,7 @@ router.get("/sensor/:sensorId/data/reverse", function(req, res) {
  */
 router.post("/sensors/common/hierarchical", function(req, res) {
     var givenSensor = req.body.sensors;
-    request_handler.getContainersChild("Root", function(response) {
+    request_handler.getContainersChild("CampusSophiaTech", function(response) {
         processor.sortHierarchicalSensor(givenSensor, response, function(response, err) {
             if(err) {
                 res.sendStatus(400);

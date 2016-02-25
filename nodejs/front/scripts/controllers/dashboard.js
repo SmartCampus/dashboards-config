@@ -120,7 +120,7 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
             generate.mapWidget(allWidgets[index].title, "watchingArray[index].mapData", existingPositions[index], function(data) {
 
 
-                var $thePosition = $("#"+existingPositions[index]);
+        /*        var $thePosition = $("#"+existingPositions[index]);
                 var mapSVGDiv = $(document.createElement("div"));
                 mapSVGDiv.attr("id", existingPositions[index]+"map");
                 mapSVGDiv.appendTo($thePosition);
@@ -159,9 +159,9 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
                     "energy": "/assets/images/sensorIcons/energy.png",
                     "sound": "/assets/images/sensorIcons/sound.png"
                 });
+*/
 
-
-                //              eval(data);
+                eval(data);
                 $thisWidget.hide();
                 finishedLoading();
             }, errorOccurred);
