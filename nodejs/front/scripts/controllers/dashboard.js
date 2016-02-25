@@ -117,7 +117,7 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
             allWidgets[index].graphType = "";
         }
         if (allWidgets[index].graphType == 'map') {
-            generate.mapWidget(allWidgets[index].title, watchingArray[index], existingPositions[index], existingPositions[index]+"map", function(data) {
+            generate.mapWidget(allWidgets[index].title, "watchingArray[index].mapData", existingPositions[index], function(data) {
 
 
                 var $thePosition = $("#"+existingPositions[index]);
@@ -149,8 +149,6 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
                 '<div class="col-md-4">'+
                     '<img class="sensorIcon" src="/assets/images/sensorIcons/temperature.png"/>Temperature sensor'+
                 '</div>');
-                console.log(watchingArray[index].mapData);
-                console.log(JSON.stringify(watchingArray[index].mapData));
                 load_svg("/assets/plan_T1_4e.svg", existingPositions[index]+"map", watchingArray[index].mapData, put_sensors, {
                     "door": "/assets/images/sensorIcons/door.png",
                     "window": "/assets/images/sensorIcons/window.png",
