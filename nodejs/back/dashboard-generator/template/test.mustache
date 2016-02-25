@@ -3,11 +3,11 @@
         <div class="{{divWidth}}">
             <div class="draggable"></div>
             {{#widgets}}
-                <div class="draggable">
-                    <div class="widgetTitle">
+                <div class="draggable card">
+                    <div id="{{widgetId}}"></div>
+                    <div class="card-block">
                         <h3>{{title}}</h3>
                     </div>
-                    <div id="{{widgetId}}"></div>
                 </div>
             {{/widgets}}
         </div>
