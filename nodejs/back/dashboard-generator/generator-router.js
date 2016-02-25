@@ -35,7 +35,6 @@ function jobsRouter(message, res) {
                     res.send(err);
                 }
                 else {
-                    console.log(data);
                     res.send(data);
                 }
             });
@@ -59,7 +58,6 @@ function jobsRouter(message, res) {
 
 router.get("/:widgetType/widgetList", function(req ,res) {
     var widget = req.params.widgetType
-   console.log(widget);
     if(layout.widgetIdList[widget]) {
         res.send(layout.widgetIdList[widget]);
     } else {

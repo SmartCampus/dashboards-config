@@ -5,11 +5,10 @@
 "use strict";
 
 var widgetIdList = {
-	halfNHalf: ["left1", "right1", "left2", "right2", "left3", "right3"],
+	halfNHalf: ["left1", "right1", "left2", "right2", "left3", "right3", "left4", "right4", "left5", "right5"],
 	threeThirds: ["left1", "center1" ,"right1" ,"left2", "center2" ,"right2", "left3", "center3" ,"right3"],
-	oneThirdTwoThirds: ["left1", "right1", "left2", "right2", "left3", "right3"],
-
-}
+	oneThirdTwoThirds: ["left1", "right1", "left2", "right2", "left3", "right3", "left4", "right4", "left5", "right5"]
+};
 
 
 var LAYOUT_WIDGET_WIDTHS = {
@@ -63,62 +62,79 @@ var LAYOUT_WIDGET_WIDTHS = {
 var dragnDropLayout = {
 	halfNHalf : {
 		"row" : [
-			{ "divWidth" : "col-md-6 sortable", "widgets" : [
-					{"widgetId" : "left1"},
-					{"widgetId" : "left2"}
-				]
-			},
-			{"divWidth" : "col-md-6 sortable", "widgets" : [
-					{"widgetId" : "right1"},
-					{"widgetId" : "right2"}
-				]
-			}
+			{ "divWidth" : "col-md-6 sortable", "widgets" : [] },
+			{"divWidth" : "col-md-6 sortable", "widgets" : [] }
 		]
 	},
 	threeThirds : {
 		"row" : [
-			{"divWidth" : "col-md-4 sortable", "widgets" : [
-					{"widgetId" : "left1"},
-					{"widgetId" : "left2"}
-				]
-			},
-			{"divWidth" : "col-md-4 sortable", "widgets" : [
-					{"widgetId" : "center1"},
-					{"widgetId" : "center2"}
-				]
-			},
-			{"divWidth" : "col-md-4 sortable", "widgets" : [
-					{"widgetId" : "right1"},
-					{"widgetId" : "right2"}
-				]
-			}
+			{"divWidth" : "col-md-4 sortable", "widgets" : []},
+			{"divWidth" : "col-md-4 sortable", "widgets" : []},
+			{"divWidth" : "col-md-4 sortable", "widgets" : []}
 		]
 	},
 	oneThirdTwoThirds : {
 		"row" : [
-			{"divWidth" : "col-md-4 sortable", "widgets" : [
-					{"widgetId" : "left1"},
-					{"widgetId" : "left2"}
-				]
-			},
-			{"divWidth" : "col-md-8 sortable", "widgets" : [
-					{"widgetId" : "right1"},
-					{"widgetId" : "right2"}
-				]
-			}
+			{"divWidth" : "col-md-4 sortable", "widgets" : []},
+			{"divWidth" : "col-md-8 sortable", "widgets" : []}
 		]
 	}
 };
 
 
 function getLayoutWidgetWidth(layout) {
+	var response = {};
 	for (var property in LAYOUT_WIDGET_WIDTHS) {
-		if (property == layout) {
-		//	return LAYOUT_WIDGET_WIDTHS[property];
-			return dragnDropLayout[property];
+		if (property == layout.layoutType) {
+			response = JSON.parse(JSON.stringify(dragnDropLayout[property]));
 		}
 	}
+
+	switch(layout.layoutType) {
+		case "halfNHalf":
+			for (var i in layout.widgets) {
+				if (layout.widgets[i].title === "") {
+					response.row[(i%2)].widgets.push({"title": "An awesome graph","widgetId": widgetIdList.halfNHalf[i]	})
+				} else {
+					response.row[(i%2)].widgets.push({"title": layout.widgets[i].title,	"widgetId": widgetIdList.halfNHalf[i]})
+				}
+			}
+			break;
+		case "threeThirds":
+			for (var i in layout.widgets) {
+				if (layout.widgets[i].title === "") {
+					response.row[(i%3)].widgets.push({
+						"title": "An awesome graph",
+						"widgetId": widgetIdList.threeThirds[i]
+					})
+				} else {
+					response.row[(i%3)].widgets.push({
+						"title": layout.widgets[i].title,
+						"widgetId": widgetIdList.threeThirds[i]
+					})
+				}
+			}
+			break;
+		case "oneThirdTwoThirds":
+			for (var i in layout.widgets) {
+				if (layout.widgets[i].title === "") {
+					response.row[(i%2)].widgets.push({
+						"title": "An awesome graph",
+						"widgetId": widgetIdList.oneThirdTwoThirds[i]
+					})
+				} else {
+					response.row[(i%2)].widgets.push({
+						"title": layout.widgets[i].title,
+						"widgetId": widgetIdList.oneThirdTwoThirds[i]
+					})
+				}
+			}
+			break;
+	}
+	return response;
 }
+
+
 
 exports.widgetIdList = widgetIdList;
 exports.getLayoutWidgetWidth = getLayoutWidgetWidth;
