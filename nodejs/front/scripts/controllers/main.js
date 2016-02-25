@@ -22,7 +22,7 @@ var startDate, endDate;
 /**
  * Get all buildings sensors et placements
  */
-$.get(mainServer + "container/CampusSophiaTech/child")
+$.get(mainServer + hierarchyRoute)
     .done(function (data) {
         sensors = data;
         initWindowsData();
@@ -135,14 +135,15 @@ $("#add-rows").click(function (event) {
  * For now, when we add a line, the other boxes become unavailable !
  */
 var addAWidget = function () {
-    $.get(mainServer + "container/CampusSophiaTech/child")
+    $.get(mainServer + hierarchyRoute)
         .done(function (data) {
             sensorsBox.push(data);
         });
 
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
 
-    needs[maxOfWidgets] = needsOrigin;
+   // needs[maxOfWidgets] = needsOrigin;
+    needs.push(needsOrigin);
     addTableRow(maxOfWidgets);
 
     $("#generateButton").attr("disabled", "disabled");
@@ -160,8 +161,11 @@ var removeAWidget = function (widgetId) {
     $('#deleteWidget' + widgetId).remove();
     $('#widgetNameForm' + widgetId).remove();
     maxOfWidgets -= 1;
-    sensorsBox[widgetId] = null;
+  //  sensorsBox[widgetId] = null;
+    sensorsBox[widgetId].splice(widgetId, 1);
     allTheNeeds.splice(widgetId, 1);
+    needs[widgetId].splice(widgetId, 1);
+
     $("#generateButton").removeAttr("disabled");
     $("#dashboardNameForm").hide();
     /* TODO :  Auto select an other box
@@ -241,7 +245,6 @@ function navigation() {
           //  var a = "postit"+((i % 4) +1);
             if (position.directSensor[i] != null) {
                 $addCaptors.append(
-                    //"<div><span class='draggable text-center'>"+position.directSensor[i].displayName + "</span></div>"
                     "<div><span class='draggable text-center' id='"+ position.directSensor[i].name +"' style='cursor: -webkit-grab; cursor:-moz-grab;;'> "
                     + position.directSensor[i].displayName + "</span></div>"
                 );
