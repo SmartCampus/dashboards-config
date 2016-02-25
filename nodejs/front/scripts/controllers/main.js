@@ -204,7 +204,7 @@ function addNeeds(boxIndex) {
                 return $('<div style="-webkit-grabbing; cursor:-moz-grabbing;" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
             },
             revert: "invalid",
-            cursorAt: { top: 0, left: 0 }
+            cursorAt: { bottom: 7, left: 25 }
         });
     }
 }
@@ -240,8 +240,6 @@ function navigation() {
         for (i = 0; i < position.directSensor.length; i++) {
           //  var a = "postit"+((i % 4) +1);
             if (position.directSensor[i] != null) {
-                console.log('the sensor : ', position.directSensor[i]);
-                console.log('its display name : ', position.directSensor[i].displayName);
                 $addCaptors.append(
                     //"<div><span class='draggable text-center'>"+position.directSensor[i].displayName + "</span></div>"
                     "<div><span class='draggable text-center' id='"+ position.directSensor[i].name +"' style='cursor: -webkit-grab; cursor:-moz-grab;;'> "
@@ -251,7 +249,8 @@ function navigation() {
                     helper: function (event) {
                         return $("<div style='-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
                     },
-                    revert: "invalid"
+                    revert: "invalid",
+                    cursorAt: { bottom: 7, left: 25 }
                 });
             }
         }
