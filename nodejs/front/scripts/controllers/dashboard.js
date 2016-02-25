@@ -73,7 +73,8 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
     }
     else if (allWidgets[index].graphType == 'map') {
         watchingArray[index].dataSC.push(data.data);
-        watchingArray[index].mapData.sensors.push({id:sensor.name, bat:"Templiers Ouest", salle:sensor.salle, value:data.data[1], kind: sensor.kind})
+        watchingArray[index].mapData.sensors.push({id:sensor.name, bat:"Templiers Ouest", salle:sensor.salle, value:data.data[1], kind: sensor.kind});
+        console.log(watchingArray[index].mapData);
         waitForOtherSensorsToDraw(sensor, index);
     }
     else {
@@ -118,50 +119,7 @@ var waitForOtherSensorsToDraw = function (sensor, index) {
         }
         if (allWidgets[index].graphType == 'map') {
             generate.mapWidget(allWidgets[index].title, "watchingArray[index].mapData", existingPositions[index], function(data) {
-
-
-                var $thePosition = $("#"+existingPositions[index]);
-                var mapSVGDiv = $(document.createElement("div"));
-                mapSVGDiv.attr("id", existingPositions[index]+"map");
-                mapSVGDiv.appendTo($thePosition);
-                mapSVGDiv.after(' <h3>Caption :</h3>'+
-                    '<div class="col-md-4">'+
-                    '<img class="sensorIcon" src="/assets/images/sensorIcons/door.png"/>Door sensor'+
-                '</div>'+
-                '<div class="col-md-4">'+
-                    '<img class="sensorIcon" src="/assets/images/sensorIcons/sound.png"/>Sound sensor'+
-                '</div>'+
-                '<div class="col-md-4">'+
-                    '<img class="sensorIcon" src="/assets/images/sensorIcons/ac.png"/>AC sensor'+
-                '</div>'+
-                '<div class="col-md-4">'+
-                    '<img class="sensorIcon" src="/assets/images/sensorIcons/heating.png"/>Heating sensor'+
-                '</div>'+
-                '<div class="col-md-4">'+
-                    '<img class="sensorIcon" src="/assets/images/sensorIcons/energy.png"/>Energy sensor'+
-                '</div>'+
-                '<div class="col-md-4">'+
-                    '<img class="sensorIcon" src="/assets/images/sensorIcons/window.png"/>Window sensor'+
-                '</div>'+
-                '<div class="col-md-4">'+
-                    '<img class="sensorIcon" src="/assets/images/sensorIcons/light.png"/>Light sensor'+
-                '</div>'+
-                '<div class="col-md-4">'+
-                    '<img class="sensorIcon" src="/assets/images/sensorIcons/temperature.png"/>Temperature sensor'+
-                '</div>');
-                load_svg("/assets/plan_T1_4e.svg", existingPositions[index]+"map", watchingArray[index].mapData, put_sensors, {
-                    "door": "/assets/images/sensorIcons/door.png",
-                    "window": "/assets/images/sensorIcons/window.png",
-                    "light": "/assets/images/sensorIcons/light.png",
-                    "temp": "/assets/images/sensorIcons/temperature.png",
-                    "heating": "/assets/images/sensorIcons/heating.png",
-                    "ac": "/assets/images/sensorIcons/ac.png",
-                    "energy": "/assets/images/sensorIcons/energy.png",
-                    "sound": "/assets/images/sensorIcons/sound.png"
-                });
-
-
-                //              eval(data);
+                                eval(data);
                 $thisWidget.hide();
                 finishedLoading();
             }, errorOccurred);
@@ -299,13 +257,11 @@ var layoutChosen = function (layoutName, layoutAnswer) {
 };
 
 var a = function () {
-    $(function() {
         $( '.sortable' ).sortable({
             connectWith: ".sortable",
             handle: 'h3',
             cursor: 'move'
         }).disableSelection();
-    });
 
     $( '.sortable' ).droppable({
         drop: function(event, ui)

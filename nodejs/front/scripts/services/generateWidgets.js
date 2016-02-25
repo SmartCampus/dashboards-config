@@ -16,7 +16,6 @@ var generate = (function () {
                 })
                 .done(function (data) {
                     console.log('request done !');
-                    // console.log(data);
                     successCB(data);
                 })
                 .fail(function (data) {
