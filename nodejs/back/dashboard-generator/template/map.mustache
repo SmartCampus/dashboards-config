@@ -1,6 +1,6 @@
 var mapSVGDiv = $(document.createElement("div"));
-mapSVGDiv.attr("id", “{{graphName}}map");
-mapSVGDiv.appendTo($("#{{graphName}}”));
+mapSVGDiv.attr("id", "{{graphName}}map");
+mapSVGDiv.appendTo($("#{{graphName}}"));
 mapSVGDiv.after(' <h3>Caption :</h3>'+
 '<div class="col-md-4">'+
    '<img class="sensorIcon" src="/assets/images/sensorIcons/door.png"/>Door sensor'+
@@ -26,7 +26,7 @@ mapSVGDiv.after(' <h3>Caption :</h3>'+
 '<div class="col-md-4">'+
    '<img class="sensorIcon" src="/assets/images/sensorIcons/temperature.png"/>Temperature sensor'+
 '</div>');
-load_svg("/assets/plan_T1_4e.svg", “graphNamemap", seriesArrayName, put_sensors, {
+load_svg("/assets/plan_T1_4e.svg", "graphNamemap", seriesArrayName, put_sensors, {
    "door": "/assets/images/sensorIcons/door.png",
    "window": "/assets/images/sensorIcons/window.png",
    "light": "/assets/images/sensorIcons/light.png",
