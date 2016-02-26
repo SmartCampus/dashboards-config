@@ -68,3 +68,12 @@ You can find the template we are using for the generate of code in :
  
 The "generateLayout" instruction is here to generate the different kind of layout which means the 50/50 or 33/33/33 or 
 the 33/67.
+You can find an example of JSON to use and the template we are using in :
+
+    $ template/layout.mustache
+    $ template/layout.json
+
+The "generateMap" instruction is here to generate the Map of the 4th floor of Smart Campus with an SVG file. You can find
+the template we are using in :
+
+    $ template/map.mustache
