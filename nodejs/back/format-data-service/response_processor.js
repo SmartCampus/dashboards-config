@@ -170,7 +170,7 @@ function persentFormat(tempPerTime, begin, end) {
     var lastOn = 0;
 
     if(tempPerTime.values.length == 1) {
-        if(tempPerTime.values[0].value === "OPEN") {
+        if(tempPerTime.values[0].value === "OPEN" || tempPerTime.values[0].value === "ON") {
             responseInGoodFormat.data.push({"open" : 100});
             responseInGoodFormat.data.push({"close" : 0});
         } else {
@@ -181,16 +181,16 @@ function persentFormat(tempPerTime, begin, end) {
     }
     for(var i in tempPerTime.values) {
         if(i == 0) {
-            if(tempPerTime.values[i].value === "OPEN") {
+            if(tempPerTime.values[i].value === "OPEN" || tempPerTime.values[0].value === "ON") {
                 lastOn = tempPerTime.values[i].date;
-            } else if (tempPerTime.values[i].value === "CLOSED") {
+            } else if (tempPerTime.values[i].value === "CLOSED" || tempPerTime.values[0].value === "OFF") {
                 lastOn = begin;
                 totalTimeOpen += (tempPerTime.values[i].date - begin);
             }
         } else {
-            if (tempPerTime.values[i].value === "OPEN") {
+            if (tempPerTime.values[i].value === "OPEN" || tempPerTime.values[0].value === "ON") {
                 lastOn = tempPerTime.values[i].date;
-            } else if (tempPerTime.values[i].value === "CLOSED") {
+            } else if (tempPerTime.values[i].value === "CLOSED" || tempPerTime.values[0].value === "OFF") {
                 totalTimeOpen += (tempPerTime.values[i].date - lastOn);
             }
         }
