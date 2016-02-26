@@ -36,7 +36,7 @@ router.get("/charts", function (req, res) {
 
 	logger.debug(grouped);
 	logger.debug(functions);
-	res.send(catalog.getChartsMatchingRequirements(functions, grouped));
+	res.send(catalog.getChartsMatchingRequirements(functions, grouped === "true"));
 });
 
 // Exports

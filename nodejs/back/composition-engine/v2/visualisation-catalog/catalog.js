@@ -16,7 +16,7 @@ var PATTERNS = "Patterns",
 	COMPARISONS = "Comparisons",
 	RELATIONSHIPS = "Relationships",
 	DISTRIBUTION = "Distribution",
-	PART_TO_A_WHOLE = "Part-to-a-whole",
+	PART_TO_A_WHOLE = "Part to a whole",
 	PROPORTIONS = "Proportions",
 	LOCATION = "Location",
 	STATUS = "Status";	// custom
@@ -117,14 +117,14 @@ function matchAndRateFunctions(requiredFunctions, functions) {
 	}
 	for (var i in requiredFunctions) {
 		if (!functions.find(function (element) {
-			return element === requiredFunctions[i];
+			return element.toLowerCase() === requiredFunctions[i].toLowerCase();
 		})) {
 			differences++;
 		}
 	}
 	for (var i in functions) {
 		if (!requiredFunctions.find(function (element) {
-			return element === functions[i];
+			return element.toLowerCase() === functions[i].toLowerCase();
 		})) {
 			differences++;
 		}
