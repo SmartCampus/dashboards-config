@@ -24,7 +24,6 @@ var generate = (function () {
                 });
     },
     widgetBoolean: function(position, idWanted, category, successCB, errorCB) {
-       
             $.post(genServer+widgetGen,
                 {
                     job : "generateBoolean",

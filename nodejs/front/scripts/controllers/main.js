@@ -196,15 +196,16 @@ function addNeeds(boxIndex) {
     needs[boxIndex] = needsOrigin;
     for (var i = 0; i < needs[boxIndex].length; i++) {
         $addIntent.append(
-            '<div id="' + needs[boxIndex][i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;" class="draggable col-md-6">' +
+            '<div id="' + needs[boxIndex][i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;" class="draggableNeed col-md-6">' +
             '<img src="/assets/images/intentions/'+needs[boxIndex][i].image+'"/>' +
             '<div style="margin-bottom:1em;">' + needs[boxIndex][i].name  + '</div>'+
             '</img></div>'
         );
 
-        $(".draggable").draggable({
+        $(".draggableNeed").draggable({
             //This defines what the user is actually dragging around
             helper: function (event) {
+                console.log(event.currentTarget);
                 return $('<div style="-webkit-grabbing; cursor:-moz-grabbing;" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
             },
             revert: "invalid",
@@ -234,21 +235,33 @@ function navigation() {
 
     $addCaptors.append("<div><h2>" + position.name + "</h2></div>");
     var i;
+    //We append a link to every room / place we can access from position
     for (i = 0; i < buildings.length; i++) {
         $addCaptors.append(
-            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:#4781ff;\">"+ buildings[i].amountOfSensors+"</span></div>"
+            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">"
+            + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:#4781ff;\">"
+            + buildings[i].amountOfSensors+"</span></div>"
     );
     }
+    $addCaptors.append( "<div id='directSensors"+position.name.replace(/ /g,"_")+"' style='margin-top: 2em;border-color: black;'></div>");
+    var $directSensorsPosition = $("#directSensors"+position.name.replace(/ /g,"_"));
 
+    //Then, in position we check if there is any sensor
     if (position.directSensor != null && typeof(position.directSensor) !== 'undefined' && position.directSensor != [null]) {
         for (i = 0; i < position.directSensor.length; i++) {
           //  var a = "postit"+((i % 4) +1);
             if (position.directSensor[i] != null) {
-                $addCaptors.append(
-                    "<div><span class='draggable text-center' id='"+ position.directSensor[i].name +"' style='cursor: -webkit-grab; cursor:-moz-grab;;'> "
+                $directSensorsPosition.append(
+                    "<div class='draggableSensor' id='"+ position.directSensor[i].name +"' style='cursor: -webkit-grab; cursor:-moz-grab;'>"
+                 //   "<div class='row''> "
                     + position.directSensor[i].displayName + "</span></div>"
+
+                /*'<div id="' + needs[boxIndex][i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;" class="draggable col-md-6">' +
+                '<img src="/assets/images/intentions/'+needs[boxIndex][i].image+'"/>' +
+                '<div style="margin-bottom:1em;">' + needs[boxIndex][i].name  + '</div>'+
+                '</img></div>'*/
                 );
-                $(".draggable").draggable({
+                $(".draggableSensor").draggable({
                     helper: function (event) {
                         return $("<div style='-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
                     },
