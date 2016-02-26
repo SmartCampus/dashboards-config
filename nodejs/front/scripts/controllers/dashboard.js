@@ -60,8 +60,15 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
         goDrawBoolean(data, sensor, index);
     }
     else if (allWidgets[index].graphType == 'pieChart') {
-        watchingArray[index].dataSC.push({"name": "Open", "y": data.data[0].open});
-        watchingArray[index].dataSC.push({"name": "Close", "y": data.data[1].close});
+        if (sensor.kind == 'door' || sensor.kind == 'window') {
+            watchingArray[index].dataSC.push({"name": "Open", "y": data.data[0].open});
+            watchingArray[index].dataSC.push({"name": "Close", "y": data.data[1].close});
+        }
+        else {
+            watchingArray[index].dataSC.push({"name": "On", "y": data.data[0].open});
+            watchingArray[index].dataSC.push({"name": "Off", "y": data.data[1].close});
+        }
+
         goDrawPie(sensor, index);
     }
     else if (allWidgets[index].graphType == 'scatterplot') {
