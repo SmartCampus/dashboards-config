@@ -240,7 +240,7 @@ function navigation() {
             + buildings[i].amountOfSensors+"</span></div>"
     );
     }
-    $addCaptors.append( "<div id='directSensors"+position.name.replace(/ /g,"_")+"' style='margin-top: 2em;border-color: black;'></div>");
+    $addCaptors.append( "<hr><div id='directSensors"+position.name.replace(/ /g,"_")+"'></div>");
     var $directSensorsPosition = $("#directSensors"+position.name.replace(/ /g,"_"));
 
     //Then, in position we check if there is any sensor
@@ -250,7 +250,7 @@ function navigation() {
             if (position.directSensor[i] != null) {
                 $directSensorsPosition.append(
                     '<div class="draggableSensor" id="' + position.directSensor[i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;">'
-                    + '<img src="/assets/images/sensorIcons/' + position.directSensor[i].kind + '.png">'
+                    + '<img class="sensorIcon" src="/assets/images/sensorIcons/' + position.directSensor[i].kind + '.png">'
                     + position.directSensor[i].displayName
                     + '</img> </div>'
 
