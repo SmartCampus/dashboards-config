@@ -76,6 +76,7 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
     }
     else {
         alert("Sorry, I didn't quite get the kind of widget I'm supposed to draw");
+        errorOccurred();
     }
 };
 

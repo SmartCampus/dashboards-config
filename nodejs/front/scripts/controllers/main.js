@@ -141,8 +141,6 @@ var addAWidget = function () {
         });
 
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
-
-   // needs[maxOfWidgets] = needsOrigin;
     needs.push(needsOrigin);
     addTableRow(maxOfWidgets);
 
@@ -150,9 +148,13 @@ var addAWidget = function () {
     $("#dashboardNameForm").hide();
 
     maxOfWidgets += 1;
-
 };
-
+var dashboardNameForm = document.getElementById('dashboardNameForm');
+dashboardNameForm.onsubmit = function(e) {
+    e.preventDefault();
+    setDashboardName();
+    window.location.href ="dashboard.html";
+};
 /////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
 var removeAWidget = function (widgetId) {
     var $addRowsDiv = $("#add-rows").find(" > div");
@@ -508,19 +510,20 @@ $('#endTime1')
 
 
 var validDates = function () {
-    $(".myerror").empty();
+    var $myError = $(".myerror");
+    var $beginTime = $('#beginTime1');
+    var $endTime = $('#endTime1');
+    $myError.empty();
 
-    if(!$('#beginTime1').data('date') || !$('#endTime1').data('date')){
-        $('.myerror').show(0).delay(2000).hide(0);
-        $('.myerror').append('<p class=\'theerror\'>Please complet all fields !</p>');
-        return;
-    }else if($('#beginTime1').data('date') > $('#endTime1').data('date')){
-        $('.myerror').show(0).delay(2000).hide(0);
-        $('.myerror').append('<p class=\'theerror\'>Begin date must be older that end one !</p>');
-        return;
+    if(!$beginTime.data('date') || !$endTime.data('date')){
+        $myError.show(0).delay(2000).hide(0);
+        $myError.append('<p class=\'theerror\'>Please complete all fields !</p>');
+    }else if($beginTime.data('date') > $endTime.data('date')){
+        $myError.show(0).delay(2000).hide(0);
+        $myError.append('<p class=\'theerror\'>Begin date must be after end date !</p>');
     }else{
         $('#myModal').modal('hide');
-        startDate = $('#beginTime1').data('date');
-        endDate = $('#endTime1').data('date');
+        startDate = $beginTime.data('date');
+        endDate = $endTime.data('date');
     }
 };
