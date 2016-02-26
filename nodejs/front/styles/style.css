@@ -88,11 +88,23 @@ div {
     min-height: 60px;
     border-bottom-right-radius: 12px;
     border-bottom-left-radius: 12px;
+    display: flex;
+    justify-content: center;
 }
 
-.widgetTitle > h3 {
-    text-align : center;
+.theTitle {
+    color: white;
+    font-weight: 400;
+    font-size: 3.2em;
+    text-align: center;
+    position: relative;
+    margin-bottom: .35em;
+}
+
+.theIcon {
+    float : right;
+    font-size: 0.5em;
     font-family: 'Work Sans';
     color : white;
+    font-weight : 100;
 }
-
