@@ -11,6 +11,7 @@ router.post("/generationRequest", function(req, res) {
     jobsRouter(req.body, res);
 });
 
+
 function jobsRouter(message, res) {
     var method = message.job;
     switch (method) {
