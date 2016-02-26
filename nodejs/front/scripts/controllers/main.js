@@ -207,7 +207,8 @@ function addNeeds(boxIndex) {
         helper: function (event) {
             return $('<div style="cursor:-webkit-grabbing; cursor:-moz-grabbing;" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
         },
-        revert: "invalid"
+        revert: "invalid",
+        cursorAt: { bottom: 7, left: 25 }
     });
 }
 
@@ -253,11 +254,6 @@ function navigation() {
                     + '<img class="sensorIcon" src="/assets/images/sensorIcons/' + position.directSensor[i].kind + '.png">'
                     + position.directSensor[i].displayName
                     + '</img> </div>'
-
-                /*'<div id="' + needs[boxIndex][i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;" class="draggable col-md-6">' +
-                '<img src="/assets/images/intentions/'+needs[boxIndex][i].image+'"/>' +
-                '<div style="margin-bottom:1em;">' + needs[boxIndex][i].name  + '</div>'+
-                '</img></div>'*/
                 );
             }
         }
@@ -268,10 +264,10 @@ function navigation() {
 
     $(".draggableSensor").draggable({
         helper: function (event) {
-          return $("<div style='-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
+          return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
         },
         revert: "invalid",
-        cursorAt: { bottom: 7, left: 25 }
+        cursorAt: { bottom: 10, left: 60 }
     });
 
     updateNavigation();

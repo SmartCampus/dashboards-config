@@ -65,8 +65,6 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
         goDrawPie(sensor, index);
     }
     else if (allWidgets[index].graphType == 'scatterplot') {
-        //this is what happens to the data we get from a split, for a scatterplot
-        //as far as we know, the only times we want a scatter is to see open or closed doors
         watchingArray[index].dataSC.push({"name": "open", color: 'rgba(119, 152, 191, .5)', "data": data.data[0].open});
         watchingArray[index].dataSC.push({"name": "close", color: 'rgba(223, 83, 83, .5)', "data": data.data[1].close});
         goDrawScatterPlot(index);
@@ -74,7 +72,6 @@ var sensorDataRetrievingSuccess = function (data, sensor, index) {
     else if (allWidgets[index].graphType == 'map') {
         watchingArray[index].dataSC.push(data.data);
         watchingArray[index].mapData.sensors.push({id:sensor.name, bat:"Templiers Ouest", salle:sensor.salle, value:data.data[1]+" "+sensor.unit, kind: sensor.kind});
-        console.log(watchingArray[index].mapData);
         waitForOtherSensorsToDraw(sensor, index);
     }
     else {
