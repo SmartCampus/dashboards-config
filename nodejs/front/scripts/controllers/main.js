@@ -199,19 +199,16 @@ function addNeeds(boxIndex) {
             '<div id="' + needs[boxIndex][i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;" class="draggableNeed col-md-6">' +
             '<img src="/assets/images/intentions/'+needs[boxIndex][i].image+'"/>' +
             '<div style="margin-bottom:1em;">' + needs[boxIndex][i].name  + '</div>'+
-            '</img></div>'
+            '</div>'
         );
-
-        $(".draggableNeed").draggable({
-            //This defines what the user is actually dragging around
-            helper: function (event) {
-                console.log(event.currentTarget);
-                return $('<div style="-webkit-grabbing; cursor:-moz-grabbing;" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
-            },
-            revert: "invalid",
-            cursorAt: { bottom: 7, left: 25 }
-        });
     }
+    $(".draggableNeed").draggable({
+        //This defines what the user is actually dragging around
+        helper: function (event) {
+            return $('<div style="cursor:-webkit-grabbing; cursor:-moz-grabbing;" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
+        },
+        revert: "invalid"
+    });
 }
 
 
@@ -252,31 +249,35 @@ function navigation() {
           //  var a = "postit"+((i % 4) +1);
             if (position.directSensor[i] != null) {
                 $directSensorsPosition.append(
-                    "<div class='draggableSensor' id='"+ position.directSensor[i].name +"' style='cursor: -webkit-grab; cursor:-moz-grab;'>"
-                 //   "<div class='row''> "
-                    + position.directSensor[i].displayName + "</span></div>"
+                    '<div class="draggableSensor" id="' + position.directSensor[i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;">'
+                    + '<img src="/assets/images/sensorIcons/' + position.directSensor[i].kind + '.png">'
+                    + position.directSensor[i].displayName
+                    + '</img> </div>'
 
                 /*'<div id="' + needs[boxIndex][i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;" class="draggable col-md-6">' +
                 '<img src="/assets/images/intentions/'+needs[boxIndex][i].image+'"/>' +
                 '<div style="margin-bottom:1em;">' + needs[boxIndex][i].name  + '</div>'+
                 '</img></div>'*/
                 );
-                $(".draggableSensor").draggable({
-                    helper: function (event) {
-                        return $("<div style='-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
-                    },
-                    revert: "invalid",
-                    cursorAt: { bottom: 7, left: 25 }
-                });
             }
         }
     }
     else {
-        $addCaptors.append("<div>There isn't any compatible sensor here. </div>");
+        $directSensorsPosition.append("<div>There isn't any compatible sensor here. </div>");
     }
+
+    $(".draggableSensor").draggable({
+        helper: function (event) {
+          return $("<div style='-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
+        },
+        revert: "invalid",
+        cursorAt: { bottom: 7, left: 25 }
+    });
 
     updateNavigation();
 }
+
+
 
 function updateNavigation() {
     // clean DOM
