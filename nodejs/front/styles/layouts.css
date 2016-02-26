@@ -113,6 +113,7 @@ body {
     border-top-left-radius: 12px;
     background: #FFFFFF;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     padding-bottom: 10px;
     padding-top: 10px;
@@ -147,4 +148,10 @@ body {
 
 }
 
-
+.svg-container {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    vertical-align: middle;
+    overflow: hidden;
+}
