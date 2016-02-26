@@ -1,17 +1,14 @@
 {
-  "row1" : [
-    {"widgetId" : "left1" , "widgetWidth" : "col-md-4"},
-    {"widgetId" : "center1" , "widgetWidth" : "col-md-4"},
-    {"widgetId" : "right1" , "widgetWidth" : "col-md-4"}
-  ],
-  "row2" : [
-    {"widgetId" : "left2" , "widgetWidth" : "col-md-4"},
-    {"widgetId" : "center2" , "widgetWidth" : "col-md-4"},
-    {"widgetId" : "right2" , "widgetWidth" : "col-md-4"}
-  ],
-  "row3" : [
-    {"widgetId" : "left3" , "widgetWidth" : "col-md-4"},
-    {"widgetId" : "center3" , "widgetWidth" : "col-md-4"},
-    {"widgetId" : "right3" , "widgetWidth" : "col-md-4"}
+  "row" : [
+    {"divId" : "sortable1" , "divWidth" : "col-md-6 connectedSortable", "widgets" : [
+      {"widgetId" : "left1"},
+      {"widgetId" : "left2"}
+    ]
+    },
+    {"divId" : "sortable2" , "divWidth" : "col-md-6 connectedSortable", "widgets" : [
+      {"widgetId" : "right1"},
+      {"widgetId" : "right2"}
+    ]
+    }
   ]
 }
