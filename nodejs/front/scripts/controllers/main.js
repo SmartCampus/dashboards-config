@@ -141,8 +141,6 @@ var addAWidget = function () {
         });
 
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
-
-   // needs[maxOfWidgets] = needsOrigin;
     needs.push(needsOrigin);
     addTableRow(maxOfWidgets);
 
@@ -150,9 +148,13 @@ var addAWidget = function () {
     $("#dashboardNameForm").hide();
 
     maxOfWidgets += 1;
-
 };
-
+var dashboardNameForm = document.getElementById('dashboardNameForm');
+dashboardNameForm.onsubmit = function(e) {
+    e.preventDefault();
+    setDashboardName();
+    window.location.href ="dashboard.html";
+};
 /////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
 var removeAWidget = function (widgetId) {
     var $addRowsDiv = $("#add-rows").find(" > div");
@@ -196,21 +198,20 @@ function addNeeds(boxIndex) {
     needs[boxIndex] = needsOrigin;
     for (var i = 0; i < needs[boxIndex].length; i++) {
         $addIntent.append(
-            '<div id="' + needs[boxIndex][i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;" class="draggable col-md-6">' +
+            '<div id="' + needs[boxIndex][i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;" class="draggableNeed col-md-6">' +
             '<img src="/assets/images/intentions/'+needs[boxIndex][i].image+'"/>' +
             '<div style="margin-bottom:1em;">' + needs[boxIndex][i].name  + '</div>'+
-            '</img></div>'
+            '</div>'
         );
-
-        $(".draggable").draggable({
-            //This defines what the user is actually dragging around
-            helper: function (event) {
-                return $('<div style="-webkit-grabbing; cursor:-moz-grabbing;" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
-            },
-            revert: "invalid",
-            cursorAt: { bottom: 7, left: 25 }
-        });
     }
+    $(".draggableNeed").draggable({
+        //This defines what the user is actually dragging around
+        helper: function (event) {
+            return $('<div style="cursor:-webkit-grabbing; cursor:-moz-grabbing;" id="' + event.currentTarget.id + '">' + event.currentTarget.id + '</div>');
+        },
+        revert: "invalid",
+        cursorAt: { bottom: 7, left: 25 }
+    });
 }
 
 
@@ -234,36 +235,47 @@ function navigation() {
 
     $addCaptors.append("<div><h2>" + position.name + "</h2></div>");
     var i;
+    //We append a link to every room / place we can access from position
     for (i = 0; i < buildings.length; i++) {
         $addCaptors.append(
-            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">" + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:#4781ff;\">"+ buildings[i].amountOfSensors+"</span></div>"
+            "<div class=\"row\"><a class=\"node\" style=\"cursor : pointer;\" id=\"" + i + "\">"
+            + buildings[i].name + "</a> -  <span class=\"badge\" style=\"background:#4781ff;\">"
+            + buildings[i].amountOfSensors+"</span></div>"
     );
     }
+    $addCaptors.append( "<hr><div id='directSensors"+position.name.replace(/ /g,"_")+"'></div>");
+    var $directSensorsPosition = $("#directSensors"+position.name.replace(/ /g,"_"));
 
+    //Then, in position we check if there is any sensor
     if (position.directSensor != null && typeof(position.directSensor) !== 'undefined' && position.directSensor != [null]) {
         for (i = 0; i < position.directSensor.length; i++) {
           //  var a = "postit"+((i % 4) +1);
             if (position.directSensor[i] != null) {
-                $addCaptors.append(
-                    "<div><span class='draggable text-center' id='"+ position.directSensor[i].name +"' style='cursor: -webkit-grab; cursor:-moz-grab;;'> "
-                    + position.directSensor[i].displayName + "</span></div>"
+                $directSensorsPosition.append(
+                    '<div class="draggableSensor" id="' + position.directSensor[i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;">'
+                    + '<img class="sensorIcon" src="/assets/images/sensorIcons/' + position.directSensor[i].kind + '.png">'
+                    + position.directSensor[i].displayName
+                    + '</img> </div>'
                 );
-                $(".draggable").draggable({
-                    helper: function (event) {
-                        return $("<div style='-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.target.id + "'>" + event.target.innerHTML + "</div>");
-                    },
-                    revert: "invalid",
-                    cursorAt: { bottom: 7, left: 25 }
-                });
             }
         }
     }
     else {
-        $addCaptors.append("<div>There isn't any compatible sensor here. </div>");
+        $directSensorsPosition.append("<div>There isn't any compatible sensor here. </div>");
     }
+
+    $(".draggableSensor").draggable({
+        helper: function (event) {
+          return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
+        },
+        revert: "invalid",
+        cursorAt: { bottom: 10, left: 60 }
+    });
 
     updateNavigation();
 }
+
+
 
 function updateNavigation() {
     // clean DOM
@@ -372,9 +384,9 @@ function dropIt(event, ui) {
                     });
             }, function (error) {
                 if (error.status === 400) {
-                    alert(error.responseText);
+                    console.log(error.responseText);
+                    alert("Sorry, if you put this intent into to widget, we cannot find any compatible sensor. ");
                 }
-                console.log('IT\'S IMPOSSIBRRRRUUUUU');
             });
         }
     }
@@ -498,19 +510,20 @@ $('#endTime1')
 
 
 var validDates = function () {
-    $(".myerror").empty();
+    var $myError = $(".myerror");
+    var $beginTime = $('#beginTime1');
+    var $endTime = $('#endTime1');
+    $myError.empty();
 
-    if(!$('#beginTime1').data('date') || !$('#endTime1').data('date')){
-        $('.myerror').show(0).delay(2000).hide(0);
-        $('.myerror').append('<p class=\'theerror\'>Please complet all fields !</p>');
-        return;
-    }else if($('#beginTime1').data('date') > $('#endTime1').data('date')){
-        $('.myerror').show(0).delay(2000).hide(0);
-        $('.myerror').append('<p class=\'theerror\'>Begin date must be older that end one !</p>');
-        return;
+    if(!$beginTime.data('date') || !$endTime.data('date')){
+        $myError.show(0).delay(2000).hide(0);
+        $myError.append('<p class=\'theerror\'>Please complete all fields !</p>');
+    }else if($beginTime.data('date') > $endTime.data('date')){
+        $myError.show(0).delay(2000).hide(0);
+        $myError.append('<p class=\'theerror\'>Begin date must be after end date !</p>');
     }else{
         $('#myModal').modal('hide');
-        startDate = $('#beginTime1').data('date');
-        endDate = $('#endTime1').data('date');
+        startDate = $beginTime.data('date');
+        endDate = $endTime.data('date');
     }
 };

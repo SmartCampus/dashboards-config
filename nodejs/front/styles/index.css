@@ -56,3 +56,8 @@ body {
     position: fixed;
     top : 2%;
 }
+
+.sensorIcon {
+    padding-right:0.4em;
+    padding-bottom:0.5em;
+}

@@ -92,11 +92,19 @@ div {
     justify-content: center;
 }
 
-.widgetTitle > span {
-    color: #2a2b39;
+.theTitle {
+    color: white;
     font-weight: 400;
     font-size: 3.2em;
     text-align: center;
     position: relative;
     margin-bottom: .35em;
+}
+
+.theIcon {
+    float : right;
+    font-size: 0.5em;
+    font-family: 'Work Sans';
+    color : white;
+    font-weight : 100;
 }
