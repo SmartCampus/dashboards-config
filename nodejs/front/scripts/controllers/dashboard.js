@@ -229,12 +229,12 @@ var layoutChosen = function (layoutName, layoutAnswer) {
                         widget.additionnal = '/splitlist';
                         widget.withParam = true;
                     }
+                    else if (widget.graphType == 'pieChart') {
+                        widget.additionnal = '/percent';
+                    }
                     else if (sensor.kind == "heating") {
                         widget.withParam = true;
                         widget.additionnal = '';
-                    }
-                    else if (widget.graphType == 'pieChart') {
-                        widget.additionnal = '/percent';
                     }
                     else {
                         widget.additionnal = '';
