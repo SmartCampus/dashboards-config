@@ -7,6 +7,11 @@
 var router = require("express").Router(),
 	catalog = require("./catalog"),
     logger = require("./logger");
+
+// TODO GET functions
+
+// TODO GET charts
+
 /**
  * Handles GET requests on /ratedcharts path. Returns matching charts according
  * to given requirements. Expects "grouped" and "functions" query parameters.

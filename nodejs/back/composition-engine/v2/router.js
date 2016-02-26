@@ -15,9 +15,8 @@ var router = require("express").Router(),
  * sensors objects.
  *
  * Generation possibilities is an object containing a set of compatible
- * visualization needs, a set of compatible sensors and another set of
- * compatible widgets. When no matching widget can be found, all those sets are
- * returned empty.
+ * visualization needs and a set of compatible widgets. When no matching widget
+ * can be found, those sets are returned empty.
  *
  * Sensor objects are defined by the sensor containers API.
  *
@@ -28,8 +27,7 @@ var router = require("express").Router(),
  * 				"sensors": 	[{sensor object}, ...]
  * 			}
  * @return 	{
- * 				"needs": 	[string, ...], 
- * 				"sensors": 	[{sensor object}, ...],
+ * 				"needs": 	[string, ...],
  * 				"widgets": 	[string, ...]
  * 			}
  */
