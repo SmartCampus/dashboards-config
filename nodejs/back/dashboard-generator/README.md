@@ -1,4 +1,4 @@
-# PFE - SmartCampus Dashboard : Sensor-Container-API
+# PFE - SmartCampus Dashboard : Dashboard-Generator
 
 ## Description of work
 
