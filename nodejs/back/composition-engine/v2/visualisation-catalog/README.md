@@ -10,11 +10,11 @@ Domain reference: http://datavizcatalogue.com/
 
 ## API
 
-### GET /charts
+### GET /ratedcharts
 
 Returns matching charts according to given requirements. Expects "grouped" and "functions" query parameters.
 
-Example: `GET /charts?grouped=true&functions=Comparisons-Proportions`
+Example: `GET /ratedcharts?grouped=true&functions=Comparisons-Proportions`
 
 Expects grouped to define whether the chart has to handle multiple data sources or not.
 

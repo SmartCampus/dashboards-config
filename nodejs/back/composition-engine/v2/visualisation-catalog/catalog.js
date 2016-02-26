@@ -1,8 +1,7 @@
 /**
- * @author 	Marc Karassev
+ * @author Marc Karassev
  *
  * Module defining charts and visualization functions relations.
- *
  */
 
 "use strict";
@@ -19,7 +18,7 @@ var PATTERNS = "Patterns",
 	PART_TO_A_WHOLE = "Part to a whole",
 	PROPORTIONS = "Proportions",
 	LOCATION = "Location",
-	STATUS = "Status";	// custom
+	STATE = "State";	// custom
 
 var FUNCTIONS = {
 	PATTERNS: PATTERNS,
@@ -29,9 +28,9 @@ var FUNCTIONS = {
 	DISTRIBUTION: DISTRIBUTION,
 	PART_TO_A_WHOLE: PART_TO_A_WHOLE,
 	LOCATION: LOCATION,
-	STATUS: STATUS,
+	STATE: STATE,
 	ALL: [PATTERNS, DATA_OVER_TIME, COMPARISONS, RELATIONSHIPS, DISTRIBUTION,
-		PART_TO_A_WHOLE, PROPORTIONS, LOCATION, STATUS]
+		PART_TO_A_WHOLE, PROPORTIONS, LOCATION, STATE]
 }
 
 // Charts
@@ -63,11 +62,11 @@ var LINE_GRAPH = new Chart("Line Graph", [PATTERNS, DATA_OVER_TIME],
 	BAR_CHART = new Chart("Bar Chart", [COMPARISONS, RELATIONSHIPS, PATTERNS,
 		/*DATA_OVER_TIME*/], [COMPARISONS, RELATIONSHIPS, PATTERNS, DISTRIBUTION,
 		/*DATA_OVER_TIME*/]), // Added data over time
-	PIE_CHART = new Chart("Pie Chart", [COMPARISONS, PART_TO_A_WHOLE, PROPORTIONS], []),
+	PIE_CHART = new Chart("Pie Chart", [COMPARISONS, /*PART_TO_A_WHOLE,*/ PROPORTIONS], []),
 	SCATTERPLOT = new Chart("Scatterplot", [PATTERNS, RELATIONSHIPS, /*DATA_OVER_TIME*/],
 		[]), // Added Data over time
 	DOT_MAP = new Chart("Dot Map", [], [DISTRIBUTION, LOCATION, PATTERNS]),
-	BOOLEAN = new Chart("Boolean", [STATUS], []), // Custom
+	BOOLEAN = new Chart("Boolean", [STATE], []), // Custom
 	LINE_BAR_CHART = new Chart("Line and Bar Chart", [], [COMPARISONS, DATA_OVER_TIME,
 		RELATIONSHIPS, PATTERNS, DISTRIBUTION]); // Custom
 
@@ -135,3 +134,5 @@ function matchAndRateFunctions(requiredFunctions, functions) {
 // Exports
 
 exports.getChartsMatchingRequirements = getChartsMatchingRequirements;
+exports.FUNCTIONS = FUNCTIONS;
+exports.CHARTS = CHARTS;

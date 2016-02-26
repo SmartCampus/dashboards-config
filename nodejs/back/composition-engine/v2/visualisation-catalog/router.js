@@ -8,9 +8,9 @@ var router = require("express").Router(),
 	catalog = require("./catalog"),
     logger = require("./logger");
 /**
- * Handles GET requests on /charts path. Returns matching charts according to
- * given requirements. Expects "grouped" and "functions" query parameters.
- * Example: GET /charts?grouped=true&functions=Comparisons-Proportions
+ * Handles GET requests on /ratedcharts path. Returns matching charts according
+ * to given requirements. Expects "grouped" and "functions" query parameters.
+ * Example: GET /ratedcharts?grouped=true&functions=Comparisons-Proportions
  *
  * @param  boolean 	grouped 	whether the chart has to handle multiple data
  *                           		sources or not	
@@ -31,7 +31,7 @@ var router = require("express").Router(),
  *                        					...
  *                        				]
  */
-router.get("/charts", function (req, res) {
+router.get("/ratedcharts", function (req, res) {
 	var grouped = req.query.grouped, functions = req.query.functions.split(/-/);
 
 	logger.debug(grouped);

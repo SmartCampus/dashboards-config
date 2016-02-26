@@ -13,7 +13,7 @@ var request = require("supertest"),
 describe("visualization catalog mock", function () {
 
 	describe("GET charts", function () {
-		var chartsPath = "/charts";
+		var chartsPath = "/ratedcharts";
 
 		it("should return Line and Bar Chart as first result", function (done) {
 			var querystring = "?grouped=true&functions=Comparisons-Data over time"
@@ -69,7 +69,8 @@ describe("visualization catalog mock", function () {
 				.end(done);
 		});
 
-		it("should return Line Graph as first result", function (done) {
+		it("should return Line Graph as first result with one data source",
+				function (done) {
 			var querystring = "?grouped=false&functions=Patterns-Data over time";
 
 			request(app)
@@ -82,7 +83,8 @@ describe("visualization catalog mock", function () {
 				.end(done);
 		});
 
-		it("should return Line Graph as first result", function (done) {
+		it("should return Line Graph as first result with several data sources",
+				function (done) {
 			var querystring = "?grouped=true&functions=Patterns-Data over time"
 				+ "-Comparisons-Relationships";
 
@@ -96,9 +98,10 @@ describe("visualization catalog mock", function () {
 				.end(done);
 		});
 
-		it("should return Bar Chart as first result", function (done) {
+		it("should return Bar Chart as first result with one data source",
+				function (done) {
 			var querystring = "?grouped=false&functions=Comparisons-Relationships"
-				+ "Patterns";
+				+ "-Patterns";
 
 			request(app)
 				.get(chartsPath + querystring)
@@ -110,9 +113,10 @@ describe("visualization catalog mock", function () {
 				.end(done);
 		});
 
-		it("should return Bar Chart as first result", function (done) {
+		it("should return Bar Chart as first result with several data sources",
+				function (done) {
 			var querystring = "?grouped=true&functions=Comparisons-Relationships"
-				+ "Patterns-Distribution";
+				+ "-Patterns-Distribution";
 
 			request(app)
 				.get(chartsPath + querystring)
@@ -126,7 +130,7 @@ describe("visualization catalog mock", function () {
 
 		it("should return Dot Map as first result", function (done) {
 			var querystring = "?grouped=true&functions=Distribution-Location" +
-				"Patterns";
+				"-Patterns";
 
 			request(app)
 				.get(chartsPath + querystring)
