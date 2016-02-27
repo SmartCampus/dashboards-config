@@ -10,7 +10,7 @@ var request = require("supertest"),
 	app = require("../app"),
 	logger = require("../logger");
 
-describe("composition engine", function () {
+describe("composition engine API", function () {
 
 	describe("POST composition data", function () {
 

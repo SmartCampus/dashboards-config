@@ -5,6 +5,7 @@
  */
 
 var router = require("express").Router(),
+	engine = require("./engine"),
     logger = require("./logger");
 
 /**
