@@ -8,9 +8,37 @@ var router = require("express").Router(),
 	catalog = require("./catalog"),
     logger = require("./logger");
 
-// TODO GET functions
+/**
+ * Handles GET requests on /functions path. Returns the catalog's list of
+ * visualization functions.
+ * 
+ * @return [string] 	An array of strings representing visualization functions.
+ */
+router.get("/functions", function (req, res) {
+	res.send(catalog.FUNCTIONS.ALL);
+});
 
-// TODO GET charts
+/**
+ * Handles GET requests on /charts path. Returns the catalog's list of charts.
+ * A chart object is defined by a name and associated visualization functions.
+ * The functions property represents functions related to a chart when a single 
+ * data source is applied to it.
+ * The whenGroupedFunctions property represents functions related to this chart
+ * when several data sources are applied to it.
+ * 
+ * @return [chart object] 	An array of chart objects. Chart objects look like
+ *                         		this way:
+ *                         			{
+ *                         				"name": "Line Graph",
+ *                         				"functions": ["Patterns", ...],
+ *                         				"whenGroupedFunctions": ["Comparisons", ...]
+ *                         			}
+ */
+router.get("/charts", function (req, res) {
+	res.send(catalog.CHARTS.ALL.map(function (chart) {
+		return chart.toJson();
+	}));
+});
 
 /**
  * Handles GET requests on /ratedcharts path. Returns matching charts according

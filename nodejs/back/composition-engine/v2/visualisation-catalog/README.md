@@ -6,9 +6,26 @@ The following visualization functions are implemented: `"Comparisons"`, `"Data o
 
 The following charts are implemented: `"Line Graph"`, `"Bar Chart"`, `"Pie Chart"`, `"Scatterplot"`, `"Dot Map"`, `"Boolean"` and `"Line and Bar Chart"`.
 
+A chart object is defined by a name and associated visualization functions. The `functions property represents functions related to a chart when a single data source is applied to it. The `whenGroupedFunctions` property represents functions related to this chart when several data sources are applied to it.
+
 Domain reference: http://datavizcatalogue.com/
 
 ## API
+
+### GET /functions
+
+Returns the catalog's list of visualization functions as an array of strings representing visualization functions.
+
+### GET /charts
+
+Returns the catalog's list of charts as an array of chart objects. Chart objects look like this way:
+```
+{
+	"name": "Line Graph",
+	"functions": ["Patterns", "Data over time"],
+	"whenGroupedFunctions": ["Comparisons", "Relationships", "Patterns", "Data over time"]
+}
+```
 
 ### GET /ratedcharts
 

@@ -55,6 +55,14 @@ class Chart {
 	get name() { return this._name; }
 	get functions() { return this._functions; }
 	get whenGroupedFunctions() { return this._whenGroupedFunctions; }
+
+	toJson() {
+		return {
+			name: this._name,
+			functions: this._functions,
+			whenGroupedFunctions: this._whenGroupedFunctions
+		};
+	}
 }
 
 var LINE_GRAPH = new Chart("Line Graph", [PATTERNS, DATA_OVER_TIME],
