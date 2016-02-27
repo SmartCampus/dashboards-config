@@ -20,7 +20,7 @@ function getCatalogResource(url, callback) {
 		});
 		res.on("end", function() {
 			logger.debug(data);
-			callback(null, data);
+			callback(null, JSON.parse(data));
 		});
 	}).on("error", function (error) {
 		logger.error(error);
@@ -38,8 +38,8 @@ function getCharts(callback) {
 }
 
 function getRatedCharts(functions, grouped, callback) {
-	getCatalogResource(CATALOG_HOST + CHARTS_PATH + "?grouped=" + grouped +
-		"&functions=" + functions.join("-"), callback);
+	getCatalogResource(CATALOG_HOST + RATED_CHARTS_PATH + "?grouped=" + grouped
+		+ "&functions=" + functions.join("-"), callback);
 }
 
 // Exports
