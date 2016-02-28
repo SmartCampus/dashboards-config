@@ -26,14 +26,14 @@ function compose(needs, sensors, callback) {
 				return adaptWidgetName(ratedchart.chart);
 			});
 			callback(null, {
-				needs: Array.from(findCompatibleNeeds(needs)),
+				needs: Array.from(findCompatibleNeeds(needs, grouped)),
 				widgets: compatibleWidgets
 			});
 		}
 	});
 }
 
-function findCompatibleNeeds(needs) {
+function findCompatibleNeeds(needs, grouped) {
 	var widget, functions, compatibleNeeds = new Set();
 
 	for (var i in WIDGETS) {
@@ -45,6 +45,7 @@ function findCompatibleNeeds(needs) {
 			});
 		}
 	}
+	return compatibleNeeds;
 }
 
 function widgetContainsNeeds(widget, needs, grouped) {
@@ -115,6 +116,10 @@ function init(callback) {
 				}
 				else {
 					WIDGETS = charts;
+					WIDGETS.map(function (widget) {
+						widget.name = adaptWidgetName(widget.name);
+						return widget;
+					});
 					cb(null);
 				}
 			});
