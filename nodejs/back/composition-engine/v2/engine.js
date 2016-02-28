@@ -23,7 +23,10 @@ function compose(needs, sensors, callback) {
 		}
 		else {
 			compatibleWidgets = ratedcharts.map(function (ratedchart) {
-				return adaptWidgetName(ratedchart.chart);
+				return {
+					widget: adaptWidgetName(ratedchart.chart),
+					rating: ratedchart.rating
+				};
 			});
 			callback(null, {
 				needs: Array.from(findCompatibleNeeds(needs, grouped)),
@@ -41,7 +44,9 @@ function findCompatibleNeeds(needs, grouped) {
 		if (widgetContainsNeeds(widget, needs, grouped)) {
 			functions = grouped ? widget.whenGroupedFunctions : widget.functions; 
 			functions.forEach(function (f) {
-				compatibleNeeds.add(f);
+				if (needs.indexOf(f) === -1) {
+					compatibleNeeds.add(f);
+				}
 			});
 		}
 	}

@@ -70,7 +70,7 @@ var LINE_GRAPH = new Chart("Line Graph", [PATTERNS, DATA_OVER_TIME],
 	BAR_CHART = new Chart("Bar Chart", [COMPARISONS, RELATIONSHIPS, PATTERNS,
 		/*DATA_OVER_TIME*/], [COMPARISONS, RELATIONSHIPS, PATTERNS, DISTRIBUTION,
 		/*DATA_OVER_TIME*/]), // Added data over time
-	PIE_CHART = new Chart("Pie Chart", [COMPARISONS, /*PART_TO_A_WHOLE,*/ PROPORTIONS], []),
+	PIE_CHART = new Chart("Pie Chart", [COMPARISONS, PART_TO_A_WHOLE, PROPORTIONS], []),
 	SCATTERPLOT = new Chart("Scatterplot", [PATTERNS, RELATIONSHIPS, /*DATA_OVER_TIME*/],
 		[]), // Added Data over time
 	DOT_MAP = new Chart("Dot Map", [], [DISTRIBUTION, LOCATION, PATTERNS]),

@@ -66,51 +66,55 @@ describe("composition engine", function () {
 
 		function testCompose(needs, sensors, expectedNeeds, expectedWidgets, strictly, callback) {
 			engine.compose(needs, sensors, function (err, result) {
+				logger.debug("result.needs:", result.needs);
+				// logger.debug("result.widgets:", result.widgets);
 				assert(!err);
+				assert(result.needs.length >= expectedNeeds.length);
+				for (var i in expectedNeeds) {
+					assert(result.needs.indexOf(expectedNeeds[i]) > -1);
+				}
 				if (strictly) {
-					assert(result.needs.length === expectedNeeds.length);
-					assert(result.widgets[0].name === expectedWidgets[0]);
+					assert.strictEqual(result.widgets[0].widget, expectedWidgets[0]);
+					assert.strictEqual(result.widgets[0].rating, 0);
 				}
 				else {
-					assert(result.needs.length >= expectedNeeds.length);
 					for (var i in expectedWidgets) {
 						assert(result.widgets.indexOf(expectedWidgets[i] > -1));
 					}
-				}
-				for (var i in expectedNeeds) {
-					assert(result.needs.indexOf(expectedNeeds[i]) > -1);
 				}
 				callback();
 			});
 		}
 
 		function testWidgetNeedsRec(inputNeeds, ouputNeeds, sensors, expectedWidget, callback) {
-			if (ouputNeeds.length === 1) {
-				// logger.debug("rec end");
-				callback();
-			}
-			else {
-				async.each(ouputNeeds, function (need, cb) {
-					var needs, expectedNeeds;
+			async.each(ouputNeeds, function (need, cb) {
+				var needs, expectedNeeds;
 
-					needs = inputNeeds.slice();
-					needs.push(need);
-					expectedNeeds = ouputNeeds.slice();
-					expectedNeeds.splice(ouputNeeds.indexOf(need), 1);
-					// logger.debug("in:", needs);
-					// logger.debug("out:", expectedNeeds);
-					// logger.debug("rec");
+				needs = inputNeeds.slice();
+				needs.push(need);
+				expectedNeeds = ouputNeeds.slice();
+				expectedNeeds.splice(ouputNeeds.indexOf(need), 1);
+				logger.debug("in:", needs);
+				logger.debug("out:", expectedNeeds);
+				if (expectedNeeds.length === 0) {
+					testCompose(needs, sensors, expectedNeeds, [expectedWidget], true, function () {
+						// logger.debug("endrec");
+						cb();
+					});
+				}
+				else {
 					testCompose(needs, sensors, expectedNeeds, [expectedWidget], false, function () {
+						// logger.debug("rec");
 						testWidgetNeedsRec(needs, expectedNeeds, sensors, expectedWidget, cb);
 					});
-				}, function join(err) {
-					if (err) {
-						logger.error(err);
-						throw err;
-					}
-					callback();
-				});
-			}
+				}
+			}, function join(err) {
+				if (err) {
+					logger.error(err);
+					throw err;
+				}
+				callback();
+			});
 		}
 
 		function testWidget(needs, sensors, widget, callback) {
@@ -121,13 +125,36 @@ describe("composition engine", function () {
 
 		describe("Summer Dashboard", function () {
 
-			describe("widget 1", function () {
+			it("should successively match widget 1 needs and finally line widget", function (done) {
+				testWidget([RELATIONSHIPS, DATA_OVER_TIME, COMPARISONS, PATTERNS], [1, 2],
+					LINE, done);
+			});
+			
+			it("should successively match widget 2 needs and finally column widget", function (done) {
+				testWidget([RELATIONSHIPS, DISTRIBUTION, COMPARISONS, PATTERNS], [1, 2],
+					COLUMN, done);
+			});
+			
+			it("should successively match widget 3 and 4 needs and finally boolean widget",
+					function (done) {
+				testWidget([STATE], [1], BOOLEAN, done);
+			});
+		});
 
-				var widget1Needs = [RELATIONSHIPS, DATA_OVER_TIME, COMPARISONS, PATTERNS];
+		describe("Surrounding Dashboard", function () {
 
-				it("should successively match widget 1 needs", function (done) {
-					testWidget(widget1Needs, [1, 2], LINE, done);
-				});
+			it("should successively match widget 1 and 2 needs and finally mix widget", function (done) {
+				testWidget([RELATIONSHIPS, DATA_OVER_TIME, COMPARISONS, PATTERNS, DISTRIBUTION],
+					[1, 2], MIX, done);
+			});
+			
+			it("should successively match widget 3 and 4 needs and finally pie widget", function (done) {
+				testWidget([PROPORTIONS, PART_TO_A_WHOLE, COMPARISONS], [1], PIE, done);
+			});
+
+			it("should successively match widget 5 and 6 needs and finally scatterplot widget",
+					function (done) {
+				testWidget([PATTERNS, RELATIONSHIPS], [1], SCATTERPLOT, done);
 			});
 		});
 	});
