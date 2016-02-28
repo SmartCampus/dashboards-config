@@ -66,7 +66,8 @@ describe("composition engine", function () {
 
 		function testCompose(needs, sensors, expectedNeeds, expectedWidgets, strictly, callback) {
 			engine.compose(needs, sensors, function (err, result) {
-				logger.debug("result.needs:", result.needs);
+				// logger.debug("result.needs:", result.needs);
+				// logger.debug("expected needs:", expectedNeeds);
 				// logger.debug("result.widgets:", result.widgets);
 				assert(!err);
 				assert(result.needs.length >= expectedNeeds.length);
@@ -94,8 +95,8 @@ describe("composition engine", function () {
 				needs.push(need);
 				expectedNeeds = ouputNeeds.slice();
 				expectedNeeds.splice(ouputNeeds.indexOf(need), 1);
-				logger.debug("in:", needs);
-				logger.debug("out:", expectedNeeds);
+				// logger.debug("in:", needs);
+				// logger.debug("out:", expectedNeeds);
 				if (expectedNeeds.length === 0) {
 					testCompose(needs, sensors, expectedNeeds, [expectedWidget], true, function () {
 						// logger.debug("endrec");
@@ -171,6 +172,13 @@ describe("composition engine", function () {
 			it("should successively match widget 3 needs and finally mix widget", function (done) {
 				testWidget([RELATIONSHIPS, DATA_OVER_TIME, COMPARISONS, PATTERNS, DISTRIBUTION],
 					[1, 2, 3], MIX, done);
+			});
+		});
+
+		describe("Overview Dashboard", function () {
+
+			it("should successively match widget 1 needs and finally map widget", function (done) {
+				testWidget([PATTERNS, LOCATION, DISTRIBUTION], [1, 2, 3, 4, 5, 6, 7, 8], MAP, done);
 			});
 		});
 	});
