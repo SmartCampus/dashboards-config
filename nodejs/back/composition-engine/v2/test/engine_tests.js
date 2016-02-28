@@ -157,5 +157,21 @@ describe("composition engine", function () {
 				testWidget([PATTERNS, RELATIONSHIPS], [1], SCATTERPLOT, done);
 			});
 		});
+
+		describe("Winter Dashboard", function () {
+
+			it("should successively match widget 1 needs and finally boolean widget", function (done) {
+				testWidget([STATE], [1], BOOLEAN, done);
+			});
+			
+			it("should successively match widget 2 needs and finally boolean widget", function (done) {
+				testWidget([STATE], [1], BOOLEAN, done);
+			});
+
+			it("should successively match widget 3 needs and finally mix widget", function (done) {
+				testWidget([RELATIONSHIPS, DATA_OVER_TIME, COMPARISONS, PATTERNS, DISTRIBUTION],
+					[1, 2, 3], MIX, done);
+			});
+		});
 	});
 });
