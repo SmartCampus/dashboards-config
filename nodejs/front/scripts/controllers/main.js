@@ -38,7 +38,6 @@ function initWindowsData() {
 
     for (var i = 0; i < maxOfWidgets; i++) {
         allTheNeeds[i] = {"needs": [], "sensors": [], "graphType": ""};
-        addTableRow(i);
     }
 
     position = sensors;
@@ -47,6 +46,10 @@ function initWindowsData() {
     createNeeds(0);
     navigation();
     sensorsBox.push(sensors);
+
+    for (var i = 0; i < maxOfWidgets; i++) {
+        addTableRow(i);
+    }
 
     $.get(secondServer + listSensorsRoute)
         .done(function (data) {
@@ -165,16 +168,19 @@ var addTableRow = function (index) {
         + '<div class="btn btn-default" onclick="removeAWidget(' + index + ')"><span class="glyphicon glyphicon-trash">'
         + '</span></div></div>');
 
-    selectedBox = index;
     updateDisableBox(index);
 };
 
 function updateDisableBox(index) {
+    selectedBox = index;
+
     $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
         if(id.length > 2){
         }else{
             if (id == index) {
+                addAnswerNeeds(selectedBox, needs[selectedBox]);
+
                 $(this).css("border-color", "#0266C8");
                 $(this).css("border-width", "3px");
                 $("#" + id).droppable(
@@ -187,10 +193,12 @@ function updateDisableBox(index) {
             } else {
                 $(this).css("border-color", "black");
                 $(this).css("border-width", "1px");
+
                 $("#" + id).droppable({drop: dropIt, disabled: true});
             }
         }
     });
+
 };
 
 
@@ -261,8 +269,6 @@ dashboardNameForm.onsubmit = function(e) {
 };
 /////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
 var removeAWidget = function (widgetId) {
-    //var $addRowsDiv = $("#add-rows").find(" > div");
-    //var domSize = $addRowsDiv.length;
 
     $('#' + widgetId).remove();
     $('#deleteWidget' + widgetId).remove();
@@ -277,7 +283,18 @@ var removeAWidget = function (widgetId) {
     $("#dateButton").show();
     $("#dashboardNameForm").hide();
 
-    //updateDisableBox(a);
+
+    if(selectedBox == widgetId){
+        for(var i = 0; i < allTheNeeds.length; i++){
+            if(allTheNeeds[i] != null){
+                updateDisableBox(i);
+                break;
+            }
+        }
+    }else{
+        updateDisableBox(widgetId);
+    }
+
 
 };
 
@@ -583,7 +600,7 @@ var declareNeeds = function () {
             allTheNeeds.splice(i, 1);
         }
     }
-    
+
     allTheNeeds.forEach(function (oneNeed, index) {
             oneNeed.sensors.forEach(function (sensor) {
                 if ($("#select" + sensor.name + " option:selected", "#" + index).text() != 'raw') {
