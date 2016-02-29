@@ -182,7 +182,7 @@ function generatePie(config, callback) {
 }
 
 function generateLayout(config, callback) {
-    readTemplateFile("test.mustache", function (template) {
+    readTemplateFile("layout.mustache", function (template) {
         //config = require(__dirname + "/template/layout.json");
         //config.widgetWidth = layoutDefinitions.getLayoutWidgetWidth(config.layoutType);
         if(config.layoutType) {
