@@ -392,7 +392,7 @@ function navigation() {
 
     $(".draggableSensor").draggable({
         helper: function (event) {
-          return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
+            return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
         },
         revert: "invalid",
         cursorAt: { bottom: 10, left: 60 }

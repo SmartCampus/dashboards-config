@@ -1,6 +1,11 @@
 var position = document.createElement("img");
 document.getElementById('{{position}}').appendChild(position);
 
+var title = document.createElement("H4")
+var t = document.createTextNode(sensor.description);
+    title.appendChild(t);
+    document.getElementById('{{position}}').appendChild(title);
+
 if ({{id}}.data[1] == 0) {
 position.src = '/assets/images/no.png';
 }

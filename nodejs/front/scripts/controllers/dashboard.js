@@ -168,7 +168,7 @@ var goDrawPie = function (sensor, index) {
     var $thisWidget = $("#loadingNeed"+index);
     $thisWidget.find(".loadingImg").hide();
     $thisWidget.find(".glyphicon").show();
-    generate.widgetPie(existingPositions[index], allWidgets[index].title, "watchingArray[index].dataSC", function (data) {
+    generate.widgetPie(existingPositions[index], sensor.displayName, "watchingArray[index].dataSC", function (data) {
         $thisWidget.hide();
         eval(data);
         finishedLoading();
