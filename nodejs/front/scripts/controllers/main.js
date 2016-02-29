@@ -537,6 +537,7 @@ function dropIt(event, ui) {
                         needSpan.html(enhancedSensor.displayName);
                         needSpan.appendTo($(self));
                         createAndAddPercentButton(($(self)).attr('id'), draggableId, droppableId);
+                        $("#dashboardNameForm").hide();
                         $("#generateButton").show().removeAttr("disabled");
                         $("#dateButton").show();
                         allTheNeeds[droppableId].sensors.push(enhancedSensor);
@@ -591,9 +592,6 @@ var declareNeeds = function () {
             //Better than cookie bc same behaviour throughout browsers.
             if (index == allTheNeeds.length - 1) {
                 localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
-                localStorage.setItem("startDate", startDate);
-                localStorage.setItem("endDate", endDate);
-
                 //Once we got everything
                 $("#dashboardNameForm").show();
                 $("#generateButton").hide();
@@ -610,6 +608,14 @@ var declareNeeds = function () {
 
 var setDashboardName = function () {
     localStorage.setItem("dashboardTitle", $("#dashboardName").val());
+    if (typeof(startDate) == 'undefined' || typeof(endDate) == 'undefined') {
+        console.log('no date defined');
+        startDate = '2015-01-01 8:00:00';
+        endDate = '2015-02-24 18:00:00';
+    }
+    localStorage.setItem("startDate", startDate);
+    localStorage.setItem("endDate", endDate);
+
     return true;
 };
 
