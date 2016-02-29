@@ -33,8 +33,53 @@ var router = require("express").Router(),
  * 			}
  */
 router.post("/composition_data", function (req, res) {
-	res.status(501).end();
+	var needs = req.body.needs, sensors = req.body.sensors;
+
+	if (!checkCompositionData(needs, sensors)) {
+		res.status(400).send({ "invalidJson": true });
+	}
+	else {
+		engine.compose(needs, sensors, function (err, result) {
+			if (err) {
+				logger.warn(err);
+				res.status(500).send(err);
+			}
+			else {
+				res.status(200).send({
+					needs: result.needs,
+					widgets: result.widgets.map(function (ratedwidget) {
+						return ratedwidget.widget;
+					})
+				});
+			}
+		});
+	}
 });
+
+function checkCompositionData(needs, sensors) {
+	if (!Array.isArray(needs) || !Array.isArray(sensors)) {
+		return false;
+	}
+	for (var i in needs) {
+		if (!engine.needExists(needs[i])) {
+			return false;
+		}
+	}
+	return true;
+}
+
+router.init = function init(callback) {
+	engine.init(function (err) {
+		if (err) {
+			logger.error(err);
+			callback(err);
+		}
+		else {
+			logger.info("composition router initialized");
+			callback(null);
+		}
+	});
+}
 
 // Exports
 
