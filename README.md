@@ -9,22 +9,26 @@ You can find the description of work document at the following link :
 
 ## Launching the project
 
-To launch the project you must place yourself in the nodejs/front folder, after clonning it , run these following commands : 
+To launch the project you must place yourself in the nodejs/front folder, after clonning it , run the following commands : 
 
-	$ bower install
+	$ npm install && bower install
  
-In the nodejs/back, you must run : 
+In the nodejs/back folder, you must run : 
 
 	$ npm install
 
-Every other time, there are 3 servers to launch : 
+Every other time, there are 5 servers to launch : 
 
 	in the front folder : 
 	 $ node app.js
-	in the back/dashboard_service folder :
+	in the back/dashboard-generator folder :
 	 $ node app.js
-	in the back/sensor-hierarchy-service : 
+	in the back/sensor-containers-API folder : 
 	 $ node app.js
+	in the back/composition-engine folder : 
+     $ node app.js
+    in the back/format-data-service folder : 
+     $ node app.js
 
 ## Authors
 
