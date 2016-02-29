@@ -61,3 +61,14 @@ body {
     padding-right:0.4em;
     padding-bottom:0.5em;
 }
+
+#add-captors, #list-captors {
+    height:300px;
+    overflow-y:scroll;
+    width:100%;
+}
+
+.form-horizontal .control-label{
+    /* text-align:right; */
+    text-align:left;
+}

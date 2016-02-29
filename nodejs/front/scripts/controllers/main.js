@@ -6,8 +6,9 @@ var sensors; //This array contains all the sensors we have
 var needsOrigin = [{name: "Comparison", "image":"comparison.png"}, {name: "Location", "image":"location.png"}, {name: "Pattern", "image":"pattern.png"}, {name: "See Status", "image":"see status.png"}, {name: "Overtime", "image":"overtime.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Hierarchy", "image":"hierarchy.png"}, {name: "Proportion", "image":"proportion.png"}, {name: "Range", "image":"range.png"}];
 var needsSimpleOrigin = ["Comparison", "Location", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 var hierarchyRoute = "container/CampusSophiaTech/child";
+var listSensorsRoute = "sensors?container=Root";
 var needs = [];
-
+var listSensors;
 
 $("#generateButton").attr("disabled", "disabled"); //The generate button starts by being disabled
 var maxOfWidgets = 1; //this determines how many boxes are drawn in the center of the page
@@ -18,7 +19,7 @@ var allTheNeeds = [];
 var sensorsBox = [];
 
 var startDate, endDate;
-
+var filters = [];
 /**
  * Get all buildings sensors et placements
  */
@@ -46,7 +47,108 @@ function initWindowsData() {
     createNeeds(0);
     navigation();
     sensorsBox.push(sensors);
+
+    $.get(secondServer + listSensorsRoute)
+        .done(function (data) {
+            listSensors = data;
+            initListSensors();
+    });
 }
+
+/** Display option **/
+function displayOption(val) {
+    if ( val ) {
+        $('.filtersOptions').hide();
+        $('#list-captors').hide();
+        $('.breadcrumb').show();
+        $('#add-captors').show();
+    }else{
+        $('.breadcrumb').hide();
+        $('#add-captors').hide();
+        $('.filtersOptions').show();
+        $('#list-captors').show();
+    }
+}
+
+/*** FILTERS SENSORS ***/
+function validate(val) {
+    if ($(val).is(':checked')) {
+        filters.push($(val).attr('id'));
+    } else {
+        var index = filters.indexOf($(val).attr('id'));
+        filters.splice(index, 1);
+    }
+    updateListSensors();
+}
+
+function updateListSensors() {
+    var $mylistSensors = $("#list-captors").empty();
+    if(filters.length == 0){
+            $.each(listSensors,function(i){
+            $mylistSensors.append(
+                '<div class="draggableSensor" id="' + listSensors[i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;">'
+                + '<img class="sensorIcon" src="/assets/images/sensorIcons/' + listSensors[i].kind + '.png">'
+                + listSensors[i].displayName
+                + '</img> </div>'
+            );
+        });
+    }else{
+        $.each(listSensors,function(i){
+            if ($.inArray(listSensors[i].category,filters) !== -1) {
+                $mylistSensors.append(
+                    '<div class="draggableSensor" id="' + listSensors[i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;">'
+                    + '<img class="sensorIcon" src="/assets/images/sensorIcons/' + listSensors[i].kind + '.png">'
+                    + listSensors[i].displayName
+                    + '</img> </div>'
+                );
+            }
+        });
+    }
+    $('#search').keyup();
+}
+
+function initListSensors() {
+    var myFilter = [];
+    var $mylistSensors = $("#list-captors").empty();
+    var $myFiltersSensors = $("#filters").empty();
+
+    var lengthListSensors = listSensors.length;
+
+    $.each(listSensors,function(i){
+        if ($.inArray(listSensors[i].category,myFilter)==-1) myFilter.push(listSensors[i].category);
+    });
+
+    $.each(myFilter,function(i){
+        $myFiltersSensors.append(
+            "<label class=\"checkbox-inline\">" +
+            "<input type=\"checkbox\" id=\""+myFilter[i]+"\" onclick=\"validate("+myFilter[i]+")\">"+myFilter[i]+
+            "</label>"
+        );
+    });
+
+    $.each(listSensors,function(i){
+        $mylistSensors.append(
+            '<div class="draggableSensor" id="' + listSensors[i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;">'
+            + '<img class="sensorIcon" src="/assets/images/sensorIcons/' + listSensors[i].kind + '.png">'
+            + listSensors[i].displayName
+            + '</img> </div>'
+        );
+    });
+
+}
+
+
+$('#search').keyup(function() {
+    var $rows = $('#list-captors .draggableSensor');
+
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+
 
 
 /**
