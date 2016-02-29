@@ -295,10 +295,8 @@ var deleteWidgetContent = function (widgetId) {
 
 function addAnswerNeeds(droppableId, answer) {
     answer.forEach(function(needAnswer) {
-       console.log(needAnswer);
        needAnswer.image = needAnswer.name+'.png';
     });
-    console.log(answer);
     needs[droppableId] = [];
 
     needs[droppableId] = answer;
@@ -512,7 +510,14 @@ function dropIt(event, ui) {
         }
     }
     else {//Means it's a sensor
-        if (!($.inArray(draggableId, allTheNeeds[droppableId].sensors) > -1)) {
+        var alreadyHere = false;
+        allTheNeeds[droppableId].sensors.forEach(function(completeSensor) {
+            if (completeSensor.name == draggableId) {
+                alreadyHere = true;
+                return false;
+            }
+        });
+        if (!alreadyHere) { //Always in this
             var temporarySensorsList = [];
 
             $.get(mainServer + "sensor/" + draggableId + "/enhanced")
@@ -526,7 +531,6 @@ function dropIt(event, ui) {
                         enhancedSensor["salle"] = (position.name).replace(/ /g,"_");
                         needs[droppableId] = answer;
                         addAnswerNeeds(droppableId, answer);
-                        console.log(enhancedSensor);
                         //Here, we add a new sensor to the widget.
                         var needSpan = $(document.createElement('span'));
                         needSpan.attr("id", draggableId);
