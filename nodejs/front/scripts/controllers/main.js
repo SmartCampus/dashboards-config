@@ -107,6 +107,15 @@ function updateListSensors() {
             }
         });
     }
+    
+    $(".draggableSensor").draggable({
+        helper: function (event) {
+            return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
+        },
+        revert: "invalid",
+        cursorAt: { bottom: 10, left: 60 }
+    });
+
     $('#search').keyup();
 }
 
@@ -136,6 +145,14 @@ function initListSensors() {
             + listSensors[i].displayName
             + '</img> </div>'
         );
+    });
+
+    $(".draggableSensor").draggable({
+        helper: function (event) {
+            return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
+        },
+        revert: "invalid",
+        cursorAt: { bottom: 10, left: 60 }
     });
 
 }
