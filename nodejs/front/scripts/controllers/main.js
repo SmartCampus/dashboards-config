@@ -191,7 +191,7 @@ function updateDisableBox(index) {
             }
         }
     });
-};
+}
 
 
 // change box
@@ -369,7 +369,7 @@ function navigation() {
             + buildings[i].amountOfSensors+"</span></div>"
     );
     }
-    $addCaptors.append( "<hr><div id='directSensors"+position.name.replace(/ /g,"_")+"'></div>");
+    $addCaptors.append( "<hr><div id='directSensors"+position.name.replace(/ /g,"_")+"' class='text-left'></div>");
     var $directSensorsPosition = $("#directSensors"+position.name.replace(/ /g,"_"));
 
     //Then, in position we check if there is any sensor
@@ -500,7 +500,7 @@ function dropIt(event, ui) {
                     needSpan.css('cursor', 'default');
                     needSpan.html(draggableId);
                     needSpan.appendTo($(self));
-                    br = $(document.createElement('br'));
+                    var br = $(document.createElement('br'));
                     br.appendTo(needSpan);
                     allTheNeeds[droppableId].needs.push(draggableId);
                     $("#generateButton").show().removeAttr("disabled");
@@ -560,7 +560,7 @@ function dropIt(event, ui) {
 
 ////////////////////////////////////// Percent button on sensors  //////////////////////////////////////////////////////
 //This method creates a percent button and appends it to a specific sensorname
-var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableId) {
+var createAndAddPercentButton = function (widgetBoxId, draggableName) {
 
     var formGroup = $(document.createElement("span"));
     formGroup.attr('class', 'input-group input-group-xs');
