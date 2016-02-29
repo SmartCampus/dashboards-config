@@ -3,7 +3,7 @@ var sensors; //This array contains all the sensors we have
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 //2 versions bc easier for now, even if not really useful...
 
-var needsOrigin = [{name: "Comparison", "image":"comparisons.png"}, {name: "Location", "image":"location.png"}, {name: "Pattern", "image":"patterns.png"}, {name: "See Status", "image":"reference_tool.png"}, {name: "Overtime", "image":"data_over_time.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Hierarchy", "image":"hierarchy.png"}, {name: "Proportion", "image":"proportions.png"}, {name: "Range", "image":"range.png"}];
+var needsOrigin = [{name: "Comparison", "image":"comparison.png"}, {name: "Location", "image":"location.png"}, {name: "Pattern", "image":"pattern.png"}, {name: "See Status", "image":"see status.png"}, {name: "Overtime", "image":"overtime.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Hierarchy", "image":"hierarchy.png"}, {name: "Proportion", "image":"proportion.png"}, {name: "Range", "image":"range.png"}];
 var needsSimpleOrigin = ["Comparison", "Location", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
 var hierarchyRoute = "container/CampusSophiaTech/child";
 var needs = [];
@@ -43,7 +43,7 @@ function initWindowsData() {
     position = sensors;
     buildings = sensors.childContainer;
     navbar.push(position.name);
-    addNeeds(0);
+    createNeeds(0);
     navigation();
     sensorsBox.push(sensors);
 }
@@ -103,7 +103,7 @@ $("#add-rows").click(function (event) {
     $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
         if (id === selectedBox) {
-            addNeeds(selectedBox);
+            addAnswerNeeds(selectedBox, needs[selectedBox]);
             $(this).css("border-color", "#0266C8");
             $(this).css("border-width", "3px");
             $("#" + id).droppable(
@@ -189,13 +189,29 @@ var deleteWidgetContent = function (widgetId) {
 };
 
 
+function addAnswerNeeds(droppableId, answer) {
+    answer.forEach(function(needAnswer) {
+       console.log(needAnswer);
+       needAnswer.image = needAnswer.name+'.png';
+    });
+    console.log(answer);
+    needs[droppableId] = [];
+
+    needs[droppableId] = answer;
+    addNeeds(droppableId);
+}
+
+function createNeeds(boxIndex) {
+    needs[boxIndex] = [];
+    needs[boxIndex] = needsOrigin;
+    addNeeds(boxIndex);
+}
 /**
  * This function fills the visulization needs panel, and set its elements to being draggable elements
  */
 function addNeeds(boxIndex) {
     var $addIntent = $("#add-need").empty();
-    needs[boxIndex] = [];
-    needs[boxIndex] = needsOrigin;
+
     for (var i = 0; i < needs[boxIndex].length; i++) {
         $addIntent.append(
             '<div id="' + needs[boxIndex][i].name + '" style="cursor: -webkit-grab; cursor:-moz-grab;" class="draggableNeed col-md-6">' +
@@ -404,7 +420,7 @@ function dropIt(event, ui) {
                     expression.sensorList(temporarySensorsList, function (answer) {
                         enhancedSensor["salle"] = (position.name).replace(/ /g,"_");
                         needs[droppableId] = answer;
-                        addNeeds(droppableId);
+                        addAnswerNeeds(droppableId, answer);
                         console.log(enhancedSensor);
                         //Here, we add a new sensor to the widget.
                         var needSpan = $(document.createElement('span'));
