@@ -107,7 +107,7 @@ function updateListSensors() {
             }
         });
     }
-    
+
     $(".draggableSensor").draggable({
         helper: function (event) {
             return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
