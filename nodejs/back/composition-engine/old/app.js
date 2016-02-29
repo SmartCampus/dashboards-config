@@ -5,9 +5,8 @@
 var express = require("express"),
     app = express(),
     bodyParser = require('body-parser'),
-    router = require("./router"),
-    logger = require("./logger")
-    port = 8084;
+    router = require("./composition_router"),
+    logger = require("./logger");
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -32,20 +31,8 @@ app.use(function (req, res, next) {
 
 app.use("/", router);
 
-(function init() {
-    router.init(function (err) {
-        if (err) {
-            logger.error(err);
-            //app.cleanBeforeExit();
-            exit(1);
-        }
-        else {
-            app.listen(port);
-            logger.info("Composition engine service is now listening on port", port + ".");
-            app.emit("ready");
-        }
-    });
-})();
+app.listen(8084);
+logger.info('Composition engine is now listening on port 8084.');
 
 // Exports
 
