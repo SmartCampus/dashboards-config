@@ -228,7 +228,9 @@ $("#add-rows").click(function (event) {
         }else{
             selectedBox = event.target.id;
         }
-        if(selectedBox !== "") {
+
+        if(selectedBox !== "" && selectedBox != undefined) {
+            console.log("coucou");
             $("#add-rows").find(" > div").each(function () {
                 var id = $(this).attr('id');
                 if (id === selectedBox) {
