@@ -228,30 +228,31 @@ $("#add-rows").click(function (event) {
         }else{
             selectedBox = event.target.id;
         }
+        if(selectedBox !== "") {
+            $("#add-rows").find(" > div").each(function () {
+                var id = $(this).attr('id');
+                if (id === selectedBox) {
+                    addAnswerNeeds(selectedBox, needs[selectedBox]);
+                    $(this).css("border-color", "#0266C8");
+                    $(this).css("border-width", "3px");
+                    $("#" + id).droppable(
+                        {
+                            drop: dropIt,
+                            disabled: false,
+                            activeClass: "myActiveDroppable"
+                        });
+                    position = sensorsBox[selectedBox];
+                    buildings = position.childContainer;
+                    goTo(navbar);
 
-        $("#add-rows").find(" > div").each(function () {
-            var id = $(this).attr('id');
-            if (id === selectedBox) {
-                addAnswerNeeds(selectedBox, needs[selectedBox]);
-                $(this).css("border-color", "#0266C8");
-                $(this).css("border-width", "3px");
-                $("#" + id).droppable(
-                    {
-                        drop: dropIt,
-                        disabled: false,
-                        activeClass: "myActiveDroppable"
-                    });
-                position = sensorsBox[selectedBox];
-                buildings = position.childContainer;
-                goTo(navbar);
-
-                navigation();
-            } else {
-                $(this).css("border-color", "black");
-                $(this).css("border-width", "1px");
-                $("#" + id).droppable({drop: dropIt, disabled: true});
-            }
-        });
+                    navigation();
+                } else {
+                    $(this).css("border-color", "black");
+                    $(this).css("border-width", "1px");
+                    $("#" + id).droppable({drop: dropIt, disabled: true});
+                }
+            });
+        }
     }
 });
 
