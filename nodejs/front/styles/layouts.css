@@ -30,3 +30,25 @@ body {
 .layoutImg:active{
     background-color: rgba(70, 177, 255, 0.29);
 }
+
+#backButton {
+    position:absolute;
+    top: 3%;
+    left: 3%;
+}
+
+.btn-round {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.btn-round.btn-lg {
+    width: 48px;
+    height: 48px;
+}
+
+.btn-round.btn-sm {
+    width: 34px;
+    height: 34px;
+}
