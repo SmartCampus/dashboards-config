@@ -95,6 +95,13 @@ All the apc related classes concern the drag n drop functionnality
     align-self: center;
 }
 
+.generalTitle {
+    text-align : center;
+    font-size: 4.6em;
+    font-family: 'Work Sans';
+    color : #575757;
+    font-weight : 300;
+}
 .widgetTitle {
     text-align : center;
     background: #575757;

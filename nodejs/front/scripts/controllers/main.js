@@ -538,6 +538,7 @@ function dropIt(event, ui) {
                         needSpan.html(enhancedSensor.displayName);
                         needSpan.appendTo($(self));
                         createAndAddPercentButton(($(self)).attr('id'), draggableId, droppableId);
+                        $("#dashboardNameForm").hide();
                         $("#generateButton").show().removeAttr("disabled");
                         $("#dateButton").show();
                         allTheNeeds[droppableId].sensors.push(enhancedSensor);
