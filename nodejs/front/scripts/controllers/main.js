@@ -158,12 +158,9 @@ $('#search').keyup(function() {
 var addTableRow = function (index) {
 
     $("#add-rows").append('' +
-        '<form class="form-inline text-left" id="widgetNameForm' + index + '" style="padding-bottom: 0.5em">' +
-        '<input class="form-control" id="widgetTitle' + index + '" placeholder="Your widget\'s name"> ' +
-        '</form>' +
-        '<div class="well col-md-10" id="'
-        + index
-        + '" style="min-height: 80px;"></div>'
+        '<form class="form-inline text-left" id="widgetNameForm' + index + '" style="padding-bottom: 0.5em">'
+        + '<input class="form-control" id="widgetTitle' + index + '" placeholder="Your widget\'s name"></form>'
+        + '<div class="well col-md-10" id="' + index + '" style="min-height: 80px;"></div>'
         + '<div class="col-md-2" id="deleteWidget' + index + '"> <br/>'
         + '<div class="btn btn-default" onclick="removeAWidget(' + index + ')"><span class="glyphicon glyphicon-trash">'
         + '</span></div></div>');
@@ -195,37 +192,39 @@ function updateDisableBox() {
 
 // change box
 $("#add-rows").click(function (event) {
-
-    if(event.target.id.length > 2){
-        selectedBox = $(event.target).parent().attr('id');
+    if(event.target.id.indexOf('widgetTitle') != -1 || event.target.id.indexOf('widgetNameForm') != -1){
+        // do nothing
     }else{
-        selectedBox = event.target.id;
-    }
-
-    $("#add-rows").find(" > div").each(function () {
-        var id = $(this).attr('id');
-        if (id === selectedBox) {
-            addAnswerNeeds(selectedBox, needs[selectedBox]);
-            $(this).css("border-color", "#0266C8");
-            $(this).css("border-width", "3px");
-            $("#" + id).droppable(
-                {
-                    drop: dropIt,
-                    disabled: false,
-                    activeClass: "myActiveDroppable"
-                });
-            position = sensorsBox[selectedBox];
-            buildings = position.childContainer;
-            goTo(navbar);
-
-            navigation();
-        } else {
-            $(this).css("border-color", "black");
-            $(this).css("border-width", "1px");
-            $("#" + id).droppable({drop: dropIt, disabled: true});
+        if(event.target.id.length > 2){
+            selectedBox = $(event.target).parent().attr('id');
+        }else{
+            selectedBox = event.target.id;
         }
-    });
 
+        $("#add-rows").find(" > div").each(function () {
+            var id = $(this).attr('id');
+            if (id === selectedBox) {
+                addAnswerNeeds(selectedBox, needs[selectedBox]);
+                $(this).css("border-color", "#0266C8");
+                $(this).css("border-width", "3px");
+                $("#" + id).droppable(
+                    {
+                        drop: dropIt,
+                        disabled: false,
+                        activeClass: "myActiveDroppable"
+                    });
+                position = sensorsBox[selectedBox];
+                buildings = position.childContainer;
+                goTo(navbar);
+
+                navigation();
+            } else {
+                $(this).css("border-color", "black");
+                $(this).css("border-width", "1px");
+                $("#" + id).droppable({drop: dropIt, disabled: true});
+            }
+        });
+    }
 
 
 });
