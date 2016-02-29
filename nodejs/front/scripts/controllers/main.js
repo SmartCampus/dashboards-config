@@ -38,7 +38,6 @@ function initWindowsData() {
 
     for (var i = 0; i < maxOfWidgets; i++) {
         allTheNeeds[i] = {"needs": [], "sensors": [], "graphType": ""};
-        addTableRow(i);
     }
 
     position = sensors;
@@ -47,6 +46,10 @@ function initWindowsData() {
     createNeeds(0);
     navigation();
     sensorsBox.push(sensors);
+
+    for (var i = 0; i < maxOfWidgets; i++) {
+        addTableRow(i);
+    }
 
     $.get(secondServer + listSensorsRoute)
         .done(function (data) {
@@ -104,6 +107,15 @@ function updateListSensors() {
             }
         });
     }
+    
+    $(".draggableSensor").draggable({
+        helper: function (event) {
+            return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
+        },
+        revert: "invalid",
+        cursorAt: { bottom: 10, left: 60 }
+    });
+
     $('#search').keyup();
 }
 
@@ -133,6 +145,14 @@ function initListSensors() {
             + listSensors[i].displayName
             + '</img> </div>'
         );
+    });
+
+    $(".draggableSensor").draggable({
+        helper: function (event) {
+            return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
+        },
+        revert: "invalid",
+        cursorAt: { bottom: 10, left: 60 }
     });
 
 }
@@ -165,16 +185,19 @@ var addTableRow = function (index) {
         + '<div class="btn btn-default" onclick="removeAWidget(' + index + ')"><span class="glyphicon glyphicon-trash">'
         + '</span></div></div>');
 
-    selectedBox = index;
     updateDisableBox(index);
 };
 
 function updateDisableBox(index) {
+    selectedBox = index;
+
     $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
         if(id.length > 2){
         }else{
             if (id == index) {
+                addAnswerNeeds(selectedBox, needs[selectedBox]);
+
                 $(this).css("border-color", "#0266C8");
                 $(this).css("border-width", "3px");
                 $("#" + id).droppable(
@@ -187,11 +210,12 @@ function updateDisableBox(index) {
             } else {
                 $(this).css("border-color", "black");
                 $(this).css("border-width", "1px");
+
                 $("#" + id).droppable({drop: dropIt, disabled: true});
             }
         }
     });
-}
+};
 
 
 // change box
@@ -261,8 +285,6 @@ dashboardNameForm.onsubmit = function(e) {
 };
 /////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
 var removeAWidget = function (widgetId) {
-    //var $addRowsDiv = $("#add-rows").find(" > div");
-    //var domSize = $addRowsDiv.length;
 
     $('#' + widgetId).remove();
     $('#deleteWidget' + widgetId).remove();
@@ -277,7 +299,18 @@ var removeAWidget = function (widgetId) {
     $("#dateButton").show();
     $("#dashboardNameForm").hide();
 
-    //updateDisableBox(a);
+
+    if(selectedBox == widgetId){
+        for(var i = 0; i < allTheNeeds.length; i++){
+            if(allTheNeeds[i] != null){
+                updateDisableBox(i);
+                break;
+            }
+        }
+    }else{
+        updateDisableBox(widgetId);
+    }
+
 
 };
 
@@ -594,11 +627,11 @@ var createAndAddPercentButton = function (widgetBoxId, draggableName) {
  ******************************/
 var declareNeeds = function () {
 
-    allTheNeeds.forEach(function (oneNeed, index) {
-        if(oneNeed == null){
-            allTheNeeds.splice(index, 1);
+    for(var i = allTheNeeds.length-1; i >= 0; i--){
+        if(allTheNeeds[i] == null){
+            allTheNeeds.splice(i, 1);
         }
-    });
+    }
 
     allTheNeeds.forEach(function (oneNeed, index) {
             oneNeed.sensors.forEach(function (sensor) {
