@@ -120,9 +120,9 @@ function initListSensors() {
 
     $.each(myFilter,function(i){
         $myFiltersSensors.append(
-            "<label class=\"checkbox-inline\">" +
+            "<div class=\"col-md-4\"><label class=\"checkbox-inline\">" +
             "<input type=\"checkbox\" id=\""+myFilter[i]+"\" onclick=\"validate("+myFilter[i]+")\">"+myFilter[i]+
-            "</label>"
+            "</label></div>"
         );
     });
 
