@@ -1,4 +1,6 @@
-
+div {
+    display: block
+}
 
 /*This class is each part title : for intentions, widget boxes and sensors*/
 .indexTitle {

@@ -246,7 +246,8 @@ var addAWidget = function () {
     needs.push(needsOrigin);
     addTableRow(maxOfWidgets);
 
-    $("#generateButton").attr("disabled", "disabled");
+    $("#generateButton").show().attr("disabled", "disabled");
+    $("#dateButton").show();
     $("#dashboardNameForm").hide();
 
     maxOfWidgets += 1;
@@ -270,7 +271,8 @@ var removeAWidget = function (widgetId) {
     allTheNeeds.splice(widgetId, 1);
     needs.splice(widgetId, 1);
 
-    $("#generateButton").removeAttr("disabled");
+    $("#generateButton").show().removeAttr("disabled");
+    $("#dateButton").show();
     $("#dashboardNameForm").hide();
     /* TODO :  Auto select an other box
     for(var i = 0; i < sensorsBox.length; i++) {
@@ -495,7 +497,8 @@ function dropIt(event, ui) {
                     br = $(document.createElement('br'));
                     br.appendTo(needSpan);
                     allTheNeeds[droppableId].needs.push(draggableId);
-                    $("#generateButton").removeAttr("disabled");
+                    $("#generateButton").show().removeAttr("disabled");
+                    $("#dateButton").show();
                 })
                     .fail(function (data) {
                         console.log(data);
@@ -531,7 +534,8 @@ function dropIt(event, ui) {
                         needSpan.html(enhancedSensor.displayName);
                         needSpan.appendTo($(self));
                         createAndAddPercentButton(($(self)).attr('id'), draggableId, droppableId);
-                        $("#generateButton").removeAttr("disabled");
+                        $("#generateButton").show().removeAttr("disabled");
+                        $("#dateButton").show();
                         allTheNeeds[droppableId].sensors.push(enhancedSensor);
                     }, function (error) {
                         console.log(error);
@@ -594,7 +598,8 @@ var declareNeeds = function () {
 
             }
         }, function () {
-            $("#generateButton").attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...
+            $("#generateButton").show().attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...
+            $("#dateButton").show();
             console.log('IT\'S IMPOSSIBRRRRUUUUU');
         });
     });
