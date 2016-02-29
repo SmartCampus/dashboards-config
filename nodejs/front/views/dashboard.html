@@ -16,6 +16,7 @@
 
     <title>SmartCampus : dashboards</title>
     <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
+    <script src="/bower_components/moment/min/moment.min.js"></script>
 
     <script src="/bower_components/highstock/highstock.js"></script>
 
@@ -31,9 +32,10 @@
     </script>
 </head>
 <body>
-<div class=" text-center">
-    <div class="generalTitle" id="theGeneralTitle">
+<div class="text-center">
+    <div id="generalTitle">
     </div>
+    <p id="underTitle"></p>
 </div>
 
 <!--This loading / error part si always the same, no matter the dashboard-->
