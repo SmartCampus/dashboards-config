@@ -229,8 +229,6 @@ $("#add-rows").click(function (event) {
             }
         });
     }
-
-
 });
 
 
@@ -263,31 +261,23 @@ dashboardNameForm.onsubmit = function(e) {
 };
 /////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
 var removeAWidget = function (widgetId) {
-    var $addRowsDiv = $("#add-rows").find(" > div");
-    var domSize = $addRowsDiv.length;
+    //var $addRowsDiv = $("#add-rows").find(" > div");
+    //var domSize = $addRowsDiv.length;
+
     $('#' + widgetId).remove();
     $('#deleteWidget' + widgetId).remove();
     $('#widgetNameForm' + widgetId).remove();
-    maxOfWidgets -= 1;
-  //  sensorsBox[widgetId] = null;
-    sensorsBox.splice(widgetId, 1);
-    allTheNeeds.splice(widgetId, 1);
-    needs.splice(widgetId, 1);
+    //maxOfWidgets -= 1;
+    //  sensorsBox[widgetId] = null;
+    sensorsBox[widgetId] = null;
+    allTheNeeds[widgetId] = null;
+    needs[widgetId] = null;
 
     $("#generateButton").show().removeAttr("disabled");
     $("#dateButton").show();
     $("#dashboardNameForm").hide();
-    console.log(widgetId);
-    var a = widgetId -1;
-    console.log(a);
 
-    updateDisableBox(a);
-    /* TODO :  Auto select an other box
-    for(var i = 0; i < sensorsBox.length; i++) {
-        if(sensorsBox[i] != null) {
-
-        }
-    }**/
+    //updateDisableBox(a);
 
 };
 
@@ -583,35 +573,43 @@ var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableI
     br.appendTo(formGroup);
 };
 
-
 /*******************************
  **** JSON Of composition ******
  ******************************/
 var declareNeeds = function () {
-    allTheNeeds.forEach(function (oneNeed, index) {
-        oneNeed.sensors.forEach(function (sensor) {
-            if ($("#select" + sensor.name + " option:selected", "#" + index).text() != 'raw') {
-                sensor.percent = true;
-            }
-            oneNeed.title = $("#widgetTitle" + index).val();
-        });
-        //We only ask the composition server if what was asked is possible enough
-        expression.need(oneNeed, function (answer) {
-            oneNeed.graphType = answer;
-            //Better than cookie bc same behaviour throughout browsers.
-            if (index == allTheNeeds.length - 1) {
-                localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
-                //Once we got everything
-                $("#dashboardNameForm").show();
-                $("#generateButton").hide();
-                $("#dateButton").hide();
 
-            }
-        }, function () {
-            $("#generateButton").show().attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...
-            $("#dateButton").show();
-            console.log('IT\'S IMPOSSIBRRRRUUUUU');
-        });
+    allTheNeeds.forEach(function (oneNeed, index) {
+        if(oneNeed == null){
+            allTheNeeds.splice(index, 1);
+        }
+    });
+
+    allTheNeeds.forEach(function (oneNeed, index) {
+            oneNeed.sensors.forEach(function (sensor) {
+                if ($("#select" + sensor.name + " option:selected", "#" + index).text() != 'raw') {
+                    sensor.percent = true;
+                }
+                oneNeed.title = $("#widgetTitle" + index).val();
+            });
+
+
+            //We only ask the composition server if what was asked is possible enough
+            expression.need(oneNeed, function (answer) {
+                oneNeed.graphType = answer;
+                //Better than cookie bc same behaviour throughout browsers.
+                if (index == allTheNeeds.length - 1) {
+                    localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
+                    //Once we got everything
+                    $("#dashboardNameForm").show();
+                    $("#generateButton").hide();
+                    $("#dateButton").hide();
+
+                }
+            }, function () {
+                $("#generateButton").show().attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...
+                $("#dateButton").show();
+            });
+
     });
 };
 
