@@ -518,7 +518,7 @@ function dropIt(event, ui) {
                     sensorsBox[selectedBox] = data;
                     goTo(navbar);
                     navigation();
-                    addToBox($(self), draggableId, null);
+                    addToBox($(self), draggableId, draggableId, null);
                     allTheNeeds[droppableId].needs.push(draggableId);
                     $("#generateButton").show().removeAttr("disabled");
                     $("#dateButton").show();
@@ -544,7 +544,6 @@ function dropIt(event, ui) {
         });
         if (!alreadyHere) { //Always in this
             var temporarySensorsList = [];
-
             $.get(mainServer + "sensor/" + draggableId + "/enhanced")
                 .done(function (enhancedSensor) {
                     allTheNeeds[droppableId].sensors.forEach(function (aSensor) {
@@ -557,7 +556,7 @@ function dropIt(event, ui) {
                         needs[droppableId] = answer;
                         addAnswerNeeds(droppableId, answer);
                         //Here, we add a new sensor to the widget.
-                        addToBox($(self), draggableId, droppableId);
+                        addToBox($(self), draggableId, enhancedSensor.displayName, droppableId);
                         $("#generateButton").removeAttr("disabled");
                         $("#dateButton").show();
                         allTheNeeds[droppableId].sensors.push(enhancedSensor);
@@ -572,17 +571,18 @@ function dropIt(event, ui) {
 var addRemoveSign = function(selfToAppend, draggableId) {
     var removeSign = $(document.createElement('span'));
     removeSign.attr("class", "glyphicon glyphicon-remove-sign");
-    removeSign.attr("onClick", "removeFromBox(" +selfToAppend.attr('id')+", "+draggableId+")");
+    removeSign.attr("onclick", "removeFromBox(" +selfToAppend.attr('id')+", '"+draggableId+"')");
+    removeSign.css("cursor", "pointer");
+    removeSign.css("padding-right", "0.3em");
     removeSign.appendTo(selfToAppend);
-
 };
 
-var addToBox = function(selfToAppend, draggableId, droppableId) {
+var addToBox = function(selfToAppend, draggableId, htmlContent, droppableId) {
     addRemoveSign(selfToAppend, draggableId);
     var needSpan = $(document.createElement('span'));
     needSpan.attr("id", draggableId);
     needSpan.css('cursor', 'default');
-    needSpan.html(draggableId);
+    needSpan.text(htmlContent);
     needSpan.appendTo(selfToAppend);
     if (droppableId !== null) {// means it's a sensor !
         createAndAddPercentButton(selfToAppend.attr('id'), draggableId, droppableId);
@@ -593,8 +593,20 @@ var addToBox = function(selfToAppend, draggableId, droppableId) {
 };
 
 var removeFromBox = function(boxId, elementId) {
-    console.log('you want to remove from box '+boxId + ' the element called '+ elementId);
-    //$("#"+boxId)
+    $("#"+boxId +" > #" + elementId).prev().remove();
+    $("#"+boxId +" > #" + elementId).remove();
+    var index = allTheNeeds[boxId].needs.indexOf(elementId);
+    if (index > -1) { //then it's a need we must remove !
+        allTheNeeds[boxId].needs.splice(index, 1);
+    }
+    else { //it's a sensor
+        allTheNeeds[boxId].sensors.forEach(function (aSensor, index) {
+            if (aSensor.name == elementId) {
+                allTheNeeds[boxId].sensors.splice(index, 1);
+                return false;
+            }
+        });
+    }
 };
 
 ////////////////////////////////////// Percent button on sensors  //////////////////////////////////////////////////////
