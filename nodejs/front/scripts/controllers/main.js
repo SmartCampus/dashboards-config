@@ -165,26 +165,30 @@ var addTableRow = function (index) {
         + '<div class="btn btn-default" onclick="removeAWidget(' + index + ')"><span class="glyphicon glyphicon-trash">'
         + '</span></div></div>');
 
-    updateDisableBox();
+    selectedBox = index;
+    updateDisableBox(index);
 };
 
-function updateDisableBox() {
+function updateDisableBox(index) {
     $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
-        if (id == selectedBox) {
-            $(this).css("border-color", "#0266C8");
-            $(this).css("border-width", "3px");
-            $("#" + id).droppable(
-                {
-                    drop: dropIt,
-                    disabled: false,
-                    activeClass: "myActiveDroppable"
-                }
-            );
-        } else {
-            $(this).css("border-color", "black");
-            $(this).css("border-width", "1px");
-            $("#" + id).droppable({drop: dropIt, disabled: true});
+        if(id.length > 2){
+        }else{
+            if (id == index) {
+                $(this).css("border-color", "#0266C8");
+                $(this).css("border-width", "3px");
+                $("#" + id).droppable(
+                    {
+                        drop: dropIt,
+                        disabled: false,
+                        activeClass: "myActiveDroppable"
+                    }
+                );
+            } else {
+                $(this).css("border-color", "black");
+                $(this).css("border-width", "1px");
+                $("#" + id).droppable({drop: dropIt, disabled: true});
+            }
         }
     });
 };
@@ -273,6 +277,11 @@ var removeAWidget = function (widgetId) {
     $("#generateButton").show().removeAttr("disabled");
     $("#dateButton").show();
     $("#dashboardNameForm").hide();
+    console.log(widgetId);
+    var a = widgetId -1;
+    console.log(a);
+
+    updateDisableBox(a);
     /* TODO :  Auto select an other box
     for(var i = 0; i < sensorsBox.length; i++) {
         if(sensorsBox[i] != null) {
