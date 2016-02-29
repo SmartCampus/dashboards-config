@@ -578,12 +578,12 @@ var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableI
  ******************************/
 var declareNeeds = function () {
 
-    allTheNeeds.forEach(function (oneNeed, index) {
-        if(oneNeed == null){
-            allTheNeeds.splice(index, 1);
+    for(var i = allTheNeeds.length-1; i >= 0; i--){
+        if(allTheNeeds[i] == null){
+            allTheNeeds.splice(i, 1);
         }
-    });
-
+    }
+    
     allTheNeeds.forEach(function (oneNeed, index) {
             oneNeed.sensors.forEach(function (sensor) {
                 if ($("#select" + sensor.name + " option:selected", "#" + index).text() != 'raw') {
