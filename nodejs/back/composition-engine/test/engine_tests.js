@@ -64,15 +64,18 @@ describe("composition engine", function () {
 
 	describe("#compose()", function () {
 
-		function testCompose(needs, sensors, expectedNeeds, expectedWidgets, strictly, callback) {
+		function testCompose(needs, sensors, expectedNeeds, checkAccept, expectedWidgets, strictly, callback) {
 			engine.compose(needs, sensors, function (err, result) {
-				logger.debug("result.needs:", result.needs);
-				logger.debug("expected needs:", expectedNeeds);
+				// logger.debug("result.needs:", result.needs);
+				// logger.debug("expected needs:", expectedNeeds);
 				// logger.debug("result.widgets:", result.widgets);
 				assert(!err);
 				assert(result.needs.length >= expectedNeeds.length);
 				for (var i in expectedNeeds) {
 					assert(result.needs.indexOf(expectedNeeds[i]) > -1);
+				}
+				if (checkAccept) {
+					assert.strictEqual(result.acceptMoreSensors, checkAccept.expected);
 				}
 				if (strictly) {
 					assert.strictEqual(result.widgets[0].widget, expectedWidgets[0]);
@@ -88,14 +91,24 @@ describe("composition engine", function () {
 		}
 
 		it("should get both grouped and not grouped needs", function (done) {
-			testCompose([PATTERNS], [1], [DATA_OVER_TIME, COMPARISONS, RELATIONSHIPS], [LINE],
-				false, done);
+			testCompose([PATTERNS], [1], [DATA_OVER_TIME, COMPARISONS, RELATIONSHIPS],
+				{ expected: true }, [LINE], false, done);
 		});
 
 		it("should get only grouped needs", function (done) {
-			testCompose([PATTERNS, DATA_OVER_TIME], [1, 2], [COMPARISONS, RELATIONSHIPS], [LINE],
-				false, done);
+			testCompose([PATTERNS, DATA_OVER_TIME], [1, 2], [COMPARISONS, RELATIONSHIPS],
+				{ expected: true }, [LINE], false, done);
 		});
+
+		it.only("should accept more sensors", function (done) {
+			testCompose([PATTERNS], [1], [], { expected: true }, [], false, function () {
+				testCompose([PATTERNS], [], [], { expected: true }, [], false, done);
+			});
+		})
+
+		it("should not accept more sensors", function (done) {
+			testCompose([PART_TO_A_WHOLE], [1], [], { expected: false }, [], false, done);
+		})
 
 		function testWidgetNeedsRec(inputNeeds, ouputNeeds, sensors, expectedWidget, callback) {
 			async.each(ouputNeeds, function (need, cb) {
@@ -108,13 +121,13 @@ describe("composition engine", function () {
 				// logger.debug("in:", needs);
 				// logger.debug("out:", expectedNeeds);
 				if (expectedNeeds.length === 0) {
-					testCompose(needs, sensors, expectedNeeds, [expectedWidget], true, function () {
+					testCompose(needs, sensors, expectedNeeds, null, [expectedWidget], true, function () {
 						// logger.debug("endrec");
 						cb();
 					});
 				}
 				else {
-					testCompose(needs, sensors, expectedNeeds, [expectedWidget], false, function () {
+					testCompose(needs, sensors, expectedNeeds, null, [expectedWidget], false, function () {
 						// logger.debug("rec");
 						testWidgetNeedsRec(needs, expectedNeeds, sensors, expectedWidget, cb);
 					});

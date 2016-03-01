@@ -16,8 +16,9 @@ var router = require("express").Router(),
  * sensors objects.
  *
  * Generation possibilities is an object containing a set of compatible
- * visualization needs and a set of compatible widgets. When no matching widget
- * can be found, those sets are returned empty.
+ * visualization needs, a boolean pointing out if other data sources can be
+ * added and a set of compatible widgets. When no matching widget can be found,
+ * the sets are returned empty.
  *
  * Sensor objects are defined by the sensor containers API.
  *
@@ -29,6 +30,7 @@ var router = require("express").Router(),
  * 			}
  * @return 	{
  * 				"needs": 	[string, ...],
+ * 				"acceptMoreSensors": boolean,
  * 				"widgets": 	[string, ...]
  * 			}
  */
@@ -47,6 +49,7 @@ router.post("/composition_data", function (req, res) {
 			else {
 				res.status(200).send({
 					needs: result.needs,
+					acceptMoreSensors: result.acceptMoreSensors,
 					widgets: result.widgets.map(function (ratedwidget) {
 						return ratedwidget.widget;
 					})

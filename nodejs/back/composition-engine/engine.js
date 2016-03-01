@@ -14,7 +14,7 @@ var NEEDS, WIDGETS;
 
 // has to restrict needs in order to absolutely match a chart
 function compose(needs, sensors, callback) {
-	var grouped = sensors.length > 1, compatibleWidgets = [];
+	var grouped = sensors.length > 1, compatibleWidgets = [], acceptMoreSensors;
 
 	catalogRequester.getRatedCharts(needs, grouped, function (err, ratedcharts) {
 		if (err) {
@@ -28,12 +28,28 @@ function compose(needs, sensors, callback) {
 					rating: ratedchart.rating
 				};
 			});
+			if (grouped || widgetContainingGroupedNeedsExists(needs)) {
+				acceptMoreSensors = true;
+			}
+			else {
+				acceptMoreSensors = false;
+			}
 			callback(null, {
 				needs: Array.from(findCompatibleNeeds(needs, grouped)),
+				acceptMoreSensors: acceptMoreSensors,
 				widgets: compatibleWidgets
 			});
 		}
 	});
+}
+
+function widgetContainingGroupedNeedsExists(needs) {
+	for (var i in WIDGETS) {
+		if (widgetContainsNeeds(WIDGETS[i], needs, true)) {
+			return true;
+		}
+	}
+	return false;
 }
 
 // when not grouped, should allow grouped possibilities

@@ -19,7 +19,7 @@ function getCatalogResource(url, callback) {
 			data += chunk;
 		});
 		res.on("end", function() {
-			logger.debug(data);
+			logger.debug("catalog response:", data);
 			callback(null, JSON.parse(data));
 		});
 	}).on("error", function (error) {
