@@ -1,31 +1,32 @@
 var mapSVGDiv = $(document.createElement("div"));
 mapSVGDiv.attr("id", "{{graphName}}map");
+mapSVGDiv.attr("class", "svg-container");
 mapSVGDiv.appendTo($("#{{graphName}}"));
-mapSVGDiv.after(' <h3>Caption :</h3>'+
-'<div class="col-md-4">'+
+mapSVGDiv.after('<div class="row" style="padding-left:20px"> <h3>Caption :</h3>'+
+'<div class="col-xs-6 col-md-4">'+
    '<img class="sensorIcon" src="/assets/images/sensorIcons/door.png"/>Door sensor'+
 '</div>'+
-'<div class="col-md-4">'+
+'<div class="col-xs-6 col-md-4">'+
    '<img class="sensorIcon" src="/assets/images/sensorIcons/sound.png"/>Sound sensor'+
 '</div>'+
-'<div class="col-md-4">'+
+'<div class="col-xs-6 col-md-4">'+
    '<img class="sensorIcon" src="/assets/images/sensorIcons/ac.png"/>AC sensor'+
 '</div>'+
-'<div class="col-md-4">'+
+'<div class="col-xs-6 col-md-4">'+
    '<img class="sensorIcon" src="/assets/images/sensorIcons/heating.png"/>Heating sensor'+
 '</div>'+
-'<div class="col-md-4">'+
+'<div class="col-xs-6 col-md-4">'+
    '<img class="sensorIcon" src="/assets/images/sensorIcons/energy.png"/>Energy sensor'+
 '</div>'+
-'<div class="col-md-4">'+
+'<div class="col-xs-6 col-md-4">'+
    '<img class="sensorIcon" src="/assets/images/sensorIcons/window.png"/>Window sensor'+
 '</div>'+
-'<div class="col-md-4">'+
+'<div class="col-xs-6 col-md-4">'+
    '<img class="sensorIcon" src="/assets/images/sensorIcons/light.png"/>Light sensor'+
 '</div>'+
-'<div class="col-md-4">'+
+'<div class="col-xs-6 col-md-4">'+
    '<img class="sensorIcon" src="/assets/images/sensorIcons/temperature.png"/>Temperature sensor'+
-'</div>');
+'</div> </div>');
 load_svg("/assets/plan_T1_4e.svg", "{{graphName}}map", {{seriesArrayName}}, put_sensors, {
    "door": "/assets/images/sensorIcons/door.png",
    "window": "/assets/images/sensorIcons/window.png",

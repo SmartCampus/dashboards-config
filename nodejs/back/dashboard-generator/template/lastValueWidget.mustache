@@ -1,0 +1,3 @@
+var sensorStatus = $(document.createElement('h4'));
+sensorStatus.html(sensor.description+' : '+ Math.round({{id}}.data[1] * 100) / 100);
+sensorStatus.appendTo($("#{{position}}"));

@@ -54,7 +54,8 @@ describe("#splittedInformation()", function() {
 describe("#persentFormat()", function(){
    context("with One OPEN and one CLOSED", function() {
       it("should return 50% open and 50% close in two list", function() {
-         var input =  { values : [ {value : "OPEN", date : 1}, {value : "CLOSED", date: 2}]};
+      //   var input =  { values : [ {value : "OPEN", date : 1}, {value : "CLOSED", date: 2}]};
+         var input =  {"values":[{"date":"0","value":"ON"},{"date":"1","value":"OFF"}]};
          var response = processor.persentFormat(input, 0, 2);
          assert.deepEqual(response, {data : [{open : 50}, {close : 50}]});
       });

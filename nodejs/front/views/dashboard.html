@@ -10,12 +10,13 @@
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
 
     <link rel="stylesheet" type="text/css" href="/styles/layouts.css">
-    <link rel="stylesheet" type="text/css" href="/styles/index.css">
+    <link rel="stylesheet" type="text/css" href="/styles/dashboard.css">
 
     <link rel="shortcut icon" type="image/x-icon" href="/assets/images/icon.png"/>
 
     <title>SmartCampus : dashboards</title>
     <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
+    <script src="/bower_components/moment/min/moment.min.js"></script>
 
     <script src="/bower_components/highstock/highstock.js"></script>
 
@@ -31,9 +32,10 @@
     </script>
 </head>
 <body>
-<div class="page-header text-center">
-    <!-- <img src="../assets/images/cat-header.jpg"> -->
-    <h1 id="theGeneralTitle"></h1>
+<div class="text-center">
+    <div id="generalTitle">
+    </div>
+    <p id="underTitle"></p>
 </div>
 
 <!--This loading / error part si always the same, no matter the dashboard-->
@@ -42,6 +44,7 @@
 <div class="hidden" id="errorOccurred">
     <img src="/assets/images/errorCat.gif" alt="loading">
     <h1 class="text-danger">An error occurred. You should reload the page !</h1>
+    <h3>If this persists, check the servers logs, something might have gone wrong there. </h3>
 </div>
 
 <div id="dashboard">
@@ -78,6 +81,9 @@
     </div> <!--modal-dialog -->
 </div> <!--modal-->
 
+<a type="button" class="btn btn-default btn-sm btn-round" id="backButton" href="index.html">
+    <span class="glyphicon glyphicon-arrow-left">  Back</span>
+</a>
 
 </body>
 
@@ -86,16 +92,16 @@
 <script src="/scripts/services/generateWidgets.js"></script>
 <script src="/scripts/services/generateLayout.js"></script>
 
-<script src="/scripts/controllers/layoutChoice.js"></script>
-
 <script src="/scripts/controllers/dashboard.js"></script>
 
 
 <footer>
+
     <script>
         $(function () {
             $("footer").load("footer.html")
         });
     </script>
+
 </footer>
 </html>

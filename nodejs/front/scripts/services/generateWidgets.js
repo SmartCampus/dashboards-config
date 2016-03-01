@@ -23,7 +23,7 @@ var generate = (function () {
                     errorCB();
                 });
     },
-    widgetBoolean: function(position, idWanted, name, successCB, errorCB) {
+    widgetBoolean: function(position, idWanted, category, successCB, errorCB) {
             $.post(genServer+widgetGen,
                 {
                     job : "generateBoolean",
@@ -31,7 +31,7 @@ var generate = (function () {
                     {
                         id: idWanted,
                         position: position,
-                        boolName:name
+                        category:category
                     }
                 })
                 .done(function (data) {

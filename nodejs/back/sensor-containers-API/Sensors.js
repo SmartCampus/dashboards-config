@@ -333,7 +333,7 @@ function initSensors(data) {
     var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis"], [], []);
     var office445 = new SensorContainer("Office 445", ["445"], [], []);
     var office443 = new SensorContainer("Office 443", ["443"], [], []);
-    var office444 = new SensorContainer("Office 444", ["444"], [""], []);
+    var office444 = new SensorContainer("Office 444", ["444"], [], []);
     // TODO : Solution très sale mais pour les capteurs virtuels y a juste aucune norme !!!
     var virtualSensors = new SensorContainer("Virtual Sensors", ["2V", "NUMBER", "3V", "TEMP_CAMPUS"], [], []);
     var root = new SensorContainer("Root", [], [], []);
@@ -358,8 +358,6 @@ function initSensors(data) {
                 var filter = new RegExp(containers[iterator].getFilters()[filters], "i");
                 var name = jsonContainers[i].name;
                 if(filter.test(jsonContainers[i].name) && (sensorList[name] !== undefined) ) {
-                 //   containers[iterator].getDirectSensors().push(sensorList[name]);
-                  //  containers[iterator].test();
                     containers[iterator].test2(sensorList[name]);
                 }
             }
@@ -426,7 +424,7 @@ function upgradeSensorsInformation(sensors) {
             sensor = new Sensor(mySensor.name, mySensor.displayName, mySensor.booleanTitle, mySensor.description ,mySensor.unit , mySensor.category, mySensor.kind);
         }
 
-        if(typeof sensor !== "undefined") {;
+        if(typeof sensor !== "undefined") {
             sensorList[sensorName] = sensor.toJson();
         }
     }
@@ -466,7 +464,7 @@ function initContainers() {
     var modalisCorridor = new SensorContainer("Modalis corridor", ["Modalis"], [], []);
     var office445 = new SensorContainer("Office 445", ["445"], [], []);
     var office443 = new SensorContainer("Office 443", ["443"], [], []);
-    var office444 = new SensorContainer("Office 444", ["444"], [""], []);
+    var office444 = new SensorContainer("Office 444", ["444"], [], []);
     // TODO : Solution très sale mais pour les capteurs virtuels y a juste aucune norme !!!
     var virtualSensors = new SensorContainer("Virtual Sensors", ["2V", "NUMBER", "3V", "TEMP_CAMPUS"], [], []);
     var root = new SensorContainer("Root", [], [], []);
