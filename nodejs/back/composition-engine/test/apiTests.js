@@ -46,6 +46,90 @@ describe("composition engine API", function () {
 
 		var compositionDataPath = "/composition_data";
 
+		it("should respond with a 400 flag while sending invalid input", function (done) {
+			async.parallel([
+				function (callback) {
+					request(app)
+						.post(compositionDataPath)
+						.send("This is not the expected JSON.")
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.invalidJson);
+						})
+						.end(callback);
+				},
+				function (callback) {
+					request(app)
+						.post(compositionDataPath)
+						.send({
+							needs: [],
+							sensros: []
+						})
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.invalidJson);
+						})
+						.end(callback);
+				},
+				function (callback) {
+					request(app)
+						.post(compositionDataPath)
+						.send({
+							nreds: [],
+							sensors: []
+						})
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.invalidJson);
+						})
+						.end(callback);
+				},
+				function (callback) {	
+					request(app)
+						.post(compositionDataPath)
+						.send({
+							needs: "This is not an array.",
+							sensors: []
+						})
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.invalidJson);
+						})
+						.end(callback);
+				},
+				function (callback) {	
+					request(app)
+						.post(compositionDataPath)
+						.send({
+							needs: [],
+							sensors: "This is not an array."
+						})
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.invalidJson);
+						})
+						.end(callback);
+				},
+				function (callback) {
+					request(app)
+						.post(compositionDataPath)
+						.send({
+							needs: [ "This is not a sensor.", "This isn't a sensor either."],
+							sensors: [1, 2]
+						})
+						.expect(400)
+						.expect(function (response) {
+							assert(response.body.invalidJson);
+						})
+						.end(callback);
+				}
+			], function join (err, results) {
+				logger.debug(err);
+				assert(!err);
+				done();
+			});
+		});
+
 		function testCompose(needs, sensors, expectedNeeds, checkAccept, expectedWidgets, strictly, callback) {
 			request(app)
 				.post(compositionDataPath)
@@ -78,8 +162,6 @@ describe("composition engine API", function () {
 				})
 				.end(callback);
 		}
-
-		// TODO error cases
 
 		it("should get both grouped and not grouped needs", function (done) {
 			testCompose([PATTERNS], [1], [DATA_OVER_TIME, COMPARISONS, RELATIONSHIPS],
