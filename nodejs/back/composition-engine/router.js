@@ -36,7 +36,8 @@ var router = require("express").Router(),
  */
 router.post("/composition_data", function (req, res) {
 	var needs = req.body.needs, sensors = req.body.sensors;
-
+	logger.debug(needs);
+	logger.debug(sensors);
 	if (!checkCompositionData(needs, sensors)) {
 		res.status(400).send({ "invalidJson": true });
 	}

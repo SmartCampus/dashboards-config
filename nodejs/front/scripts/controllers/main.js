@@ -2,9 +2,9 @@ var sensors; //This array contains all the sensors we have
 
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 //2 versions bc easier for now, even if not really useful...
-
-var needsOrigin = [{name: "Comparison", "image":"comparison.png"}, {name: "Location", "image":"location.png"}, {name: "Pattern", "image":"pattern.png"}, {name: "See Status", "image":"see status.png"}, {name: "Overtime", "image":"overtime.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Hierarchy", "image":"hierarchy.png"}, {name: "Proportion", "image":"proportion.png"}, {name: "Range", "image":"range.png"}];
-var needsSimpleOrigin = ["Comparison", "Location", "Pattern", "See Status", "Overtime", "Relationships", "Hierarchy", "Proportion", "Summarize"];
+"Part to a whole"
+var needsOrigin = [{name: "Distribution", "image":"distribution.png"}, {name: "Part to a whole", "image":"part_to_a_whole.png"}, {name: "Comparisons", "image":"comparisons.png"}, {name: "Location", "image":"location.png"}, {name: "Patterns", "image":"patterns.png"}, {name: "State", "image":"state.png"}, {name: "Data over time", "image":"overtime.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Hierarchy", "image":"hierarchy.png"}, {name: "Proportions", "image":"proportions.png"}, {name: "Range", "image":"range.png"}];
+var needsSimpleOrigin = ["Distribution", "Part to a whole", "Comparisons", "Location", "Patterns", "State", "Data over time", "Relationships", "Hierarchy", "Proportions", "Summarize"];
 var hierarchyRoute = "container/CampusSophiaTech/child";
 var listSensorsRoute = "sensors?container=Root";
 var needs = [];
@@ -329,7 +329,7 @@ var deleteWidgetContent = function (widgetId) {
 
 function addAnswerNeeds(droppableId, answer) {
     answer.forEach(function(needAnswer) {
-       needAnswer.image = needAnswer.name+'.png';
+       //needAnswer.image = needAnswer.name+'.png';
     });
     needs[droppableId] = [];
 
@@ -496,56 +496,66 @@ function dropIt(event, ui) {
     var aTemporaryArrayOfNeeds = [];
     var draggableId = ui.draggable.attr("id");
     var droppableId = $(self).attr("id");
-    //This is if we talk about a visualization need
-    //It must exist, and it mustn't already be in the widget
-    if ($.inArray(draggableId, needsSimpleOrigin) > -1) {
-        if (!($.inArray(draggableId, allTheNeeds[droppableId].needs) > -1)) {
+//Checking if it's already in the box for the sensors (more complicated than need)
+    var alreadyHere = false;
+    allTheNeeds[droppableId].sensors.forEach(function(completeSensor) {
+        if (completeSensor.name == draggableId) {
+            alreadyHere = true;
+            return false;
+        }
+    });
+    //If it's already in the box as a need
+    if (($.inArray(draggableId, allTheNeeds[droppableId].needs) > -1)) {
+        alreadyHere = true;
+    }
+    //This need or sensor mustn't already be in the box !
+    if (!alreadyHere) {
+        var isANeed = false;
+        if ($.inArray(draggableId, needsSimpleOrigin) > -1) {
+            isANeed = true;
+        }
+        if (isANeed) {
             allTheNeeds[droppableId].needs.forEach(function (aNeed) {
                 aTemporaryArrayOfNeeds.push(aNeed);
             });
             aTemporaryArrayOfNeeds.push(draggableId);
-            expression.needList(aTemporaryArrayOfNeeds, function (answer) {
-                var tmpSensorList = [];
-                answer.forEach(function (oneSensorSet) {
-                    oneSensorSet.sensors.forEach(function (sensor) {
-                        tmpSensorList.push(sensor.name);
-                    })
-                });
-                $.post(mainServer + 'sensors/common/hierarchical', {
-                    "sensors": tmpSensorList
-                }).done(function (data) {
-                    //Resetting all the sensors data we have to get the new one
-                    buildings.splice(0, buildings.length);
-                    position = data;
-                    buildings = data.childContainer;
-                    sensorsBox[selectedBox] = data;
-                    goTo(navbar);
-                    navigation();
-                    addToBox($(self), draggableId, draggableId, null);
-                    allTheNeeds[droppableId].needs.push(draggableId);
-                    $("#generateButton").show().removeAttr("disabled");
-                    $("#dateButton").show();
-                })
-                    .fail(function (data) {
-                        console.log(data);
-                    });
-            }, function (error) {
-                if (error.status === 400) {
-                    console.log(error.responseText);
-                    alert("Sorry, if you put this intent into to widget, we cannot find any compatible sensor. ");
-                }
-            });
         }
-    }
-    else {//Means it's a sensor
-        var alreadyHere = false;
-        allTheNeeds[droppableId].sensors.forEach(function(completeSensor) {
-            if (completeSensor.name == draggableId) {
-                alreadyHere = true;
-                return false;
+
+        expression.compose(aTemporaryArrayOfNeeds, allTheNeeds[droppableId].sensors, function (answer) {
+            console.log(answer);
+    /*        var tmpSensorList = [];
+            answer.forEach(function (oneSensorSet) {
+                oneSensorSet.sensors.forEach(function (sensor) {
+                    tmpSensorList.push(sensor.name);
+                })
+            });
+                    $.post(mainServer + 'sensors/common/hierarchical', {
+                        "sensors": tmpSensorList
+                    }).done(function (data) {
+                            //Resetting all the sensors data we have to get the new one
+                            buildings.splice(0, buildings.length);
+                            position = data;
+                            buildings = data.childContainer;
+                            sensorsBox[selectedBox] = data;
+                            goTo(navbar);
+                            navigation();
+                            addToBox($(self), draggableId, draggableId, null);
+                            allTheNeeds[droppableId].needs.push(draggableId);
+                            $("#generateButton").show().removeAttr("disabled");
+                            $("#dateButton").show();
+                        })
+                        .fail(function (data) {
+                            console.log(data);
+                        });
+                }, function (error) {
+                    if (error.status === 400) {
+                        console.log(error.responseText);
+                        alert("Sorry, if you put this intent into to widget, we cannot find any compatible sensor. ");
+                    }
+                });
             }
-        });
-        if (!alreadyHere) { //Always in this
+
+    else {//Means it's a sensor
             var temporarySensorsList = [];
             $.get(mainServer + "sensor/" + draggableId + "/enhanced")
                 .done(function (enhancedSensor) {
@@ -563,11 +573,12 @@ function dropIt(event, ui) {
                         $("#generateButton").removeAttr("disabled");
                         $("#dateButton").show();
                         allTheNeeds[droppableId].sensors.push(enhancedSensor);
+                        */
                     }, function (error) {
                         console.log(error);
                     });
-                });
-        }
+      //          });
+
     }
 }
 
