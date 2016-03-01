@@ -36,20 +36,24 @@ function compose(needs, sensors, callback) {
 	});
 }
 
+// when not grouped, should allow grouped possibilities
 function findCompatibleNeeds(needs, grouped) {
-	var widget, functions, compatibleNeeds = new Set();
+	var widget, functions = [], compatibleNeeds = new Set();
 
 	for (var i in WIDGETS) {
 		widget = WIDGETS[i];
-		if (widgetContainsNeeds(widget, needs, grouped)) {
-			functions = grouped ? widget.whenGroupedFunctions : widget.functions; 
-			functions.forEach(function (f) {
-				if (needs.indexOf(f) === -1) {
-					compatibleNeeds.add(f);
-				}
-			});
+		if (!grouped && widgetContainsNeeds(widget, needs, false)) {
+			functions = functions.concat(widget.functions);
+		}
+		if (widgetContainsNeeds(widget, needs, true)) {
+			functions = functions.concat(widget.whenGroupedFunctions);
 		}
 	}
+	functions.forEach(function (f) {
+		if (needs.indexOf(f) === -1) {
+			compatibleNeeds.add(f);
+		}
+	});
 	return compatibleNeeds;
 }
 

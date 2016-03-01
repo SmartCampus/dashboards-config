@@ -66,8 +66,8 @@ describe("composition engine", function () {
 
 		function testCompose(needs, sensors, expectedNeeds, expectedWidgets, strictly, callback) {
 			engine.compose(needs, sensors, function (err, result) {
-				// logger.debug("result.needs:", result.needs);
-				// logger.debug("expected needs:", expectedNeeds);
+				logger.debug("result.needs:", result.needs);
+				logger.debug("expected needs:", expectedNeeds);
 				// logger.debug("result.widgets:", result.widgets);
 				assert(!err);
 				assert(result.needs.length >= expectedNeeds.length);
@@ -86,6 +86,16 @@ describe("composition engine", function () {
 				callback();
 			});
 		}
+
+		it("should get both grouped and not grouped needs", function (done) {
+			testCompose([PATTERNS], [1], [DATA_OVER_TIME, COMPARISONS, RELATIONSHIPS], [LINE],
+				false, done);
+		});
+
+		it("should get only grouped needs", function (done) {
+			testCompose([PATTERNS, DATA_OVER_TIME], [1, 2], [COMPARISONS, RELATIONSHIPS], [LINE],
+				false, done);
+		});
 
 		function testWidgetNeedsRec(inputNeeds, ouputNeeds, sensors, expectedWidget, callback) {
 			async.each(ouputNeeds, function (need, cb) {
