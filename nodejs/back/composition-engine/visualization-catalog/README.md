@@ -2,7 +2,7 @@
 
 The visualization catalog mock matches graphs with visualization functions and number of allowed data sources.
 
-The following visualization functions are implemented: `"Comparisons"`, `"Data over time"`, `"Proportions"`, `"Status"`, `"Relationships"`, `"Distribution"`, `"Location"`, `"Part to a whole"` and `"Patterns"`.
+The following visualization functions are implemented: `"Comparisons"`, `"Data over time"`, `"Proportions"`, `"State"`, `"Relationships"`, `"Distribution"`, `"Location"`, `"Part to a whole"` and `"Patterns"`.
 
 The following charts are implemented: `"Line Graph"`, `"Bar Chart"`, `"Pie Chart"`, `"Scatterplot"`, `"Dot Map"`, `"Boolean"` and `"Line and Bar Chart"`.
 
@@ -66,3 +66,13 @@ The mock has to fullfill the following requirements:
  9. Distribution, Patterns, Data over time, Comparisons and Relationships functions with several data sources matches Line and Bar Chart as first result.
 
  This specification is guaranted by integration tests in `test/mockTest.js` file.
+
+## Intallation
+
+At the service root, run `npm install`, root privileges might be required depending on your operating system.
+
+Run `node app.js` at the service root to launch the service.
+
+## Tests
+
+Run `mocha` to launch the test suites.
