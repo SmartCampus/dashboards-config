@@ -440,8 +440,6 @@ var addAWidget = function () {
     maxOfWidgets += 1;
 };
 
-
-
 /**
  * Remove a widget box.
  *
@@ -754,23 +752,6 @@ function addNeeds(boxIndex) {
     });
 }
 
-var addAWidget = function () {
-    $.get(mainServer + hierarchyRoute)
-        .done(function (data) {
-            sensorsBox.push(data);
-        });
-
-    allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
-    needs.push(needsOrigin);
-    sensorsBox.push(sensors);
-    addTableRow(maxOfWidgets);
-
-    $("#generateButton").show().attr("disabled", "disabled");
-    $("#dateButton").show();
-    $("#dashboardNameForm").hide();
-
-    maxOfWidgets += 1;
-};
 
 ////////////////Submit button for the form /////////////
 var dashboardNameForm = document.getElementById('dashboardNameForm');
@@ -885,23 +866,11 @@ var declareNeeds = function () {
                 }
                 oneNeed.title = $("#widgetTitle" + index).val();
             });
-            //We only ask the composition server if what was asked is possible enough
-            expression.need(oneNeed, function (answer) {
-                oneNeed.graphType = answer;
-                //Better than cookie bc same behaviour throughout browsers.
-                if (index == allTheNeeds.length - 1) {
-                    localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
-                    //Once we got everything
-                    $("#dashboardNameForm").show();
-                    $("#generateButton").hide();
-                    $("#dateButton").hide();
-                }
-            }, function () {
-                $("#generateButton").show().attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...
-                $("#dateButton").show();
-            });
-
     });
+
+    $("#dashboardNameForm").show();
+    $("#generateButton").hide();
+    $("#dateButton").hide();
 };
 
 
@@ -924,6 +893,7 @@ var setDashboardName = function () {
         endDate = '2015-02-24 18:00:00';
     }
     localStorage.setItem("startDate", startDate);
+    localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
     localStorage.setItem("endDate", endDate);
 
     return true;
