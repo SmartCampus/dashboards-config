@@ -560,9 +560,8 @@ var addToBox = function(selfToAppend, draggableId, droppableId, isANeed) {
 };
 
 var removeFromBox = function(boxId, elementId) {
-    console.log('removing ', elementId, ' from ', boxId);
-    $("#"+boxId +" > #" + elementId).prev().remove();
-    $("#"+boxId +" > #" + elementId).remove();
+    $("#"+boxId +" > [id='"+elementId+"']").prev().remove();
+    $("#"+boxId +" > [id='"+elementId+"']").remove();
     var index = allTheNeeds[boxId].needs.indexOf(elementId);
     console.log('lindex tas vu : ', allTheNeeds[boxId].needs.indexOf(elementId));
     console.log(allTheNeeds[boxId].needs);
