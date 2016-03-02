@@ -45,8 +45,6 @@ var expression = (function () {
                 });
         },
         compose: function (needsList, sensorsList, successCB, errorCB) {
-            console.log(needsList);
-            console.log(sensorsList);
             $.post(needsServer + composition, {
                     needs: needsList,
                     sensors: sensorsList
