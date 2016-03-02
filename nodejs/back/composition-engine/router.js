@@ -63,6 +63,14 @@ router.post("/composition_data", function (req, res) {
 	}
 });
 
+/**
+ * Checks if the JSON send containing composition data is correct.
+ * 
+ * @param  Array 	needs   the "needs" JSON property that should be an array
+ *                        		of strings
+ * @param  Array 	sensors the "sensors" JSON property that should be an array
+ * @return Boolean     	    true if the data is correct, false otherwise
+ */
 function checkCompositionData(needs, sensors) {
 	if (!Array.isArray(needs) || (sensors && !Array.isArray(sensors))) {
 		return false;
@@ -75,6 +83,11 @@ function checkCompositionData(needs, sensors) {
 	return true;
 }
 
+/**
+ * Initialization function, calls the composition engine to initialize.
+ * 
+ * @param  {Function} 	callback 	the callback to call with an optional error
+ */
 router.init = function init(callback) {
 	engine.init(function (err) {
 		if (err) {
