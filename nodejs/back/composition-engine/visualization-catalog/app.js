@@ -1,13 +1,14 @@
 /**
- * @author Quentin Cornevin, Marc Karassev
+ * @author Marc Karassev
  */
 
 var express = require("express"),
     app = express(),
     bodyParser = require('body-parser'),
     router = require("./router"),
-    logger = require("./logger")
-    port = 8084;
+    logger = require("./logger");
+
+var PORT = 8085;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
@@ -32,23 +33,8 @@ app.use(function (req, res, next) {
 
 app.use("/", router);
 
-/**
- * Initialization function, calls the router to initialize.
- * Emits a "ready" event when done.
- */
-(function init() {
-    router.init(function (err) {
-        if (err) {
-            logger.error(err);
-            exit(1);
-        }
-        else {
-            app.listen(port);
-            logger.info("Composition engine service is now listening on port", port + ".");
-            app.emit("ready");
-        }
-    });
-})();
+app.listen(PORT);
+logger.info('Visualisation catalogue is now listening on port', PORT, '.');
 
 // Exports
 

@@ -2,51 +2,48 @@
 
 This service is responsible for matching needs with sensors and widget types.
 
-The following needs are implemented: `"Comparison"`, `"Overtime"`, `"Proportion"`, `"See Status"`, `"Relationships"`, `"Hierarchy"`, `"Summarize"` and `"Pattern"`.
+The following needs are implemented: `"Comparisons"`, `"Data over time"`, `"Proportions"`, `"State"`, `"Relationships"`, `"Distribution"`, `"Part to a whole"`, `"Location"` and `"Patterns"`.
 
 Existing widget type names: `"line"`, `"column"`, `"mix"`, `"pieChart"`, `"boolean"` and `"scatterplot"`.
 
-Domain reference: http://datavizcatalogue.com/
+Domain reference: [datavizcatalogue][http://datavizcatalogue.com/]
 
-Evaluation: https://docs.google.com/document/d/1BCv7G4Lhh80qvGd66ChQFr6Q3Vc5ot1lKM6WLGShIpM/pub
+See Visualization Catalog mock [README][visualization-catolog/README.md] for more information.
 
 ## API
 
-### POST /needSet
+### POST /composition_data
 
-Returns matching sensor categories to given visualization needs.
+Returns generation possibilities according to given composition data.
 
-Expects the request body to be set to a JSON array of strings representing needs.
-
-Answers with an array of sensor sets (categories) matching the given needs. Sensor set format:
-
+Composition data is composed by a set of visualization needs and a set of sensors objects. Example:
 ```
 {
- "set": "category_name",
- "sensors": [{sensor object}]
+	"needs": 	["Comparisons", "Data over time"],
+	"sensors": 	[{sensor object 1}, {sensor object 2}]
 }
 ```
 
-Sensor objects are defined in the sensor container API.
+Generation possibilities is an object containing a set of compatible
+visualization needs, a boolean pointing out if other data sources can be added and a set of compatible widgets. When no matching widget can be found, the sets are returned empty. Example:
+```
+{
+	"needs": 	["Patters", "Relationships", "Distribution"],
+	"acceptMoreSensors": true,
+	"widgets": 	["line", "bar"]
+}
+```
 
-Might send 400 status codes in case of incorrect needs or incompatible needs.
+Sensor objects are defined by the sensor containers API service.
 
-### POST /sensorSet
+Can set 400 HTTP status code in case of bad formatted input data.
 
-Handles POST requests on /sensorSet path. Returns matching needs to  the given sensors.
+## Intallation
 
-Expects the request body to be set to a JSON array of sensor objetcs. Sensor objects are defined in the sensor container API.
+At the service root, run `npm install`, root privileges might be required depending on your operating system.
 
-Answers with an array of strings representing needs matching the given sensors.
+Run `node app.js` at the service root to launch the service.
 
-Might send 400 status codes in case of invalid sensors or invalid sensors categories.
+## Tests
 
-### POST /expressNeeds
-
-Handles POST requests on /expressNeed path. Returns matching widget types to given visualization needs.
-
-Expects the request body to be set to a JSON array of strings representing needs.
-
-Answers with a widget type name.
-
-Might send 422 status codes in case of unprocessable inputs.
+Run `mocha` to launch the test suites.

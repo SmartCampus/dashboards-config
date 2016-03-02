@@ -12,10 +12,10 @@ var expression = (function () {
                     errorCB();
                 });
         },
-        needList: function(needsList, successCB, errorCB) {
+        needList: function (needsList, successCB, errorCB) {
             $.post(needsServer + needSet, {
-                needs:needsList
-            })
+                    needs: needsList
+                })
                 .done(function (data) {
                     if (data.length <= 0) {
                         console.log('no more sensors possible. must do stg');
@@ -28,9 +28,9 @@ var expression = (function () {
                     errorCB(data);
                 });
         },
-        sensorList: function(sensorsList, successCB, errorCB) {
+        sensorList: function (sensorsList, successCB, errorCB) {
             $.post(needsServer + sensorSet, {
-                    sensors:sensorsList
+                    sensors: sensorsList
                 })
                 .done(function (data) {
                     if (data.length <= 0) {
@@ -43,6 +43,20 @@ var expression = (function () {
                     console.log(data);
                     errorCB(data);
                 });
+        },
+        compose: function (needsList, sensorsList, successCB, errorCB) {
+            $.post(needsServer + composition, {
+                    needs: needsList,
+                    sensors: sensorsList
+                })
+                .done(function (data) {
+                    successCB(data);
+                })
+                .fail(function (data) {
+                    console.log(data);
+                    errorCB(data);
+                });
+
         }
         //POST sur needSet
     }
