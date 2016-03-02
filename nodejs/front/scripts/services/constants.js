@@ -9,6 +9,8 @@ needsServer = 'http://localhost:8084/';
 secondServer = 'http://localhost:8081/';
 
 widgetGen = 'generationRequest';
+composition = 'composition_data';
+
 
 needsQuestion = 'expressNeed';
 needSet = 'needSet';

@@ -68,6 +68,18 @@ body {
     height:300px;
     overflow-y:scroll;
     width:100%;
+    padding-top: 0px;
+}
+#list-captors {
+    display:none;
+}
+
+#dashboardNameForm {
+    display: none;
+}
+
+.filtersOptions {
+    display:none; background-color: #f5f5f5
 }
 
 .form-horizontal .control-label{
@@ -123,3 +135,7 @@ body {
 }
 
 
+#searchLabel, #filtersLabel {
+    font-weight: bold;
+    font-style: italic;
+}

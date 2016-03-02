@@ -1,7 +1,3 @@
-/**
- * Created by Garance on 05/01/2016.
- */
-
 var existingPositions = [];
 var glyphiconOk = "glyphicon glyphicon-ok";
 
@@ -11,7 +7,10 @@ var watchingArray = [{"dataSC": [], "counter": [], "mapData":{"sensors":[]}},{"d
     {"dataSC": [], "counter": [], "mapData":{"sensors":[]}},{"dataSC": [], "counter": [], "mapData":{"sensors":[]}}];
 
 
-////////////////////////////// Generic function to fire in case of server error ///////////////////////////////////////
+//=======================================
+// Generic function to fire in case of server error
+//=======================================
+
 var errorOccurred = function () {
     document.getElementById("errorOccurred").className = "row text-center show";
     document.getElementById("loadingImg").className = "hidden";
@@ -19,8 +18,10 @@ var errorOccurred = function () {
 };
 
 
+//=======================================
+// Retrieving the needs stored from previous page
+//=======================================
 
-////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
 var allWidgets = JSON.parse(localStorage.getItem("widgetsDescription"));
 
 
@@ -39,7 +40,10 @@ if (localStorage.getItem("startDate") !== null && localStorage.getItem("endDate"
 }
 
 
-///////////////////////////// Success callback for data retrieving, for any kind of sensor ////////////////////////////
+//=======================================
+// Success callback for data retrieving, for any kind of sensor
+//=======================================
+
 var sensorDataRetrievingSuccess = function (data, sensor, index) {
     var $thisSensor = $("#loadingSensor"+sensor.name+index);
     $thisSensor.find(".loadingImg").hide();
@@ -94,7 +98,7 @@ var finishedLoading = function () {
     }
     else {
         document.getElementById("loadingImg").className = "hidden";
-        a();
+        dragWidget();
     }
 };
 
@@ -261,7 +265,12 @@ var layoutChosen = function (layoutName, layoutAnswer) {
 
 };
 
-var a = function () {
+
+//=======================================
+// Make widget draggable and responsive to layout
+//=======================================
+
+var dragWidget = function () {
 
     $('.apc_column--content').droppable({
         drop: function(event, ui)
