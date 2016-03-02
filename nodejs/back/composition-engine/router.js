@@ -61,7 +61,7 @@ router.post("/composition_data", function (req, res) {
 });
 
 function checkCompositionData(needs, sensors) {
-	if (!Array.isArray(needs) || !Array.isArray(sensors)) {
+	if (!Array.isArray(needs) || (sensors && !Array.isArray(sensors))) {
 		return false;
 	}
 	for (var i in needs) {

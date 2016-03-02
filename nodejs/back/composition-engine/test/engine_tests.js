@@ -100,15 +100,15 @@ describe("composition engine", function () {
 				{ expected: true }, [LINE], false, done);
 		});
 
-		it.only("should accept more sensors", function (done) {
+		it("should accept more sensors", function (done) {
 			testCompose([PATTERNS], [1], [], { expected: true }, [], false, function () {
 				testCompose([PATTERNS], [], [], { expected: true }, [], false, done);
 			});
-		})
+		});
 
 		it("should not accept more sensors", function (done) {
 			testCompose([PART_TO_A_WHOLE], [1], [], { expected: false }, [], false, done);
-		})
+		});
 
 		function testWidgetNeedsRec(inputNeeds, ouputNeeds, sensors, expectedWidget, callback) {
 			async.each(ouputNeeds, function (need, cb) {
