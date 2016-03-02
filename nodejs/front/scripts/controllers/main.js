@@ -564,6 +564,8 @@ var removeFromBox = function(boxId, elementId) {
     $("#"+boxId +" > #" + elementId).prev().remove();
     $("#"+boxId +" > #" + elementId).remove();
     var index = allTheNeeds[boxId].needs.indexOf(elementId);
+    console.log('lindex tas vu : ', allTheNeeds[boxId].needs.indexOf(elementId));
+    console.log(allTheNeeds[boxId].needs);
     if (index > -1) { //then it's a need we must remove !
         allTheNeeds[boxId].needs.splice(index, 1);
     }
@@ -612,7 +614,6 @@ var declareNeeds = function () {
             allTheNeeds.splice(i, 1);
         }
     }
-
     allTheNeeds.forEach(function (oneNeed, index) {
             oneNeed.sensors.forEach(function (sensor) {
                 if ($("#select" + sensor.name + " option:selected", "#" + index).text() != 'raw') {
@@ -620,8 +621,6 @@ var declareNeeds = function () {
                 }
                 oneNeed.title = $("#widgetTitle" + index).val();
             });
-
-
             //We only ask the composition server if what was asked is possible enough
             expression.need(oneNeed, function (answer) {
                 oneNeed.graphType = answer;
@@ -632,7 +631,6 @@ var declareNeeds = function () {
                     $("#dashboardNameForm").show();
                     $("#generateButton").hide();
                     $("#dateButton").hide();
-
                 }
             }, function () {
                 $("#generateButton").show().attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...
