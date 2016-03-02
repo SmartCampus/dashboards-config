@@ -48,29 +48,6 @@ describe("composition engine API", function () {
 
 		it("should respond with a 400 flag while sending invalid input", function (done) {
 			async.parallel([
-				function (callback) {
-					request(app)
-						.post(compositionDataPath)
-						.send("This is not the expected JSON.")
-						.expect(400)
-						.expect(function (response) {
-							assert(response.body.invalidJson);
-						})
-						.end(callback);
-				},
-				function (callback) {
-					request(app)
-						.post(compositionDataPath)
-						.send({
-							nreds: [],
-							sensors: []
-						})
-						.expect(400)
-						.expect(function (response) {
-							assert(response.body.invalidJson);
-						})
-						.end(callback);
-				},
 				function (callback) {	
 					request(app)
 						.post(compositionDataPath)
@@ -152,6 +129,10 @@ describe("composition engine API", function () {
 
 		it("should work when sending undefined instead of sensors", function (done) {
 			testCompose([PATTERNS], undefined, [DATA_OVER_TIME], null, [LINE], false, done);
+		})
+
+		it("should work when sending undefined instead of needs", function (done) {
+			testCompose(undefined, [1], [DATA_OVER_TIME], null, [LINE], false, done);
 		})
 
 		it("should get both grouped and not grouped needs", function (done) {

@@ -45,6 +45,9 @@ router.post("/composition_data", function (req, res) {
 		if (!sensors) {
 			sensors = [];
 		}
+		if (!needs) {
+			needs = [];
+		}
 		engine.compose(needs, sensors, function (err, result) {
 			if (err) {
 				logger.warn(err);
@@ -72,7 +75,7 @@ router.post("/composition_data", function (req, res) {
  * @return Boolean     	    true if the data is correct, false otherwise
  */
 function checkCompositionData(needs, sensors) {
-	if (!Array.isArray(needs) || (sensors && !Array.isArray(sensors))) {
+	if ((needs && !Array.isArray(needs)) || (sensors && !Array.isArray(sensors))) {
 		return false;
 	}
 	for (var i in needs) {
