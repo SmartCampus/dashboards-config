@@ -32,11 +32,14 @@ app.use(function (req, res, next) {
 
 app.use("/", router);
 
+/**
+ * Initialization function, calls the router to initialize.
+ * Emits a "ready" event when done.
+ */
 (function init() {
     router.init(function (err) {
         if (err) {
             logger.error(err);
-            //app.cleanBeforeExit();
             exit(1);
         }
         else {

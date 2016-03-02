@@ -92,6 +92,28 @@ var CHARTS = {
 
 // Functions
 
+/**
+ * Returns matching charts according to given requirements.
+ * The result is an array of charts sorted from the most matching to the less one
+ * according to a rating criteria, ex:
+ * 	 [
+ *  	 {
+ *   		"name": "Line Graph",
+ *     		"rating": 4
+ *       },
+ *       {
+ *       	"name": "Dot Map",
+ *        	"rating": 5
+ *       }
+ *       ...
+ *   ]
+ * 
+ * @param  {Array}   	requiredFunctions 	a list of required visualization functions
+ * @param  {Boolean} 	grouped           	whether the charts have to handle multiple
+ *                                       		data sources or not
+ * @param  {Function} 	callback          	the callback function to call with error
+ *                                        		and result parameters
+ */
 function getChartsMatchingRequirements(requiredFunctions, grouped, callback) {
 	var chart, chartsWithRatings = [], functions;
 
