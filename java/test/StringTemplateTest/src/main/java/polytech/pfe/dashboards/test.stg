@@ -1,7 +1,0 @@
-templateExample(param) ::= <<
-This is a template with the following param: (<param>)
->>
-
-mySecondTemplate(secondParam, YetAnotherOne) ::= <<
-This is another template in the same file ! A param is <secondParam>, but You could also change $YetAnotherOne$ if you wanted !
->>
