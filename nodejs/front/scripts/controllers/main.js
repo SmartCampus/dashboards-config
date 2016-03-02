@@ -889,8 +889,8 @@ var declareNeeds = function () {
 var setDashboardName = function () {
     localStorage.setItem("dashboardTitle", $("#dashboardName").val());
     if (typeof(startDate) == 'undefined' || typeof(endDate) == 'undefined') {
-        startDate = '2015-01-01 8:00:00';
-        endDate = '2015-02-24 18:00:00';
+        startDate = '2016-01-01 8:00:00';
+        endDate = '2016-02-24 18:00:00';
     }
     localStorage.setItem("startDate", startDate);
     localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
