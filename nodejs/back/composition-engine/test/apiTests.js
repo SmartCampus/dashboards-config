@@ -62,19 +62,6 @@ describe("composition engine API", function () {
 					request(app)
 						.post(compositionDataPath)
 						.send({
-							needs: [],
-							sensros: []
-						})
-						.expect(400)
-						.expect(function (response) {
-							assert(response.body.invalidJson);
-						})
-						.end(callback);
-				},
-				function (callback) {
-					request(app)
-						.post(compositionDataPath)
-						.send({
 							nreds: [],
 							sensors: []
 						})
@@ -162,6 +149,10 @@ describe("composition engine API", function () {
 				})
 				.end(callback);
 		}
+
+		it("should work when sending undefined instead of sensors", function (done) {
+			testCompose([PATTERNS], undefined, [DATA_OVER_TIME], null, [LINE], false, done);
+		})
 
 		it("should get both grouped and not grouped needs", function (done) {
 			testCompose([PATTERNS], [1], [DATA_OVER_TIME, COMPARISONS, RELATIONSHIPS],
