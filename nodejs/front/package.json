@@ -1,6 +1,6 @@
 {
   "name": "PFE-Dashboards-SmartCampus-frontend",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "https://drive.google.com/file/d/0B2zMH_7SErjuSUhNWW1rZnAzLUk/view?usp=sharing",
   "author": "Polytech Nice-Sophia SI - PFE 2015-2016 - groupe 9",
   "contributors": [
@@ -29,8 +29,9 @@
     "url": "https://atlas.i3s.unice.fr/jira/secure/RapidBoard.jspa?rapidView=246&view=planning.nodetail"
   },
   "dependencies": {
+    "express": "^4.13.3"
   },
   "devDependencies": {},
   "private": true,
-  "license": "no license"
+  "license": "UNLICENSED"
 }

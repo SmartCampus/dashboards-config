@@ -1,6 +1,6 @@
 {
   "name": "PFE-Dashboards-SmartCampus-dashboard-generator",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "https://drive.google.com/file/d/0B2zMH_7SErjuSUhNWW1rZnAzLUk/view?usp=sharing",
   "author": "Polytech Nice-Sophia SI - PFE 2015-2016 - groupe 9",
   "contributors": [
@@ -29,11 +29,10 @@
     "url": "https://atlas.i3s.unice.fr/jira/secure/RapidBoard.jspa?rapidView=246&view=planning.nodetail"
   },
   "dependencies": {
-    "handlebars": "^4.0.5",
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
     "mustache": "^2.2.0"
   },
-  "devDependencies": {
-  },
   "private": true,
-  "license": "no license"
+  "license": "UNLICENSED"
 }

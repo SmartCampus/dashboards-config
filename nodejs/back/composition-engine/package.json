@@ -1,6 +1,6 @@
 {
   "name": "PFE-Dashboards-SmartCampus-composition-engine",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "https://drive.google.com/file/d/0B2zMH_7SErjuSUhNWW1rZnAzLUk/view?usp=sharing",
   "author": "Polytech Nice-Sophia SI - PFE 2015-2016 - groupe 9",
   "contributors": [
@@ -30,9 +30,14 @@
   },
   "dependencies": {
     "async": "^1.5.2",
-    "body-parser": "^1.14.1"
+    "body-parser": "^1.14.1",
+    "express": "^4.13.3",
+    "winston": "^2.1.1"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "^2.3.4",
+    "supertest": "^1.1.0"
+  },
   "private": true,
-  "license": "no license"
+  "license": "UNLICENSED"
 }
