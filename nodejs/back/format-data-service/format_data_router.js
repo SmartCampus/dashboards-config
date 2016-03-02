@@ -80,7 +80,12 @@ router.get("/sensor/:sensorId/data/last", function(req, res) {
  * This route allow the user to have all the sensors sorted in a hierarchical way.
  */
 router.post("/sensors/common/hierarchical", function(req, res) {
-    var givenSensor = req.body.sensors;
+    var givenSensor;
+    if(req.body.sensors) {
+        givenSensor = req.body.sensors;
+    } else {
+        givenSensor = [];
+    }
     request_handler.getContainersChild("CampusSophiaTech", function(response) {
         processor.sortHierarchicalSensor(givenSensor, response, function(response, err) {
             if(err) {
