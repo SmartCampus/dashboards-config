@@ -4,11 +4,11 @@ echo "you should have npm and bower installed"
 
 parent_path=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )
 
+npm install -g forever
+npm install -g bower
+
 cd "$parent_path"
-npm install
-cd back
-npm install
-cd format-data-service
+cd back/format-data-service
 npm install
 cd ../sensor-containers-API
 npm install
@@ -16,6 +16,8 @@ cd ../dashboard-generator
 npm install
 cd ../composition-engine
 npm install
-cd ../../front
+cd visualization-catalog
+npm install
+cd ../../../front
 npm install
 bower install --allow-root

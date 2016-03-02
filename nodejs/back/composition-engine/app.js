@@ -40,7 +40,7 @@ app.use("/", router);
     router.init(function (err) {
         if (err) {
             logger.error(err);
-            exit(1);
+            process.exit(1);
         }
         else {
             app.listen(port);
