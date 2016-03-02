@@ -22,22 +22,22 @@ var errorOccurred = function () {
 
 ////////////////////////////// Retrieving the needs stored from previous page //////////////////////////////////////////
 var allWidgets = JSON.parse(localStorage.getItem("widgetsDescription"));
-console.log(allWidgets);
-beginDate = localStorage.getItem("startDate");
-endDate = localStorage.getItem("endDate");
+
 
 localStorage.removeItem("widgetsDescription");
 if (allWidgets === null) {
     errorOccurred()
 }
 if (localStorage.getItem("dashboardTitle") !== null) {
-    $("#theGeneralTitle").html(localStorage.getItem("dashboardTitle"));
+    $("#generalTitle").append('<span>'+localStorage.getItem("dashboardTitle")+'</span>');
 } //else we just don't write any title
 
-if (beginDate == 'undefined' || endDate == 'undefined') {
-    beginDate = '2015-08-21 8:00:11';
-    endDate = '2015-10-21 18:00:11';
+if (localStorage.getItem("startDate") !== null && localStorage.getItem("endDate") !== null) {
+    beginDate = localStorage.getItem("startDate");
+    endDate = localStorage.getItem("endDate");
+    $("#underTitle").append("From " + moment(beginDate).format("dddd, MMMM Do YYYY, h:mm a") + " to " + moment(endDate).format("dddd, MMMM Do YYYY, h:mm a"));
 }
+
 
 ///////////////////////////// Success callback for data retrieving, for any kind of sensor ////////////////////////////
 var sensorDataRetrievingSuccess = function (data, sensor, index) {
@@ -168,7 +168,7 @@ var goDrawPie = function (sensor, index) {
     var $thisWidget = $("#loadingNeed"+index);
     $thisWidget.find(".loadingImg").hide();
     $thisWidget.find(".glyphicon").show();
-    generate.widgetPie(existingPositions[index], allWidgets[index].title, "watchingArray[index].dataSC", function (data) {
+    generate.widgetPie(existingPositions[index], sensor.displayName, "watchingArray[index].dataSC", function (data) {
         $thisWidget.hide();
         eval(data);
         finishedLoading();

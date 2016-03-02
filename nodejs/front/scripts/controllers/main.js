@@ -38,7 +38,6 @@ function initWindowsData() {
 
     for (var i = 0; i < maxOfWidgets; i++) {
         allTheNeeds[i] = {"needs": [], "sensors": [], "graphType": ""};
-        addTableRow(i);
     }
 
     position = sensors;
@@ -47,6 +46,10 @@ function initWindowsData() {
     createNeeds(0);
     navigation();
     sensorsBox.push(sensors);
+
+    for (var i = 0; i < maxOfWidgets; i++) {
+        addTableRow(i);
+    }
 
     $.get(secondServer + listSensorsRoute)
         .done(function (data) {
@@ -104,6 +107,15 @@ function updateListSensors() {
             }
         });
     }
+
+    $(".draggableSensor").draggable({
+        helper: function (event) {
+            return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
+        },
+        revert: "invalid",
+        cursorAt: { bottom: 10, left: 60 }
+    });
+
     $('#search').keyup();
 }
 
@@ -120,9 +132,9 @@ function initListSensors() {
 
     $.each(myFilter,function(i){
         $myFiltersSensors.append(
-            "<label class=\"checkbox-inline\">" +
+            "<div class=\"col-md-4\"><label class=\"checkbox-inline\">" +
             "<input type=\"checkbox\" id=\""+myFilter[i]+"\" onclick=\"validate("+myFilter[i]+")\">"+myFilter[i]+
-            "</label>"
+            "</label></div>"
         );
     });
 
@@ -133,6 +145,14 @@ function initListSensors() {
             + listSensors[i].displayName
             + '</img> </div>'
         );
+    });
+
+    $(".draggableSensor").draggable({
+        helper: function (event) {
+            return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
+        },
+        revert: "invalid",
+        cursorAt: { bottom: 10, left: 60 }
     });
 
 }
@@ -158,36 +178,41 @@ $('#search').keyup(function() {
 var addTableRow = function (index) {
 
     $("#add-rows").append('' +
-        '<form class="form-inline text-left" id="widgetNameForm' + index + '" style="padding-bottom: 0.5em">' +
-        '<input class="form-control" id="widgetTitle' + index + '" placeholder="Your widget\'s name"> ' +
-        '</form>' +
-        '<div class="well col-md-10" id="'
-        + index
-        + '" style="min-height: 80px;"></div>'
+        '<form class="form-inline text-left" id="widgetNameForm' + index + '" style="padding-bottom: 0.5em">'
+        + '<input class="form-control" id="widgetTitle' + index + '" placeholder="Your widget\'s name"></form>'
+        + '<div class="well col-md-10" id="' + index + '" style="min-height: 80px;"></div>'
         + '<div class="col-md-2" id="deleteWidget' + index + '"> <br/>'
         + '<div class="btn btn-default" onclick="removeAWidget(' + index + ')"><span class="glyphicon glyphicon-trash">'
         + '</span></div></div>');
 
-    updateDisableBox();
+    updateDisableBox(index);
 };
 
-function updateDisableBox() {
+function updateDisableBox(index) {
+    selectedBox = index;
+
     $("#add-rows").find(" > div").each(function () {
         var id = $(this).attr('id');
-        if (id == selectedBox) {
-            $(this).css("border-color", "#0266C8");
-            $(this).css("border-width", "3px");
-            $("#" + id).droppable(
-                {
-                    drop: dropIt,
-                    disabled: false,
-                    activeClass: "myActiveDroppable"
-                }
-            );
-        } else {
-            $(this).css("border-color", "black");
-            $(this).css("border-width", "1px");
-            $("#" + id).droppable({drop: dropIt, disabled: true});
+        if(id.length > 2){
+        }else{
+            if (id == index) {
+                addAnswerNeeds(selectedBox, needs[selectedBox]);
+
+                $(this).css("border-color", "#0266C8");
+                $(this).css("border-width", "3px");
+                $("#" + id).droppable(
+                    {
+                        drop: dropIt,
+                        disabled: false,
+                        activeClass: "myActiveDroppable"
+                    }
+                );
+            } else {
+                $(this).css("border-color", "black");
+                $(this).css("border-width", "1px");
+
+                $("#" + id).droppable({drop: dropIt, disabled: true});
+            }
         }
     });
 };
@@ -195,39 +220,42 @@ function updateDisableBox() {
 
 // change box
 $("#add-rows").click(function (event) {
-
-    if(event.target.id.length > 2){
-        selectedBox = $(event.target).parent().attr('id');
+    if(event.target.id.indexOf('widgetTitle') != -1 || event.target.id.indexOf('widgetNameForm') != -1){
+        // do nothing
     }else{
-        selectedBox = event.target.id;
-    }
-
-    $("#add-rows").find(" > div").each(function () {
-        var id = $(this).attr('id');
-        if (id === selectedBox) {
-            addAnswerNeeds(selectedBox, needs[selectedBox]);
-            $(this).css("border-color", "#0266C8");
-            $(this).css("border-width", "3px");
-            $("#" + id).droppable(
-                {
-                    drop: dropIt,
-                    disabled: false,
-                    activeClass: "myActiveDroppable"
-                });
-            position = sensorsBox[selectedBox];
-            buildings = position.childContainer;
-            goTo(navbar);
-
-            navigation();
-        } else {
-            $(this).css("border-color", "black");
-            $(this).css("border-width", "1px");
-            $("#" + id).droppable({drop: dropIt, disabled: true});
+        if(event.target.id.length > 2){
+            selectedBox = $(event.target).parent().attr('id');
+        }else{
+            selectedBox = event.target.id;
         }
-    });
 
+        if(selectedBox !== "" && selectedBox != undefined) {
+            console.log("coucou");
+            $("#add-rows").find(" > div").each(function () {
+                var id = $(this).attr('id');
+                if (id === selectedBox) {
+                    addAnswerNeeds(selectedBox, needs[selectedBox]);
+                    $(this).css("border-color", "#0266C8");
+                    $(this).css("border-width", "3px");
+                    $("#" + id).droppable(
+                        {
+                            drop: dropIt,
+                            disabled: false,
+                            activeClass: "myActiveDroppable"
+                        });
+                    position = sensorsBox[selectedBox];
+                    buildings = position.childContainer;
+                    goTo(navbar);
 
-
+                    navigation();
+                } else {
+                    $(this).css("border-color", "black");
+                    $(this).css("border-width", "1px");
+                    $("#" + id).droppable({drop: dropIt, disabled: true});
+                }
+            });
+        }
+    }
 });
 
 
@@ -260,26 +288,32 @@ dashboardNameForm.onsubmit = function(e) {
 };
 /////////////////////////////////////// Removing a widget box //////////////////////////////////////////////////
 var removeAWidget = function (widgetId) {
-    var $addRowsDiv = $("#add-rows").find(" > div");
-    var domSize = $addRowsDiv.length;
+
     $('#' + widgetId).remove();
     $('#deleteWidget' + widgetId).remove();
     $('#widgetNameForm' + widgetId).remove();
-    maxOfWidgets -= 1;
-  //  sensorsBox[widgetId] = null;
-    sensorsBox.splice(widgetId, 1);
-    allTheNeeds.splice(widgetId, 1);
-    needs.splice(widgetId, 1);
+    //maxOfWidgets -= 1;
+    //  sensorsBox[widgetId] = null;
+    sensorsBox[widgetId] = null;
+    allTheNeeds[widgetId] = null;
+    needs[widgetId] = null;
 
     $("#generateButton").show().removeAttr("disabled");
     $("#dateButton").show();
     $("#dashboardNameForm").hide();
-    /* TODO :  Auto select an other box
-    for(var i = 0; i < sensorsBox.length; i++) {
-        if(sensorsBox[i] != null) {
 
+
+    if(selectedBox == widgetId){
+        for(var i = 0; i < allTheNeeds.length; i++){
+            if(allTheNeeds[i] != null){
+                updateDisableBox(i);
+                break;
+            }
         }
-    }**/
+    }else{
+        updateDisableBox(widgetId);
+    }
+
 
 };
 
@@ -295,10 +329,8 @@ var deleteWidgetContent = function (widgetId) {
 
 function addAnswerNeeds(droppableId, answer) {
     answer.forEach(function(needAnswer) {
-       console.log(needAnswer);
        needAnswer.image = needAnswer.name+'.png';
     });
-    console.log(answer);
     needs[droppableId] = [];
 
     needs[droppableId] = answer;
@@ -363,7 +395,7 @@ function navigation() {
             + buildings[i].amountOfSensors+"</span></div>"
     );
     }
-    $addCaptors.append( "<hr><div id='directSensors"+position.name.replace(/ /g,"_")+"'></div>");
+    $addCaptors.append( "<hr><div id='directSensors"+position.name.replace(/ /g,"_")+"' class='text-left'></div>");
     var $directSensorsPosition = $("#directSensors"+position.name.replace(/ /g,"_"));
 
     //Then, in position we check if there is any sensor
@@ -386,7 +418,7 @@ function navigation() {
 
     $(".draggableSensor").draggable({
         helper: function (event) {
-          return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
+            return $("<div style='cursor:-webkit-grabbing; cursor:-moz-grabbing;'  id='" + event.currentTarget.id + "'>" + event.currentTarget.innerHTML + "</div>");
         },
         revert: "invalid",
         cursorAt: { bottom: 10, left: 60 }
@@ -489,13 +521,7 @@ function dropIt(event, ui) {
                     sensorsBox[selectedBox] = data;
                     goTo(navbar);
                     navigation();
-                    var needSpan = $(document.createElement('span'));
-                    needSpan.attr("id", draggableId);
-                    needSpan.css('cursor', 'default');
-                    needSpan.html(draggableId);
-                    needSpan.appendTo($(self));
-                    br = $(document.createElement('br'));
-                    br.appendTo(needSpan);
+                    addToBox($(self), draggableId, draggableId, null);
                     allTheNeeds[droppableId].needs.push(draggableId);
                     $("#generateButton").show().removeAttr("disabled");
                     $("#dateButton").show();
@@ -512,9 +538,15 @@ function dropIt(event, ui) {
         }
     }
     else {//Means it's a sensor
-        if (!($.inArray(draggableId, allTheNeeds[droppableId].sensors) > -1)) {
+        var alreadyHere = false;
+        allTheNeeds[droppableId].sensors.forEach(function(completeSensor) {
+            if (completeSensor.name == draggableId) {
+                alreadyHere = true;
+                return false;
+            }
+        });
+        if (!alreadyHere) { //Always in this
             var temporarySensorsList = [];
-
             $.get(mainServer + "sensor/" + draggableId + "/enhanced")
                 .done(function (enhancedSensor) {
                     allTheNeeds[droppableId].sensors.forEach(function (aSensor) {
@@ -526,15 +558,9 @@ function dropIt(event, ui) {
                         enhancedSensor["salle"] = (position.name).replace(/ /g,"_");
                         needs[droppableId] = answer;
                         addAnswerNeeds(droppableId, answer);
-                        console.log(enhancedSensor);
                         //Here, we add a new sensor to the widget.
-                        var needSpan = $(document.createElement('span'));
-                        needSpan.attr("id", draggableId);
-                        needSpan.css('cursor', 'default');
-                        needSpan.html(enhancedSensor.displayName);
-                        needSpan.appendTo($(self));
-                        createAndAddPercentButton(($(self)).attr('id'), draggableId, droppableId);
-                        $("#generateButton").show().removeAttr("disabled");
+                        addToBox($(self), draggableId, enhancedSensor.displayName, droppableId);
+                        $("#generateButton").removeAttr("disabled");
                         $("#dateButton").show();
                         allTheNeeds[droppableId].sensors.push(enhancedSensor);
                     }, function (error) {
@@ -545,9 +571,50 @@ function dropIt(event, ui) {
     }
 }
 
+var addRemoveSign = function(selfToAppend, draggableId) {
+    var removeSign = $(document.createElement('span'));
+    removeSign.attr("class", "glyphicon glyphicon-remove-sign");
+    removeSign.attr("onclick", "removeFromBox(" +selfToAppend.attr('id')+", '"+draggableId+"')");
+    removeSign.css("cursor", "pointer");
+    removeSign.css("padding-right", "0.3em");
+    removeSign.appendTo(selfToAppend);
+};
+
+var addToBox = function(selfToAppend, draggableId, htmlContent, droppableId) {
+    addRemoveSign(selfToAppend, draggableId);
+    var needSpan = $(document.createElement('span'));
+    needSpan.attr("id", draggableId);
+    needSpan.css('cursor', 'default');
+    needSpan.text(htmlContent);
+    needSpan.appendTo(selfToAppend);
+    if (droppableId !== null) {// means it's a sensor !
+        createAndAddPercentButton(selfToAppend.attr('id'), draggableId, droppableId);
+    }else {
+        var br = $(document.createElement('br'));
+        br.appendTo(needSpan);
+    }
+};
+
+var removeFromBox = function(boxId, elementId) {
+    $("#"+boxId +" > #" + elementId).prev().remove();
+    $("#"+boxId +" > #" + elementId).remove();
+    var index = allTheNeeds[boxId].needs.indexOf(elementId);
+    if (index > -1) { //then it's a need we must remove !
+        allTheNeeds[boxId].needs.splice(index, 1);
+    }
+    else { //it's a sensor
+        allTheNeeds[boxId].sensors.forEach(function (aSensor, index) {
+            if (aSensor.name == elementId) {
+                allTheNeeds[boxId].sensors.splice(index, 1);
+                return false;
+            }
+        });
+    }
+};
+
 ////////////////////////////////////// Percent button on sensors  //////////////////////////////////////////////////////
 //This method creates a percent button and appends it to a specific sensorname
-var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableId) {
+var createAndAddPercentButton = function (widgetBoxId, draggableName) {
 
     var formGroup = $(document.createElement("span"));
     formGroup.attr('class', 'input-group input-group-xs');
@@ -570,43 +637,56 @@ var createAndAddPercentButton = function (widgetBoxId, draggableName, droppableI
     br.appendTo(formGroup);
 };
 
-
 /*******************************
  **** JSON Of composition ******
  ******************************/
 var declareNeeds = function () {
+
+    for(var i = allTheNeeds.length-1; i >= 0; i--){
+        if(allTheNeeds[i] == null){
+            allTheNeeds.splice(i, 1);
+        }
+    }
+
     allTheNeeds.forEach(function (oneNeed, index) {
-        oneNeed.sensors.forEach(function (sensor) {
-            if ($("#select" + sensor.name + " option:selected", "#" + index).text() != 'raw') {
-                sensor.percent = true;
-            }
-            oneNeed.title = $("#widgetTitle" + index).val();
-        });
-        //We only ask the composition server if what was asked is possible enough
-        expression.need(oneNeed, function (answer) {
-            oneNeed.graphType = answer;
-            //Better than cookie bc same behaviour throughout browsers.
-            if (index == allTheNeeds.length - 1) {
-                localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
-                localStorage.setItem("startDate", startDate);
-                localStorage.setItem("endDate", endDate);
+            oneNeed.sensors.forEach(function (sensor) {
+                if ($("#select" + sensor.name + " option:selected", "#" + index).text() != 'raw') {
+                    sensor.percent = true;
+                }
+                oneNeed.title = $("#widgetTitle" + index).val();
+            });
 
-                //Once we got everything
-                $("#dashboardNameForm").show();
-                $("#generateButton").hide();
-                $("#dateButton").hide();
 
-            }
-        }, function () {
-            $("#generateButton").show().attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...
-            $("#dateButton").show();
-            console.log('IT\'S IMPOSSIBRRRRUUUUU');
-        });
+            //We only ask the composition server if what was asked is possible enough
+            expression.need(oneNeed, function (answer) {
+                oneNeed.graphType = answer;
+                //Better than cookie bc same behaviour throughout browsers.
+                if (index == allTheNeeds.length - 1) {
+                    localStorage.setItem("widgetsDescription", JSON.stringify(allTheNeeds));
+                    //Once we got everything
+                    $("#dashboardNameForm").show();
+                    $("#generateButton").hide();
+                    $("#dateButton").hide();
+
+                }
+            }, function () {
+                $("#generateButton").show().attr("disabled", "disabled"); //The generate button becomes disabled if something impossible was asked...
+                $("#dateButton").show();
+            });
+
     });
 };
 
 var setDashboardName = function () {
     localStorage.setItem("dashboardTitle", $("#dashboardName").val());
+    if (typeof(startDate) == 'undefined' || typeof(endDate) == 'undefined') {
+        console.log('no date defined');
+        startDate = '2015-01-01 8:00:00';
+        endDate = '2015-02-24 18:00:00';
+    }
+    localStorage.setItem("startDate", startDate);
+    localStorage.setItem("endDate", endDate);
+
     return true;
 };
 
