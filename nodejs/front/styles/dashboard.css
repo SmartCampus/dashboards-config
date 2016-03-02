@@ -4,14 +4,8 @@ Stylesheet for the dahsboard html page
 /*
 All the apc related classes concern the drag n drop functionnality
 */
-.apc_column--content .apc_inner_item {
-    border-bottom: 1px solid #FFFFFF;
-}
 
-.apc_column--content .apc_inner_item:last-child
-{
-    border-bottom: 0;
-}
+/** Bottom divider line between widget **/
 
 .row > [class*='col-']:before {
     background: #FFFFFF;
@@ -26,6 +20,17 @@ All the apc related classes concern the drag n drop functionnality
     display: none;
 }
 
+
+/** Help for drag widget : shadow, handle ... **/
+
+.apc_column--content .apc_inner_item {
+    border-bottom: 1px solid #FFFFFF;
+}
+
+.apc_column--content .apc_inner_item:last-child
+{
+    border-bottom: 0;
+}
 
 .apc_inner_item {
     padding: 10px;
@@ -80,7 +85,7 @@ All the apc related classes concern the drag n drop functionnality
     float: none
 }
 
-
+/** Display center all widget **/
 .theWidget {
     border-top-right-radius: 12px;
     border-top-left-radius: 12px;
@@ -134,6 +139,7 @@ All the apc related classes concern the drag n drop functionnality
 
 }
 
+/* make svg responsive */
 .svg-container {
     display: inline-block;
     position: relative;
