@@ -41,6 +41,10 @@ router.post("/composition_data", function (req, res) {
 		res.status(400).send({ "invalidJson": true });
 	}
 	else {
+		// for web browsers that send undefined instead of an empty array
+		if (!sensors) {
+			sensors = [];
+		}
 		engine.compose(needs, sensors, function (err, result) {
 			if (err) {
 				logger.warn(err);
