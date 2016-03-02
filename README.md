@@ -1,52 +1,42 @@
 # PFE - SmartCampus dashboards 
 
-
 ## Description of Work 
 
-You can find the description of work document at the following link :
+You can find the description of work document [here][1].
 
-	https://drive.google.com/file/d/0B2zMH_7SErjuSUhNWW1rZnAzLUk/view?usp=sharing
+And there's the [final report][2].
 
-## Launching the project
+## Installation
 
-To launch the project you must place yourself in the nodejs/front folder, after clonning it , run the following commands : 
+### Ubuntu
 
-	$ npm install && bower install
- 
-In the nodejs/back folder, you must run : 
+`cd nodejs` and execute the `install.sh` script in root mode.
 
-	$ npm install
+Execute the `start.sh` script in order to launch the application. It uses [forever][3] to manage the processes. It allows you to consult logs and perform monitoring tasks over the application processes, see the [docs][3] for more informatoin.
 
-Every other time, there are 5 servers to launch : 
+The frontend is now available at [`localhost:8080`](http://localhost:8080) host.
 
-	in the front folder : 
-	 $ node app.js
-	in the back/dashboard-generator folder :
-	 $ node app.js
-	in the back/sensor-containers-API folder : 
-	 $ node app.js
-	in the back/composition-engine folder : 
-     $ node app.js
-    in the back/format-data-service folder : 
-     $ node app.js
+You can stop the application by running the `stop.sh` script.
 
 ## Authors
 
-Polytech Nice-Sophia SI - PFE 2015-2016 - groupe 9 :
+Polytech Nice-Sophia SI - PFE 2015-2016 - groupe 9:
 
 * [Garance Vallat](mailto:garance.vallat@gmail.com)
 * [Salah Bennour](mailto:bennour@polytech.unice.fr)
 * [Quentin Cornevin](mailto:qcornevin@gmail.com)
 * [Marc Karassev](mailto:marc.karassev@yahoo.fr)
 
-## Production
+## Links
 
-IP: 52.34.201.18
-
-Front port: 80
-
-Jenkins port: 8080
+ * [Description of work][1]
+ * [Final report][2]
+ * [Forever][3]
 
 ---
 
 ![Polytech Nice Sophia](http://users.polytech.unice.fr/~bennour/logos.png)
+
+[1]: https://drive.google.com/file/d/0B2zMH_7SErjuSUhNWW1rZnAzLUk/view?usp=sharing
+[2]: TODO
+[3]: https://github.com/foreverjs/forever
