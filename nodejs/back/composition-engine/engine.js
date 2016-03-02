@@ -28,7 +28,8 @@ function compose(needs, sensors, callback) {
 					rating: ratedchart.rating
 				};
 			});
-			if (grouped || widgetContainingGroupedNeedsExists(needs)) {
+			if (grouped || widgetContainingGroupedNeedsExists(needs)
+				|| sensors.length === 0) {
 				acceptMoreSensors = true;
 			}
 			else {

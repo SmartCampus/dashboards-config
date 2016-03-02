@@ -62,19 +62,6 @@ describe("composition engine API", function () {
 					request(app)
 						.post(compositionDataPath)
 						.send({
-							needs: [],
-							sensros: []
-						})
-						.expect(400)
-						.expect(function (response) {
-							assert(response.body.invalidJson);
-						})
-						.end(callback);
-				},
-				function (callback) {
-					request(app)
-						.post(compositionDataPath)
-						.send({
 							nreds: [],
 							sensors: []
 						})
@@ -163,6 +150,10 @@ describe("composition engine API", function () {
 				.end(callback);
 		}
 
+		it("should work when sending undefined instead of sensors", function (done) {
+			testCompose([PATTERNS], undefined, [DATA_OVER_TIME], null, [LINE], false, done);
+		})
+
 		it("should get both grouped and not grouped needs", function (done) {
 			testCompose([PATTERNS], [1], [DATA_OVER_TIME, COMPARISONS, RELATIONSHIPS],
 				{ expected: true }, [LINE], false, done);
@@ -174,8 +165,21 @@ describe("composition engine API", function () {
 		});
 
 		it("should accept more sensors", function (done) {
-			testCompose([PATTERNS], [1], [], { expected: true }, [], false, function () {
-				testCompose([PATTERNS], [], [], { expected: true }, [], false, done);
+			async.parallel([
+				function (callback) {
+					testCompose([PATTERNS], [1], [], { expected: true }, [], false, callback);
+				},
+				function (callback) {
+					testCompose([PATTERNS], [], [], { expected: true }, [], false, callback);
+				},
+				function (callback) {
+					testCompose([PART_TO_A_WHOLE], undefined, [], { expected: true }, [], false,
+						callback);
+				}
+			], function join (err, results) {
+				logger.debug(err);
+				assert(!err);
+				done();
 			});
 		});
 
