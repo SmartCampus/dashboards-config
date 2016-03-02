@@ -75,31 +75,17 @@ router.get("/sensor/:sensorId/data/last", function(req, res) {
     request_handler.getLastInformation(sensorId, res);
 });
 
-/**
- *
- */
-router.get("/sensor/:sensorId/data/reverse", function(req, res) {
-    var sensorId = req.params.sensorId;
-    if(sensorId != "AC_443STATE") {
-        res.send("Sorry bad sensor, this route should be used for AC_443STATE only.");
-    } else {
-
-        var date = "";
-        if (req.query.date !== undefined) {
-            date = req.query.date;
-        }
-
-        request_handler.getReversedInformation(sensorId, date, function (value) {
-            res.send(value);
-        })
-    }
-});
 
 /**
  * This route allow the user to have all the sensors sorted in a hierarchical way.
  */
 router.post("/sensors/common/hierarchical", function(req, res) {
-    var givenSensor = req.body.sensors;
+    var givenSensor;
+    if(req.body.sensors) {
+        givenSensor = req.body.sensors;
+    } else {
+        givenSensor = [];
+    }
     request_handler.getContainersChild("CampusSophiaTech", function(response) {
         processor.sortHierarchicalSensor(givenSensor, response, function(response, err) {
             if(err) {
