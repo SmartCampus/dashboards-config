@@ -2,9 +2,9 @@ var sensors; //This array contains all the sensors we have
 
 //these are the visualization intentions we know of and use. Should be part of Ivan's work.
 //2 versions bc easier for now, even if not really useful...
-"Part to a whole"
-var needsOrigin = [{name: "Distribution", "image":"distribution.png"}, {name: "Part to a whole", "image":"part_to_a_whole.png"}, {name: "Comparisons", "image":"comparisons.png"}, {name: "Location", "image":"location.png"}, {name: "Patterns", "image":"patterns.png"}, {name: "State", "image":"state.png"}, {name: "Data over time", "image":"overtime.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Hierarchy", "image":"hierarchy.png"}, {name: "Proportions", "image":"proportions.png"}, {name: "Range", "image":"range.png"}];
-var needsSimpleOrigin = ["Distribution", "Part to a whole", "Comparisons", "Location", "Patterns", "State", "Data over time", "Relationships", "Hierarchy", "Proportions", "Summarize"];
+var needsOrigin = [{name: "Distribution", "image":"distribution.png"}, {name: "Part to a whole", "image":"part_to_a_whole.png"}, {name: "Comparisons", "image":"comparisons.png"}, {name: "Location", "image":"location.png"}, {name: "Patterns", "image":"patterns.png"}, {name: "State", "image":"state.png"}, {name: "Data over time", "image":"overtime.png"}, {name: "Relationships", "image":"relationships.png"}, {name: "Proportions", "image":"proportions.png"}];
+var needsSimpleOrigin = ["Distribution", "Part to a whole", "Comparisons", "Location", "Patterns", "State", "Data over time", "Relationships", "Proportions"];
+
 var hierarchyRoute = "container/CampusSophiaTech/child";
 var listSensorsRoute = "sensors?container=Root";
 var needs = [];
@@ -196,7 +196,14 @@ function updateDisableBox(index) {
         if(id.length > 2){
         }else{
             if (id == index) {
+                //updating needs
                 addAnswerNeeds(selectedBox, needs[selectedBox]);
+                //updating sensors TODO
+                console.log(sensorsBox[selectedBox]);
+                position = sensorsBox[selectedBox];
+                buildings = position.childContainer;
+                goTo(navbar);
+                navigation();
 
                 $(this).css("border-color", "#0266C8");
                 $(this).css("border-width", "3px");
@@ -215,7 +222,7 @@ function updateDisableBox(index) {
             }
         }
     });
-};
+}
 
 
 // change box
@@ -272,6 +279,7 @@ var addAWidget = function () {
 
     allTheNeeds[maxOfWidgets] = {"needs": [], "sensors": [], "graphType": ""};
     needs.push(needsOrigin);
+    sensorsBox.push(sensors);
     addTableRow(maxOfWidgets);
 
     $("#generateButton").show().attr("disabled", "disabled");
@@ -317,19 +325,13 @@ var removeAWidget = function (widgetId) {
 
 };
 
-/*
- This functions empties a widget box, making it back to its original state
- Not used right now
- */
-var deleteWidgetContent = function (widgetId) {
-    allTheNeeds[widgetId] = {"needs": [], "sensors": [], "graphType": ""};
-    $('#' + widgetId).empty();
-};
-
-
 function addAnswerNeeds(droppableId, answer) {
-    answer.forEach(function(needAnswer) {
-       //needAnswer.image = needAnswer.name+'.png';
+    needsOrigin.forEach(function(originalNeed) {
+        answer.forEach(function(answerNeed, index) {
+            if (originalNeed.name == answerNeed) {
+                answer[index] = originalNeed;
+            }
+        });
     });
     needs[droppableId] = [];
 
@@ -427,8 +429,6 @@ function navigation() {
     updateNavigation();
 }
 
-
-
 function updateNavigation() {
     // clean DOM
     var $breadCrumb = $(".breadcrumb").empty();
@@ -493,12 +493,11 @@ function goTo(myPath) {
  ***********************/
 function dropIt(event, ui) {
     var self = this;
-    var aTemporaryArrayOfNeeds = [];
     var draggableId = ui.draggable.attr("id");
     var droppableId = $(self).attr("id");
 //Checking if it's already in the box for the sensors (more complicated than need)
     var alreadyHere = false;
-    allTheNeeds[droppableId].sensors.forEach(function(completeSensor) {
+    allTheNeeds[droppableId].sensors.forEach(function(completeSensor) { //checking if already in the box as a sensor
         if (completeSensor.name == draggableId) {
             alreadyHere = true;
             return false;
@@ -513,74 +512,132 @@ function dropIt(event, ui) {
         var isANeed = false;
         if ($.inArray(draggableId, needsSimpleOrigin) > -1) {
             isANeed = true;
+            allTheNeeds[droppableId].needs.push(draggableId);
+            console.log('its a need');
+            callCompositionAndDealWithIt(droppableId, draggableId, $(self), isANeed);
         }
-        if (isANeed) {
-            allTheNeeds[droppableId].needs.forEach(function (aNeed) {
-                aTemporaryArrayOfNeeds.push(aNeed);
-            });
-            aTemporaryArrayOfNeeds.push(draggableId);
-        }
-
-        expression.compose(aTemporaryArrayOfNeeds, allTheNeeds[droppableId].sensors, function (answer) {
-            console.log(answer);
-    /*        var tmpSensorList = [];
-            answer.forEach(function (oneSensorSet) {
-                oneSensorSet.sensors.forEach(function (sensor) {
-                    tmpSensorList.push(sensor.name);
-                })
-            });
-                    $.post(mainServer + 'sensors/common/hierarchical', {
-                        "sensors": tmpSensorList
-                    }).done(function (data) {
-                            //Resetting all the sensors data we have to get the new one
-                            buildings.splice(0, buildings.length);
-                            position = data;
-                            buildings = data.childContainer;
-                            sensorsBox[selectedBox] = data;
-                            goTo(navbar);
-                            navigation();
-                            addToBox($(self), draggableId, draggableId, null);
-                            allTheNeeds[droppableId].needs.push(draggableId);
-                            $("#generateButton").show().removeAttr("disabled");
-                            $("#dateButton").show();
-                        })
-                        .fail(function (data) {
-                            console.log(data);
-                        });
-                }, function (error) {
-                    if (error.status === 400) {
-                        console.log(error.responseText);
-                        alert("Sorry, if you put this intent into to widget, we cannot find any compatible sensor. ");
-                    }
-                });
-            }
-
-    else {//Means it's a sensor
-            var temporarySensorsList = [];
+        else {
+            console.log('its a sensor');
             $.get(mainServer + "sensor/" + draggableId + "/enhanced")
                 .done(function (enhancedSensor) {
-                    allTheNeeds[droppableId].sensors.forEach(function (aSensor) {
-                        temporarySensorsList.push(aSensor);
-                    });
-                    temporarySensorsList.push(enhancedSensor);
+                    console.log('found the enhanced sensor ! :)');
+                    enhancedSensor["salle"] = (position.name).replace(/ /g,"_");
+                    allTheNeeds[droppableId].sensors.push(enhancedSensor);
+                    console.log(enhancedSensor);
+                    callCompositionAndDealWithIt(droppableId, draggableId, $(self), isANeed);
+                }).fail(function(error) {
+                console.log('error in enhanced');
+            });
+        }
 
-                    expression.sensorList(temporarySensorsList, function (answer) {
-                        enhancedSensor["salle"] = (position.name).replace(/ /g,"_");
-                        needs[droppableId] = answer;
-                        addAnswerNeeds(droppableId, answer);
-                        //Here, we add a new sensor to the widget.
-                        addToBox($(self), draggableId, enhancedSensor.displayName, droppableId);
-                        $("#generateButton").removeAttr("disabled");
-                        $("#dateButton").show();
-                        allTheNeeds[droppableId].sensors.push(enhancedSensor);
-                        */
-                    }, function (error) {
-                        console.log(error);
-                    });
-      //          });
 
     }
 }
+
+var callCompositionAndDealWithIt = function(droppableId, draggableId, boxSelf, isANeed) {
+    expression.compose(allTheNeeds[droppableId].needs, allTheNeeds[droppableId].sensors, function (answer) {
+        console.log('in answer');
+        console.log(answer);
+        needs[droppableId] = answer.needs;
+        allTheNeeds[droppableId].graphType = answer.widgets[0];
+        console.log(needs[droppableId]);
+        addAnswerNeeds(droppableId, answer.needs);
+        addToBox(boxSelf, draggableId, droppableId, isANeed);
+        //If it didn't derp, it's legit
+        if (!answer.acceptMoreSensors) { // then we must throw away all of our sensors !
+            console.log('no more sensors, were emptying !');
+            $.post(mainServer + 'sensors/common/hierarchical', {
+                "isEmpty":true,
+                "sensors": []
+            }).done(function (data) {
+                    //Resetting all the sensors data we have to get the new one
+                    buildings.splice(0, buildings.length);
+                    position = data;
+                    buildings = data.childContainer;
+                    sensorsBox[selectedBox] = data;
+                    goTo(navbar);
+                    navigation();
+                    /*     addToBox($(self), draggableId, draggableId, null);
+                     allTheNeeds[droppableId].needs.push(draggableId);
+                     $("#generateButton").show().removeAttr("disabled");
+                     $("#dateButton").show(); */
+                })
+                .fail(function (data) {
+                    console.log(data);
+                });
+
+            /*buildings.splice(0, buildings.length);
+             sensorsBox[droppableId] = [];
+             position = {name:"Campus SophiaTech"};
+             buildings = [];
+             console.log('before goto');
+             goTo([]);
+             console.log('before navigation');
+             navigation();*/
+        }
+        else {
+            console.log('sensors left, nothing to be done here');
+        }
+
+        //Here, we add a new sensor to the widget.
+        //
+        //addToBox($(self), draggableId, draggableId, null);
+        $("#generateButton").show().removeAttr("disabled");
+        /*        var tmpSensorList = [];
+         answer.forEach(function (oneSensorSet) {
+         oneSensorSet.sensors.forEach(function (sensor) {
+         tmpSensorList.push(sensor.name);
+         })
+         });
+         $.post(mainServer + 'sensors/common/hierarchical', {
+         "sensors": tmpSensorList
+         }).done(function (data) {
+         //Resetting all the sensors data we have to get the new one
+         buildings.splice(0, buildings.length);
+         position = data;
+         buildings = data.childContainer;
+         sensorsBox[selectedBox] = data;
+         goTo(navbar);
+         navigation();
+         addToBox($(self), draggableId, draggableId, null);
+         allTheNeeds[droppableId].needs.push(draggableId);
+         $("#generateButton").show().removeAttr("disabled");
+         $("#dateButton").show();
+         })
+         .fail(function (data) {
+         console.log(data);
+         });
+         }, function (error) {
+         if (error.status === 400) {
+         console.log(error.responseText);
+         alert("Sorry, if you put this intent into to widget, we cannot find any compatible sensor. ");
+         }
+         });
+         }
+
+         else {//Means it's a sensor
+         var temporarySensorsList = [];
+         $.get(mainServer + "sensor/" + draggableId + "/enhanced")
+         .done(function (enhancedSensor) {
+         allTheNeeds[droppableId].sensors.forEach(function (aSensor) {
+         temporarySensorsList.push(aSensor);
+         });
+         temporarySensorsList.push(enhancedSensor);
+
+         expression.sensorList(temporarySensorsList, function (answer) {
+         enhancedSensor["salle"] = (position.name).replace(/ /g,"_");
+         needs[droppableId] = answer;
+         addAnswerNeeds(droppableId, answer);
+         //Here, we add a new sensor to the widget.
+         addToBox($(self), draggableId, enhancedSensor.displayName, droppableId);
+         $("#generateButton").removeAttr("disabled");
+         $("#dateButton").show();
+         allTheNeeds[droppableId].sensors.push(enhancedSensor);
+         */
+    }, function (error) {
+        console.log(error);
+    });
+};
 
 var addRemoveSign = function(selfToAppend, draggableId) {
     var removeSign = $(document.createElement('span'));
@@ -591,19 +648,27 @@ var addRemoveSign = function(selfToAppend, draggableId) {
     removeSign.appendTo(selfToAppend);
 };
 
-var addToBox = function(selfToAppend, draggableId, htmlContent, droppableId) {
+var addToBox = function(selfToAppend, draggableId, droppableId, isANeed) {
     addRemoveSign(selfToAppend, draggableId);
     var needSpan = $(document.createElement('span'));
     needSpan.attr("id", draggableId);
     needSpan.css('cursor', 'default');
-    needSpan.text(htmlContent);
-    needSpan.appendTo(selfToAppend);
-    if (droppableId !== null) {// means it's a sensor !
-        createAndAddPercentButton(selfToAppend.attr('id'), draggableId, droppableId);
-    }else {
+    if (isANeed) {
+        needSpan.text(allTheNeeds[droppableId].needs[allTheNeeds[droppableId].needs.length - 1]);
         var br = $(document.createElement('br'));
         br.appendTo(needSpan);
     }
+    else {
+        needSpan.text(allTheNeeds[droppableId].sensors[allTheNeeds[droppableId].sensors.length - 1].displayName);
+        createAndAddPercentButton(selfToAppend.attr('id'), draggableId, droppableId);
+    }
+
+    needSpan.appendTo(selfToAppend);
+ /*   if (droppableId !== null) {// means it's a sensor !
+
+    }else {
+
+    }*/
 };
 
 var removeFromBox = function(boxId, elementId) {

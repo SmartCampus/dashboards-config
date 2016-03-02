@@ -52,8 +52,6 @@ var expression = (function () {
                     sensors: sensorsList
                 })
                 .done(function (data) {
-                    console.log('********************');
-                    console.log(data);
                     successCB(data);
                 })
                 .fail(function (data) {
