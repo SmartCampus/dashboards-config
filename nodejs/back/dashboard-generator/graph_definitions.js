@@ -46,17 +46,17 @@ var PERCENT = new YAxisType("percent", 0, 100, "%", undefined, "average", "colum
 			label: {"text": "Noise threshold"}
 		},
 		"average", ""),
-		LUX = new YAxisType("lux", 8, "undefined", "lux",
-				{
-					value: 400,
-					color: "red",
-					dashStyle: "shortdash",
-					width: 2,
-					label: {"text": "Day / Night threshold"}
-				},
+	LUX = new YAxisType("lux", 8, "undefined", "lux",
+		{
+			value: 400,
+			color: "red",
+			dashStyle: "shortdash",
+			width: 2,
+			label: {"text": "Day / Night threshold"}
+		},
 		"average", ""),
-		STATE = new YAxisType("state", 0, 100, "", undefined, "average", "column");
-
+	STATE = new YAxisType("state", 0, 100, "", undefined, "average", "column"),
+	WATT = new YAxisType("watt", 0, undefined, "w", undefined, "average", "line");
 
 var YAXIS_TYPES = {
 	lux: LUX,
@@ -64,10 +64,11 @@ var YAXIS_TYPES = {
 	number: NUMBER,
 	temperature: TEMPERATURE,
 	decibel: DECIBEL,
-	state: STATE
+	state: STATE,
+	watt: WATT
 };
 
-var YAXIS_TYPES_ARRAY = [LUX, PERCENT, NUMBER, TEMPERATURE, DECIBEL, STATE];
+var YAXIS_TYPES_ARRAY = [LUX, PERCENT, NUMBER, TEMPERATURE, DECIBEL, STATE, WATT];
 
 function getYAxisType(type) {
 	for (var i in YAXIS_TYPES_ARRAY) {
