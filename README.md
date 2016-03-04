@@ -12,7 +12,7 @@ And there's the [final report][2].
 
 `cd nodejs` and execute the `install.sh` script in root mode.
 
-Execute the `start.sh` script in order to launch the application. It uses [forever][3] to manage the processes. It allows you to consult logs and perform monitoring tasks over the application processes, see the [docs][3] for more informatoin.
+Execute the `start.sh` script in order to launch the application. It uses `forever` to manage the processes, see its [docs][3] for more information.
 
 The frontend is now available at [`localhost:8080`](http://localhost:8080) host.
 
